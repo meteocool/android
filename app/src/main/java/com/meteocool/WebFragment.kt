@@ -64,15 +64,14 @@ class WebFragment() : Fragment(){
 
     override fun onResume() {
         super.onResume()
-        /*if(!errorReceived && Validator.isLocationPermissionGranted(requireActivity().applicationContext)) {
+        if(Validator.isLocationPermissionGranted(requireActivity().applicationContext)) {
             val string = "window.manualTileUpdateFn(true);"
             mWebView.post {
                 run {
-                    mWebView.evaluateJavascript(string) { _ ->
-                    }
+                    mWebView.evaluateJavascript(string) {}
                 }
             }
-        }*/
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -94,7 +93,7 @@ class WebFragment() : Fragment(){
             error: WebResourceError?
         ) {
             super.onReceivedError(view, request, error)
-            Log.d("WebFragment", "onReceivedError")
+            Log.d("WebFragment", "onReceivedError $error")
             errorReceived = true
             listener.receivedWebViewError()
         }

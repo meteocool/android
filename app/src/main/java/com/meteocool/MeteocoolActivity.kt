@@ -8,6 +8,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.util.Log
 import android.webkit.WebView
 import android.widget.*
@@ -122,7 +123,11 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
                         }
                     }
                     getString(R.string.menu_documentation) ->{
-                        webViewModel._url.value = WebViewModel.DOC_URL
+                            val webpage: Uri = Uri.parse(WebViewModel.DOC_URL)
+                            val intent = Intent(Intent.ACTION_VIEW, webpage)
+                            if (intent.resolveActivity(packageManager) != null) {
+                                startActivity(intent)
+                            }
                     }
 
                 }
@@ -163,7 +168,8 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
     override fun onStart() {
         super.onStart()
 
-
+        val mWebView : WebView = findViewById(R.id.webView)
+        mWebView.addJavascriptInterface(WebAppInterface(this), "Android")
 
         val token = defaultSharedPreferences.getString("fb", "no token")!!
         doAsync {

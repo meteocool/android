@@ -1,7 +1,5 @@
 package com.meteocool.view
 
-import android.content.SharedPreferences
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -9,7 +7,7 @@ class WebViewModel() : ViewModel(){
 
     companion object {
         const val MAP_URL = "https://meteocool.com/?mobile=android2"
-        const val DOC_URL = "https://jwiedmann-it.de"
+        const val DOC_URL = "https://meteocool.com/documentation.html"
     }
 
 
