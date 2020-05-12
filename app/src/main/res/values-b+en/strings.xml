@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">meteocool</string>
+    <string name="notifications_admin_channel_name">meteocool</string>
+    <string name="notifications_admin_channel_description">meteocool</string>
+    <string name="notifications_admin_channel_id">meteocool</string>
+    <string name="default_notification_channel_id">meteocool</string>
+
+
+    <string name="onboarding_title1">Hi there!</string>
+    <string name="onboarding_title2">Stormchaser or couch potato?</string>
+    <string name="onboarding_title3">Notifications</string>
+    <string name="onboarding_title4">Location</string>
+    <string name="onboarding_title5">Go outside and enjoy the sun!</string>
+
+    <string name="onboarding_description1">No rain radar like any other. It is free of advertising and free of charge.</string>
+    <string name="onboarding_description2">Inform yourself about the current and future situation of the rain clouds and
+        thunderstorms.</string>
+    <string name="onboarding_description3">Get informed about upcoming rainfall with push messages.</string>
+    <string name="onboarding_description4">Now activate your location access to receive push messages.</string>
+    <string name="onboarding_description5">Tell your friends and give us feedback!</string>
+
+    <string name="gps_button_toast">Bad GPS signal.</string>
+
+    <string name="title_activity_settings">Settings</string>
+    <string name="menu_documentation">Documentation</string>
+
+    <!-- Preference Titles -->
+    <string name="notification_header">Notifications</string>
+    <string name="map_header">Map</string>
+
+    <!-- Push Preferences -->
+    <string name="notification_push_title">Notifications</string>
+    <string name="notification_push_level_title">Notification from…</string>
+    <string name="level_drizzle">Drizzle</string>
+    <string name="level_rain">Rain</string>
+    <string name="level_heavy_rain">Heavy Rain</string>
+    <string name="level_hail">Hail</string>
+
+    <string name="notification_time_title">Notify time</string>
+
+
+    <!-- Map Preferences -->
+    <string name="map_zoom_title">Zoom after start</string>
+    <string name="map_rotate_title">Rotation of map</string>
+    <string name="map_mode_title">Dark mode</string>
+
+</resources>
