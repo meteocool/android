@@ -16,8 +16,10 @@ import org.jetbrains.anko.defaultSharedPreferences
 class WebViewModel(private val sharedPreferences: SharedPreferences, application: Application) : AndroidViewModel(application){
 
     companion object {
+        val test = "http://10.10.4.162:8040/"
+        val prod = "https://meteocool.com/"
         const val DOC_URL = "https://meteocool.com/documentation.html"
-        const val MAP_URL = "http://10.10.4.162:8040/?mobile=android2"
+        const val MAP_URL = "https://meteocool.com/?mobile=android2"
     }
 
 

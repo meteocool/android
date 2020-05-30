@@ -19,7 +19,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.Meteocool">
 
         <meta-data
             android:name="android.webkit.WebView.EnableSafeBrowsing"
@@ -58,6 +58,7 @@
         <activity
             android:name=".OnboardingActivity"
             android:enabled="true"
+            android:theme="@style/SplashTheme"
             android:exported="false">
         </activity>
 

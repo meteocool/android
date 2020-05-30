@@ -12,9 +12,9 @@ companion object {
 
     val test = "http://10.10.4.162:8040/"
     val prod = "https://meteocool.com/"
-    val POST_CLIENT_DATA = URL(test + "post_location")
-    val POST_CLEAR_NOTIFICATION  = URL(test + "clear_notification")
-    val POST_UNREGISTER_TOKEN  = URL(test + "unregister")
+    val POST_CLIENT_DATA = URL(prod + "post_location")
+    val POST_CLEAR_NOTIFICATION  = URL(prod + "clear_notification")
+    val POST_UNREGISTER_TOKEN  = URL(prod + "unregister")
 
     private fun buildJSONString(json : JSON) : String{
         val gsonBuilder = Gson().newBuilder().create()

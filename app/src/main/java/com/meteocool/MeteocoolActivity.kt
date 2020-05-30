@@ -64,11 +64,11 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
     private lateinit var sFrag: SettingsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            setTheme(R.style.DarkTheme)
-        } else {
-            setTheme(R.style.LightTheme)
-        }
+//        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+//            setTheme(R.style.DarkTheme)
+//        } else {
+//            setTheme(R.style.LightTheme)
+//        }
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_meteocool)
