@@ -14,8 +14,8 @@
   ~ limitations under the License.
   -->
 
-<androidx.preference.PreferenceScreen
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
             app:icon="@drawable/ic_notification"
@@ -51,6 +51,7 @@
         app:title="@string/map_header">
 
         <SwitchPreferenceCompat
+                android:id="@+id/map_zoom"
             app:key="map_zoom"
             app:defaultValue="false"
             app:title="@string/map_zoom_title"

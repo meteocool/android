@@ -12,12 +12,6 @@ class SplashActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("Splash", isOnboardingCompleted().toString())
-        if(Validator.isLocationPermissionGranted(this)) {
-            defaultSharedPreferences.edit().putBoolean("notification", true).apply()
-        }else{
-            defaultSharedPreferences.edit().putBoolean("notification", false).apply()
-            defaultSharedPreferences.edit().putBoolean("map_zoom", false).apply()
-        }
         if(!isOnboardingCompleted()) {
             startActivity(Intent(this.applicationContext, OnboardingActivity::class.java))
         }else {

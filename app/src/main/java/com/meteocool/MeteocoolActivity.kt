@@ -8,11 +8,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.util.Log
-import android.webkit.WebView
 import android.widget.*
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.gms.common.ConnectionResult
@@ -23,8 +25,8 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnCompleteListener
 
 import com.google.firebase.iid.FirebaseInstanceId
+import com.meteocool.location.LocationResultHelper
 import com.meteocool.location.LocationUpdatesBroadcastReceiver
-import com.meteocool.location.UploadLocation
 import com.meteocool.location.WebAppInterface
 import org.jetbrains.anko.doAsync
 
@@ -32,10 +34,13 @@ import com.meteocool.security.Validator
 import com.meteocool.settings.SettingsFragment
 import com.meteocool.utility.*
 import com.meteocool.view.WebViewModel
+import kotlinx.android.synthetic.main.fragment_map.*
+import org.jetbrains.anko.configuration
 import org.jetbrains.anko.defaultSharedPreferences
 
 
-class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, SharedPreferences.OnSharedPreferenceChangeListener,
+class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
+    GoogleApiClient.OnConnectionFailedListener, SharedPreferences.OnSharedPreferenceChangeListener,
     WebFragment.WebViewClientListener {
 
     private val pendingIntent: PendingIntent
@@ -45,19 +50,28 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
             return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
-    private var  requestingLocationUpdates = false
+    private var requestingLocationUpdates = false
 
     /**
      * The entry point to Google Play Services.
      */
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
 
-    private val webViewModel : WebViewModel by viewModels()
+    private val webViewModel: WebViewModel by viewModels {
+        InjectorUtils.provideWebViewModelFactory(this, application)
+    }
+
+    private lateinit var sFrag: SettingsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            setTheme(R.style.DarkTheme)
+        } else {
+            setTheme(R.style.LightTheme)
+        }
+
         super.onCreate(savedInstanceState)
-
-
+        setContentView(R.layout.activity_meteocool)
 
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
@@ -74,76 +88,75 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
             })
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        if(Validator.isLocationPermissionGranted(this)) {
+        if (Validator.isLocationPermissionGranted(this)) {
             Log.d("Location", "Start Fused")
             requestLocationUpdates()
-        }else{
-            if(requestingLocationUpdates) {
+        } else {
+            if (requestingLocationUpdates) {
                 stopLocationRequests()
             }
         }
 
-        setContentView(R.layout.activity_meteocool)
         val appVersion = findViewById<TextView>(R.id.app_version)
-        appVersion.text = String.format("v %s", applicationContext.packageManager.getPackageInfo(packageName, 0).versionName)
+        appVersion.text = String.format(
+            "v %s",
+            applicationContext.packageManager.getPackageInfo(packageName, 0).versionName
+        )
 
-        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, WebFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, WebFragment())
+            .commit()
+
+        sFrag = SettingsFragment()
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.settings, SettingsFragment())
+            .replace(R.id.settings, sFrag)
             .commit()
         cancelNotifications()
 
-        val drawerItems = listOf(NavDrawerItem(R.drawable.ic_map, getString(R.string.map_header)),
-            NavDrawerItem(R.drawable.ic_file, getString(R.string.menu_documentation)))
+        val drawerItems = listOf(
+            NavDrawerItem(R.drawable.ic_map, getString(R.string.map_header)),
+            NavDrawerItem(R.drawable.ic_file, getString(R.string.menu_documentation))
+        )
 
-        val drawerList : ListView = findViewById(R.id.drawer_menu)
+        val drawerList: ListView = findViewById(R.id.drawer_menu)
         val navAdapter = NavDrawerAdapter(this, R.layout.menu_item, drawerItems)
         drawerList.adapter = navAdapter
-        //TODO Maybe merge button in errorfragment with click listener in drawer -> try navigating to WebView
-       /* drawerList.onItemClickListener = AdapterView.OnItemClickListener{
-            handleWebViewNavigation()
-        }  */
         addClickListenerTo(drawerList)
     }
 
     private fun addClickListenerTo(drawerList: ListView) {
         drawerList.onItemClickListener =
             AdapterView.OnItemClickListener { adapterView, view, pos, id ->
-                Log.d(TAG, "{${webViewModel._url.value} + before change")
+                Log.d(TAG, "{${webViewModel.url.value} + before change")
                 supportFragmentManager.popBackStackImmediate()
                 val selectedItem = adapterView.adapter.getItem(pos) as NavDrawerItem
-                when(selectedItem.menuHeading) {
-                    getString(R.string.map_header)->{
-                        val lastState = defaultSharedPreferences.getString("map_url", null)
-                        if (lastState != null) {
-                            webViewModel._url.value = lastState
-                        } else {
-                            webViewModel._url.value = WebViewModel.MAP_URL
-                        }
+                when (selectedItem.menuHeading) {
+                    getString(R.string.map_header) -> {
+                        webViewModel.setUrlToDefault()
                     }
-                    getString(R.string.menu_documentation) ->{
-                            val webpage: Uri = Uri.parse(WebViewModel.DOC_URL)
-                            val intent = Intent(Intent.ACTION_VIEW, webpage)
-                            if (intent.resolveActivity(packageManager) != null) {
-                                startActivity(intent)
-                            }
+                    getString(R.string.menu_documentation) -> {
+                        val webpage: Uri = Uri.parse(WebViewModel.DOC_URL)
+                        val intent = Intent(Intent.ACTION_VIEW, webpage)
+                        if (intent.resolveActivity(packageManager) != null) {
+                            startActivity(intent)
+                        }
                     }
 
                 }
-                Log.d(TAG, "{${webViewModel._url.value} + after change")
+                Log.d(TAG, "{${webViewModel.url.value} + after change")
             }
     }
 
     /**
      * Handles the Request Updates button and requests start of location updates.
      */
-   private fun requestLocationUpdates() {
+    private fun requestLocationUpdates() {
         try {
-                Log.i(TAG, "Starting location updates")
-                mFusedLocationClient.requestLocationUpdates(
-                    locationRequest, pendingIntent
-                )
+            LocationUpdatesBroadcastReceiver.sendOnce = true
+            Log.i(TAG, "Starting location updates")
+            mFusedLocationClient.requestLocationUpdates(
+                locationRequest, pendingIntent
+            )
             requestingLocationUpdates = true
 
         } catch (e: SecurityException) {
@@ -152,25 +165,23 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
     }
 
-    private fun stopLocationRequests(){
-            Log.i(TAG, "Stopping location updates")
+    private fun stopLocationRequests() {
+        Log.i(TAG, "Stopping location updates")
         val token = defaultSharedPreferences.getString("fb", "no token")!!
         doAsync {
-            NetworkUtility.sendPostRequest(JSONUnregisterNotification(token), NetworkUtility.POST_UNREGISTER_TOKEN)
+            NetworkUtility.sendPostRequest(
+                JSONUnregisterNotification(token),
+                NetworkUtility.POST_UNREGISTER_TOKEN
+            )
         }
-            mFusedLocationClient.removeLocationUpdates(pendingIntent)
+        mFusedLocationClient.removeLocationUpdates(pendingIntent)
 
         requestingLocationUpdates = false
     }
 
 
-
     override fun onStart() {
         super.onStart()
-
-        val mWebView : WebView = findViewById(R.id.webView)
-        mWebView.addJavascriptInterface(WebAppInterface(this), "Android")
-
         val token = defaultSharedPreferences.getString("fb", "no token")!!
         doAsync {
             NetworkUtility.sendPostRequest(
@@ -186,6 +197,9 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
     override fun onResume() {
         super.onResume()
         cancelNotifications()
+        if (webView != null) {
+            webView.addJavascriptInterface(WebAppInterface(this), "Android")
+        }
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
     }
 
@@ -218,48 +232,70 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        when(key){
-            "map_mode", "map_rotate" -> {
-                Log.i(TAG, "Preference value $key was updated to ${sharedPreferences!!.getBoolean(key, false)} ")
+        when (key) {
+            "map_rotate" -> {
+                Log.i(
+                    TAG,
+                    "Preference value $key was updated to ${sharedPreferences!!.getBoolean(
+                        key,
+                        false
+                    )} "
+                )
                 val webAppInterface = WebAppInterface(this)
                 webAppInterface.requestSettings()
             }
+            "map_mode" -> {
+                val darkTheme = sharedPreferences!!.getBoolean(key,false)
+                Log.i(TAG,"Preference value $key was updated to $darkTheme ")
+                val webAppInterface = WebAppInterface(this)
+                webAppInterface.requestSettings()
+
+                if (darkTheme) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                }
+                recreate()
+            }
             "map_zoom" -> {
-                Log.i(TAG, "Preference value $key was updated to ${sharedPreferences!!.getBoolean(key, false)} ")
-                if(Validator.isLocationPermissionGranted(this)) {
+                val zoomAfterStart = sharedPreferences!!.getBoolean(key, false)
+                Log.i(TAG, "Preference value $key was updated to $zoomAfterStart ")
+                Validator.checkLocationPermission(this, this)
+                if (Validator.isLocationPermissionGranted(this)) {
                     val webAppInterface = WebAppInterface(this)
                     webAppInterface.requestSettings()
-                }else{
-                    Validator.checkAndroidPermissions(this, this)
-                    Toast.makeText(this,"Location permission not granted.", Toast.LENGTH_SHORT).show()
                 }
             }
             "notification" -> {
                 val isNotificationON = sharedPreferences!!.getBoolean(key, false)
                 Log.i(TAG, "Preference value $key was updated to $isNotificationON ")
-                if(isNotificationON && !requestingLocationUpdates){
+                if (isNotificationON && !requestingLocationUpdates) {
                     requestLocationUpdates()
-                }else{
-                    if(requestingLocationUpdates) {
+                } else {
+                    if (requestingLocationUpdates) {
                         stopLocationRequests()
                     }
                 }
             }
-            "notification_intensity"->{
+            "notification_intensity" -> {
                 val intensity = sharedPreferences!!.getString(key, "-1")!!.toInt()
                 Log.i(TAG, "Preference value $key was updated to $intensity")
-                UploadLocation().execute()
+                LocationResultHelper.NOTIFICATION_INTENSITY = intensity
+                requestLocationUpdates()
             }
-            "notification_time"->{
+            "notification_time" -> {
                 val time = sharedPreferences!!.getString(key, "-1")!!.toInt()
                 Log.i(TAG, "Preference value $key was updated to $time")
+                LocationResultHelper.NOTIFICATION_TIME = time
+                requestLocationUpdates()
             }
         }
     }
 
-    private fun cancelNotifications(){
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if(notificationManager.activeNotifications.isNotEmpty()) {
+    private fun cancelNotifications() {
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (notificationManager.activeNotifications.isNotEmpty()) {
             notificationManager.cancelAll()
             val token = defaultSharedPreferences.getString("fb", "no token")!!
             doAsync {
@@ -274,9 +310,9 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
         }
     }
 
-    private val locationRequest : LocationRequest?
-        get(){
-           return  LocationRequest.create()?.apply {
+    private val locationRequest: LocationRequest?
+        get() {
+            return LocationRequest.create()?.apply {
                 interval = UPDATE_INTERVAL
                 fastestInterval = FASTEST_UPDATE_INTERVAL
                 priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
@@ -284,21 +320,36 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
             }
         }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            Validator.PERMISSION_REQUEST_LOCATION -> {
+                val locationPermission =
+                    (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                webViewModel.isLocationGranted.value = locationPermission
+                Log.d(TAG, "RequestResult $locationPermission")
+            }
+        }
+    }
 
-    companion object{
+    companion object {
 
         private val TAG = MeteocoolActivity::class.java.simpleName + "_location"
 
         /**
          * The desired interval for location updates. Inexact. Updates may be more or less frequent.
          */
-        private const val UPDATE_INTERVAL : Long = 15 * 60 * 1000
+        private const val UPDATE_INTERVAL: Long = 15 * 60 * 1000
 
         /**
          * The fastest rate for active location updates. Updates will never be more frequent
          * than this value, but they may be less frequent.
          */
-        private const val FASTEST_UPDATE_INTERVAL : Long = 5 * 60 * 1000
+        private const val FASTEST_UPDATE_INTERVAL: Long = 5 * 60 * 1000
 
         /**
          * The max time before batched results are delivered by location services. Results may be
@@ -308,11 +359,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
     }
 
     override fun receivedWebViewError() {
-        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, ErrorFragment()).addToBackStack("Test").commit()
+        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, ErrorFragment())
+            .addToBackStack(null).commit()
     }
-
-
 }
-
-
-

@@ -1,31 +1,38 @@
 package com.meteocool.view
 
+import android.Manifest
+import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.meteocool.MeteocoolActivity
+import org.jetbrains.anko.defaultSharedPreferences
 
-class WebViewModel() : ViewModel(){
+class WebViewModel(private val sharedPreferences: SharedPreferences, application: Application) : AndroidViewModel(application){
 
     companion object {
-        const val MAP_URL = "https://meteocool.com/?mobile=android2"
         const val DOC_URL = "https://meteocool.com/documentation.html"
+        const val MAP_URL = "http://10.10.4.162:8040/?mobile=android2"
     }
 
 
-    val _url = MutableLiveData<String>()
+    private val _url = MutableLiveData(getSavedMapStateOrDefault())
 
-    /*val url: LiveData<String>
-        get() = _url*/
+    var isLocationGranted = MutableLiveData<Boolean>()
 
-    fun initialStart(){
+    val url : LiveData<String>
+        get() = _url
+
+    fun setUrlToDefault(){
         _url.value = MAP_URL
-        /*val lastState = sharedPreferences.getString("map_url", null)
-        if(lastState != null){
-            _url.value = lastState
-        }*/
     }
 
-    fun changeURL(newUrl : String){
-        _url.value = newUrl
+    private fun getSavedMapStateOrDefault() : String{
+        return sharedPreferences.getString("map_url", null) ?: MAP_URL
     }
-
 }

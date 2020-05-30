@@ -9,27 +9,40 @@
         android:paddingTop="16dp">
 
     <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/ic_logo_round"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            app:srcCompat="@drawable/rain"
             android:id="@+id/imageView"
             android:layout_gravity="center_vertical|start"/>
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="meteocool"
-            android:textSize="@dimen/font_size"
-            android:paddingRight="16dp"
-            android:textColor="@color/cloudAccent"
-            android:gravity="center_vertical|start"/>
-    <TextView
-            android:id="@+id/app_version"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text=""
-            android:textSize="@dimen/font_size"
-            android:textColor="@color/cloudAccent"
-            android:gravity="center_vertical|end"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="meteocool.de"
+                android:layout_marginTop="10dp"
+                android:textColor="?android:attr/textColor"
+                android:textSize="@dimen/font_size_logo" />
+
+        <TextView
+                android:id="@+id/app_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="-6dp"
+                android:paddingTop="0dp"
+                android:text=""
+                android:textColor="?android:attr/textColor"
+                android:textSize="@dimen/font_size_version" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.meteocool
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,8 @@ class ErrorFragment : Fragment(){
         val view =  inflater.inflate(R.layout.fragment_error, container, false)
 
         val retryMap = view.findViewById<Button>(R.id.retry_map)
-        retryMap.onClick {
+        retryMap.setOnClickListener {
+            Log.d("ErrorFragment", "retry clicked")
             requireActivity().supportFragmentManager.popBackStack()
         }
 

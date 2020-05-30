@@ -9,7 +9,6 @@ import com.github.paolorotolo.appintro.AppIntro
 import com.github.paolorotolo.appintro.AppIntroFragment
 import com.github.paolorotolo.appintro.model.SliderPage
 import com.meteocool.security.Validator
-import org.jetbrains.anko.defaultSharedPreferences
 
 
 class OnboardingActivity : AppIntro() {
@@ -94,7 +93,7 @@ class OnboardingActivity : AppIntro() {
     override fun onSlideChanged(oldFragment: Fragment?, newFragment: Fragment?) {
         super.onSlideChanged(oldFragment, newFragment)
         if(newFragment != null && newFragment.equals(slides.get(3))){
-            Validator.checkAndroidPermissions(this.applicationContext, this)
+            Validator.checkLocationPermission(this.applicationContext, this)
         }
     }
 }

@@ -11,7 +11,9 @@ import android.webkit.*
 import androidx.fragment.app.activityViewModels
 import com.meteocool.location.WebAppInterface
 import com.meteocool.security.Validator
+import com.meteocool.utility.InjectorUtils
 import com.meteocool.view.WebViewModel
+import org.jetbrains.anko.support.v4.defaultSharedPreferences
 
 
 class WebFragment() : Fragment(){
@@ -26,11 +28,8 @@ class WebFragment() : Fragment(){
 
 
 
-    private val webViewModel : WebViewModel by activityViewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        webViewModel.initialStart()
+    private val webViewModel : WebViewModel by activityViewModels{
+        InjectorUtils.provideWebViewModelFactory(requireContext(), requireActivity().application)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -43,7 +42,9 @@ class WebFragment() : Fragment(){
             mWebView.loadUrl(newUrl)
         }
 
-        webViewModel._url.observe(viewLifecycleOwner, urlObserver)
+
+
+        webViewModel.url.observe(viewLifecycleOwner, urlObserver)
 
         val webSettings = mWebView.settings
         webSettings.javaScriptEnabled = true
@@ -58,12 +59,16 @@ class WebFragment() : Fragment(){
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+
+    override fun onStop() {
+        super.onStop()
+        defaultSharedPreferences.edit().putString("map_url", mWebView.url).apply()
     }
+
 
     override fun onResume() {
         super.onResume()
+
         if(Validator.isLocationPermissionGranted(requireActivity().applicationContext)) {
             val string = "window.manualTileUpdateFn(true);"
             mWebView.post {
@@ -73,6 +78,15 @@ class WebFragment() : Fragment(){
             }
         }
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        defaultSharedPreferences.edit().putString("map_url", mWebView.url).apply()
+    }
+
+
+
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -93,9 +107,12 @@ class WebFragment() : Fragment(){
             error: WebResourceError?
         ) {
             super.onReceivedError(view, request, error)
-            Log.d("WebFragment", "onReceivedError $error")
-            errorReceived = true
-            listener.receivedWebViewError()
+            Log.d("WebFragment", "onReceivedError ${error!!.description}")
+            Log.d("WebFragment", "onReceivedError ${request!!.url}")
+            if(request.url.toString() == WebViewModel.MAP_URL){
+                errorReceived = true
+                listener.receivedWebViewError()
+            }
         }
 
         override fun onPageFinished(view: WebView?, url: String?) {

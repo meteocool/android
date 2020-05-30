@@ -5,61 +5,38 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.requestPermissions
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
+import org.jetbrains.anko.defaultSharedPreferences
 
-class Validator{
-companion object {
+class Validator {
+    companion object {
 
-    private const val PERMISSION_REQUEST_LOCATION = 34
+        const val PERMISSION_REQUEST_LOCATION = 34
+        const val PERMISSION_REQUEST_BACKGROUND = 35
 
-     fun checkAndroidPermissions(context: Context, activity: Activity) {
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(
+        fun checkLocationPermission(context: Context, activity: Activity) {
+            when {
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED -> {
+                    requestPermissions(
+                        activity,
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        PERMISSION_REQUEST_LOCATION
+                    )
+                }
+            }
+        }
+
+        fun isLocationPermissionGranted(context: Context): Boolean {
+            return ContextCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                activity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                PERMISSION_REQUEST_LOCATION
-            )
-/*
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
-            ) {
-                //TODO Show permission information
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.READ_CONTACTS),
-                    PERMISSION_REQUEST_LOCATION
-                )
+            ) == PackageManager.PERMISSION_GRANTED
 
-                // PERMISSION_REQUEST_LOCATION is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }*/
-        } else {
-            // Permission has already been granted
         }
     }
-
-    fun isLocationPermissionGranted(context : Context) : Boolean{
-       return ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )== PackageManager.PERMISSION_GRANTED
-
-    }
-}
 }
