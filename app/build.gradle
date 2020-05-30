@@ -11,7 +11,7 @@ android {
             // storeFile file('C:\\Users\\jerem\\Google Drive\\PlayStore\\meteocool.jks')
         }
     }
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.meteocool"
         minSdkVersion 23

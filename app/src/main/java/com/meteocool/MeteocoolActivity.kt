@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.net.Uri
 import android.util.Log
 import android.widget.*
@@ -35,7 +34,6 @@ import com.meteocool.settings.SettingsFragment
 import com.meteocool.utility.*
 import com.meteocool.view.WebViewModel
 import kotlinx.android.synthetic.main.fragment_map.*
-import org.jetbrains.anko.configuration
 import org.jetbrains.anko.defaultSharedPreferences
 
 
@@ -247,13 +245,15 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
             "map_mode" -> {
                 val darkTheme = sharedPreferences!!.getBoolean(key,false)
                 Log.i(TAG,"Preference value $key was updated to $darkTheme ")
+
+                //TODO Only possible if internet connection is available
                 val webAppInterface = WebAppInterface(this)
                 webAppInterface.requestSettings()
 
                 if (darkTheme) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 } else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 }
                 recreate()
             }
@@ -302,7 +302,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
                 NetworkUtility.sendPostRequest(
                     JSONClearPost(
                         token,
-                        "background"
+                        "launch_screen"
                     ),
                     NetworkUtility.POST_CLEAR_NOTIFICATION
                 )

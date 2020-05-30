@@ -40,13 +40,13 @@ class WebAppInterface(private val  activity: Activity) {
                 val acc = lastLocation.getValue(LocationResultHelper.KEY_LOCATION_UPDATES_RESULT_ACC)
                 val string = "window.injectLocation($lat , $lon , $acc , true);"
                 Log.d(TAG, string)
-                webView.post({
+                webView.post {
                     run  {
-                        webView.evaluateJavascript(string, { _ ->
+                        webView.evaluateJavascript(string) { _ ->
                             Log.d(TAG, string)
-                        })
+                        }
                     }
-                })
+                }
             }else{
                 Toast.makeText(activity, R.string.gps_button_toast, Toast.LENGTH_SHORT).show()
             }
@@ -73,14 +73,14 @@ class WebAppInterface(private val  activity: Activity) {
                 Pair("mapRotation",preferenceManager.getBoolean("map_rotate", false)))
 
         val string = "window.injectSettings(${settings.toJson(myMap)});"
-        webView.post({
+        webView.post {
             run  {
-                webView.evaluateJavascript(string, { foo ->
+                webView.evaluateJavascript(string) { foo ->
                     Log.d(TAG, string)
                     Log.d(TAG, foo)
-                })
+                }
             }
-        })
+        }
     }
 
 

@@ -37,7 +37,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         NetworkUtility.sendPostRequest(
             JSONClearPost(
                 token,
-                "background"
+                "launch_screen"
             ), NetworkUtility.POST_CLEAR_NOTIFICATION
         )
     }

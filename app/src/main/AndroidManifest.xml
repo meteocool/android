@@ -58,7 +58,6 @@
         <activity
             android:name=".OnboardingActivity"
             android:enabled="true"
-            android:theme="@style/SplashTheme"
             android:exported="false">
         </activity>
 

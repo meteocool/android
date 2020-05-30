@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--<resources>-->
+<?xml version="1.0" encoding="utf-8"?><!--<resources>-->
 <!--    <color name="colorPrimary">#ffffff</color>-->
 <!--    <color name="colorPrimaryDark">#f8f9fa</color>-->
 <!--    <color name="textColor">#000000</color>-->
@@ -8,19 +7,13 @@
 <!--</resources>-->
 
 
-
 <resources>
-<color name="colorPrimary">#ffffff</color>
-<color name="colorPrimaryDark">#f8f9fa</color>
-<color name="colorAccent">#8bcdd8</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#f8f9fa</color>
+    <color name="colorAccent">#8bcdd8</color>
 
-<color name="colorBackground">#FFFFFF</color>
-<color name="colorText">#000000</color>
+    <color name="colorBackground">#ffffff</color>
+    <color name="colorText">#000000</color>
     <color name="cloudAccent">#8bcdd8</color>
 
-    <color name="colorPrimary1">#6200EE</color>
-    <color name="colorPrimaryDark1">#3700B3</color>
-
-    <color name="colorBackground1">#FFFFFF</color>
-    <color name="colorText1">#000000</color>
 </resources>

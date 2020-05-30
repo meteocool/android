@@ -3,15 +3,15 @@ package com.meteocool
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceManager
 import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
-import com.github.appintro.AppIntro
+import com.github.appintro.AppIntro2
 import com.github.appintro.AppIntroFragment
 import com.github.appintro.model.SliderPage
+import org.jetbrains.anko.defaultSharedPreferences
 
 
-class OnboardingActivity : AppIntro() {
+class OnboardingActivity : AppIntro2() {
 
     companion object{
         const val IS_ONBOARD_COMPLETED = "is_onboard_completed"
@@ -24,6 +24,9 @@ class OnboardingActivity : AppIntro() {
         sliderPage1.title = getString(R.string.onboarding_title1)
         sliderPage1.description = getString(R.string.onboarding_description1)
         sliderPage1.imageDrawable = R.drawable.volunteers_c
+        sliderPage1.backgroundColor = ContextCompat.getColor(this, R.color.colorPrimary)
+        sliderPage1.titleColor = ContextCompat.getColor(this, R.color.colorText)
+        sliderPage1.descriptionColor = ContextCompat.getColor(this, R.color.colorText)
 
         val sliderPage2 = SliderPage()
         sliderPage2.title = getString(R.string.onboarding_title2)
@@ -59,8 +62,8 @@ class OnboardingActivity : AppIntro() {
 
 
         setBarColor(ContextCompat.getColor(this, R.color.cloudAccent))
-        setSeparatorColor(ContextCompat.getColor(this, R.color.colorText))
-        isButtonsEnabled = true
+        isButtonsEnabled = false
+
 
         addSlide(AppIntroFragment.newInstance(sliderPage1))
         addSlide(AppIntroFragment.newInstance(sliderPage2))
@@ -68,15 +71,23 @@ class OnboardingActivity : AppIntro() {
         addSlide(AppIntroFragment.newInstance(sliderPage4))
         addSlide(AppIntroFragment.newInstance(sliderPage5))
 
-        askForPermissions(
-            permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            slideNumber = 3,
-            required = false)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            askForPermissions(
+                permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+                slideNumber = 4,
+                required = false)
+        }else{
+            askForPermissions(
+                permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                slideNumber = 4,
+                required = false)
+        }
+
     }
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
-        PreferenceManager.getDefaultSharedPreferences(this).edit().apply {
+        defaultSharedPreferences.edit().apply {
             putBoolean(IS_ONBOARD_COMPLETED, true)
             apply()
         }
@@ -88,6 +99,12 @@ class OnboardingActivity : AppIntro() {
         super.onBackPressed()
         // user cannot just skip the intro once
         startActivity(Intent(this, OnboardingActivity::class.java))
+        finish()
+    }
+
+    override fun onSkipPressed(currentFragment: Fragment?) {
+        super.onSkipPressed(currentFragment)
+        startActivity(Intent(this, MeteocoolActivity::class.java))
         finish()
     }
 }
