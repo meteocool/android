@@ -20,40 +20,26 @@
     </FrameLayout>
 
     <com.google.android.material.navigation.NavigationView
-            android:id="@+id/nav_view"
+            android:id="@+id/nav_drawer_main"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/nav_header_main"
+            app:menu="@menu/meteocool_drawer"
+            app:itemTextColor="@color/colorText"
+            app:itemIconTint="@color/colorText"
+            >
         <View style="@style/Divider"/>
-        <LinearLayout
+
+        <FrameLayout
+                android:id="@+id/settings"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_marginTop="@dimen/drawer_layout_menu"
+                android:layout_height="wrap_content">
 
-            <include layout="@layout/nav_header_main"/>
-
-
-            <ListView android:id="@+id/drawer_menu"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:headerDividersEnabled="false"
-                      android:dividerHeight="0dp"
-                      android:divider="@null"
-                      android:choiceMode="singleChoice"
-                    android:textColor="?android:attr/textColor"
-                      android:listSelector="@color/cloudAccent">
-            </ListView>
-
-            <FrameLayout
-                    android:id="@+id/settings"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                <View style="@style/Divider"/>
-            </FrameLayout>
-        </LinearLayout>
-
+            <View style="@style/Divider" />
+        </FrameLayout>
 
     </com.google.android.material.navigation.NavigationView>
-
 </androidx.drawerlayout.widget.DrawerLayout>

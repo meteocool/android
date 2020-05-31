@@ -1,8 +1,5 @@
 package com.meteocool
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -10,9 +7,16 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
-import android.widget.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.widget.AdapterView
+import android.widget.ListView
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -22,19 +26,18 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnCompleteListener
-
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.meteocool.location.LocationResultHelper
 import com.meteocool.location.LocationUpdatesBroadcastReceiver
 import com.meteocool.location.WebAppInterface
-import org.jetbrains.anko.doAsync
-
 import com.meteocool.security.Validator
 import com.meteocool.settings.SettingsFragment
 import com.meteocool.utility.*
 import com.meteocool.view.WebViewModel
 import kotlinx.android.synthetic.main.fragment_map.*
 import org.jetbrains.anko.defaultSharedPreferences
+import org.jetbrains.anko.doAsync
 
 
 class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
@@ -95,12 +98,6 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
             }
         }
 
-        val appVersion = findViewById<TextView>(R.id.app_version)
-        appVersion.text = String.format(
-            "v %s",
-            applicationContext.packageManager.getPackageInfo(packageName, 0).versionName
-        )
-
         supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, WebFragment())
             .commit()
 
@@ -111,39 +108,33 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
             .commit()
         cancelNotifications()
 
-        val drawerItems = listOf(
-            NavDrawerItem(R.drawable.ic_map, getString(R.string.map_header)),
-            NavDrawerItem(R.drawable.ic_file, getString(R.string.menu_documentation))
-        )
-
-        val drawerList: ListView = findViewById(R.id.drawer_menu)
-        val navAdapter = NavDrawerAdapter(this, R.layout.menu_item, drawerItems)
-        drawerList.adapter = navAdapter
-        addClickListenerTo(drawerList)
+        val navView: NavigationView = findViewById(R.id.nav_drawer_main)
+        addClickListenerTo(navView)
     }
 
-    private fun addClickListenerTo(drawerList: ListView) {
-        drawerList.onItemClickListener =
-            AdapterView.OnItemClickListener { adapterView, view, pos, id ->
-                Log.d(TAG, "{${webViewModel.url.value} + before change")
-                supportFragmentManager.popBackStackImmediate()
-                val selectedItem = adapterView.adapter.getItem(pos) as NavDrawerItem
-                when (selectedItem.menuHeading) {
-                    getString(R.string.map_header) -> {
-                        webViewModel.setUrlToDefault()
-                    }
-                    getString(R.string.menu_documentation) -> {
-                        val webpage: Uri = Uri.parse(WebViewModel.DOC_URL)
-                        val intent = Intent(Intent.ACTION_VIEW, webpage)
-                        if (intent.resolveActivity(packageManager) != null) {
-                            startActivity(intent)
-                        }
-                    }
+    private fun addClickListenerTo(navView: NavigationView) {
+        navView.setNavigationItemSelectedListener { menuItem ->
+            Log.d(TAG, "{${webViewModel.url.value} + before change")
+            //supportFragmentManager.popBackStackImmediate()
 
+            when (menuItem.itemId) {
+                R.id.nav_home -> {
+                    webViewModel.setUrlToDefault()
+                    true
                 }
-                Log.d(TAG, "{${webViewModel.url.value} + after change")
+                R.id.nav_documentation  -> {
+                    val webpage: Uri = Uri.parse(WebViewModel.DOC_URL)
+                    val intent = Intent(Intent.ACTION_VIEW, webpage)
+                    if (intent.resolveActivity(packageManager) != null) {
+                        startActivity(intent)
+                    }
+                    true
+                }
+                else -> false
             }
+        }
     }
+
 
     /**
      * Handles the Request Updates button and requests start of location updates.
