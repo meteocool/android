@@ -118,8 +118,8 @@ class WebFragment() : Fragment(){
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
             Log.d("WebFragment", "onPageFinished")
-            if(!errorReceived) {
-                view?.addJavascriptInterface(WebAppInterface(requireActivity()), "Android")
+            if(view != null && !errorReceived) {
+                view.addJavascriptInterface(WebAppInterface(requireActivity()), "Android")
             }else{
                 errorReceived = false
             }

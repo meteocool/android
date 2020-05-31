@@ -1,25 +1,14 @@
 package com.meteocool.utility
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.activity.viewModels
-import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import com.meteocool.R
-import com.meteocool.view.WebViewModel
-import org.jetbrains.anko.colorAttr
-import org.jetbrains.anko.defaultSharedPreferences
-
 
 class NavDrawerAdapter(private val activity : AppCompatActivity, private val layoutResourceId : Int, private val navDrawerItems: List<NavDrawerItem>)
     : ArrayAdapter<NavDrawerItem>(activity.applicationContext, layoutResourceId, navDrawerItems) {
