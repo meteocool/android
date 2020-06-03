@@ -17,6 +17,7 @@ class Validator {
 
         fun checkLocationPermission(context: Context, activity: Activity) {
             when {
+
                 ContextCompat.checkSelfPermission(
                     context,
                     Manifest.permission.ACCESS_FINE_LOCATION

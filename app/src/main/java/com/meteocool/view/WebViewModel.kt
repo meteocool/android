@@ -5,12 +5,11 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.meteocool.MeteocoolActivity
+import com.meteocool.security.Validator
 import org.jetbrains.anko.defaultSharedPreferences
 
 class WebViewModel(private val sharedPreferences: SharedPreferences, application: Application) : AndroidViewModel(application){
@@ -22,10 +21,15 @@ class WebViewModel(private val sharedPreferences: SharedPreferences, application
         const val MAP_URL = "https://meteocool.com/?mobile=android2"
     }
 
-
     private val _url = MutableLiveData(getSavedMapStateOrDefault())
 
-    var isLocationGranted = MutableLiveData<Boolean>()
+    var isLocationGranted = MutableLiveData<Boolean>(Validator.isLocationPermissionGranted(application.applicationContext))
+
+    var isNightModeEnabled = MutableLiveData<Boolean>()
+
+    val test = Transformations.map(isNightModeEnabled){
+        Validator.isLocationPermissionGranted(application.applicationContext)
+    }
 
     val url : LiveData<String>
         get() = _url
@@ -35,6 +39,7 @@ class WebViewModel(private val sharedPreferences: SharedPreferences, application
     }
 
     private fun getSavedMapStateOrDefault() : String{
-        return sharedPreferences.getString("map_url", null) ?: MAP_URL
+        return sharedPreferences.getString("map_url", MAP_URL)!!
     }
+
 }

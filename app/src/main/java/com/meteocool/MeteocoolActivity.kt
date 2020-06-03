@@ -110,6 +110,15 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
         val navView: NavigationView = findViewById(R.id.nav_drawer_main)
         addClickListenerTo(navView)
+
+        val urlObserver = androidx.lifecycle.Observer<Boolean>{
+
+            Log.d(TAG, "permission changed $it")
+
+        }
+
+        webViewModel.test.observe(this, urlObserver)
+
     }
 
     private fun addClickListenerTo(navView: NavigationView) {
