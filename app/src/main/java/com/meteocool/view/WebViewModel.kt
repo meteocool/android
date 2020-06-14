@@ -25,12 +25,6 @@ class WebViewModel(private val sharedPreferences: SharedPreferences, application
 
     var isLocationGranted = MutableLiveData<Boolean>(Validator.isLocationPermissionGranted(application.applicationContext))
 
-    var isNightModeEnabled = MutableLiveData<Boolean>()
-
-    val test = Transformations.map(isNightModeEnabled){
-        Validator.isLocationPermissionGranted(application.applicationContext)
-    }
-
     val url : LiveData<String>
         get() = _url
 

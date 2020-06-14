@@ -115,19 +115,17 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
         val navView: NavigationView = findViewById(R.id.nav_drawer_main)
         addClickListenerTo(navView)
 
-        val urlObserver = androidx.lifecycle.Observer<Boolean>{
-
-            Log.d(TAG, "permission changed $it")
-
-        }
-
-        webViewModel.test.observe(this, urlObserver)
-
-
-        val test = defaultSharedPreferences
-        test.booleanLiveData("map_mode", false).observe(this, { enabled ->
+        defaultSharedPreferences.booleanLiveData("map_mode", false).observe(this, { enabled ->
             Log.d(TAG, "LiveData changed $enabled")
         })
+
+        defaultSharedPreferences.booleanLiveData("map_rotate", false).observe(this, {
+           if(it) {
+               val webAppInterface = WebAppInterface(this)
+               webAppInterface.requestSettings()
+           }
+        })
+
     }
 
     fun isGooglePlayServicesAvailable(activity: Activity?): Boolean {
@@ -252,17 +250,6 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
-            "map_rotate" -> {
-                Log.i(
-                    TAG,
-                    "Preference value $key was updated to ${sharedPreferences!!.getBoolean(
-                        key,
-                        false
-                    )} "
-                )
-                val webAppInterface = WebAppInterface(this)
-                webAppInterface.requestSettings()
-            }
             "map_mode" -> {
                 val darkTheme = sharedPreferences!!.getBoolean(key,false)
                 Log.i(TAG,"Preference value $key was updated to $darkTheme ")
