@@ -1,5 +1,6 @@
 package com.meteocool
 
+import android.app.Activity
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -9,18 +10,15 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.widget.AdapterView
-import android.widget.ListView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.observe
 import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
@@ -33,7 +31,11 @@ import com.meteocool.location.LocationUpdatesBroadcastReceiver
 import com.meteocool.location.WebAppInterface
 import com.meteocool.security.Validator
 import com.meteocool.settings.SettingsFragment
-import com.meteocool.utility.*
+import com.meteocool.settings.booleanLiveData
+import com.meteocool.utility.InjectorUtils
+import com.meteocool.utility.JSONClearPost
+import com.meteocool.utility.JSONUnregisterNotification
+import com.meteocool.utility.NetworkUtility
 import com.meteocool.view.WebViewModel
 import kotlinx.android.synthetic.main.fragment_map.*
 import org.jetbrains.anko.defaultSharedPreferences
@@ -89,6 +91,8 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
             })
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        Log.d(TAG, "Google services available: " + isGooglePlayServicesAvailable(this).toString() )
+
         if (Validator.isLocationPermissionGranted(this)) {
             Log.d("Location", "Start Fused")
             requestLocationUpdates()
@@ -119,6 +123,23 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
         webViewModel.test.observe(this, urlObserver)
 
+
+        val test = defaultSharedPreferences
+        test.booleanLiveData("map_mode", false).observe(this, { enabled ->
+            Log.d(TAG, "LiveData changed $enabled")
+        })
+    }
+
+    fun isGooglePlayServicesAvailable(activity: Activity?): Boolean {
+        val googleApiAvailability = GoogleApiAvailability.getInstance()
+        val status = googleApiAvailability.isGooglePlayServicesAvailable(activity)
+        if (status != ConnectionResult.SUCCESS) {
+            if (googleApiAvailability.isUserResolvableError(status)) {
+                googleApiAvailability.getErrorDialog(activity, status, 2404).show()
+            }
+            return false
+        }
+        return true
     }
 
     private fun addClickListenerTo(navView: NavigationView) {

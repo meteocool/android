@@ -2,10 +2,8 @@ package com.meteocool
 
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.meteocool.security.Validator
 import org.jetbrains.anko.defaultSharedPreferences
 
 class SplashActivity : AppCompatActivity(){

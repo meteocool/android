@@ -11,6 +11,7 @@ import android.webkit.*
 import androidx.fragment.app.activityViewModels
 import com.meteocool.location.WebAppInterface
 import com.meteocool.security.Validator
+import com.meteocool.settings.booleanLiveData
 import com.meteocool.utility.InjectorUtils
 import com.meteocool.view.WebViewModel
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
@@ -41,8 +42,6 @@ class WebFragment() : Fragment(){
             mWebView.stopLoading()
             mWebView.loadUrl(newUrl)
         }
-
-
 
         webViewModel.url.observe(viewLifecycleOwner, urlObserver)
 

@@ -2,7 +2,7 @@ package com.meteocool.location
 
 import android.app.Activity
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.ValueCallback
@@ -28,7 +28,7 @@ class WebAppInterface(private val  activity: Activity) {
     @JavascriptInterface
     fun injectLocation() {
         Log.d(TAG, "injectLocation")
-        val preferenceManager = PreferenceManager.getDefaultSharedPreferences(activity)
+       // val preferenceManager = PreferenceManager.getDefaultSharedPreferences(activity)
         if(Validator.isLocationPermissionGranted(activity)) {
             Log.d(TAG, "entered")
             val lastLocation = LocationResultHelper.getSavedLocationResult(activity)
