@@ -1,16 +1,12 @@
 package com.meteocool.view
 
-import android.Manifest
 import android.app.Application
-import android.content.Context
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
-import com.meteocool.MeteocoolActivity
 import com.meteocool.security.Validator
-import org.jetbrains.anko.defaultSharedPreferences
+import com.meteocool.settings.booleanLiveData
+import com.meteocool.settings.stringLiveData
 
 class WebViewModel(private val sharedPreferences: SharedPreferences, application: Application) : AndroidViewModel(application){
 
@@ -19,21 +15,34 @@ class WebViewModel(private val sharedPreferences: SharedPreferences, application
         val prod = "https://meteocool.com/"
         const val DOC_URL = "https://meteocool.com/documentation.html"
         const val MAP_URL = "https://meteocool.com/?mobile=android2"
+
     }
 
-    private val _url = MutableLiveData(getSavedMapStateOrDefault())
+    private val _url = sharedPreferences.stringLiveData("map_url", MAP_URL)
+    private val _isMapRotateActive = sharedPreferences.booleanLiveData("map_rotate", false)
+    private val _isNightModeEnabled =  sharedPreferences.booleanLiveData("map_mode", false)
+    private val _isLocationGranted = MutableLiveData(Validator.isLocationPermissionGranted(application.applicationContext))
 
-    var isLocationGranted = MutableLiveData<Boolean>(Validator.isLocationPermissionGranted(application.applicationContext))
+    val isLocationGranted : LiveData<Boolean>
+        get() = _isLocationGranted
+
+    val isNightModeEnabled : LiveData<Boolean>
+        get() = _isNightModeEnabled
+
+    val isMapRotateActive : LiveData<Boolean>
+        get() = _isMapRotateActive
 
     val url : LiveData<String>
         get() = _url
 
     fun setUrlToDefault(){
-        _url.value = MAP_URL
+        sharedPreferences.edit().putString("map_url",MAP_URL).apply()
     }
 
-    private fun getSavedMapStateOrDefault() : String{
-        return sharedPreferences.getString("map_url", MAP_URL)!!
+    fun updateLocationPermission(){
+        val context = getApplication<Application>().applicationContext
+        Log.d("VIEWMODEL", "perm "+ Validator.isLocationPermissionGranted(context))
+        _isLocationGranted.value =  Validator.isLocationPermissionGranted(context)
     }
 
 }

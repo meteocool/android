@@ -29,7 +29,7 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver(){
                             Log.i(TAG, "$isDistanceBiggerThan500F")
                             Log.i(TAG, "$location is better than $lastLocation")
                             val preferenceManager = PreferenceManager.getDefaultSharedPreferences(context)
-                           val token = preferenceManager.getString("fb", "no token")
+                           val token = preferenceManager.getString("fb_token", "no token")
                            Log.d(TAG, " Token $token")
                            UploadLocation().execute(location, token)
                            sendOnce = false

@@ -15,7 +15,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
-        defaultSharedPreferences.edit().putString("fb", p0).apply()
+        defaultSharedPreferences.edit().putString("fb_token", p0).apply()
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
@@ -33,7 +33,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun cancelNotification() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancelAll()
-        val token =  defaultSharedPreferences.getString("fb", "no token")!!
+        val token =  defaultSharedPreferences.getString("fb_token", "no token")!!
         NetworkUtility.sendPostRequest(
             JSONClearPost(
                 token,

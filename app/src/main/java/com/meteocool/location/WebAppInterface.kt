@@ -28,7 +28,7 @@ class WebAppInterface(private val  activity: Activity) {
     @JavascriptInterface
     fun injectLocation() {
         Log.d(TAG, "injectLocation")
-       // val preferenceManager = PreferenceManager.getDefaultSharedPreferences(activity)
+        Validator.checkLocationPermission(activity.applicationContext, activity)
         if(Validator.isLocationPermissionGranted(activity)) {
             Log.d(TAG, "entered")
             val lastLocation = LocationResultHelper.getSavedLocationResult(activity)
@@ -50,21 +50,19 @@ class WebAppInterface(private val  activity: Activity) {
             }else{
                 Toast.makeText(activity, R.string.gps_button_toast, Toast.LENGTH_SHORT).show()
             }
-        }else{
-            Log.d(TAG, "Permission not granted")
         }
     }
 
-
-
     @JavascriptInterface
     fun showSettings(){
+        Log.d(TAG, "Settings injected")
         val drawerLayout: DrawerLayout = activity.findViewById(R.id.drawer_layout)
         drawerLayout.openDrawer(GravityCompat.START)
     }
 
     @JavascriptInterface
     fun requestSettings(){
+
         val preferenceManager = PreferenceManager.getDefaultSharedPreferences(activity)
         val settings : Gson = Gson().newBuilder().create()
         val myMap = mapOf<String, Boolean>(
