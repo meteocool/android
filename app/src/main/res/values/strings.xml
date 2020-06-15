@@ -33,6 +33,7 @@
     <!-- Preference Titles -->
     <string name="notification_header">Benachrichtigungen</string>
     <string name="map_header">Karte</string>
+    <string name="about_header">Über</string>
 
     <!-- Push Preferences -->
     <string name="notification_push_title">Push-Nachrichten</string>

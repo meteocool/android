@@ -71,4 +71,20 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+            app:title="@string/about_header">
+
+        <Preference
+                app:key="feedback"
+                app:title="Feedback">
+        </Preference>
+
+        <Preference
+                app:key="impressum"
+                app:title="Copyright"
+                android:summary="© DWD © blitzortung.org\n© OpenStreetMap © CARTO">
+
+        </Preference>
+    </PreferenceCategory>
+
 </androidx.preference.PreferenceScreen>

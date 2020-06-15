@@ -1,15 +1,18 @@
 package com.meteocool.settings
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.activityViewModels
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.meteocool.R
 import com.meteocool.utility.InjectorUtils
 import com.meteocool.view.WebViewModel
 
-class SettingsFragment() : PreferenceFragmentCompat(){
+class SettingsFragment() : PreferenceFragmentCompat() {
 
     private val webViewModel : WebViewModel by activityViewModels{
         InjectorUtils.provideWebViewModelFactory(requireContext(), requireActivity().application)
@@ -45,5 +48,29 @@ class SettingsFragment() : PreferenceFragmentCompat(){
             Log.d("Night Mode", "$isNightModeEnabled")
         }
         webViewModel.isNightModeEnabled.observe(viewLifecycleOwner, prefNightModeObserver)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        registerPreferenceClickListener()
+    }
+
+    private fun registerPreferenceClickListener(){
+        findPreference<Preference>("feedback")?.setOnPreferenceClickListener {
+            val webpage: Uri = Uri.parse(WebViewModel.FEEDBACK_URL)
+            val intent = Intent(Intent.ACTION_VIEW, webpage)
+            if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                startActivity(intent)
+            }
+            true
+        }
+        findPreference<Preference>("impressum")?.setOnPreferenceClickListener {
+            val webpage: Uri = Uri.parse(WebViewModel.IMPRESSUM_URL)
+            val intent = Intent(Intent.ACTION_VIEW, webpage)
+            if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                startActivity(intent)
+            }
+            true
+        }
     }
 }

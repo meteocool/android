@@ -29,6 +29,8 @@
     <!-- Preference Titles -->
     <string name="notification_header">Notifications</string>
     <string name="map_header">Map</string>
+    <string name="about_header">About</string>
+
 
     <!-- Push Preferences -->
     <string name="notification_push_title">Notifications</string>
