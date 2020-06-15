@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">meteocool</string>
+    <string name="app_name">meteocool.de</string>
     <string name="notifications_admin_channel_name">meteocool</string>
     <string name="notifications_admin_channel_description">meteocool</string>
     <string name="notifications_admin_channel_id">meteocool</string>

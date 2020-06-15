@@ -12,6 +12,6 @@
     <color name="colorAccent">#8bcdd8</color>
 
     <color name="colorBackground">#343A40</color>
-    <color name="colorText">#ffffff</color>
+    <color name="textColor">#ffffff</color>
     <color name="cloudAccent">#8bcdd8</color>
 </resources>

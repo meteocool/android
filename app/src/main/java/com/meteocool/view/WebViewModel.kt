@@ -2,6 +2,7 @@ package com.meteocool.view
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.location.Location
 import android.util.Log
 import androidx.lifecycle.*
 import com.meteocool.security.Validator
@@ -15,13 +16,13 @@ class WebViewModel(private val sharedPreferences: SharedPreferences, application
         val prod = "https://meteocool.com/"
         const val DOC_URL = "https://meteocool.com/documentation.html"
         const val MAP_URL = "https://meteocool.com/?mobile=android2"
-
     }
 
     private val _url = sharedPreferences.stringLiveData("map_url", MAP_URL)
     private val _isMapRotateActive = sharedPreferences.booleanLiveData("map_rotate", false)
     private val _isNightModeEnabled =  sharedPreferences.booleanLiveData("map_mode", false)
     private val _isLocationGranted = MutableLiveData(Validator.isLocationPermissionGranted(application.applicationContext))
+    private val _injectLocation = MutableLiveData<Location>()
 
     val isLocationGranted : LiveData<Boolean>
         get() = _isLocationGranted
@@ -35,8 +36,11 @@ class WebViewModel(private val sharedPreferences: SharedPreferences, application
     val url : LiveData<String>
         get() = _url
 
-    fun setUrlToDefault(){
-        sharedPreferences.edit().putString("map_url",MAP_URL).apply()
+    val injectLocation : LiveData<Location>
+        get() = _injectLocation
+
+    fun injectLocationOnce(location : Location){
+        _injectLocation.value = location
     }
 
     fun updateLocationPermission(){

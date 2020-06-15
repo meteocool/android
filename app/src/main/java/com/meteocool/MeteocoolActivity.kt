@@ -1,16 +1,20 @@
 package com.meteocool
 
+import android.Manifest
 import android.app.Activity
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.gms.common.ConnectionResult
@@ -168,6 +172,18 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
     override fun onResume() {
         super.onResume()
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+            mFusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    LocationResultHelper.saveResults(defaultSharedPreferences, location!!)
+                    webViewModel.injectLocationOnce(location)
+                }
+        }
+
         cancelNotifications()
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
     }

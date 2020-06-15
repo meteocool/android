@@ -1,7 +1,10 @@
 package com.meteocool
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -10,9 +13,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import com.meteocool.location.WebAppInterface
-import com.meteocool.security.Validator
 import com.meteocool.utility.InjectorUtils
 import com.meteocool.view.WebViewModel
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
@@ -42,6 +45,16 @@ class WebFragment() : Fragment() {
         }
         webViewModel.isMapRotateActive.observe(this, preferenceObserver)
         webViewModel.isNightModeEnabled.observe(this, preferenceObserver)
+
+        val injectLocationOnceObserver = androidx.lifecycle.Observer<Location>{
+            val string = "window.injectLocation(${it.latitude} , ${it.longitude} , ${it.accuracy} , ${defaultSharedPreferences.getBoolean("map_zoom", false)});"
+            mWebView.post {
+                run  {
+                    mWebView.evaluateJavascript(string) {}
+                }
+            }
+        }
+        webViewModel.injectLocation.observe(this, injectLocationOnceObserver)
     }
 
     override fun onCreateView(
@@ -85,11 +98,15 @@ class WebFragment() : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        if (Validator.isLocationPermissionGranted(requireActivity().applicationContext)) {
-            val string = "window.manualTileUpdateFn(true);"
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        )  {
+            val function = "window.manualTileUpdateFn(true);"
             mWebView.post {
                 run {
-                    mWebView.evaluateJavascript(string) {}
+                    mWebView.evaluateJavascript(function) {}
                 }
             }
         }

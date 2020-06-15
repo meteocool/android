@@ -7,6 +7,7 @@ import android.preference.PreferenceManager
 import android.util.Log
 import com.google.android.gms.location.LocationResult
 import com.meteocool.location.LocationResultHelper.Companion.getDistanceToLastLocation
+import org.jetbrains.anko.defaultSharedPreferences
 
 class LocationUpdatesBroadcastReceiver : BroadcastReceiver(){
 
@@ -37,9 +38,8 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver(){
 
                             Log.i(TAG, "$location is not better than $lastLocation")
                         }
-                    val locationResultHelper = LocationResultHelper(context, location)
                     // Save the location data to SharedPreferences.
-                    locationResultHelper.saveResults()
+                    LocationResultHelper.saveResults(context.defaultSharedPreferences, location)
                     Log.i(TAG, LocationResultHelper.getSavedLocationResult(context).toString())
                 }
             }

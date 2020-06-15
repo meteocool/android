@@ -13,7 +13,7 @@
     <color name="colorAccent">#8bcdd8</color>
 
     <color name="colorBackground">#f8f9fa</color>
-    <color name="colorText">#000000</color>
+    <color name="textColor">#000000</color>
     <color name="cloudAccent">#8bcdd8</color>
 
 </resources>

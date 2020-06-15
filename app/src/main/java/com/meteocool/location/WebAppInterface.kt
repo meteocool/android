@@ -8,12 +8,15 @@ import android.webkit.JavascriptInterface
 import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.gson.Gson
 import com.meteocool.R
 import com.meteocool.security.Validator
-
+import com.meteocool.utility.InjectorUtils
+import com.meteocool.view.WebViewModel
+import org.jetbrains.anko.defaultSharedPreferences
 
 
 /** Instantiate the interface and set the comntext */
@@ -30,6 +33,7 @@ class WebAppInterface(private val  activity: Activity) {
         Log.d(TAG, "injectLocation")
         Validator.checkLocationPermission(activity.applicationContext, activity)
         if(Validator.isLocationPermissionGranted(activity)) {
+
             Log.d(TAG, "entered")
             val lastLocation = LocationResultHelper.getSavedLocationResult(activity)
 
@@ -38,6 +42,7 @@ class WebAppInterface(private val  activity: Activity) {
                 val lat = lastLocation.getValue(LocationResultHelper.KEY_LOCATION_UPDATES_RESULT_LAT)
                 val lon = lastLocation.getValue(LocationResultHelper.KEY_LOCATION_UPDATES_RESULT_LON)
                 val acc = lastLocation.getValue(LocationResultHelper.KEY_LOCATION_UPDATES_RESULT_ACC)
+
                 val string = "window.injectLocation($lat , $lon , $acc , true);"
                 Log.d(TAG, string)
                 webView.post {

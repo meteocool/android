@@ -25,40 +25,40 @@ class OnboardingActivity : AppIntro2() {
         sliderPage1.description = getString(R.string.onboarding_description1)
         sliderPage1.imageDrawable = R.drawable.volunteers_c
         sliderPage1.backgroundColor = ContextCompat.getColor(this, R.color.colorPrimary)
-        sliderPage1.titleColor = ContextCompat.getColor(this, R.color.colorText)
-        sliderPage1.descriptionColor = ContextCompat.getColor(this, R.color.colorText)
+        sliderPage1.titleColor = ContextCompat.getColor(this, R.color.textColor)
+        sliderPage1.descriptionColor = ContextCompat.getColor(this, R.color.textColor)
 
         val sliderPage2 = SliderPage()
         sliderPage2.title = getString(R.string.onboarding_title2)
         sliderPage2.description = getString(R.string.onboarding_description2)
         sliderPage2.imageDrawable = R.drawable.jacket
         sliderPage2.backgroundColor = ContextCompat.getColor(this, R.color.colorPrimary)
-        sliderPage2.titleColor = ContextCompat.getColor(this, R.color.colorText)
-        sliderPage2.descriptionColor = ContextCompat.getColor(this, R.color.colorText)
+        sliderPage2.titleColor = ContextCompat.getColor(this, R.color.textColor)
+        sliderPage2.descriptionColor = ContextCompat.getColor(this, R.color.textColor)
 
         val sliderPage3 = SliderPage()
         sliderPage3.title = getString(R.string.onboarding_title3)
         sliderPage3.description = getString(R.string.onboarding_description3)
         sliderPage3.imageDrawable = R.drawable.bell
         sliderPage3.backgroundColor = ContextCompat.getColor(this, R.color.colorPrimary)
-        sliderPage3.titleColor = ContextCompat.getColor(this, R.color.colorText)
-        sliderPage3.descriptionColor = ContextCompat.getColor(this, R.color.colorText)
+        sliderPage3.titleColor = ContextCompat.getColor(this, R.color.textColor)
+        sliderPage3.descriptionColor = ContextCompat.getColor(this, R.color.textColor)
 
         val sliderPage4 = SliderPage()
         sliderPage4.title = getString(R.string.onboarding_title4)
         sliderPage4.description = getString(R.string.onboarding_description4)
         sliderPage4.imageDrawable = R.drawable.maps_and_location
         sliderPage4.backgroundColor = ContextCompat.getColor(this, R.color.colorPrimary)
-        sliderPage4.titleColor = ContextCompat.getColor(this, R.color.colorText)
-        sliderPage4.descriptionColor = ContextCompat.getColor(this, R.color.colorText)
+        sliderPage4.titleColor = ContextCompat.getColor(this, R.color.textColor)
+        sliderPage4.descriptionColor = ContextCompat.getColor(this, R.color.textColor)
 
         val sliderPage5 = SliderPage()
         sliderPage5.title = getString(R.string.onboarding_title5)
         sliderPage5.description = getString(R.string.onboarding_description5)
         sliderPage5.imageDrawable = R.drawable.sun_rain_composit_4
         sliderPage5.backgroundColor = ContextCompat.getColor(this, R.color.colorPrimary)
-        sliderPage5.titleColor = ContextCompat.getColor(this, R.color.colorText)
-        sliderPage5.descriptionColor = ContextCompat.getColor(this, R.color.colorText)
+        sliderPage5.titleColor = ContextCompat.getColor(this, R.color.textColor)
+        sliderPage5.descriptionColor = ContextCompat.getColor(this, R.color.textColor)
 
 
         setBarColor(ContextCompat.getColor(this, R.color.cloudAccent))
