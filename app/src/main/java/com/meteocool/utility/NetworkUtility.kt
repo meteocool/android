@@ -12,6 +12,12 @@ companion object {
 
     val test = "http://10.10.4.162:8040/"
     val prod = "https://meteocool.com/"
+
+    const val DOC_URL = "https://meteocool.com/documentation.html"
+    const val MAP_URL = "https://meteocool.com/?mobile=android2"
+    const val FEEDBACK_URL = "https://meteocool.com/#about"
+    const val IMPRESSUM_URL = "https://meteocool.com/#impressum"
+
     val POST_CLIENT_DATA = URL(prod + "post_location")
     val POST_CLEAR_NOTIFICATION  = URL(prod + "clear_notification")
     val POST_UNREGISTER_TOKEN  = URL(prod + "unregister")
@@ -42,7 +48,6 @@ companion object {
 
                 Log.d("NetworkUtility", "URL $url")
                 Log.d("NetworkUtility", "HTTP-Response $responseCode")
-
 
                 BufferedReader(InputStreamReader(inputStream)).use {
                     val response = StringBuffer()

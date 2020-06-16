@@ -10,6 +10,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.meteocool.R
 import com.meteocool.utility.InjectorUtils
+import com.meteocool.utility.NetworkUtility
 import com.meteocool.view.WebViewModel
 
 class SettingsFragment() : PreferenceFragmentCompat() {
@@ -57,7 +58,7 @@ class SettingsFragment() : PreferenceFragmentCompat() {
 
     private fun registerPreferenceClickListener(){
         findPreference<Preference>("feedback")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(WebViewModel.FEEDBACK_URL)
+            val webpage: Uri = Uri.parse(NetworkUtility.FEEDBACK_URL)
             val intent = Intent(Intent.ACTION_VIEW, webpage)
             if (intent.resolveActivity(requireActivity().packageManager) != null) {
                 startActivity(intent)
@@ -65,7 +66,7 @@ class SettingsFragment() : PreferenceFragmentCompat() {
             true
         }
         findPreference<Preference>("impressum")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(WebViewModel.IMPRESSUM_URL)
+            val webpage: Uri = Uri.parse(NetworkUtility.IMPRESSUM_URL)
             val intent = Intent(Intent.ACTION_VIEW, webpage)
             if (intent.resolveActivity(requireActivity().packageManager) != null) {
                 startActivity(intent)

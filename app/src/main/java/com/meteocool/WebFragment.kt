@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import com.meteocool.location.WebAppInterface
 import com.meteocool.utility.InjectorUtils
+import com.meteocool.utility.NetworkUtility
 import com.meteocool.view.WebViewModel
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 
@@ -140,7 +141,7 @@ class WebFragment() : Fragment() {
             super.onReceivedError(view, request, error)
             Log.d("WebFragment", "onReceivedError ${error!!.description}")
             Log.d("WebFragment", "onReceivedError ${request!!.url}")
-            if (request.url.toString() == WebViewModel.MAP_URL) {
+            if (request.url.toString() == NetworkUtility.MAP_URL) {
                 listener.receivedWebViewError()
             }
         }

@@ -8,19 +8,12 @@ import androidx.lifecycle.*
 import com.meteocool.security.Validator
 import com.meteocool.settings.booleanLiveData
 import com.meteocool.settings.stringLiveData
+import com.meteocool.utility.NetworkUtility
 
 class WebViewModel(private val sharedPreferences: SharedPreferences, application: Application) : AndroidViewModel(application){
 
-    companion object {
-        val test = "http://10.10.4.162:8040/"
-        val prod = "https://meteocool.com/"
-        const val DOC_URL = "https://meteocool.com/documentation.html"
-        const val MAP_URL = "https://meteocool.com/?mobile=android2"
-        const val FEEDBACK_URL = "https://meteocool.com/#about"
-        const val IMPRESSUM_URL = "https://meteocool.com/#impressum"
-    }
 
-    private val _url = sharedPreferences.stringLiveData("map_url", MAP_URL)
+    private val _url = sharedPreferences.stringLiveData("map_url", NetworkUtility.MAP_URL)
     private val _isMapRotateActive = sharedPreferences.booleanLiveData("map_rotate", false)
     private val _isNightModeEnabled =  sharedPreferences.booleanLiveData("map_mode", false)
     private val _isLocationGranted = MutableLiveData(Validator.isLocationPermissionGranted(application.applicationContext))

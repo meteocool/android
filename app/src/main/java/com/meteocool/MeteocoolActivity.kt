@@ -122,7 +122,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
                     true
                 }
                 R.id.nav_documentation -> {
-                    val webpage: Uri = Uri.parse(WebViewModel.DOC_URL)
+                    val webpage: Uri = Uri.parse(NetworkUtility.DOC_URL)
                     val intent = Intent(Intent.ACTION_VIEW, webpage)
                     if (intent.resolveActivity(packageManager) != null) {
                         startActivity(intent)
