@@ -73,5 +73,21 @@ class SettingsFragment() : PreferenceFragmentCompat() {
             }
             true
         }
+        findPreference<Preference>("github")?.setOnPreferenceClickListener {
+            val webpage: Uri = Uri.parse(NetworkUtility.GITHUB_URL)
+            val intent = Intent(Intent.ACTION_VIEW, webpage)
+            if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                startActivity(intent)
+            }
+            true
+        }
+        findPreference<Preference>("twitter")?.setOnPreferenceClickListener {
+            val webpage: Uri = Uri.parse(NetworkUtility.TWITTER_URL)
+            val intent = Intent(Intent.ACTION_VIEW, webpage)
+            if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                startActivity(intent)
+            }
+            true
+        }
     }
 }

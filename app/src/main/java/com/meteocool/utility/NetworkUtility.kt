@@ -17,6 +17,8 @@ companion object {
     const val MAP_URL = "https://meteocool.com/?mobile=android2"
     const val FEEDBACK_URL = "https://meteocool.com/#about"
     const val IMPRESSUM_URL = "https://meteocool.com/#impressum"
+    const val TWITTER_URL = "https://twitter.com/meteocool_de"
+    const val GITHUB_URL = "https://github.com/meteocool"
 
     val POST_CLIENT_DATA = URL(prod + "post_location")
     val POST_CLEAR_NOTIFICATION  = URL(prod + "clear_notification")

@@ -75,6 +75,18 @@
             app:title="@string/about_header">
 
         <Preference
+                app:key="github"
+                app:icon="@drawable/ic_github"
+                app:title="Github">
+        </Preference>
+
+        <Preference
+                app:key="twitter"
+                app:icon="@drawable/ic_twitter"
+                app:title="Twitter">
+        </Preference>
+
+        <Preference
                 app:key="feedback"
                 app:title="Feedback">
         </Preference>
