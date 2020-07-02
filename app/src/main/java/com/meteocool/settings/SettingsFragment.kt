@@ -12,6 +12,8 @@ import com.meteocool.R
 import com.meteocool.utility.InjectorUtils
 import com.meteocool.utility.NetworkUtility
 import com.meteocool.view.WebViewModel
+import org.jetbrains.anko.defaultSharedPreferences
+import org.jetbrains.anko.support.v4.defaultSharedPreferences
 
 class SettingsFragment() : PreferenceFragmentCompat() {
 
@@ -58,7 +60,7 @@ class SettingsFragment() : PreferenceFragmentCompat() {
 
     private fun registerPreferenceClickListener(){
         findPreference<Preference>("feedback")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(NetworkUtility.FEEDBACK_URL)
+            val webpage: Uri = Uri.parse(NetworkUtility.FEEDBACK_URL + defaultSharedPreferences.getString("fb_token", "no token")!!)
             val intent = Intent(Intent.ACTION_VIEW, webpage)
             if (intent.resolveActivity(requireActivity().packageManager) != null) {
                 startActivity(intent)
