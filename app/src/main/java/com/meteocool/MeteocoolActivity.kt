@@ -246,7 +246,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        Log.d(TAG, "OnSharedPref was changed $sharedPreferences")
+        Log.d(TAG, "OnSharedPref was changed $sharedPreferences: $key")
         when (key) {
             "map_zoom" -> {
                 val zoomAfterStart = sharedPreferences!!.getBoolean(key, false)
@@ -282,6 +282,14 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
                 Log.i(TAG, "Preference value $key was updated to $time")
                 LocationResultHelper.NOTIFICATION_TIME = time
                 requestLocationUpdates()
+            }
+            "map_rotate" -> {
+                val webAppInterface = WebAppInterface(this)
+                webAppInterface.requestSettings()
+            }
+            "map_mode" -> {
+                val webAppInterface = WebAppInterface(this)
+                webAppInterface.requestSettings()
             }
         }
     }

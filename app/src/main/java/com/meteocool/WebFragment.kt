@@ -38,15 +38,6 @@ class WebFragment() : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val preferenceObserver = androidx.lifecycle.Observer<Boolean>{
-                isRotationActive ->
-            val webAppInterface = WebAppInterface(requireActivity())
-            webAppInterface.requestSettings()
-            Log.d("Map Rotation", "$isRotationActive")
-        }
-        webViewModel.isMapRotateActive.observe(this, preferenceObserver)
-        webViewModel.isNightModeEnabled.observe(this, preferenceObserver)
-
         val injectLocationOnceObserver = androidx.lifecycle.Observer<Location>{
             val string = "window.injectLocation(${it.latitude} , ${it.longitude} , ${it.accuracy} , ${defaultSharedPreferences.getBoolean("map_zoom", false)});"
             mWebView.post {
@@ -104,7 +95,7 @@ class WebFragment() : Fragment() {
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         )  {
-            val function = "window.manualTileUpdateFn(true);"
+            val function = "if (window.manualTileUpdateFn) window.manualTileUpdateFn(true);"
             mWebView.post {
                 run {
                     mWebView.evaluateJavascript(function) {}
