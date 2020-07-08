@@ -25,7 +25,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.meteocool.location.LocationResultHelper
 import com.meteocool.location.LocationUpdatesBroadcastReceiver
-import com.meteocool.location.WebAppInterface
 import com.meteocool.security.Validator
 import com.meteocool.settings.SettingsFragment
 import com.meteocool.utility.InjectorUtils
@@ -85,14 +84,23 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
         val navView: NavigationView = findViewById(R.id.nav_drawer_main)
         addClickListenerTo(navView)
 
-        val locationPermissionObserver = androidx.lifecycle.Observer<Boolean> {
-            if (it) {
-                requestLocationUpdates()
-            } else {
-                stopLocationRequests()
+//        val locationPermissionObserver = androidx.lifecycle.Observer<Boolean> {
+//            if (it) {
+//                requestLocationUpdates()
+//            } else {
+//                stopLocationRequests()
+//            }
+//        }
+//        webViewModel.isLocationGranted.observe(this, locationPermissionObserver)
+
+        val openDrawerObserver = androidx.lifecycle.Observer<Boolean> {
+            if(it) {
+                val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+                drawerLayout.openDrawer(GravityCompat.START)
+                webViewModel.resetDrawer()
             }
         }
-        webViewModel.isLocationGranted.observe(this, locationPermissionObserver)
+        webViewModel.injectSettings.observe(this, openDrawerObserver)
     }
 
     private fun isGooglePlayServicesAvailable(activity: Activity?): Boolean {
@@ -175,20 +183,23 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        //val states = LocationSettingsStates.fromIntent(intent);
-        when (requestCode) {
-            REQUEST_CHECK_SETTINGS ->
-                when (resultCode) {
-                    Activity.RESULT_OK ->{
-                        requestLocationUpdates()
-                    }
-                    Activity.RESULT_CANCELED ->{
-                    }
-                }
-        }
-    }
+
+
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        //val states = LocationSettingsStates.fromIntent(intent);
+//        when (requestCode) {
+//            REQUEST_CHECK_SETTINGS ->
+//                when (resultCode) {
+//                    Activity.RESULT_OK -> {
+//                        requestLocationUpdates()
+//                    }
+//                    Activity.RESULT_CANCELED -> {
+//                    }
+//                }
+//        }
+//    }
 
     private fun stopLocationRequests() {
         Log.i(TAG, "Stopping location updates")
@@ -212,7 +223,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
     override fun onResume() {
         super.onResume()
-        requestLocationUpdates()
+        //  requestLocationUpdates()
         cancelNotifications()
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
     }
@@ -245,6 +256,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
         }
     }
 
+
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         Log.d(TAG, "OnSharedPref was changed $sharedPreferences")
         when (key) {
@@ -253,8 +265,8 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
                 Log.i(TAG, "Preference value $key was updated to $zoomAfterStart ")
                 Validator.checkLocationPermission(this, this)
                 if (Validator.isLocationPermissionGranted(this)) {
-                    val webAppInterface = WebAppInterface(this)
-                    webAppInterface.requestSettings()
+                    //  val webAppInterface = WebAppInterface()
+                    //webAppInterface.requestSettings()
                 }
             }
             "notification" -> {
@@ -348,7 +360,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
          */
         private const val MAX_WAIT_TIME = UPDATE_INTERVAL
 
-        private const val REQUEST_CHECK_SETTINGS = 999
+        const val REQUEST_CHECK_SETTINGS = 999
     }
 
     override fun receivedWebViewError() {

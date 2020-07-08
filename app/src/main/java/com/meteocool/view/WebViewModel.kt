@@ -18,6 +18,14 @@ class WebViewModel(private val sharedPreferences: SharedPreferences, application
     private val _isNightModeEnabled =  sharedPreferences.booleanLiveData("map_mode", false)
     private val _isLocationGranted = MutableLiveData(Validator.isLocationPermissionGranted(application.applicationContext))
     private val _injectLocation = MutableLiveData<Location>()
+    private val _injectSettings = MutableLiveData<Boolean>()
+    private val _requestingLocationUpdatesForeground = MutableLiveData<Boolean>()
+
+    val requestingLocationUpdatesForeground  : LiveData<Boolean>
+        get() = _requestingLocationUpdatesForeground
+
+    val injectSettings : LiveData<Boolean>
+        get() = _injectSettings
 
     val isLocationGranted : LiveData<Boolean>
         get() = _isLocationGranted
@@ -43,5 +51,22 @@ class WebViewModel(private val sharedPreferences: SharedPreferences, application
         Log.d("VIEWMODEL", "perm "+ Validator.isLocationPermissionGranted(context))
         _isLocationGranted.value =  Validator.isLocationPermissionGranted(context)
     }
+
+    fun openDrawer(){
+        _injectSettings.value = true
+    }
+
+    fun resetDrawer(){
+        _injectSettings.value = false
+    }
+
+    fun sendLocationOnce(){
+        _requestingLocationUpdatesForeground.value = true
+    }
+
+    fun stopLocationUpdates(){
+        _requestingLocationUpdatesForeground.value = false
+    }
+
 
 }

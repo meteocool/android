@@ -3,8 +3,8 @@ package com.meteocool.location
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.preference.PreferenceManager
 import android.util.Log
+import androidx.preference.PreferenceManager
 import com.google.android.gms.location.LocationResult
 import com.meteocool.location.LocationResultHelper.Companion.getDistanceToLastLocation
 import org.jetbrains.anko.defaultSharedPreferences
@@ -29,8 +29,8 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver(){
                        if(isDistanceBiggerThan500F || sendOnce){
                             Log.i(TAG, "$isDistanceBiggerThan500F")
                             Log.i(TAG, "$location is better than $lastLocation")
-                            val preferenceManager = PreferenceManager.getDefaultSharedPreferences(context)
-                           val token = preferenceManager.getString("fb_token", "no token")
+                            val preferences = context.defaultSharedPreferences
+                           val token = preferences.getString("fb_token", "no token")
                            Log.d(TAG, " Token $token")
                            UploadLocation().execute(location, token)
                            sendOnce = false
