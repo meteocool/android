@@ -1,7 +1,7 @@
 package com.meteocool.utility
 
-import android.util.Log
 import com.google.gson.Gson
+import timber.log.Timber
 import java.io.*
 import java.lang.Exception
 import java.net.HttpURLConnection
@@ -27,7 +27,7 @@ companion object {
     private fun buildJSONString(json : JSON) : String{
         val gsonBuilder = Gson().newBuilder().create()
         val jsonAsString = gsonBuilder.toJson(json)
-        Log.d("NetworkUtility", "JSON $jsonAsString")
+        Timber.d("JSON $jsonAsString")
         return jsonAsString
     }
 
@@ -48,8 +48,8 @@ companion object {
                 wr.write(jsonAsString)
                 wr.flush()
 
-                Log.d("NetworkUtility", "URL $url")
-                Log.d("NetworkUtility", "HTTP-Response $responseCode")
+                Timber.d("URL $url")
+                Timber.d("HTTP-Response $responseCode")
 
                 BufferedReader(InputStreamReader(inputStream)).use {
                     val response = StringBuffer()
@@ -60,11 +60,11 @@ companion object {
                         inputLine = it.readLine()
                     }
                     it.close()
-                    Log.d("NetworkUtility", "$response")
+                    Timber.d( "$response")
                 }
             }
         }catch(e : Exception){
-            Log.d("NetworkUtility", "Upload Error")
+            Timber.e(e)
         }
     }
 }

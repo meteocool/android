@@ -14,9 +14,9 @@ class MeteocoolApp : Application() {
             Timber.plant(DebugTree())
         } else {
             Timber.plant(CrashReportingTree())
-            Fabric.with(this, Crashlytics())
+            //Fabric.with(this, Crashlytics())
 
-            FirebaseAnalytics.getInstance(this)
+            //FirebaseAnalytics.getInstance(this)
         }
     }
 
@@ -31,14 +31,14 @@ class MeteocoolApp : Application() {
             if (priority == Log.VERBOSE || priority == Log.DEBUG) {
                 return
             }
-            FakeCrashLibrary.log(priority, tag, message)
-            if (t != null) {
-                if (priority == Log.ERROR) {
-                    FakeCrashLibrary.logError(t)
-                } else if (priority == Log.WARN) {
-                    FakeCrashLibrary.logWarning(t)
-                }
-            }
+//            FakeCrashLibrary.log(priority, tag, message)
+//            if (t != null) {
+//                if (priority == Log.ERROR) {
+//                    FakeCrashLibrary.logError(t)
+//                } else if (priority == Log.WARN) {
+//                    FakeCrashLibrary.logWarning(t)
+//                }
+//            }
         }
     }
 }

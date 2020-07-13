@@ -2,14 +2,14 @@ package com.meteocool
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import org.jetbrains.anko.defaultSharedPreferences
+import timber.log.Timber
 
 class SplashActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("Splash", isOnboardingCompleted().toString())
+        Timber.d(isOnboardingCompleted().toString())
         if(!isOnboardingCompleted()) {
             startActivity(Intent(this.applicationContext, OnboardingActivity::class.java))
         }else {

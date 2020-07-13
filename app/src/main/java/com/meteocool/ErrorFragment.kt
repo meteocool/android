@@ -1,13 +1,12 @@
 package com.meteocool
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import org.jetbrains.anko.sdk25.coroutines.onClick
+import timber.log.Timber
 
 class ErrorFragment : Fragment(){
 
@@ -20,7 +19,7 @@ class ErrorFragment : Fragment(){
 
         val retryMap = view.findViewById<Button>(R.id.retry_map)
         retryMap.setOnClickListener {
-            Log.d("ErrorFragment", "retry clicked")
+            Timber.d("retry clicked")
             requireActivity().supportFragmentManager.popBackStack()
         }
 

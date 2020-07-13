@@ -9,7 +9,6 @@ import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,12 +20,12 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.google.gson.Gson
-import com.meteocool.location.LocationUpdatesBroadcastReceiver
 import com.meteocool.security.Validator
 import com.meteocool.utility.InjectorUtils
 import com.meteocool.utility.NetworkUtility
 import com.meteocool.view.WebViewModel
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
+import timber.log.Timber
 
 
 class WebFragment() : Fragment() {
@@ -48,36 +47,11 @@ class WebFragment() : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val preferenceObserver = androidx.lifecycle.Observer<Boolean>{
-                isRotationActive ->
-            val webAppInterface = WebAppInterface()
-            webAppInterface.requestSettings()
-            Log.d("Map Rotation", "$isRotationActive")
-        }
-        webViewModel.isMapRotateActive.observe(this, preferenceObserver)
-        webViewModel.isNightModeEnabled.observe(this, preferenceObserver)
 
-        val injectLocationOnceObserver = androidx.lifecycle.Observer<Location>{
-            val string = "window.injectLocation(${it.latitude} , ${it.longitude} , ${it.accuracy} , ${defaultSharedPreferences.getBoolean("map_zoom", false)});"
-            mWebView.post {
-                run  {
-                    mWebView.evaluateJavascript(string) {}
-                }
-            }
-        }
-        webViewModel.injectLocation.observe(this, injectLocationOnceObserver)
-
-        val requestForegroundLocationObserver = androidx.lifecycle.Observer<Boolean>{
-            if(it){
-                requestLocationUpdates()
-            }else{
-                stopLocationUpdates()
-            }
-        }
-        webViewModel.requestingLocationUpdatesForeground.observe(this, requestForegroundLocationObserver)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         locationCallback = object : LocationCallback() {
+
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult ?: return
                 for (location in locationResult.locations){
@@ -122,7 +96,37 @@ class WebFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mWebView.addJavascriptInterface(WebAppInterface(), "Android")
+       // mWebView.addJavascriptInterface(WebAppInterface(), "Android")
+        val preferenceObserver = androidx.lifecycle.Observer<Boolean>{
+                isRotationActive ->
+            val webAppInterface = WebAppInterface()
+            webAppInterface.requestSettings()
+            Timber.d("$isRotationActive")
+        }
+        //webViewModel.isMapRotateActive.observe(viewLifecycleOwner, preferenceObserver)
+        //webViewModel.isNightModeEnabled.observe(viewLifecycleOwner, preferenceObserver)
+
+        val injectLocationOnceObserver = androidx.lifecycle.Observer<Location>{
+            Timber.d("Called")
+            val string = "window.injectLocation(${it.latitude} , ${it.longitude} , ${it.accuracy} , ${defaultSharedPreferences.getBoolean("map_zoom", false)});"
+            mWebView.post {
+                run  {
+                    mWebView.evaluateJavascript(string) {}
+                }
+            }
+        }
+        webViewModel.injectLocation.observe(viewLifecycleOwner, injectLocationOnceObserver)
+
+        val requestForegroundLocationObserver = androidx.lifecycle.Observer<Boolean>{
+            Timber.d("$it")
+
+            if(it){
+                requestLocationUpdates()
+            }else{
+                stopLocationUpdates()
+            }
+        }
+        webViewModel.requestingLocationUpdatesForeground.observe(viewLifecycleOwner, requestForegroundLocationObserver)
     }
 
     override fun onPause() {
@@ -166,20 +170,19 @@ class WebFragment() : Fragment() {
         }
     }
     private fun stopLocationUpdates() {
+        Timber.i("Stop location updates")
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
-
     private fun requestLocationUpdates() {
         try {
-            LocationUpdatesBroadcastReceiver.sendOnce = true
             val builder =
                 LocationSettingsRequest.Builder()
                     .addLocationRequest(frontendLocationRequest)
             val client: SettingsClient = LocationServices.getSettingsClient(requireActivity())
             val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
             task.addOnSuccessListener {
-                Log.i("WebFragment", "Starting location updates")
+                Timber.i("Starting location updates")
                 fusedLocationClient.requestLocationUpdates(
                     frontendLocationRequest, locationCallback, Looper.getMainLooper()
                 )
@@ -196,7 +199,7 @@ class WebFragment() : Fragment() {
                             requireActivity(),
                             MeteocoolActivity.REQUEST_CHECK_SETTINGS
                         )
-                        Log.d("MeteocoolActivity.TAG", "No location permission")
+                        Timber.d("No location permission")
                     } catch (sendEx: IntentSender.SendIntentException) {
                         // Ignore the error.
                     }
@@ -228,8 +231,8 @@ class WebFragment() : Fragment() {
             error: WebResourceError?
         ) {
             super.onReceivedError(view, request, error)
-            Log.d("WebFragment", "onReceivedError ${error!!.description}")
-            Log.d("WebFragment", "onReceivedError ${request!!.url}")
+            Timber.d("onReceivedError ${error!!.description}")
+            Timber.d("onReceivedError ${request!!.url}")
             if (request.url.toString() == NetworkUtility.MAP_URL) {
                 listener.receivedWebViewError()
             }
@@ -241,7 +244,7 @@ class WebFragment() : Fragment() {
             errorResponse: WebResourceResponse?
         ) {
             super.onReceivedHttpError(view, request, errorResponse)
-            Log.d("WebFragment", "onReceivedHttpError")
+            Timber.d("onReceivedHttpError")
         }
 
         override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
@@ -288,8 +291,8 @@ class WebFragment() : Fragment() {
             mWebView.post {
                 run {
                     mWebView.evaluateJavascript(string) { foo ->
-                            Log.d("TAG", string)
-                            Log.d("TAG", foo)
+                            Timber.d(string)
+                            Timber.d(foo)
                         }
                 }
             }

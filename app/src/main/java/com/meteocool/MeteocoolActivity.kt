@@ -9,7 +9,6 @@ import android.content.IntentSender
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -34,6 +33,7 @@ import com.meteocool.utility.NetworkUtility
 import com.meteocool.view.WebViewModel
 import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.doAsync
+import timber.log.Timber
 
 
 class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
@@ -64,13 +64,13 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
-                    Log.w(TAG, "getInstanceId failed", task.exception)
+                    Timber.w(task.exception,"getInstanceId failed")
                     return@OnCompleteListener
                 }
             })
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        Log.d(TAG, "Google services available: " + isGooglePlayServicesAvailable(this).toString())
+        Timber.d("Google services available: %s", isGooglePlayServicesAvailable(this).toString())
 
         supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, WebFragment())
             .commit()
@@ -118,7 +118,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
     private fun addClickListenerTo(navView: NavigationView) {
         navView.setNavigationItemSelectedListener { menuItem ->
-            Log.d(TAG, "{${webViewModel.url.value} + before change")
+            Timber.d("{${webViewModel.url.value} + before change")
 
             when (menuItem.itemId) {
                 R.id.nav_home -> {
@@ -152,7 +152,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
             val client: SettingsClient = LocationServices.getSettingsClient(this)
             val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
             task.addOnSuccessListener {
-                Log.i(TAG, "Starting location updates")
+                Timber.d("Starting location updates")
                 mFusedLocationClient.requestLocationUpdates(
                     locationRequest, pendingIntent
                 )
@@ -169,7 +169,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
                             this@MeteocoolActivity,
                             REQUEST_CHECK_SETTINGS
                         )
-                        Log.d(TAG, "No location permission")
+                        Timber.d("No location permission")
                     } catch (sendEx: IntentSender.SendIntentException) {
                         // Ignore the error.
                     }
@@ -202,7 +202,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 //    }
 
     private fun stopLocationRequests() {
-        Log.i(TAG, "Stopping location updates")
+        Timber.d("Stopping location updates")
         mFusedLocationClient.removeLocationUpdates(pendingIntent)
     }
 
@@ -234,17 +234,17 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
     }
 
     override fun onConnected(p0: Bundle?) {
-        Log.i(TAG, "GoogleApiClient connected")
+        Timber.d("GoogleApiClient connected")
     }
 
     override fun onConnectionSuspended(p0: Int) {
         val text = "Connection suspended"
-        Log.w(TAG, "$text: Error code: $p0")
+        Timber.w("$text: Error code: $p0")
     }
 
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
         val text = "Exception while connecting to Google Play services"
-        Log.w(TAG, text + ": " + connectionResult.errorMessage)
+        Timber.w( "%s%s", text, connectionResult.errorMessage)
     }
 
     override fun onBackPressed() {
@@ -258,11 +258,11 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        Log.d(TAG, "OnSharedPref was changed $sharedPreferences")
+        Timber.d("OnSharedPref was changed $sharedPreferences")
         when (key) {
             "map_zoom" -> {
                 val zoomAfterStart = sharedPreferences!!.getBoolean(key, false)
-                Log.i(TAG, "Preference value $key was updated to $zoomAfterStart ")
+                Timber.i("Preference value $key was updated to $zoomAfterStart ")
                 Validator.checkLocationPermission(this, this)
                 if (Validator.isLocationPermissionGranted(this)) {
                     //  val webAppInterface = WebAppInterface()
@@ -271,7 +271,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
             }
             "notification" -> {
                 val isNotificationON = sharedPreferences!!.getBoolean(key, false)
-                Log.i(TAG, "Preference value $key was updated to $isNotificationON ")
+                Timber.i("Preference value $key was updated to $isNotificationON ")
                 Validator.checkLocationPermission(this, this)
                 if (!isNotificationON) {
                     val token = defaultSharedPreferences.getString("fb_token", "no token")!!
@@ -285,13 +285,13 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
             }
             "notification_intensity" -> {
                 val intensity = sharedPreferences!!.getString(key, "-1")!!.toInt()
-                Log.i(TAG, "Preference value $key was updated to $intensity")
+                Timber.i("Preference value $key was updated to $intensity")
                 LocationResultHelper.NOTIFICATION_INTENSITY = intensity
                 requestLocationUpdates()
             }
             "notification_time" -> {
                 val time = sharedPreferences!!.getString(key, "-1")!!.toInt()
-                Log.i(TAG, "Preference value $key was updated to $time")
+                Timber.i("Preference value $key was updated to $time")
                 LocationResultHelper.NOTIFICATION_TIME = time
                 requestLocationUpdates()
             }
@@ -340,8 +340,6 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
     }
 
     companion object {
-
-        private val TAG = MeteocoolActivity::class.java.simpleName + "_location"
 
         /**
          * The desired interval for location updates. Inexact. Updates may be more or less frequent.

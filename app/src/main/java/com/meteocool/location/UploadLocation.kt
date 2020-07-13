@@ -2,11 +2,9 @@ package com.meteocool.location
 
 import android.location.Location
 import android.os.AsyncTask
-import android.preference.PreferenceManager
-import android.util.Log
-import com.google.firebase.iid.FirebaseInstanceId
 import com.meteocool.utility.JSONPost
 import com.meteocool.utility.NetworkUtility
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -17,7 +15,7 @@ import java.util.*
  */
 class UploadLocation: AsyncTask<Any, Unit, Unit>(){
     override fun doInBackground(vararg params: Any?) {
-        Log.d("Async", "location: $params[0].toString(), token: $params[1]")
+        Timber.d("location: $params[0].toString(), token: $params[1]")
         val location = params[0] as Location
         val verticalAccuracy = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             location.verticalAccuracyMeters

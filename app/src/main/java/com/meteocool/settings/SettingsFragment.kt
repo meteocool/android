@@ -3,7 +3,6 @@ package com.meteocool.settings
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.activityViewModels
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -12,6 +11,7 @@ import com.meteocool.R
 import com.meteocool.utility.InjectorUtils
 import com.meteocool.utility.NetworkUtility
 import com.meteocool.view.WebViewModel
+import timber.log.Timber
 
 class SettingsFragment() : PreferenceFragmentCompat() {
 
@@ -39,14 +39,14 @@ class SettingsFragment() : PreferenceFragmentCompat() {
                 isRotationActive ->
             this.preferenceManager.findPreference<SwitchPreferenceCompat>("map_rotate")?.isChecked =
                 isRotationActive
-            Log.d("Map Rotation", "$isRotationActive")
+            Timber.d("$isRotationActive")
         }
         webViewModel.isMapRotateActive.observe(viewLifecycleOwner, prefMapRotationObserver)
         val prefNightModeObserver = androidx.lifecycle.Observer<Boolean>{
                 isNightModeEnabled ->
             this.preferenceManager.findPreference<SwitchPreferenceCompat>("map_mode")?.isChecked =
                 isNightModeEnabled
-            Log.d("Night Mode", "$isNightModeEnabled")
+            Timber.d("$isNightModeEnabled")
         }
         webViewModel.isNightModeEnabled.observe(viewLifecycleOwner, prefNightModeObserver)
     }

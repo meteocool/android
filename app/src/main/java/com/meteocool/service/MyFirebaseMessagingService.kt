@@ -1,6 +1,5 @@
 package com.meteocool.service
 
-import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import android.app.NotificationManager
@@ -8,6 +7,7 @@ import android.content.Context
 import com.meteocool.utility.JSONClearPost
 import com.meteocool.utility.NetworkUtility
 import org.jetbrains.anko.defaultSharedPreferences
+import timber.log.Timber
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -19,8 +19,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-        Log.d(TAG, "From: " + remoteMessage.from!!)
-        Log.d(TAG, "Notification Message Body: " + remoteMessage.data["clear_all"])
+        Timber.d("From: %s", remoteMessage.from!!)
+        Timber.d("Notification Message Body: %s", remoteMessage.data["clear_all"])
 
         if (remoteMessage.data["clear_all"] == "true") {
             cancelNotification()
@@ -38,9 +38,5 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 "launch_screen"
             ), NetworkUtility.POST_CLEAR_NOTIFICATION
         )
-    }
-
-    companion object {
-        private const val TAG = "FCM Service"
     }
 }

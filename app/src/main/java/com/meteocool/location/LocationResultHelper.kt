@@ -4,8 +4,8 @@ package com.meteocool.location;
 import android.content.Context
 import android.content.SharedPreferences
 import android.location.Location
-import android.util.Log
 import org.jetbrains.anko.defaultSharedPreferences
+import timber.log.Timber
 
 /**
  * Class to process location results.
@@ -13,9 +13,6 @@ import org.jetbrains.anko.defaultSharedPreferences
 internal class LocationResultHelper() {
 
     companion object {
-
-        private const val TAG = "LocationResultHelper"
-
         const val KEY_LOCATION_UPDATES_RESULT_LAT = "location-update-result-latitude"
         const val KEY_LOCATION_UPDATES_RESULT_LON = "location-update-result-longitude"
         const val KEY_LOCATION_UPDATES_RESULT_ALT = "location-update-result-altitude"
@@ -51,7 +48,7 @@ internal class LocationResultHelper() {
         fun getDistanceToLastLocation(newLocation : Location, context: Context) : Float{
             val distance = FloatArray(1)
             Location.distanceBetween(newLocation.latitude, newLocation.longitude, getSavedLocationResult(context).getValue(KEY_LOCATION_UPDATES_RESULT_LAT).toDouble(), getSavedLocationResult(context).getValue(KEY_LOCATION_UPDATES_RESULT_LON).toDouble() , distance)
-            Log.d(TAG, "Calculated distance: ${distance[0]}")
+            Timber.d("Calculated distance: ${distance[0]}")
             return distance[0]
         }
     }
