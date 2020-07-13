@@ -3,12 +3,10 @@ package com.meteocool
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,12 +15,7 @@ import android.view.ViewGroup
 import android.webkit.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
-import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.*
-import com.google.android.gms.tasks.Task
-import com.google.gson.Gson
-import com.meteocool.location.LocationUpdatesBroadcastReceiver
-import com.meteocool.security.Validator
+import com.meteocool.location.WebAppInterface
 import com.meteocool.utility.InjectorUtils
 import com.meteocool.utility.NetworkUtility
 import com.meteocool.view.WebViewModel
@@ -37,9 +30,6 @@ class WebFragment() : Fragment() {
 
     private lateinit var listener: WebViewClientListener
     private lateinit var mWebView: WebView
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationCallback: LocationCallback
-
 
 
     private val webViewModel: WebViewModel by activityViewModels {
@@ -48,15 +38,6 @@ class WebFragment() : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val preferenceObserver = androidx.lifecycle.Observer<Boolean>{
-                isRotationActive ->
-            val webAppInterface = WebAppInterface()
-            webAppInterface.requestSettings()
-            Log.d("Map Rotation", "$isRotationActive")
-        }
-        webViewModel.isMapRotateActive.observe(this, preferenceObserver)
-        webViewModel.isNightModeEnabled.observe(this, preferenceObserver)
-
         val injectLocationOnceObserver = androidx.lifecycle.Observer<Location>{
             val string = "window.injectLocation(${it.latitude} , ${it.longitude} , ${it.accuracy} , ${defaultSharedPreferences.getBoolean("map_zoom", false)});"
             mWebView.post {
@@ -66,32 +47,6 @@ class WebFragment() : Fragment() {
             }
         }
         webViewModel.injectLocation.observe(this, injectLocationOnceObserver)
-
-        val requestForegroundLocationObserver = androidx.lifecycle.Observer<Boolean>{
-            if(it){
-                requestLocationUpdates()
-            }else{
-                stopLocationUpdates()
-            }
-        }
-        webViewModel.requestingLocationUpdatesForeground.observe(this, requestForegroundLocationObserver)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                locationResult ?: return
-                for (location in locationResult.locations){
-                    val string = "window.injectLocation(${location.latitude} , ${location.longitude} , ${location.accuracy} , true);"
-                    mWebView.post {
-                        run  {
-                            mWebView.evaluateJavascript(string) {}
-                        }
-                    }
-                }
-                webViewModel.stopLocationUpdates()
-            }
-        }
-
     }
 
     override fun onCreateView(
@@ -122,7 +77,8 @@ class WebFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mWebView.addJavascriptInterface(WebAppInterface(), "Android")
+        mWebView.addJavascriptInterface(WebAppInterface(requireActivity()), "Android")
+
     }
 
     override fun onPause() {
@@ -139,7 +95,7 @@ class WebFragment() : Fragment() {
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         )  {
-            val function = "window.manualTileUpdateFn(true);"
+            val function = "if (window.manualTileUpdateFn) window.manualTileUpdateFn(true);"
             mWebView.post {
                 run {
                     mWebView.evaluateJavascript(function) {}
@@ -165,60 +121,6 @@ class WebFragment() : Fragment() {
             )
         }
     }
-    private fun stopLocationUpdates() {
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-    }
-
-
-    private fun requestLocationUpdates() {
-        try {
-            LocationUpdatesBroadcastReceiver.sendOnce = true
-            val builder =
-                LocationSettingsRequest.Builder()
-                    .addLocationRequest(frontendLocationRequest)
-            val client: SettingsClient = LocationServices.getSettingsClient(requireActivity())
-            val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
-            task.addOnSuccessListener {
-                Log.i("WebFragment", "Starting location updates")
-                fusedLocationClient.requestLocationUpdates(
-                    frontendLocationRequest, locationCallback, Looper.getMainLooper()
-                )
-            }
-
-            task.addOnFailureListener { exception ->
-                if (exception is ResolvableApiException) {
-                    // Location settings are not satisfied, but this can be fixed
-                    // by showing the user a dialog.
-                    try {
-                        // Show the dialog by calling startResolutionForResult(),
-                        // and check the result in onActivityResult().
-                        exception.startResolutionForResult(
-                            requireActivity(),
-                            MeteocoolActivity.REQUEST_CHECK_SETTINGS
-                        )
-                        Log.d("MeteocoolActivity.TAG", "No location permission")
-                    } catch (sendEx: IntentSender.SendIntentException) {
-                        // Ignore the error.
-                    }
-                }
-            }
-
-
-        } catch (e: SecurityException) {
-            e.printStackTrace()
-        }
-
-    }
-
-    private val frontendLocationRequest: LocationRequest
-        get() {
-            return LocationRequest.create().apply {
-                interval = 2
-                fastestInterval = 1
-                priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
-                maxWaitTime = 2
-            }
-        }
 
     inner class MyWebViewClient(private val listener: WebViewClientListener) : WebViewClient() {
 
@@ -254,45 +156,6 @@ class WebFragment() : Fragment() {
                 startActivity(this)
             }
             return true
-        }
-    }
-
-    inner class WebAppInterface {
-        @JavascriptInterface
-        fun injectLocation() {
-            Validator.checkBackgroundLocationPermission(requireContext(), requireActivity())
-            requireActivity().runOnUiThread {
-                webViewModel.sendLocationOnce()
-            }
-        }
-
-        @JavascriptInterface
-        fun showSettings() {
-                requireActivity().runOnUiThread {
-                    webViewModel.openDrawer()
-                }
-        }
-
-        @JavascriptInterface
-        fun requestSettings() {
-
-            val preferenceManager = defaultSharedPreferences
-            val settings: Gson = Gson().newBuilder().create()
-            val myMap = mapOf<String, Boolean>(
-                Pair("darkMode", preferenceManager.getBoolean("map_mode", false)),
-                Pair("zoomOnForeground", preferenceManager.getBoolean("map_zoom", false)),
-                Pair("mapRotation", preferenceManager.getBoolean("map_rotate", false))
-            )
-
-            val string = "window.injectSettings(${settings.toJson(myMap)});"
-            mWebView.post {
-                run {
-                    mWebView.evaluateJavascript(string) { foo ->
-                            Log.d("TAG", string)
-                            Log.d("TAG", foo)
-                        }
-                }
-            }
         }
     }
 }
