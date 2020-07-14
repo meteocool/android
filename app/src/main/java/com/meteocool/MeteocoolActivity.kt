@@ -295,6 +295,14 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
                 LocationResultHelper.NOTIFICATION_TIME = time
                 requestLocationUpdates()
             }
+            "map_rotate" -> {
+                val webAppInterface = WebAppInterface(this)
+                webAppInterface.requestSettings()
+            }
+            "map_mode" -> {
+                val webAppInterface = WebAppInterface(this)
+                webAppInterface.requestSettings()
+            }
         }
     }
 

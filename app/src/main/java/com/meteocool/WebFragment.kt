@@ -3,7 +3,6 @@ package com.meteocool
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
@@ -47,25 +46,15 @@ class WebFragment() : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-
-        locationCallback = object : LocationCallback() {
-
-            override fun onLocationResult(locationResult: LocationResult?) {
-                locationResult ?: return
-                for (location in locationResult.locations){
-                    val string = "window.injectLocation(${location.latitude} , ${location.longitude} , ${location.accuracy} , true);"
-                    mWebView.post {
-                        run  {
-                            mWebView.evaluateJavascript(string) {}
-                        }
-                    }
+        val injectLocationOnceObserver = androidx.lifecycle.Observer<Location>{
+            val string = "window.injectLocation(${it.latitude} , ${it.longitude} , ${it.accuracy} , ${defaultSharedPreferences.getBoolean("map_zoom", false)});"
+            mWebView.post {
+                run  {
+                    mWebView.evaluateJavascript(string) {}
                 }
-                webViewModel.stopLocationUpdates()
             }
         }
-
+        webViewModel.injectLocation.observe(this, injectLocationOnceObserver)
     }
 
     override fun onCreateView(
@@ -96,37 +85,7 @@ class WebFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       // mWebView.addJavascriptInterface(WebAppInterface(), "Android")
-        val preferenceObserver = androidx.lifecycle.Observer<Boolean>{
-                isRotationActive ->
-            val webAppInterface = WebAppInterface()
-            webAppInterface.requestSettings()
-            Timber.d("$isRotationActive")
-        }
-        //webViewModel.isMapRotateActive.observe(viewLifecycleOwner, preferenceObserver)
-        //webViewModel.isNightModeEnabled.observe(viewLifecycleOwner, preferenceObserver)
-
-        val injectLocationOnceObserver = androidx.lifecycle.Observer<Location>{
-            Timber.d("Called")
-            val string = "window.injectLocation(${it.latitude} , ${it.longitude} , ${it.accuracy} , ${defaultSharedPreferences.getBoolean("map_zoom", false)});"
-            mWebView.post {
-                run  {
-                    mWebView.evaluateJavascript(string) {}
-                }
-            }
-        }
-        webViewModel.injectLocation.observe(viewLifecycleOwner, injectLocationOnceObserver)
-
-        val requestForegroundLocationObserver = androidx.lifecycle.Observer<Boolean>{
-            Timber.d("$it")
-
-            if(it){
-                requestLocationUpdates()
-            }else{
-                stopLocationUpdates()
-            }
-        }
-        webViewModel.requestingLocationUpdatesForeground.observe(viewLifecycleOwner, requestForegroundLocationObserver)
+        mWebView.addJavascriptInterface(WebAppInterface(), "Android")
     }
 
     override fun onPause() {
@@ -143,7 +102,7 @@ class WebFragment() : Fragment() {
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         )  {
-            val function = "window.manualTileUpdateFn(true);"
+            val function = "if (window.manualTileUpdateFn) window.manualTileUpdateFn(true);"
             mWebView.post {
                 run {
                     mWebView.evaluateJavascript(function) {}
