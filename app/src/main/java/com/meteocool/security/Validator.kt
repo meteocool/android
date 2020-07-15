@@ -17,11 +17,11 @@ class Validator {
             when {
                 ContextCompat.checkSelfPermission(
                     context,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
+                    Manifest.permission.ACCESS_FINE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED -> {
                     requestPermissions(
                         activity,
-                        arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                         LOCATION
                     )
                 }
@@ -55,8 +55,7 @@ class Validator {
                     requestPermissions(
                         activity,
                         arrayOf(
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
+                            Manifest.permission.ACCESS_FINE_LOCATION
                         ),
                         LOCATION_BACKGROUND
                     )
@@ -67,9 +66,6 @@ class Validator {
 
     fun isLocationPermissionGranted(context: Context): Boolean {
         return ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED

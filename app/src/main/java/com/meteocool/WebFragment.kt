@@ -195,19 +195,12 @@ class WebFragment() : Fragment() {
             val client: SettingsClient = LocationServices.getSettingsClient(requireActivity())
             val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
             task.addOnSuccessListener {
-                fusedLocationClient.lastLocation.addOnSuccessListener {
-                    if (it != null) {
-                        Timber.d("Got last known location")
 
-                        updateUserLocation(it)
+                Timber.i("Starting location updates")
 
-                    }
-                    Timber.i("Starting location updates")
-
-                    fusedLocationClient.requestLocationUpdates(
-                        frontendLocationRequest, locationCallback, Looper.getMainLooper()
-                    )
-                }
+                fusedLocationClient.requestLocationUpdates(
+                    frontendLocationRequest, locationCallback, Looper.getMainLooper()
+                )
 
             }
 
