@@ -7,7 +7,7 @@ import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
-class NetworkUtility{
+class NetworkUtils{
 companion object {
 
     val test = "http://10.10.4.162:8040/"

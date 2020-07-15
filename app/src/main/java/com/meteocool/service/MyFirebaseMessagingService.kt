@@ -5,7 +5,7 @@ import com.google.firebase.messaging.RemoteMessage
 import android.app.NotificationManager
 import android.content.Context
 import com.meteocool.utility.JSONClearPost
-import com.meteocool.utility.NetworkUtility
+import com.meteocool.utility.NetworkUtils
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
@@ -32,11 +32,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancelAll()
         val token = defaultSharedPreferences.getString("fb_token", "no token")!!
-        NetworkUtility.sendPostRequest(
+        NetworkUtils.sendPostRequest(
             JSONClearPost(
                 token,
                 "launch_screen"
-            ), NetworkUtility.POST_CLEAR_NOTIFICATION
+            ), NetworkUtils.POST_CLEAR_NOTIFICATION
         )
     }
 }

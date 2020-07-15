@@ -8,8 +8,9 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.meteocool.R
+import com.meteocool.security.Validator
 import com.meteocool.utility.InjectorUtils
-import com.meteocool.utility.NetworkUtility
+import com.meteocool.utility.NetworkUtils
 import com.meteocool.view.WebViewModel
 import timber.log.Timber
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
@@ -24,34 +25,6 @@ class SettingsFragment() : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val isLocationGrantedObserver = androidx.lifecycle.Observer<Boolean>{
-                isLocationGranted ->
-            if(!isLocationGranted) {
-                this.preferenceManager.findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked =
-                    false
-                this.preferenceManager.findPreference<SwitchPreferenceCompat>("notification")?.isChecked =
-                    false
-            }
-        }
-        webViewModel.isLocationGranted.observe(viewLifecycleOwner, isLocationGrantedObserver)
-        val prefMapRotationObserver = androidx.lifecycle.Observer<Boolean>{
-                isRotationActive ->
-            this.preferenceManager.findPreference<SwitchPreferenceCompat>("map_rotate")?.isChecked =
-                isRotationActive
-            Timber.d("$isRotationActive")
-        }
-        webViewModel.isMapRotateActive.observe(viewLifecycleOwner, prefMapRotationObserver)
-        val prefNightModeObserver = androidx.lifecycle.Observer<Boolean>{
-                isNightModeEnabled ->
-            this.preferenceManager.findPreference<SwitchPreferenceCompat>("map_mode")?.isChecked =
-                isNightModeEnabled
-            Timber.d("$isNightModeEnabled")
-        }
-        webViewModel.isNightModeEnabled.observe(viewLifecycleOwner, prefNightModeObserver)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registerPreferenceClickListener()
@@ -59,7 +32,7 @@ class SettingsFragment() : PreferenceFragmentCompat() {
 
     private fun registerPreferenceClickListener(){
         findPreference<Preference>("feedback")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(NetworkUtility.FEEDBACK_URL + defaultSharedPreferences.getString("fb_token", "no token")!!)
+            val webpage: Uri = Uri.parse(NetworkUtils.FEEDBACK_URL + defaultSharedPreferences.getString("fb_token", "no token")!!)
             val intent = Intent(Intent.ACTION_VIEW, webpage)
             if (intent.resolveActivity(requireActivity().packageManager) != null) {
                 startActivity(intent)
@@ -67,7 +40,7 @@ class SettingsFragment() : PreferenceFragmentCompat() {
             true
         }
         findPreference<Preference>("impressum")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(NetworkUtility.IMPRESSUM_URL)
+            val webpage: Uri = Uri.parse(NetworkUtils.IMPRESSUM_URL)
             val intent = Intent(Intent.ACTION_VIEW, webpage)
             if (intent.resolveActivity(requireActivity().packageManager) != null) {
                 startActivity(intent)
@@ -75,7 +48,7 @@ class SettingsFragment() : PreferenceFragmentCompat() {
             true
         }
         findPreference<Preference>("github")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(NetworkUtility.GITHUB_URL)
+            val webpage: Uri = Uri.parse(NetworkUtils.GITHUB_URL)
             val intent = Intent(Intent.ACTION_VIEW, webpage)
             if (intent.resolveActivity(requireActivity().packageManager) != null) {
                 startActivity(intent)
@@ -83,10 +56,26 @@ class SettingsFragment() : PreferenceFragmentCompat() {
             true
         }
         findPreference<Preference>("twitter")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(NetworkUtility.TWITTER_URL)
+            val webpage: Uri = Uri.parse(NetworkUtils.TWITTER_URL)
             val intent = Intent(Intent.ACTION_VIEW, webpage)
             if (intent.resolveActivity(requireActivity().packageManager) != null) {
                 startActivity(intent)
+            }
+            true
+        }
+
+        findPreference<SwitchPreferenceCompat>("map_zoom")?.setOnPreferenceChangeListener { preference, newValue ->
+            Timber.d("$preference, $newValue")
+            if(newValue.toString().toBoolean() && !Validator.isLocationPermissionGranted(requireContext())){
+                Validator.checkLocationPermission(requireContext(), requireActivity())
+            }
+            true
+        }
+        findPreference<SwitchPreferenceCompat>("notification")?.setOnPreferenceChangeListener { preference, newValue ->
+            Timber.d("$preference, $newValue")
+            val value = newValue.toString().toBoolean()
+            if(value && !Validator.isBackgroundLocationPermissionGranted(requireContext())){
+                Validator.checkBackgroundLocationPermission(requireContext(), requireActivity())
             }
             true
         }

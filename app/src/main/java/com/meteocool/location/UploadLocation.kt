@@ -3,7 +3,7 @@ package com.meteocool.location
 import android.location.Location
 import android.os.AsyncTask
 import com.meteocool.utility.JSONPost
-import com.meteocool.utility.NetworkUtility
+import com.meteocool.utility.NetworkUtils
 import timber.log.Timber
 import java.util.*
 
@@ -26,7 +26,7 @@ class UploadLocation: AsyncTask<Any, Unit, Unit>(){
         val token =  params[1].toString()
 
 
-        NetworkUtility.sendPostRequest(
+        NetworkUtils.sendPostRequest(
             JSONPost(
                 location.latitude,
                 location.longitude,
@@ -37,10 +37,10 @@ class UploadLocation: AsyncTask<Any, Unit, Unit>(){
                 System.currentTimeMillis().toDouble(),
                 token,
                 "android",
-                LocationResultHelper.NOTIFICATION_TIME,
-                LocationResultHelper.NOTIFICATION_INTENSITY,
+                LocationUtils.NOTIFICATION_TIME,
+                LocationUtils.NOTIFICATION_INTENSITY,
                 Locale.getDefault().language
-            ), NetworkUtility.POST_CLIENT_DATA
+            ), NetworkUtils.POST_CLIENT_DATA
         )
     }
 }

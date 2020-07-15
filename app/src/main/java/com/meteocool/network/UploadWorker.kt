@@ -1,13 +1,5 @@
 package com.meteocool.network
 
-import android.content.Context
-import android.location.Location
-import android.util.Log
-import com.meteocool.location.LocationResultHelper
-import com.meteocool.utility.JSONPost
-import com.meteocool.utility.NetworkUtility
-import java.util.*
-
 /*class UploadWorker(appContext: Context, workerParams: WorkerParameters)
     : Worker(appContext, workerParams) {
 
