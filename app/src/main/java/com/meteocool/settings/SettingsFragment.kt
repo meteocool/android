@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
@@ -11,6 +12,7 @@ import com.meteocool.R
 import com.meteocool.security.Validator
 import com.meteocool.utility.InjectorUtils
 import com.meteocool.utility.NetworkUtils
+import com.meteocool.view.EventObserver
 import com.meteocool.view.WebViewModel
 import timber.log.Timber
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
@@ -21,8 +23,27 @@ class SettingsFragment() : PreferenceFragmentCompat() {
         InjectorUtils.provideWebViewModelFactory(requireContext(), requireActivity().application)
     }
 
+
+    private lateinit var isZoomEnabledObserver: Observer<Boolean>
+    private lateinit var areNotificationsEnabledObserver: Observer<Boolean>
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        val isZoomEnabledObserver = androidx.lifecycle.Observer<Boolean>{
+                this.preferenceManager.findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked =
+                    it
+        }
+        webViewModel.isZoomEnabled.observe(viewLifecycleOwner, isZoomEnabledObserver)
+
+        val areNotificationsEnabledObserver = androidx.lifecycle.Observer<Boolean>{
+           findPreference<SwitchPreferenceCompat>("notification")?.isChecked = it
+        }
+        webViewModel.areNotificationsEnabled.observe(viewLifecycleOwner, areNotificationsEnabledObserver)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

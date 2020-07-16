@@ -14,7 +14,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
@@ -339,6 +338,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
                     stopBackgroundLocationUpdates()
                     requestBackgroundLocationUpdates()
                 }else{
+                    defaultSharedPreferences.edit().putBoolean("notification", false).apply()
                     val alert = BackgroundLocationAlertFragment(R.string.bg_dialog_msg)
                     alert.show(supportFragmentManager, "BackgroundLocationAlertFragment")
 //                    Snackbar.make(
@@ -354,6 +354,10 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
 
+                }else {
+                    defaultSharedPreferences.edit().putBoolean("map_zoom", false).apply()
+                    val alert = BackgroundLocationAlertFragment(R.string.gp_dialog_msg)
+                    alert.show(supportFragmentManager, "BackgroundLocationAlertFragment")
                 }
             }
         }

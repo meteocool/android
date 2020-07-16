@@ -49,7 +49,7 @@
     <string name="map_mode_title">Dark Mode</string>
 
     <!-- Background Dialog -->
-    <string name="zoom_dialog_msg">Location permission <b>Allow all the time</b> is required for notifications to work</string>
+    <string name="gp_dialog_msg">Location permission is required for <b>locate me</b> to work</string>
     <string name="bg_dialog_msg">Location permission <b>Allow all the time</b> is required for notifications to work</string>
     <string name="bg_dialog_pos">Open Settings</string>
     <string name="bg_dialog_neg">Got it</string>

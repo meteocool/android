@@ -51,7 +51,7 @@
     <string name="map_mode_title">Nachtmodus</string>
 
     <!-- Background Dialog -->
-    <string name="zoom_dialog_msg">Location permission <b>Allow all the time</b> is required for notifications to work</string>
+    <string name="gp_dialog_msg">Berechtigung für Standortzugriff wird für <b>Mich-Lokalisieren</b> benötigt</string>
     <string name="bg_dialog_msg">Berechtigung für Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt</string>
     <string name="bg_dialog_pos">Öffne Einstellungen</string>
     <string name="bg_dialog_neg">Verstanden</string>

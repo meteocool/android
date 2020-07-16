@@ -10,6 +10,8 @@ import timber.log.Timber
 
 class WebViewModel(private val sharedPreferences: SharedPreferences, application: Application) : AndroidViewModel(application){
 
+    private val _isZoomEnabled = sharedPreferences.booleanLiveData("map_zoom", false)
+    private val _areNotificationsEnabled = sharedPreferences.booleanLiveData("notification", false)
     private val _url = sharedPreferences.stringLiveData("map_url", NetworkUtils.MAP_URL)
     private val _requestingLocationUpdatesBackground = MutableLiveData<Event<Boolean>>()
     private val _injectDrawer = MutableLiveData<VoidEvent>()
@@ -30,6 +32,12 @@ class WebViewModel(private val sharedPreferences: SharedPreferences, application
 
     val url : LiveData<String>
         get() = _url
+
+    val isZoomEnabled : LiveData<Boolean>
+        get() = _isZoomEnabled
+
+    val areNotificationsEnabled : LiveData<Boolean>
+        get() = _areNotificationsEnabled
 
     fun openDrawer(){
         _injectDrawer.value = VoidEvent()
