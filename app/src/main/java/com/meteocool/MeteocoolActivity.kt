@@ -72,7 +72,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
-                    Timber.w(task.exception,"getInstanceId failed")
+                    Timber.w(task.exception, "getInstanceId failed")
                     return@OnCompleteListener
                 }
             })
@@ -93,19 +93,22 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
         addClickListenerTo(navView)
 
         openDrawerObserver = VoidEventObserver {
-                val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-                drawerLayout.openDrawer(GravityCompat.START)
+            val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+            drawerLayout.openDrawer(GravityCompat.START)
         }
         webViewModel.injectDrawer.observe(this, openDrawerObserver)
 
         requestBackgroundLocationObserver = EventObserver {
-            if(it){
+            if (it) {
                 requestBackgroundLocationUpdates()
-            }else{
+            } else {
                 stopBackgroundLocationUpdates()
             }
         }
-        webViewModel.requestingLocationUpdatesBackground.observe(this, requestBackgroundLocationObserver)
+        webViewModel.requestingLocationUpdatesBackground.observe(
+            this,
+            requestBackgroundLocationObserver
+        )
     }
 
     private fun isGooglePlayServicesAvailable(activity: Activity?): Boolean {
@@ -190,16 +193,23 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            REQUEST_CHECK_SETTINGS ->
+            REQUEST_CHECK_SETTINGS -> {
+//                webViewModel.requestingBackgroundLocationUpdates(
+//                    Validator.isBackgroundLocationPermissionGranted(
+//                        this
+//                    )
+//                )
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        stopBackgroundLocationUpdates()
-                        requestBackgroundLocationUpdates()
                     }
                     Activity.RESULT_CANCELED -> {
-                        stopBackgroundLocationUpdates()
+                        webViewModel.requestingBackgroundLocationUpdates(false)
+                        defaultSharedPreferences.edit().putBoolean("notification", false)
+                            .putBoolean("map_zoom", false).apply()
                     }
                 }
+            }
+
         }
     }
 
@@ -225,14 +235,17 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
     override fun onResume() {
         super.onResume()
-        webViewModel.requestingBackgroundLocationUpdates(Validator.isBackgroundLocationPermissionGranted(this) && defaultSharedPreferences.getBoolean("notification", false))
+        webViewModel.requestingBackgroundLocationUpdates(
+            Validator.isBackgroundLocationPermissionGranted(
+                this
+            ) && defaultSharedPreferences.getBoolean("notification", false)
+        )
         cancelNotifications()
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
     }
 
     override fun onPause() {
         super.onPause()
-        webViewModel.requestingBackgroundLocationUpdates(Validator.isBackgroundLocationPermissionGranted(this) && defaultSharedPreferences.getBoolean("notification", false))
         defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
     }
 
@@ -247,7 +260,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
         val text = "Exception while connecting to Google Play services"
-        Timber.w( "%s%s", text, connectionResult.errorMessage)
+        Timber.w("%s%s", text, connectionResult.errorMessage)
     }
 
     override fun onBackPressed() {
@@ -274,21 +287,43 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
                             NetworkUtils.POST_UNREGISTER_TOKEN
                         )
                     }
+                }else{
+                   webViewModel.requestingBackgroundLocationUpdates(
+                        Validator.isBackgroundLocationPermissionGranted(
+                            this
+                        )
+                    )
                 }
             }
             "notification_intensity" -> {
                 val intensity = sharedPreferences!!.getString(key, "-1")!!.toInt()
                 Timber.i("Preference value $key was updated to $intensity")
                 LocationUtils.NOTIFICATION_INTENSITY = intensity
-                webViewModel.requestingBackgroundLocationUpdates(Validator.isBackgroundLocationPermissionGranted(this))
+                webViewModel.requestingBackgroundLocationUpdates(
+                    Validator.isBackgroundLocationPermissionGranted(
+                        this
+                    )
+                )
             }
             "notification_time" -> {
                 val time = sharedPreferences!!.getString(key, "-1")!!.toInt()
                 Timber.i("Preference value $key was updated to $time")
                 LocationUtils.NOTIFICATION_TIME = time
-                webViewModel.requestingBackgroundLocationUpdates(Validator.isBackgroundLocationPermissionGranted(this))
+                webViewModel.requestingBackgroundLocationUpdates(
+                    Validator.isBackgroundLocationPermissionGranted(
+                        this
+                    )
+                )
             }
-            "map_mode", "map_rotate", "map_zoom" -> {
+            "map_zoom" -> {
+                val isMapZoomOn = sharedPreferences!!.getBoolean(key, false)
+                Timber.i("Preference value $key was updated to $isMapZoomOn ")
+                if (isMapZoomOn) {
+                    webViewModel.sendLocationOnce(true)
+                }
+                webViewModel.sendSettings()
+            }
+            "map_mode", "map_rotate"-> {
                 webViewModel.sendSettings()
             }
         }
@@ -334,10 +369,11 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
         when (requestCode) {
             Validator.LOCATION_BACKGROUND -> {
                 if ((grantResults.isNotEmpty() &&
-                            grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                ) {
                     stopBackgroundLocationUpdates()
                     requestBackgroundLocationUpdates()
-                }else{
+                } else {
                     defaultSharedPreferences.edit().putBoolean("notification", false).apply()
                     val alert = BackgroundLocationAlertFragment(R.string.bg_dialog_msg)
                     alert.show(supportFragmentManager, "BackgroundLocationAlertFragment")
@@ -346,15 +382,14 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 //                        "Location setting does not work",
 //                        Snackbar.LENGTH_SHORT
 //                    ).show()
-
-                    //stopLocationRequests()
                 }
             }
-            Validator.LOCATION ->{
+            Validator.LOCATION -> {
                 if ((grantResults.isNotEmpty() &&
-                            grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                ) {
 
-                }else {
+                } else {
                     defaultSharedPreferences.edit().putBoolean("map_zoom", false).apply()
                     val alert = BackgroundLocationAlertFragment(R.string.gp_dialog_msg)
                     alert.show(supportFragmentManager, "BackgroundLocationAlertFragment")

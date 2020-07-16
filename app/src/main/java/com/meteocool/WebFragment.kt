@@ -24,6 +24,7 @@ import com.meteocool.security.Validator
 import com.meteocool.utility.InjectorUtils
 import com.meteocool.utility.NetworkUtils
 import com.meteocool.view.*
+import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import timber.log.Timber
 
@@ -65,6 +66,8 @@ class WebFragment() : Fragment() {
             if (it) {
                 Timber.d("requestLocation $it")
                 requestLocationUpdates()
+            }else{
+                stopLocationUpdates()
             }
         }
 
@@ -278,7 +281,7 @@ class WebFragment() : Fragment() {
         fun injectLocation() {
             Validator.checkLocationPermission(requireContext(), requireActivity())
             requireActivity().runOnUiThread {
-                webViewModel.sendLocationOnce(Validator.isLocationPermissionGranted(requireContext()))
+                webViewModel.sendLocationOnce(Validator.isLocationPermissionGranted(requireContext())  && defaultSharedPreferences.getBoolean("map_zoom", false))
             }
         }
 
