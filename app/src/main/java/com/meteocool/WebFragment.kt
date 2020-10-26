@@ -1,5 +1,6 @@
 package com.meteocool
 
+import Resource
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -16,10 +17,13 @@ import android.view.ViewGroup
 import android.webkit.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.google.gson.Gson
+import com.meteocool.location.LocationModel
 import com.meteocool.security.Validator
 import com.meteocool.utility.InjectorUtils
 import com.meteocool.utility.NetworkUtils
@@ -41,6 +45,7 @@ class WebFragment() : Fragment() {
     private lateinit var locationCallback: LocationCallback
 
     private lateinit var requestForegroundLocationObserver: EventObserver<Boolean>
+    private lateinit var locationObserver: Observer<in Resource<LocationModel>>
     private lateinit var requestSettingsObserver: VoidEventObserver<VoidEvent>
 
     private val webViewModel: WebViewModel by activityViewModels {
@@ -57,9 +62,25 @@ class WebFragment() : Fragment() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult ?: return
                 for (location in locationResult.locations) {
-                    updateUserLocation(location)
+                  //  updateUserLocation(location)
                 }
             }
+        }
+
+        locationObserver = Observer {
+            Timber.d("Called")
+            if(it.isSuccessful) {
+                Timber.d("Updated location: ${it.data().latitude}, ${it.data().longitude}, ${it.data().accuracy}, ${it.data().altitude}")
+                updateUserLocation(it.data())
+            }else{
+                if (it.error() is ResolvableApiException) {
+                    (it.error() as ResolvableApiException).startResolutionForResult(
+                        requireActivity(),
+                        MeteocoolActivity.REQUEST_CHECK_SETTINGS
+                    )
+                }
+            }
+
         }
 
         requestForegroundLocationObserver = EventObserver {
@@ -76,7 +97,7 @@ class WebFragment() : Fragment() {
             val settings: Gson = Gson().newBuilder().create()
             val currentSettings = mapOf<String, Boolean>(
                 Pair("darkMode", defaultSharedPreferences.getBoolean("map_mode", false)),
-                Pair("zoomOnForeground", defaultSharedPreferences.getBoolean("map_zoom", false)),
+                //Pair("zoomOnForeground", defaultSharedPreferences.getBoolean("map_zoom", false)),
                 Pair("mapRotation", defaultSharedPreferences.getBoolean("map_rotate", false))
             )
             val string = "window.injectSettings(${settings.toJson(currentSettings)});"
@@ -123,7 +144,7 @@ class WebFragment() : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        mWebView.removeJavascriptInterface("Android")
+       // mWebView.removeJavascriptInterface("Android")
         defaultSharedPreferences.edit().putString("map_url", mWebView.url).apply()
     }
 
@@ -136,10 +157,16 @@ class WebFragment() : Fragment() {
             requestSettingsObserver
         )
 
-        webViewModel.requestingLocationUpdatesForeground.observe(
+        webViewModel.locationData.observe(
             viewLifecycleOwner,
-            requestForegroundLocationObserver
+            locationObserver
         )
+
+//        webViewModel.requestingLocationUpdatesForeground.observe(
+//            viewLifecycleOwner,
+//            requestForegroundLocationObserver
+//        )
+
 
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -174,7 +201,7 @@ class WebFragment() : Fragment() {
         }
     }
 
-    private fun updateUserLocation(location: Location) {
+    private fun updateUserLocation(location: LocationModel) {
         val string =
             "window.injectLocation(${location.latitude} , ${location.longitude} , ${location.accuracy} , true);"
         mWebView.post {
@@ -281,7 +308,10 @@ class WebFragment() : Fragment() {
         fun injectLocation() {
             Validator.checkLocationPermission(requireContext(), requireActivity())
             requireActivity().runOnUiThread {
-                webViewModel.sendLocationOnce(Validator.isLocationPermissionGranted(requireContext())  && defaultSharedPreferences.getBoolean("map_zoom", false))
+
+                webViewModel.getLocation()
+               //webViewModel.locationData.observe(requireActivity(), locationObserver)
+                //webViewModel.sendLocationOnce(Validator.isLocationPermissionGranted(requireContext())  && defaultSharedPreferences.getBoolean("map_zoom", false))
             }
         }
 

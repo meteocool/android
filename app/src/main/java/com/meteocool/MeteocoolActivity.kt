@@ -14,6 +14,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
+import com.meteocool.location.LocationLiveData
 import com.meteocool.location.LocationUpdatesBroadcastReceiver
 import com.meteocool.location.LocationUtils
 import com.meteocool.security.Validator
@@ -59,7 +61,6 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
     private lateinit var openDrawerObserver: VoidEventObserver<VoidEvent>
     private lateinit var requestBackgroundLocationObserver: EventObserver<Boolean>
-
 
     private val webViewModel: WebViewModel by viewModels {
         InjectorUtils.provideWebViewModelFactory(this, application)
@@ -105,6 +106,8 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
                 stopBackgroundLocationUpdates()
             }
         }
+
+
         webViewModel.requestingLocationUpdatesBackground.observe(
             this,
             requestBackgroundLocationObserver
@@ -215,7 +218,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
     private fun stopBackgroundLocationUpdates() {
         Timber.d("Stopping location updates")
-        mFusedLocationClient.removeLocationUpdates(pendingIntent)
+        //mFusedLocationClient.removeLocationUpdates(pendingIntent)
     }
 
 
@@ -235,6 +238,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
     override fun onResume() {
         super.onResume()
+
         webViewModel.requestingBackgroundLocationUpdates(
             Validator.isBackgroundLocationPermissionGranted(
                 this
@@ -319,7 +323,8 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
                 val isMapZoomOn = sharedPreferences!!.getBoolean(key, false)
                 Timber.i("Preference value $key was updated to $isMapZoomOn ")
                 if (isMapZoomOn) {
-                    webViewModel.sendLocationOnce(true)
+                    webViewModel.getLocation()
+                    //webViewModel.sendLocationOnce(true)
                 }
                 webViewModel.sendSettings()
             }
@@ -403,19 +408,19 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
         /**
          * The desired interval for location updates. Inexact. Updates may be more or less frequent.
          */
-        private const val UPDATE_INTERVAL: Long = 15 * 60 * 1000
+        const val UPDATE_INTERVAL: Long = 60 * 1000
 
         /**
          * The fastest rate for active location updates. Updates will never be more frequent
          * than this value, but they may be less frequent.
          */
-        private const val FASTEST_UPDATE_INTERVAL: Long = 5 * 60 * 1000
+        const val FASTEST_UPDATE_INTERVAL: Long = 2 * 60 * 1000
 
         /**
          * The max time before batched results are delivered by location services. Results may be
          * delivered sooner than this interval.
          */
-        private const val MAX_WAIT_TIME = UPDATE_INTERVAL
+        const val MAX_WAIT_TIME = UPDATE_INTERVAL
 
         const val REQUEST_CHECK_SETTINGS = 999
     }

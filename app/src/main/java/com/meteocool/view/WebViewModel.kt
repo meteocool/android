@@ -3,6 +3,7 @@ package com.meteocool.view
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.lifecycle.*
+import com.meteocool.location.LocationLiveData
 import com.meteocool.settings.booleanLiveData
 import com.meteocool.settings.stringLiveData
 import com.meteocool.utility.NetworkUtils
@@ -17,6 +18,15 @@ class WebViewModel(private val sharedPreferences: SharedPreferences, application
     private val _injectDrawer = MutableLiveData<VoidEvent>()
     private val _requestingLocationUpdatesForeground = MutableLiveData<Event<Boolean>>()
     private val _requestingSettings = MutableLiveData<VoidEvent>()
+
+    private val _locationData = LocationLiveData(application)
+
+    private val _requesting = MutableLiveData<Boolean>()
+
+    val locationData : LocationLiveData
+        get() = _locationData
+
+    //fun getLocationData() = _locationData
 
     val requestingLocationUpdatesForeground  : LiveData<Event<Boolean>>
         get() = _requestingLocationUpdatesForeground
@@ -56,6 +66,10 @@ class WebViewModel(private val sharedPreferences: SharedPreferences, application
     fun sendSettings(){
         Timber.d("updateSettings")
         _requestingSettings.value = VoidEvent()
+    }
+
+    fun getLocation(){
+        _locationData.test()
     }
 
 }
