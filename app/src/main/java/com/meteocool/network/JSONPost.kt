@@ -1,4 +1,4 @@
-package com.meteocool.utility
+package com.meteocool.network
 
 data class JSONPost(val lat : Double,
                     val lon : Double,

@@ -12,7 +12,7 @@
 
 
     <application
-            android:name=".MeteocoolApp"
+            android:name=".app.MeteocoolApp"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
@@ -32,7 +32,7 @@
                 android:value="false" />
 
         <activity
-                android:name=".SplashActivity"
+                android:name=".ui.SplashActivity"
                 android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".MeteocoolActivity"
+                android:name=".ui.MeteocoolActivity"
                 android:configChanges="uiMode">
             <tools:validation testUrl="http://meteocool.com" />
 
@@ -57,12 +57,12 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".OnboardingActivity"
+                android:name=".ui.onboard.OnboardingActivity"
                 android:enabled="true"
                 android:exported="false" />
 
         <service
-                android:name=".service.MyFirebaseMessagingService"
+                android:name=".firebase.MyFirebaseMessagingService"
                 android:exported="false">
             <meta-data
                     android:name="com.google.firebase.messaging.default_notification_icon"

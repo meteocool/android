@@ -1,8 +1,9 @@
-package com.meteocool
+package com.meteocool.ui
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.meteocool.ui.onboard.OnboardingActivity
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 

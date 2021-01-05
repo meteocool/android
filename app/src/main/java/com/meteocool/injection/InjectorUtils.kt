@@ -1,4 +1,4 @@
-package com.meteocool.utility
+package com.meteocool.injection
 
 import android.app.Application
 import android.content.Context

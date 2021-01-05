@@ -1,11 +1,11 @@
-package com.meteocool.service
+package com.meteocool.firebase
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import android.app.NotificationManager
 import android.content.Context
-import com.meteocool.utility.JSONClearPost
-import com.meteocool.utility.NetworkUtils
+import com.meteocool.network.JSONClearPost
+import com.meteocool.network.NetworkUtils
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 

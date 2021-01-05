@@ -1,4 +1,4 @@
-package com.meteocool
+package com.meteocool.ui.map
 
 import android.app.Dialog
 import android.content.DialogInterface
@@ -7,8 +7,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog.Builder
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.DialogFragment
+import com.meteocool.R
 
 
 class BackgroundLocationAlertFragment(private val msg : Int) : DialogFragment() {
@@ -17,7 +17,8 @@ class BackgroundLocationAlertFragment(private val msg : Int) : DialogFragment() 
             // Use the Builder class for convenient dialog construction
             val builder = Builder(it)
             builder.setMessage(msg)
-                .setPositiveButton(R.string.bg_dialog_pos,
+                .setPositiveButton(
+                    R.string.bg_dialog_pos,
                     DialogInterface.OnClickListener { dialog, id ->
                         val intent =
                             Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -30,7 +31,8 @@ class BackgroundLocationAlertFragment(private val msg : Int) : DialogFragment() 
                         intent.data = uri
                         startActivity(intent)
                     })
-                .setNegativeButton(R.string.bg_dialog_neg,
+                .setNegativeButton(
+                    R.string.bg_dialog_neg,
                     DialogInterface.OnClickListener { dialog, id ->
 
                     })

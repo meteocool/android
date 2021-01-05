@@ -1,4 +1,4 @@
-package com.meteocool
+package com.meteocool.ui.map
 
 import Resource
 import android.Manifest
@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
-import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
@@ -18,17 +17,17 @@ import android.webkit.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.google.gson.Gson
+import com.meteocool.ui.MeteocoolActivity
+import com.meteocool.R
 import com.meteocool.location.LocationModel
 import com.meteocool.security.Validator
-import com.meteocool.utility.InjectorUtils
-import com.meteocool.utility.NetworkUtils
+import com.meteocool.injection.InjectorUtils
+import com.meteocool.network.NetworkUtils
 import com.meteocool.view.*
-import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import timber.log.Timber
 

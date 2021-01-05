@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.lifecycle.*
 import com.meteocool.location.LocationLiveData
-import com.meteocool.settings.booleanLiveData
-import com.meteocool.settings.stringLiveData
-import com.meteocool.utility.NetworkUtils
+import com.meteocool.sharedPrefs.booleanLiveData
+import com.meteocool.sharedPrefs.stringLiveData
+import com.meteocool.network.NetworkUtils
 import timber.log.Timber
 
 class WebViewModel(private val sharedPreferences: SharedPreferences, application: Application) : AndroidViewModel(application){

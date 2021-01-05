@@ -1,4 +1,4 @@
-package com.meteocool.utility
+package com.meteocool.network
 
 import com.google.gson.Gson
 import timber.log.Timber

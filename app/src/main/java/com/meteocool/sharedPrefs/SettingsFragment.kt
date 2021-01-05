@@ -1,4 +1,4 @@
-package com.meteocool.settings
+package com.meteocool.sharedPrefs
 
 import android.content.Intent
 import android.net.Uri
@@ -10,9 +10,8 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.meteocool.R
 import com.meteocool.security.Validator
-import com.meteocool.utility.InjectorUtils
-import com.meteocool.utility.NetworkUtils
-import com.meteocool.view.EventObserver
+import com.meteocool.injection.InjectorUtils
+import com.meteocool.network.NetworkUtils
 import com.meteocool.view.WebViewModel
 import timber.log.Timber
 import org.jetbrains.anko.support.v4.defaultSharedPreferences

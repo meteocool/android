@@ -1,8 +1,8 @@
-package com.meteocool
+package com.meteocool.app
 
 import android.app.Application
 import android.util.Log
-import com.google.firebase.analytics.FirebaseAnalytics
+import com.meteocool.BuildConfig
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 

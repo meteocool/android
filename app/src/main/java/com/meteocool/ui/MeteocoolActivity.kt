@@ -1,4 +1,4 @@
-package com.meteocool
+package com.meteocool.ui
 
 import android.app.Activity
 import android.app.NotificationManager
@@ -14,7 +14,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
@@ -24,15 +23,18 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
-import com.meteocool.location.LocationLiveData
+import com.meteocool.R
 import com.meteocool.location.LocationUpdatesBroadcastReceiver
 import com.meteocool.location.LocationUtils
 import com.meteocool.security.Validator
-import com.meteocool.settings.SettingsFragment
-import com.meteocool.utility.InjectorUtils
-import com.meteocool.utility.JSONClearPost
-import com.meteocool.utility.JSONUnregisterNotification
-import com.meteocool.utility.NetworkUtils
+import com.meteocool.sharedPrefs.SettingsFragment
+import com.meteocool.injection.InjectorUtils
+import com.meteocool.network.JSONClearPost
+import com.meteocool.network.JSONUnregisterNotification
+import com.meteocool.network.NetworkUtils
+import com.meteocool.ui.map.BackgroundLocationAlertFragment
+import com.meteocool.ui.map.ErrorFragment
+import com.meteocool.ui.map.WebFragment
 import com.meteocool.view.EventObserver
 import com.meteocool.view.VoidEvent
 import com.meteocool.view.VoidEventObserver

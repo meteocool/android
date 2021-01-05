@@ -8,7 +8,7 @@ import android.content.Intent
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.meteocool.MeteocoolActivity
+import com.meteocool.ui.MeteocoolActivity
 import com.meteocool.security.Validator
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber

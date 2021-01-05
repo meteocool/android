@@ -2,8 +2,8 @@ package com.meteocool.location
 
 import android.location.Location
 import android.os.AsyncTask
-import com.meteocool.utility.JSONPost
-import com.meteocool.utility.NetworkUtils
+import com.meteocool.network.JSONPost
+import com.meteocool.network.NetworkUtils
 import timber.log.Timber
 import java.util.*
 
