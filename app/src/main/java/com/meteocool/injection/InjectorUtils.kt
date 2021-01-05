@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import com.meteocool.view.WebViewModelFactory
 import org.jetbrains.anko.defaultSharedPreferences
 
+// TODO: Replace with Dagger2
 object InjectorUtils {
 
     private fun getSharedPreferences(context : Context) : SharedPreferences{

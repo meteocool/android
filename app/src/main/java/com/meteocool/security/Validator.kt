@@ -8,6 +8,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 
+/**
+ * Helper class for validating app permission constraints.
+ */
 class Validator {
     companion object {
 

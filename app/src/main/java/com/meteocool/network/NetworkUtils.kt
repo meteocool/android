@@ -7,6 +7,9 @@ import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * Helper class for handling network communication.
+ */
 class NetworkUtils{
 companion object {
 

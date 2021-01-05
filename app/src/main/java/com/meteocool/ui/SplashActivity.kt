@@ -7,6 +7,9 @@ import com.meteocool.ui.onboard.OnboardingActivity
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
+/**
+ * Shows the loading screen from meteocool.
+ */
 class SplashActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

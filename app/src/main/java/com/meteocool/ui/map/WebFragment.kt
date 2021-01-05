@@ -31,7 +31,9 @@ import com.meteocool.view.*
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import timber.log.Timber
 
-
+/**
+ * Loads the webapp "meteocool".
+ */
 class WebFragment() : Fragment() {
 
     interface WebViewClientListener {

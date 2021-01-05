@@ -6,7 +6,6 @@ import com.meteocool.BuildConfig
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
-
 class MeteocoolApp : Application() {
     override fun onCreate() {
         super.onCreate()

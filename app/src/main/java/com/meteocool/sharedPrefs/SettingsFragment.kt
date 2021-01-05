@@ -16,6 +16,9 @@ import com.meteocool.view.WebViewModel
 import timber.log.Timber
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 
+/**
+ * Shows the settings from meteocool.
+ */
 class SettingsFragment() : PreferenceFragmentCompat() {
 
     private val webViewModel : WebViewModel by activityViewModels{

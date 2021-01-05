@@ -9,6 +9,9 @@ import com.meteocool.sharedPrefs.stringLiveData
 import com.meteocool.network.NetworkUtils
 import timber.log.Timber
 
+/**
+ * Viewmodel for webfragment and its settings.
+ */
 class WebViewModel(private val sharedPreferences: SharedPreferences, application: Application) : AndroidViewModel(application){
 
     private val _isZoomEnabled = sharedPreferences.booleanLiveData("map_zoom", false)

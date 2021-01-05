@@ -10,7 +10,9 @@ import androidx.appcompat.app.AlertDialog.Builder
 import androidx.fragment.app.DialogFragment
 import com.meteocool.R
 
-
+/**
+ * Alert pos: navigate to app permission settings (background location permission needed) or neg: cancel.
+ */
 class BackgroundLocationAlertFragment(private val msg : Int) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {

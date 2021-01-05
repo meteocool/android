@@ -9,6 +9,10 @@ import androidx.fragment.app.Fragment
 import com.meteocool.R
 import timber.log.Timber
 
+/**
+ * Displays no network connection.
+ * Replaces the default Android WebView error.
+ */
 class ErrorFragment : Fragment(){
 
     override fun onCreateView(

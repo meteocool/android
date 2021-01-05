@@ -1,4 +1,4 @@
-package com.meteocool.location
+package com.meteocool.sharedPrefs
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -6,7 +6,10 @@ import android.location.Location
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
-class LocationUtils {
+/**
+ * Helper
+ */
+class SharedPrefUtils {
     companion object {
         const val KEY_LOCATION_UPDATES_RESULT_LAT = "location_latitude"
         const val KEY_LOCATION_UPDATES_RESULT_LON = "location_longitude"
@@ -56,21 +59,5 @@ class LocationUtils {
             )
         }
 
-        fun getDistanceToLastLocation(newLocation: Location, context: Context): Float {
-            val distance = FloatArray(1)
-            Location.distanceBetween(
-                newLocation.latitude,
-                newLocation.longitude,
-                getSavedLocationResult(
-                    context
-                ).getValue(KEY_LOCATION_UPDATES_RESULT_LAT).toDouble(),
-                getSavedLocationResult(
-                    context
-                ).getValue(KEY_LOCATION_UPDATES_RESULT_LON).toDouble(),
-                distance
-            )
-            Timber.d("Calculated distance: ${distance[0]}")
-            return distance[0]
-        }
     }
 }

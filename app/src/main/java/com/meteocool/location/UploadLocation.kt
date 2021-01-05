@@ -4,6 +4,7 @@ import android.location.Location
 import android.os.AsyncTask
 import com.meteocool.network.JSONPost
 import com.meteocool.network.NetworkUtils
+import com.meteocool.sharedPrefs.SharedPrefUtils
 import timber.log.Timber
 import java.util.*
 
@@ -37,8 +38,8 @@ class UploadLocation: AsyncTask<Any, Unit, Unit>(){
                 System.currentTimeMillis().toDouble(),
                 token,
                 "android",
-                LocationUtils.NOTIFICATION_TIME,
-                LocationUtils.NOTIFICATION_INTENSITY,
+                SharedPrefUtils.NOTIFICATION_TIME,
+                SharedPrefUtils.NOTIFICATION_INTENSITY,
                 Locale.getDefault().language
             ), NetworkUtils.POST_CLIENT_DATA
         )

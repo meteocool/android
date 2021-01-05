@@ -5,14 +5,20 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.meteocool.ui.MeteocoolActivity
 import com.meteocool.security.Validator
+import com.meteocool.sharedPrefs.SharedPrefUtils
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
+/**
+ * Receives locations updates and performs an upload if new location is better than the old one.
+ * Receives phone reboots and reregisters location updates if user preferences and app permissions are met.
+ */
 class LocationUpdatesBroadcastReceiver : BroadcastReceiver(){
 
     companion object {
@@ -31,8 +37,8 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver(){
                 Timber.d("Location: $result")
                 if (result != null) {
                     val location = result.lastLocation
-                    val lastLocation = LocationUtils.getSavedLocationResult(context)
-                    val isDistanceBiggerThan500F = LocationUtils.getDistanceToLastLocation(location, context) > 499f
+                    val lastLocation = SharedPrefUtils.getSavedLocationResult(context)
+                    val isDistanceBiggerThan500F = getDistanceToLastLocation(location, context) > 499f
                        if(isDistanceBiggerThan500F){
                             Timber.i("$isDistanceBiggerThan500F")
                             Timber.i("$location is better than $lastLocation")
@@ -45,8 +51,8 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver(){
                             Timber.i("$location is not better than $lastLocation")
                         }
                     // Save the location data to SharedPreferences.
-                    LocationUtils.saveResults(context.defaultSharedPreferences, location)
-                    Timber.i(LocationUtils.getSavedLocationResult(context).toString())
+                    SharedPrefUtils.saveResults(context.defaultSharedPreferences, location)
+                    Timber.i(SharedPrefUtils.getSavedLocationResult(context).toString())
                 }
             }
             else if(Intent.ACTION_BOOT_COMPLETED == action){
@@ -59,6 +65,23 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver(){
                 }
             }
         }
+    }
+
+    private fun getDistanceToLastLocation(newLocation: Location, context: Context): Float {
+        val distance = FloatArray(1)
+        Location.distanceBetween(
+            newLocation.latitude,
+            newLocation.longitude,
+            SharedPrefUtils.getSavedLocationResult(
+                context
+            ).getValue(SharedPrefUtils.KEY_LOCATION_UPDATES_RESULT_LAT).toDouble(),
+            SharedPrefUtils.getSavedLocationResult(
+                context
+            ).getValue(SharedPrefUtils.KEY_LOCATION_UPDATES_RESULT_LON).toDouble(),
+            distance
+        )
+        Timber.d("Calculated distance: ${distance[0]}")
+        return distance[0]
     }
 
 

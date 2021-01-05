@@ -12,7 +12,9 @@ import com.meteocool.ui.MeteocoolActivity
 import com.meteocool.R
 import org.jetbrains.anko.defaultSharedPreferences
 
-
+/**
+ * Onboarding how the app works.
+ */
 class OnboardingActivity : AppIntro2() {
 
     companion object{

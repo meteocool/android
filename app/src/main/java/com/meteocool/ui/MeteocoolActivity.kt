@@ -25,7 +25,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.meteocool.R
 import com.meteocool.location.LocationUpdatesBroadcastReceiver
-import com.meteocool.location.LocationUtils
+import com.meteocool.sharedPrefs.SharedPrefUtils
 import com.meteocool.security.Validator
 import com.meteocool.sharedPrefs.SettingsFragment
 import com.meteocool.injection.InjectorUtils
@@ -43,7 +43,9 @@ import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.doAsync
 import timber.log.Timber
 
-
+/**
+ * Main Activity from meteocool
+ */
 class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, SharedPreferences.OnSharedPreferenceChangeListener,
     WebFragment.WebViewClientListener {
@@ -304,7 +306,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
             "notification_intensity" -> {
                 val intensity = sharedPreferences!!.getString(key, "-1")!!.toInt()
                 Timber.i("Preference value $key was updated to $intensity")
-                LocationUtils.NOTIFICATION_INTENSITY = intensity
+                SharedPrefUtils.NOTIFICATION_INTENSITY = intensity
                 webViewModel.requestingBackgroundLocationUpdates(
                     Validator.isBackgroundLocationPermissionGranted(
                         this
@@ -314,7 +316,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
             "notification_time" -> {
                 val time = sharedPreferences!!.getString(key, "-1")!!.toInt()
                 Timber.i("Preference value $key was updated to $time")
-                LocationUtils.NOTIFICATION_TIME = time
+                SharedPrefUtils.NOTIFICATION_TIME = time
                 webViewModel.requestingBackgroundLocationUpdates(
                     Validator.isBackgroundLocationPermissionGranted(
                         this

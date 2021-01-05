@@ -3,6 +3,9 @@ package com.meteocool.sharedPrefs
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 
+/**
+ * Makes values from SharedPreference observable via LiveData
+ */
 abstract class SharedPreferenceLiveData<T>(val sharedPrefs: SharedPreferences,
                                            private val key: String,
                                            private val defValue: T) : LiveData<T>() {
