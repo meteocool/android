@@ -1,11 +1,13 @@
-package com.meteocool.location
+package com.meteocool.location.service
 
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.meteocool.location.LocationUpdatesBroadcastReceiver
+import com.meteocool.location.MeteocoolLocation
 import java.util.concurrent.TimeUnit
 
-abstract class LocationService(protected val context : Context) {
+abstract class LocationService(protected val context : Context){
 
     companion object{
         const val BACKGROUND_SETTING = 998

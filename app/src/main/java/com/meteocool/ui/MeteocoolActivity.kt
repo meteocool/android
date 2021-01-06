@@ -1,6 +1,5 @@
 package com.meteocool.ui
 
-import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
@@ -12,9 +11,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
@@ -23,9 +19,9 @@ import com.meteocool.R
 import com.meteocool.security.Validator
 import com.meteocool.preferences.SettingsFragment
 import com.meteocool.injection.InjectorUtils
-import com.meteocool.location.FusedLocationService
-import com.meteocool.location.LocationService
-import com.meteocool.location.LocationServiceFactory
+import com.meteocool.location.service.LocationService
+import com.meteocool.location.service.LocationServiceFactory
+import com.meteocool.location.service.ServiceType
 import com.meteocool.network.JSONClearPost
 import com.meteocool.network.JSONUnregisterNotification
 import com.meteocool.network.NetworkUtils
@@ -46,6 +42,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     WebFragment.WebViewClientListener {
 
     private lateinit var openDrawerObserver: VoidEventObserver<VoidEvent>
+    private lateinit var backgroundLocationService: LocationService
 
     private val webViewModel: WebViewModel by viewModels {
         InjectorUtils.provideWebViewModelFactory(this, application)
@@ -63,6 +60,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                 }
             })
 
+        backgroundLocationService = LocationServiceFactory.getLocationService(this, ServiceType.BACK)
         supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, WebFragment())
             .commit()
 
@@ -166,7 +164,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         super.onResume()
         cancelNotifications()
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
-        LocationServiceFactory.getLocationService(this)?.stopLocationUpdates()
+        backgroundLocationService.stopLocationUpdates()
 //        if (!Validator.isBackgroundLocationPermissionGranted(
 //                this
 //            ) && defaultSharedPreferences.getBoolean("notification", false)
@@ -183,7 +181,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         super.onPause()
         defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
         if(Validator.isBackgroundLocationPermissionGranted(this) && defaultSharedPreferences.getBoolean("notification", false)){
-            LocationServiceFactory.getLocationService(this)?.requestLocationUpdates()
+           backgroundLocationService.requestLocationUpdates()
         }
     }
 
@@ -213,23 +211,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                     }
                 }
             }
-            "notification_intensity" -> {
-                val intensity = sharedPreferences!!.getString(key, "-1")!!.toInt()
-                Timber.i("Preference value $key was updated to $intensity")
-            }
-            "notification_time" -> {
-                val time = sharedPreferences!!.getString(key, "-1")!!.toInt()
-                Timber.i("Preference value $key was updated to $time")
-            }
-            "map_zoom" -> {
-                val isMapZoomOn = sharedPreferences!!.getBoolean(key, false)
-                Timber.i("Preference value $key was updated to $isMapZoomOn ")
-                if (isMapZoomOn) {
-                    //TODO inject location or not?
-                }
-                webViewModel.sendSettings()
-            }
-            "map_mode", "map_rotate" -> {
+            "map_zoom", "map_mode", "map_rotate" -> {
                 webViewModel.sendSettings()
             }
         }
@@ -276,7 +258,6 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 ) {
-                    LocationServiceFactory.getLocationService(this)?.requestLocationUpdates()
                     //TODO replace with foreground
                 } else {
                     defaultSharedPreferences.edit().putBoolean("map_zoom", false).apply()

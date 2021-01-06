@@ -1,32 +1,19 @@
-package com.meteocool.location
+package com.meteocool.location.service
 
 import android.content.Context
-import android.location.LocationProvider
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
-class FusedLocationService(context: Context) : LocationService(context) {
-
-
-    companion object {
-        private var INSTANCE: FusedLocationService? = null
-        fun getService(context: Context): FusedLocationService? {
-            if (INSTANCE == null) {
-                INSTANCE = FusedLocationService(context)
-            }
-            return INSTANCE
-        }
-
-    }
+class FusedBackgroundLocationService(context: Context) : LocationService(context) {
 
     /**
      * The entry point to Google Play Services.
      */
     private val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
-    private val backgroundLocationRequest: LocationRequest
+    private val locationRequest: LocationRequest
         get() {
             return LocationRequest.create().apply {
                 interval = super.updateInterval
@@ -40,13 +27,13 @@ class FusedLocationService(context: Context) : LocationService(context) {
         try {
             val builder =
                 LocationSettingsRequest.Builder()
-                    .addLocationRequest(backgroundLocationRequest)
+                    .addLocationRequest(locationRequest)
             val client: SettingsClient = LocationServices.getSettingsClient(context)
             val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
             task.addOnSuccessListener {
                 Timber.d("Starting background location updates")
                 mFusedLocationClient.requestLocationUpdates(
-                    backgroundLocationRequest, pendingIntent
+                    locationRequest, pendingIntent
                 )
             }
             task.addOnFailureListener {

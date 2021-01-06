@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import com.google.android.gms.location.LocationResult
+import com.meteocool.location.service.LocationServiceFactory
+import com.meteocool.location.service.ServiceType
 import com.meteocool.security.Validator
 import com.meteocool.preferences.SharedPrefUtils
 import org.jetbrains.anko.defaultSharedPreferences
@@ -32,12 +34,13 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver(){
                 Timber.d("Location: $result")
                 if (result != null) {
                     val location = result.lastLocation
-                    val lastLocation = SharedPrefUtils.getSavedLocationResult(context)
+                    val preferences = context.defaultSharedPreferences
+                    val lastLocation = SharedPrefUtils.getSavedLocationResult(preferences)
                     val isDistanceBiggerThan500F = getDistanceToLastLocation(location, context) > 499f
                        if(isDistanceBiggerThan500F){
                             Timber.i("$isDistanceBiggerThan500F")
                             Timber.i("$location is better than $lastLocation")
-                            val preferences = context.defaultSharedPreferences
+
                            val token = preferences.getString("fb_token", "no token")
                            Timber.d(" Token $token")
                            UploadLocation().execute(location, token, preferences)
@@ -46,12 +49,12 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver(){
                         }
                     // Save the location data to SharedPreferences.
                     SharedPrefUtils.saveResults(context.defaultSharedPreferences, location)
-                    Timber.i(SharedPrefUtils.getSavedLocationResult(context).toString())
+                    Timber.i("$lastLocation")
                 }
             }
             else if(Intent.ACTION_BOOT_COMPLETED == action){
                 if(Validator.isBackgroundLocationPermissionGranted(context)) {
-                    FusedLocationService(context).requestLocationUpdates()
+                    LocationServiceFactory.getLocationService(context, ServiceType.BACK).requestLocationUpdates()
                 }
             }
         }

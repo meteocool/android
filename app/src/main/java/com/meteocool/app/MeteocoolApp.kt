@@ -3,9 +3,7 @@ package com.meteocool.app
 import android.app.Application
 import android.util.Log
 import com.meteocool.BuildConfig
-import com.meteocool.location.FusedLocationService
 import com.meteocool.location.LocationRepository
-import com.meteocool.location.LocationService
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 import timber.log.Timber.DebugTree

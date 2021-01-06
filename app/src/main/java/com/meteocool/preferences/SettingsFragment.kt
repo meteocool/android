@@ -12,11 +12,10 @@ import androidx.preference.SwitchPreferenceCompat
 import com.meteocool.R
 import com.meteocool.security.Validator
 import com.meteocool.injection.InjectorUtils
-import com.meteocool.location.LocationServiceFactory
+import com.meteocool.location.service.LocationServiceFactory
 import com.meteocool.network.NetworkUtils
 import com.meteocool.ui.map.LocationAlertFragment
 import com.meteocool.view.WebViewModel
-import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 
@@ -119,7 +118,7 @@ class SettingsFragment() : PreferenceFragmentCompat() {
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 ) {
-                    LocationServiceFactory.getLocationService(requireContext())?.requestLocationUpdates()
+//                    LocationServiceFactory.getLocationService(requireContext())?.requestLocationUpdates()
                     //TODO replace with foreground
                 } else {
                     findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked = false
