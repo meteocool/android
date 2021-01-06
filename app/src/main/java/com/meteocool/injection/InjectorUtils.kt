@@ -3,6 +3,7 @@ package com.meteocool.injection
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.meteocool.app.MeteocoolApp
 import com.meteocool.view.WebViewModelFactory
 import org.jetbrains.anko.defaultSharedPreferences
 
@@ -14,6 +15,6 @@ object InjectorUtils {
     }
 
     fun provideWebViewModelFactory(context : Context, application: Application) : WebViewModelFactory{
-        return WebViewModelFactory(getSharedPreferences(context), application)
+        return WebViewModelFactory(getSharedPreferences(context), (context.applicationContext as MeteocoolApp).repository, application)
     }
 }

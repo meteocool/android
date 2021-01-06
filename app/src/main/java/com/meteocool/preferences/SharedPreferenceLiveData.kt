@@ -1,4 +1,4 @@
-package com.meteocool.sharedPrefs
+package com.meteocool.preferences
 
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData

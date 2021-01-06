@@ -2,10 +2,8 @@ package com.meteocool.ui
 
 import android.app.Activity
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.IntentSender
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -17,25 +15,23 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.meteocool.R
-import com.meteocool.location.LocationUpdatesBroadcastReceiver
-import com.meteocool.sharedPrefs.SharedPrefUtils
 import com.meteocool.security.Validator
-import com.meteocool.sharedPrefs.SettingsFragment
+import com.meteocool.preferences.SettingsFragment
 import com.meteocool.injection.InjectorUtils
+import com.meteocool.location.FusedLocationService
+import com.meteocool.location.LocationService
+import com.meteocool.location.LocationServiceFactory
 import com.meteocool.network.JSONClearPost
 import com.meteocool.network.JSONUnregisterNotification
 import com.meteocool.network.NetworkUtils
-import com.meteocool.ui.map.BackgroundLocationAlertFragment
+import com.meteocool.ui.map.LocationAlertFragment
 import com.meteocool.ui.map.ErrorFragment
 import com.meteocool.ui.map.WebFragment
-import com.meteocool.view.EventObserver
 import com.meteocool.view.VoidEvent
 import com.meteocool.view.VoidEventObserver
 import com.meteocool.view.WebViewModel
@@ -46,25 +42,10 @@ import timber.log.Timber
 /**
  * Main Activity from meteocool
  */
-class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener, SharedPreferences.OnSharedPreferenceChangeListener,
+class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
     WebFragment.WebViewClientListener {
 
-
-    private val pendingIntent: PendingIntent
-        get() {
-            val intent = Intent(this, LocationUpdatesBroadcastReceiver::class.java)
-            intent.action = LocationUpdatesBroadcastReceiver.ACTION_PROCESS_UPDATES
-            return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        }
-
-    /**
-     * The entry point to Google Play Services.
-     */
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient
-
     private lateinit var openDrawerObserver: VoidEventObserver<VoidEvent>
-    private lateinit var requestBackgroundLocationObserver: EventObserver<Boolean>
 
     private val webViewModel: WebViewModel by viewModels {
         InjectorUtils.provideWebViewModelFactory(this, application)
@@ -81,9 +62,6 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
                     return@OnCompleteListener
                 }
             })
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        Timber.d("Google services available: %s", isGooglePlayServicesAvailable(this).toString())
 
         supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, WebFragment())
             .commit()
@@ -103,33 +81,7 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
         }
         webViewModel.injectDrawer.observe(this, openDrawerObserver)
 
-        requestBackgroundLocationObserver = EventObserver {
-            if (it) {
-                requestBackgroundLocationUpdates()
-            } else {
-                stopBackgroundLocationUpdates()
-            }
-        }
-
-
-        webViewModel.requestingLocationUpdatesBackground.observe(
-            this,
-            requestBackgroundLocationObserver
-        )
     }
-
-    private fun isGooglePlayServicesAvailable(activity: Activity?): Boolean {
-        val googleApiAvailability = GoogleApiAvailability.getInstance()
-        val status = googleApiAvailability.isGooglePlayServicesAvailable(activity)
-        if (status != ConnectionResult.SUCCESS) {
-            if (googleApiAvailability.isUserResolvableError(status)) {
-                googleApiAvailability.getErrorDialog(activity, status, 2404).show()
-            }
-            return false
-        }
-        return true
-    }
-
 
     private fun addClickListenerTo(navView: NavigationView) {
         navView.setNavigationItemSelectedListener { menuItem ->
@@ -159,72 +111,42 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
      * Handles the Request Updates button and requests start of location updates.
      */
     private fun requestBackgroundLocationUpdates() {
-        try {
-            val builder =
-                LocationSettingsRequest.Builder()
-                    .addLocationRequest(backgroundLocationRequest)
-            val client: SettingsClient = LocationServices.getSettingsClient(this)
-            val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
-            task.addOnSuccessListener {
-                Timber.d("Starting background location updates")
-                mFusedLocationClient.requestLocationUpdates(
-                    backgroundLocationRequest, pendingIntent
-                )
-            }
-
-            task.addOnFailureListener { exception ->
-                if (exception is ResolvableApiException) {
-                    // Location settings are not satisfied, but this can be fixed
-                    // by showing the user a dialog.
-                    try {
-                        // Show the dialog by calling startResolutionForResult(),
-                        // and check the result in onActivityResult().
-                        exception.startResolutionForResult(
-                            this@MeteocoolActivity,
-                            REQUEST_CHECK_SETTINGS
-                        )
-                        Timber.d("No location permission")
-                    } catch (sendEx: IntentSender.SendIntentException) {
-                        // Ignore the error.
-                    }
-                }
-            }
-
-
-        } catch (e: SecurityException) {
-            e.printStackTrace()
-        }
-
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_CHECK_SETTINGS -> {
-//                webViewModel.requestingBackgroundLocationUpdates(
-//                    Validator.isBackgroundLocationPermissionGranted(
-//                        this
+//        task.addOnFailureListener { exception ->
+//            if (exception is ResolvableApiException) {
+//                // Location settings are not satisfied, but this can be fixed
+//                // by showing the user a dialog.
+//                try {
+//                    // Show the dialog by calling startResolutionForResult(),
+//                    // and check the result in onActivityResult().
+//                    exception.startResolutionForResult(
+//                        this@MeteocoolActivity,
+//                        REQUEST_CHECK_SETTINGS
 //                    )
-//                )
-                when (resultCode) {
-                    Activity.RESULT_OK -> {
-                    }
-                    Activity.RESULT_CANCELED -> {
-                        webViewModel.requestingBackgroundLocationUpdates(false)
-                        defaultSharedPreferences.edit().putBoolean("notification", false)
-                            .putBoolean("map_zoom", false).apply()
-                    }
-                }
-            }
-
-        }
+//                    Timber.d("No location permission")
+//                } catch (sendEx: IntentSender.SendIntentException) {
+//                    // Ignore the error.
+//                }
+//            }
+//        }
     }
-
-    private fun stopBackgroundLocationUpdates() {
-        Timber.d("Stopping location updates")
-        //mFusedLocationClient.removeLocationUpdates(pendingIntent)
-    }
-
+//
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        when (requestCode) {
+//            REQUEST_CHECK_SETTINGS -> {
+//                when (resultCode) {
+//                    Activity.RESULT_OK -> {
+//                    }
+//                    Activity.RESULT_CANCELED -> {
+//                        webViewModel.requestingBackgroundLocationUpdates(false)
+//                        defaultSharedPreferences.edit().putBoolean("notification", false)
+//                            .putBoolean("map_zoom", false).apply()
+//                    }
+//                }
+//            }
+//
+//        }
+//    }
 
     override fun onStart() {
         super.onStart()
@@ -242,33 +164,27 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
 
     override fun onResume() {
         super.onResume()
-
-        webViewModel.requestingBackgroundLocationUpdates(
-            Validator.isBackgroundLocationPermissionGranted(
-                this
-            ) && defaultSharedPreferences.getBoolean("notification", false)
-        )
         cancelNotifications()
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        LocationServiceFactory.getLocationService(this)?.stopLocationUpdates()
+//        if (!Validator.isBackgroundLocationPermissionGranted(
+//                this
+//            ) && defaultSharedPreferences.getBoolean("notification", false)
+//        ) {
+//            defaultSharedPreferences.edit()
+//                .putBoolean("notification", false)
+//                .putBoolean("map_zoom", false)
+//                .apply()
+//            // TODO Show hint that this is not working
+//        }
     }
 
     override fun onPause() {
         super.onPause()
         defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
-    }
-
-    override fun onConnected(p0: Bundle?) {
-        Timber.d("GoogleApiClient connected")
-    }
-
-    override fun onConnectionSuspended(p0: Int) {
-        val text = "Connection suspended"
-        Timber.w("$text: Error code: $p0")
-    }
-
-    override fun onConnectionFailed(connectionResult: ConnectionResult) {
-        val text = "Exception while connecting to Google Play services"
-        Timber.w("%s%s", text, connectionResult.errorMessage)
+        if(Validator.isBackgroundLocationPermissionGranted(this) && defaultSharedPreferences.getBoolean("notification", false)){
+            LocationServiceFactory.getLocationService(this)?.requestLocationUpdates()
+        }
     }
 
     override fun onBackPressed() {
@@ -295,44 +211,25 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
                             NetworkUtils.POST_UNREGISTER_TOKEN
                         )
                     }
-                }else{
-                   webViewModel.requestingBackgroundLocationUpdates(
-                        Validator.isBackgroundLocationPermissionGranted(
-                            this
-                        )
-                    )
                 }
             }
             "notification_intensity" -> {
                 val intensity = sharedPreferences!!.getString(key, "-1")!!.toInt()
                 Timber.i("Preference value $key was updated to $intensity")
-                SharedPrefUtils.NOTIFICATION_INTENSITY = intensity
-                webViewModel.requestingBackgroundLocationUpdates(
-                    Validator.isBackgroundLocationPermissionGranted(
-                        this
-                    )
-                )
             }
             "notification_time" -> {
                 val time = sharedPreferences!!.getString(key, "-1")!!.toInt()
                 Timber.i("Preference value $key was updated to $time")
-                SharedPrefUtils.NOTIFICATION_TIME = time
-                webViewModel.requestingBackgroundLocationUpdates(
-                    Validator.isBackgroundLocationPermissionGranted(
-                        this
-                    )
-                )
             }
             "map_zoom" -> {
                 val isMapZoomOn = sharedPreferences!!.getBoolean(key, false)
                 Timber.i("Preference value $key was updated to $isMapZoomOn ")
                 if (isMapZoomOn) {
-                    webViewModel.getLocation()
-                    //webViewModel.sendLocationOnce(true)
+                    //TODO inject location or not?
                 }
                 webViewModel.sendSettings()
             }
-            "map_mode", "map_rotate"-> {
+            "map_mode", "map_rotate" -> {
                 webViewModel.sendSettings()
             }
         }
@@ -356,16 +253,6 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
         }
     }
 
-    private val backgroundLocationRequest: LocationRequest
-        get() {
-            return LocationRequest.create().apply {
-                interval = UPDATE_INTERVAL
-                fastestInterval = FASTEST_UPDATE_INTERVAL
-                priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
-                maxWaitTime = MAX_WAIT_TIME
-            }
-        }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -378,55 +265,26 @@ class MeteocoolActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbac
         when (requestCode) {
             Validator.LOCATION_BACKGROUND -> {
                 if ((grantResults.isNotEmpty() &&
-                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                            grantResults[0] != PackageManager.PERMISSION_GRANTED)
                 ) {
-                    stopBackgroundLocationUpdates()
-                    requestBackgroundLocationUpdates()
-                } else {
                     defaultSharedPreferences.edit().putBoolean("notification", false).apply()
-                    val alert = BackgroundLocationAlertFragment(R.string.bg_dialog_msg)
+                    val alert = LocationAlertFragment(R.string.bg_dialog_msg)
                     alert.show(supportFragmentManager, "BackgroundLocationAlertFragment")
-//                    Snackbar.make(
-//                        findViewById(R.id.fragmentContainer),
-//                        "Location setting does not work",
-//                        Snackbar.LENGTH_SHORT
-//                    ).show()
                 }
             }
             Validator.LOCATION -> {
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 ) {
-
+                    LocationServiceFactory.getLocationService(this)?.requestLocationUpdates()
+                    //TODO replace with foreground
                 } else {
                     defaultSharedPreferences.edit().putBoolean("map_zoom", false).apply()
-                    val alert = BackgroundLocationAlertFragment(R.string.gp_dialog_msg)
-                    alert.show(supportFragmentManager, "BackgroundLocationAlertFragment")
+                    val alert = LocationAlertFragment(R.string.gp_dialog_msg)
+                    alert.show(supportFragmentManager, "LocationAlertFragment")
                 }
             }
         }
-    }
-
-    companion object {
-
-        /**
-         * The desired interval for location updates. Inexact. Updates may be more or less frequent.
-         */
-        const val UPDATE_INTERVAL: Long = 60 * 1000
-
-        /**
-         * The fastest rate for active location updates. Updates will never be more frequent
-         * than this value, but they may be less frequent.
-         */
-        const val FASTEST_UPDATE_INTERVAL: Long = 2 * 60 * 1000
-
-        /**
-         * The max time before batched results are delivered by location services. Results may be
-         * delivered sooner than this interval.
-         */
-        const val MAX_WAIT_TIME = UPDATE_INTERVAL
-
-        const val REQUEST_CHECK_SETTINGS = 999
     }
 
     override fun receivedWebViewError() {

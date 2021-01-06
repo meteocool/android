@@ -32,6 +32,22 @@ class Validator {
             }
         }
 
+
+        fun checkLocationPermissionFragment(context: Context, activity: Activity) {
+            when {
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED -> {
+                    ActivityCompat.requestPermissions(
+                        activity,
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        LOCATION
+                    )
+                }
+            }
+        }
+
         fun checkBackgroundLocationPermission(context: Context, activity: Activity) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                 if (

@@ -1,6 +1,7 @@
-package com.meteocool.sharedPrefs
+package com.meteocool.preferences
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.activityViewModels
@@ -11,8 +12,11 @@ import androidx.preference.SwitchPreferenceCompat
 import com.meteocool.R
 import com.meteocool.security.Validator
 import com.meteocool.injection.InjectorUtils
+import com.meteocool.location.LocationServiceFactory
 import com.meteocool.network.NetworkUtils
+import com.meteocool.ui.map.LocationAlertFragment
 import com.meteocool.view.WebViewModel
+import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 
@@ -36,13 +40,13 @@ class SettingsFragment() : PreferenceFragmentCompat() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val isZoomEnabledObserver = androidx.lifecycle.Observer<Boolean>{
+        isZoomEnabledObserver = androidx.lifecycle.Observer<Boolean>{
                 this.preferenceManager.findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked =
                     it
         }
         webViewModel.isZoomEnabled.observe(viewLifecycleOwner, isZoomEnabledObserver)
 
-        val areNotificationsEnabledObserver = androidx.lifecycle.Observer<Boolean>{
+        areNotificationsEnabledObserver = androidx.lifecycle.Observer<Boolean>{
            findPreference<SwitchPreferenceCompat>("notification")?.isChecked = it
         }
         webViewModel.areNotificationsEnabled.observe(viewLifecycleOwner, areNotificationsEnabledObserver)
@@ -101,6 +105,28 @@ class SettingsFragment() : PreferenceFragmentCompat() {
                 Validator.checkBackgroundLocationPermission(requireContext(), requireActivity())
             }
             true
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode){
+            Validator.LOCATION -> {
+                if ((grantResults.isNotEmpty() &&
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                ) {
+                    LocationServiceFactory.getLocationService(requireContext())?.requestLocationUpdates()
+                    //TODO replace with foreground
+                } else {
+                    findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked = false
+                    val alert = LocationAlertFragment(R.string.gp_dialog_msg)
+                    alert.show(requireActivity().supportFragmentManager, "LocationAlertFragment")
+                }
+            }
         }
     }
 }

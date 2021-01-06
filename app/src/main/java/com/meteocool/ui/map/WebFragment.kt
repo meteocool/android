@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
@@ -26,7 +27,10 @@ import com.meteocool.R
 import com.meteocool.location.LocationModel
 import com.meteocool.security.Validator
 import com.meteocool.injection.InjectorUtils
+import com.meteocool.location.LocationService
+import com.meteocool.location.MeteocoolLocation
 import com.meteocool.network.NetworkUtils
+import com.meteocool.preferences.SharedPrefUtils
 import com.meteocool.view.*
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import timber.log.Timber
@@ -42,12 +46,12 @@ class WebFragment() : Fragment() {
 
     private lateinit var listener: WebViewClientListener
     private lateinit var mWebView: WebView
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationCallback: LocationCallback
 
     private lateinit var requestForegroundLocationObserver: EventObserver<Boolean>
-    private lateinit var locationObserver: Observer<in Resource<LocationModel>>
+    private lateinit var locationObserver: Observer<MeteocoolLocation?>
     private lateinit var requestSettingsObserver: VoidEventObserver<VoidEvent>
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private val webViewModel: WebViewModel by activityViewModels {
         InjectorUtils.provideWebViewModelFactory(requireContext(), requireActivity().application)
@@ -56,41 +60,20 @@ class WebFragment() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-
-        locationCallback = object : LocationCallback() {
-
-            override fun onLocationResult(locationResult: LocationResult?) {
-                locationResult ?: return
-                for (location in locationResult.locations) {
-                  //  updateUserLocation(location)
-                }
-            }
-        }
-
         locationObserver = Observer {
             Timber.d("Called")
-            if(it.isSuccessful) {
-                Timber.d("Updated location: ${it.data().latitude}, ${it.data().longitude}, ${it.data().accuracy}, ${it.data().altitude}")
-                updateUserLocation(it.data())
-            }else{
-                if (it.error() is ResolvableApiException) {
-                    (it.error() as ResolvableApiException).startResolutionForResult(
-                        requireActivity(),
-                        MeteocoolActivity.REQUEST_CHECK_SETTINGS
-                    )
-                }
+            if (it != null) {
+                Timber.d("Updated location: ${it.latitude}, ${it.longitude}, ${it.accuracy}, ${it.altitude}")
+                updateUserLocation(it, false)
+            } else {
+                // TODO Show hint?
             }
 
         }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         requestForegroundLocationObserver = EventObserver {
-            if (it) {
-                Timber.d("requestLocation $it")
-                requestLocationUpdates()
-            }else{
-                stopLocationUpdates()
-            }
+            //TODO Handle foregroundCallback
         }
 
         requestSettingsObserver = VoidEventObserver {
@@ -98,7 +81,7 @@ class WebFragment() : Fragment() {
             val settings: Gson = Gson().newBuilder().create()
             val currentSettings = mapOf<String, Boolean>(
                 Pair("darkMode", defaultSharedPreferences.getBoolean("map_mode", false)),
-                //Pair("zoomOnForeground", defaultSharedPreferences.getBoolean("map_zoom", false)),
+                Pair("zoomOnForeground", defaultSharedPreferences.getBoolean("map_zoom", false)),
                 Pair("mapRotation", defaultSharedPreferences.getBoolean("map_rotate", false))
             )
             val string = "window.injectSettings(${settings.toJson(currentSettings)});"
@@ -138,14 +121,9 @@ class WebFragment() : Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
     override fun onPause() {
         super.onPause()
-       // mWebView.removeJavascriptInterface("Android")
+        mWebView.removeJavascriptInterface("Android")
         defaultSharedPreferences.edit().putString("map_url", mWebView.url).apply()
     }
 
@@ -161,19 +139,9 @@ class WebFragment() : Fragment() {
         webViewModel.locationData.observe(
             viewLifecycleOwner,
             locationObserver
-        )
+        ) //TODO replace
 
-//        webViewModel.requestingLocationUpdatesForeground.observe(
-//            viewLifecycleOwner,
-//            requestForegroundLocationObserver
-//        )
-
-
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
+        if (Validator.isLocationPermissionGranted(requireContext())) {
             Timber.d("Called manual tile")
             val function = "if (window.manualTileUpdateFn) window.manualTileUpdateFn(true);"
             mWebView.post {
@@ -181,8 +149,14 @@ class WebFragment() : Fragment() {
                     mWebView.evaluateJavascript(function) {}
                 }
             }
+            try {
+                zoomOnLocation()
+            }catch(e : Exception){
+                Timber.d("Did not work $e")
+            }
         }
     }
+
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -202,70 +176,41 @@ class WebFragment() : Fragment() {
         }
     }
 
-    private fun updateUserLocation(location: LocationModel) {
+    private fun updateUserLocation(location: MeteocoolLocation, locateMe: Boolean) {
         val string =
-            "window.injectLocation(${location.latitude} , ${location.longitude} , ${location.accuracy} , true);"
+            "window.injectLocation(${location.latitude} , ${location.longitude} , ${location.accuracy} , ${locateMe});"
         mWebView.post {
             run {
                 mWebView.evaluateJavascript(string) {}
             }
         }
-        stopLocationUpdates()
     }
 
-    private fun stopLocationUpdates() {
-        Timber.i("Stop location updates")
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-    }
-
-    private fun requestLocationUpdates() {
-        try {
-            val builder =
-                LocationSettingsRequest.Builder()
-                    .addLocationRequest(frontendLocationRequest)
-            val client: SettingsClient = LocationServices.getSettingsClient(requireActivity())
-            val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
-            task.addOnSuccessListener {
-
-                Timber.i("Starting location updates")
-
-                fusedLocationClient.requestLocationUpdates(
-                    frontendLocationRequest, locationCallback, Looper.getMainLooper()
-                )
-
-            }
-
-            task.addOnFailureListener { exception ->
-                if (exception is ResolvableApiException) {
-                    // Location settings are not satisfied, but this can be fixed
-                    // by showing the user a dialog.
-                    try {
-                        // Show the dialog by calling startResolutionForResult(),
-                        // and check the result in onActivityResult().
-                        exception.startResolutionForResult(
-                            requireActivity(),
-                            MeteocoolActivity.REQUEST_CHECK_SETTINGS
-                        )
-                        Timber.d("No location permission")
-                    } catch (sendEx: IntentSender.SendIntentException) {
-                        // Ignore the error.
+    private fun zoomOnLocation(){
+        Timber.d("Zoomed")
+        if (defaultSharedPreferences.getBoolean("map_zoom", false)) {
+            try {
+                fusedLocationClient.lastLocation
+                    .addOnSuccessListener { location: Location? ->
+                        Timber.d("lastlocation $location")
+                        if (location != null) {
+                            val lastLocation = MeteocoolLocation(
+                                location.latitude,
+                                location.longitude,
+                                location.altitude,
+                                location.accuracy
+                            )
+                            updateUserLocation(lastLocation, true)
+                        }
                     }
-                }
+                    .addOnFailureListener {
+                        Timber.d("lastlocation $it")
+                    }
+            } catch (e: SecurityException) {
+                Timber.d("security raise $e")
             }
-        } catch (e: SecurityException) {
-            Timber.e(e)
         }
     }
-
-    private val frontendLocationRequest: LocationRequest
-        get() {
-            return LocationRequest.create().apply {
-                interval = 2
-                fastestInterval = 1
-                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                maxWaitTime = 2
-            }
-        }
 
     inner class MyWebViewClient(private val listener: WebViewClientListener) : WebViewClient() {
 
@@ -307,12 +252,13 @@ class WebFragment() : Fragment() {
     inner class WebAppInterface {
         @JavascriptInterface
         fun injectLocation() {
-            Validator.checkLocationPermission(requireContext(), requireActivity())
-            requireActivity().runOnUiThread {
-
-                webViewModel.getLocation()
-               //webViewModel.locationData.observe(requireActivity(), locationObserver)
-                //webViewModel.sendLocationOnce(Validator.isLocationPermissionGranted(requireContext())  && defaultSharedPreferences.getBoolean("map_zoom", false))
+            if (Validator.isLocationPermissionGranted(requireContext())) {
+                Timber.d("Injected")
+                val lastStoredLocation = SharedPrefUtils.getSavedLocationResult(requireContext())
+                updateUserLocation(lastStoredLocation, true)
+            } else {
+                Validator.checkLocationPermissionFragment(requireContext(), requireActivity())
+                Timber.d("Requested")
             }
         }
 
@@ -325,6 +271,8 @@ class WebFragment() : Fragment() {
 
         @JavascriptInterface
         fun requestSettings() {
+            Timber.d("requestSettings injected")
+            zoomOnLocation()
         }
     }
 }
