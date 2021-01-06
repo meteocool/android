@@ -128,7 +128,7 @@ class WebFragment() : Fragment() {
         webViewModel.locationData.observe(
             viewLifecycleOwner,
             locationObserver
-        ) //TODO replace
+        )
 
         if (Validator.isLocationPermissionGranted(requireContext())) {
             Timber.d("Called manual tile")
@@ -142,7 +142,6 @@ class WebFragment() : Fragment() {
             foregroundLocationService.requestLocationUpdates()
         }
     }
-
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

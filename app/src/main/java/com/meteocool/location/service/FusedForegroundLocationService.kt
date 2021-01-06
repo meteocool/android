@@ -45,9 +45,9 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
 
     override fun requestLocationUpdates() {
         Timber.d("Request Updates")
-        super.updateInterval = TimeUnit.SECONDS.toMillis(10)
-        super.fastestUpdateInterval = TimeUnit.SECONDS.toMillis(5)
-        super.maxWaitTime = TimeUnit.SECONDS.toMillis(10)
+        super.updateInterval = TimeUnit.SECONDS.toMillis(20)
+        super.fastestUpdateInterval = TimeUnit.SECONDS.toMillis(10)
+        super.maxWaitTime = TimeUnit.SECONDS.toMillis(20)
         try {
             val builder =
                 LocationSettingsRequest.Builder()
