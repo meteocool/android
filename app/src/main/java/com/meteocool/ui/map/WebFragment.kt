@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.webkit.*
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import com.google.android.gms.location.*
 import com.google.gson.Gson
 import com.meteocool.R
 import com.meteocool.security.Validator
@@ -39,11 +38,12 @@ class WebFragment() : Fragment() {
     private lateinit var listener: WebViewClientListener
     private lateinit var mWebView: WebView
 
-    private lateinit var requestForegroundLocationObserver: EventObserver<Boolean>
     private lateinit var locationObserver: Observer<MeteocoolLocation?>
     private lateinit var requestSettingsObserver: VoidEventObserver<VoidEvent>
 
     private lateinit var foregroundLocationService: LocationService
+
+    private var isRequestSettingsCalled : Boolean = false
 
     private val webViewModel: WebViewModel by activityViewModels {
         InjectorUtils.provideWebViewModelFactory(requireContext(), requireActivity().application)
@@ -54,7 +54,7 @@ class WebFragment() : Fragment() {
 
         locationObserver = Observer {
             Timber.d("Called")
-            if (it != null) {
+            if (it != null && isRequestSettingsCalled) {
                 Timber.d("Updated location: ${it.latitude}, ${it.longitude}, ${it.accuracy}, ${it.altitude}")
                 updateUserLocation(it, false)
             } else {
@@ -64,18 +64,14 @@ class WebFragment() : Fragment() {
 
         foregroundLocationService = LocationServiceFactory.getLocationService(requireContext(), ServiceType.FRONT)
 
-        requestForegroundLocationObserver = EventObserver {
-            //TODO Handle foregroundCallback
-        }
-
         requestSettingsObserver = VoidEventObserver {
             Timber.d("requestSetting")
             val settings: Gson = Gson().newBuilder().create()
             val currentSettings = mapOf<String, Boolean>(
                 Pair("darkMode", defaultSharedPreferences.getBoolean("map_mode", false)),
-                Pair("zoomOnForeground", defaultSharedPreferences.getBoolean("map_zoom", false)),
                 Pair("mapRotation", defaultSharedPreferences.getBoolean("map_rotate", false))
             )
+            Timber.d("Updated ")
             val string = "window.injectSettings(${settings.toJson(currentSettings)});"
             mWebView.post {
                 run {
@@ -142,11 +138,7 @@ class WebFragment() : Fragment() {
                     mWebView.evaluateJavascript(function) {}
                 }
             }
-            try {
-                zoomOnLastKnownLocation()
-            }catch(e : Exception){
-                Timber.d("Did not work $e")
-            }
+            zoomOnLastKnownLocation()
             foregroundLocationService.requestLocationUpdates()
         }
     }
@@ -181,9 +173,12 @@ class WebFragment() : Fragment() {
     }
 
     private fun zoomOnLastKnownLocation(){
-        Timber.d("Zoomed")
-        val lastLocation = SharedPrefUtils.getSavedLocationResult(requireContext().defaultSharedPreferences)
-        updateUserLocation(lastLocation, true)
+        if(isRequestSettingsCalled) {
+            Timber.d("Zoomed")
+            val lastLocation =
+                SharedPrefUtils.getSavedLocationResult(requireContext().defaultSharedPreferences)
+            updateUserLocation(lastLocation, true)
+        }
     }
 
     inner class MyWebViewClient(private val listener: WebViewClientListener) : WebViewClient() {
@@ -245,6 +240,7 @@ class WebFragment() : Fragment() {
         @JavascriptInterface
         fun requestSettings() {
             Timber.d("requestSettings injected")
+            isRequestSettingsCalled = true
             if (defaultSharedPreferences.getBoolean("map_zoom", false)) {
                 zoomOnLastKnownLocation()
             }
