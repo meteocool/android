@@ -1,12 +1,12 @@
 package com.meteocool.location
 
+import android.content.SharedPreferences
 import android.location.Location
 import android.os.AsyncTask
-import android.preference.PreferenceManager
-import android.util.Log
-import com.google.firebase.iid.FirebaseInstanceId
-import com.meteocool.utility.JSONPost
-import com.meteocool.utility.NetworkUtility
+import com.meteocool.network.JSONPost
+import com.meteocool.network.NetworkUtils
+import com.meteocool.preferences.SharedPrefUtils
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -14,10 +14,11 @@ import java.util.*
  * Handover parameters in following order:
  * 1. location
  * 2. client token
+ * 3. user preferences
  */
 class UploadLocation: AsyncTask<Any, Unit, Unit>(){
     override fun doInBackground(vararg params: Any?) {
-        Log.d("Async", "location: $params[0].toString(), token: $params[1]")
+        Timber.d("location: $params[0].toString(), token: $params[1]")
         val location = params[0] as Location
         val verticalAccuracy = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             location.verticalAccuracyMeters
@@ -26,9 +27,10 @@ class UploadLocation: AsyncTask<Any, Unit, Unit>(){
         }
 
         val token =  params[1].toString()
+        val prefs =  params[2] as SharedPreferences
 
 
-        NetworkUtility.sendPostRequest(
+        NetworkUtils.sendPostRequest(
             JSONPost(
                 location.latitude,
                 location.longitude,
@@ -39,10 +41,10 @@ class UploadLocation: AsyncTask<Any, Unit, Unit>(){
                 System.currentTimeMillis().toDouble(),
                 token,
                 "android",
-                LocationResultHelper.NOTIFICATION_TIME,
-                LocationResultHelper.NOTIFICATION_INTENSITY,
+                prefs.getString("notification_time", "15")!!.toInt(),
+                prefs.getString("notification_intensity", "10")!!.toInt(),
                 Locale.getDefault().language
-            ), NetworkUtility.POST_CLIENT_DATA
+            ), NetworkUtils.POST_CLIENT_DATA
         )
     }
 }

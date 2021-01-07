@@ -37,7 +37,7 @@
 
     <!-- Push Preferences -->
     <string name="notification_push_title">Push-Nachrichten</string>
-    <string name="notification_push_level_title">Benachrichtigung ab…</string>
+    <string name="notification_push_level_title">Benachrichtigen ab…</string>
     <string name="level_drizzle">Nieselregen</string>
     <string name="level_rain">Regen</string>
     <string name="level_heavy_rain">Starkem Regen</string>
@@ -45,10 +45,15 @@
 
     <string name="notification_time_title">Benachrichtigungszeit</string>
 
-
     <!-- Map Preferences -->
     <string name="map_zoom_title">Zoom nach Start</string>
-    <string name="map_rotate_title">Rotation der Karte</string>
+    <string name="map_rotate_title">Rotation</string>
     <string name="map_mode_title">Nachtmodus</string>
+
+    <!-- Background Dialog -->
+    <string name="gp_dialog_msg">Berechtigung für Standortzugriff wird für <b>Mich Lokalisieren</b> benötigt</string>
+    <string name="bg_dialog_msg">Berechtigung für Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt. Feature wird deaktiviert.</string>
+    <string name="bg_dialog_pos">Öffne Einstellungen</string>
+    <string name="bg_dialog_neg">Verstanden</string>
 
 </resources>

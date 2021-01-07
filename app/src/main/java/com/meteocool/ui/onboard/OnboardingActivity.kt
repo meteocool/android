@@ -1,4 +1,4 @@
-package com.meteocool
+package com.meteocool.ui.onboard
 
 import android.Manifest
 import android.content.Intent
@@ -8,9 +8,13 @@ import androidx.core.content.ContextCompat
 import com.github.appintro.AppIntro2
 import com.github.appintro.AppIntroFragment
 import com.github.appintro.model.SliderPage
+import com.meteocool.ui.MeteocoolActivity
+import com.meteocool.R
 import org.jetbrains.anko.defaultSharedPreferences
 
-
+/**
+ * Onboarding how the app works.
+ */
 class OnboardingActivity : AppIntro2() {
 
     companion object{

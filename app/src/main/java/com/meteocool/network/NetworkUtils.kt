@@ -1,13 +1,16 @@
-package com.meteocool.utility
+package com.meteocool.network
 
-import android.util.Log
 import com.google.gson.Gson
+import timber.log.Timber
 import java.io.*
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
-class NetworkUtility{
+/**
+ * Helper class for handling network communication.
+ */
+class NetworkUtils{
 companion object {
 
     val test = "http://10.10.4.162:8040/"
@@ -15,8 +18,8 @@ companion object {
 
     const val DOC_URL = "https://meteocool.com/documentation.html"
     const val MAP_URL = "https://meteocool.com/?mobile=android2"
-    const val FEEDBACK_URL = "https://meteocool.com/#about"
-    const val IMPRESSUM_URL = "https://meteocool.com/#impressum"
+    const val FEEDBACK_URL = "mailto:meteocool@unimplemented.org?subject=Android%20App%20Feedback&body=%0A%0A--%0APlease%20include%20the%20following%20information%20when%20reporting%20issues%21%0A%0ADebug-Token:%20";
+    const val IMPRESS_URL = "https://meteocool.com/#about"
     const val TWITTER_URL = "https://twitter.com/meteocool_de"
     const val GITHUB_URL = "https://github.com/meteocool"
 
@@ -27,7 +30,7 @@ companion object {
     private fun buildJSONString(json : JSON) : String{
         val gsonBuilder = Gson().newBuilder().create()
         val jsonAsString = gsonBuilder.toJson(json)
-        Log.d("NetworkUtility", "JSON $jsonAsString")
+        Timber.d("JSON $jsonAsString")
         return jsonAsString
     }
 
@@ -48,8 +51,8 @@ companion object {
                 wr.write(jsonAsString)
                 wr.flush()
 
-                Log.d("NetworkUtility", "URL $url")
-                Log.d("NetworkUtility", "HTTP-Response $responseCode")
+                Timber.d("URL $url")
+                Timber.d("HTTP-Response $responseCode")
 
                 BufferedReader(InputStreamReader(inputStream)).use {
                     val response = StringBuffer()
@@ -60,11 +63,11 @@ companion object {
                         inputLine = it.readLine()
                     }
                     it.close()
-                    Log.d("NetworkUtility", "$response")
+                    Timber.d( "$response")
                 }
             }
         }catch(e : Exception){
-            Log.d("NetworkUtility", "Upload Error")
+            Timber.e(e)
         }
     }
 }

@@ -2,46 +2,57 @@ package com.meteocool.view
 
 import android.app.Application
 import android.content.SharedPreferences
-import android.location.Location
-import android.util.Log
 import androidx.lifecycle.*
-import com.meteocool.security.Validator
-import com.meteocool.settings.booleanLiveData
-import com.meteocool.settings.stringLiveData
-import com.meteocool.utility.NetworkUtility
+import com.meteocool.location.LocationRepository
+import com.meteocool.location.MeteocoolLocation
+import com.meteocool.preferences.booleanLiveData
+import com.meteocool.preferences.stringLiveData
+import com.meteocool.network.NetworkUtils
+import timber.log.Timber
 
-class WebViewModel(private val sharedPreferences: SharedPreferences, application: Application) : AndroidViewModel(application){
+/**
+ * Viewmodel for webfragment and its settings.
+ */
+class WebViewModel(private val sharedPreferences: SharedPreferences, private val locationRepository: LocationRepository, application: Application) : ViewModel(){
+
+    private val _isZoomEnabled = sharedPreferences.booleanLiveData("map_zoom", false)
+    private val _areNotificationsEnabled = sharedPreferences.booleanLiveData("notification", false)
+    private val _url = sharedPreferences.stringLiveData("map_url", NetworkUtils.MAP_URL)
+    private val _injectDrawer = MutableLiveData<VoidEvent>()
+    private val _requestingLocationUpdatesForeground = MutableLiveData<Event<Boolean>>()
+    private val _requestingSettings = MutableLiveData<VoidEvent>()
+
+    private val _locationData = locationRepository.currentLocation
+
+    val locationData : LiveData<MeteocoolLocation?>
+        get() = _locationData
+
+    val requestingLocationUpdatesForeground  : LiveData<Event<Boolean>>
+        get() = _requestingLocationUpdatesForeground
 
 
-    private val _url = sharedPreferences.stringLiveData("map_url", NetworkUtility.MAP_URL)
-    private val _isMapRotateActive = sharedPreferences.booleanLiveData("map_rotate", false)
-    private val _isNightModeEnabled =  sharedPreferences.booleanLiveData("map_mode", false)
-    private val _isLocationGranted = MutableLiveData(Validator.isLocationPermissionGranted(application.applicationContext))
-    private val _injectLocation = MutableLiveData<Location>()
+    val requestingSettings  : LiveData<VoidEvent>
+        get() = _requestingSettings
 
-    val isLocationGranted : LiveData<Boolean>
-        get() = _isLocationGranted
-
-    val isNightModeEnabled : LiveData<Boolean>
-        get() = _isNightModeEnabled
-
-    val isMapRotateActive : LiveData<Boolean>
-        get() = _isMapRotateActive
+    val injectDrawer : LiveData<VoidEvent>
+        get() = _injectDrawer
 
     val url : LiveData<String>
         get() = _url
 
-    val injectLocation : LiveData<Location>
-        get() = _injectLocation
+    val isZoomEnabled : LiveData<Boolean>
+        get() = _isZoomEnabled
 
-    fun injectLocationOnce(location : Location){
-        _injectLocation.value = location
+    val areNotificationsEnabled : LiveData<Boolean>
+        get() = _areNotificationsEnabled
+
+    fun openDrawer(){
+        _injectDrawer.value = VoidEvent()
     }
 
-    fun updateLocationPermission(){
-        val context = getApplication<Application>().applicationContext
-        Log.d("VIEWMODEL", "perm "+ Validator.isLocationPermissionGranted(context))
-        _isLocationGranted.value =  Validator.isLocationPermissionGranted(context)
+    fun sendSettings(){
+        Timber.d("updateSettings")
+        _requestingSettings.value = VoidEvent()
     }
 
 }

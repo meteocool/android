@@ -1,15 +1,19 @@
-package com.meteocool
+package com.meteocool.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.meteocool.ui.onboard.OnboardingActivity
 import org.jetbrains.anko.defaultSharedPreferences
+import timber.log.Timber
 
+/**
+ * Shows the loading screen from meteocool.
+ */
 class SplashActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("Splash", isOnboardingCompleted().toString())
+        Timber.d(isOnboardingCompleted().toString())
         if(!isOnboardingCompleted()) {
             startActivity(Intent(this.applicationContext, OnboardingActivity::class.java))
         }else {

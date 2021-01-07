@@ -94,7 +94,7 @@
         <Preference
                 app:key="impressum"
                 app:title="Copyright"
-                android:summary="© DWD © blitzortung.org\n© OpenStreetMap © CARTO">
+                android:summary="© DWD © blitzortung.org\n© OpenStreetMap © CARTO\n© meteocool Contributors ❤️">
 
         </Preference>
     </PreferenceCategory>

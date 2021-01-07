@@ -1,5 +1,8 @@
-package com.meteocool.utility
+package com.meteocool.network
 
+/**
+ * JSONPost to update client information for the server.
+ */
 data class JSONPost(val lat : Double,
                     val lon : Double,
                     val altitude : Double,
