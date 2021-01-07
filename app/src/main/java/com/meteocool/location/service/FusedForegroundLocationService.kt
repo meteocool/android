@@ -6,6 +6,7 @@ import android.os.Looper
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.meteocool.location.MeteocoolLocation
+import com.meteocool.location.UploadLocation
 import com.meteocool.preferences.SharedPrefUtils
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
@@ -77,7 +78,8 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
 
     private fun getBetterLocation(location : Location?) : MeteocoolLocation {
         var result: MeteocoolLocation? = null
-        result = SharedPrefUtils.getSavedLocationResult(context.defaultSharedPreferences)
+        val preferences = context.defaultSharedPreferences
+        result = SharedPrefUtils.getSavedLocationResult(preferences)
         if (location != null) {
             val lastLocation = MeteocoolLocation(
                 location.latitude,
@@ -88,7 +90,8 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
             )
             if (lastLocation > result) {
                 result = lastLocation
-                SharedPrefUtils.saveResults(context.defaultSharedPreferences, location)
+                SharedPrefUtils.saveResults(preferences, location)
+//                UploadLocation().execute(location, token, preferences)
             }
         }
         return result
