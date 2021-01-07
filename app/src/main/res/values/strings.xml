@@ -52,7 +52,7 @@
 
     <!-- Background Dialog -->
     <string name="gp_dialog_msg">Berechtigung für Standortzugriff wird für <b>Mich Lokalisieren</b> benötigt</string>
-    <string name="bg_dialog_msg">Berechtigung für Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt</string>
+    <string name="bg_dialog_msg">Berechtigung für Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt. Feature wird deaktiviert.</string>
     <string name="bg_dialog_pos">Öffne Einstellungen</string>
     <string name="bg_dialog_neg">Verstanden</string>
 
