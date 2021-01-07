@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.work.*
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
@@ -25,6 +26,7 @@ import com.meteocool.location.service.ServiceType
 import com.meteocool.network.JSONClearPost
 import com.meteocool.network.JSONUnregisterNotification
 import com.meteocool.network.NetworkUtils
+import com.meteocool.network.UploadWorker
 import com.meteocool.ui.map.LocationAlertFragment
 import com.meteocool.ui.map.ErrorFragment
 import com.meteocool.ui.map.WebFragment
@@ -149,6 +151,24 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     override fun onStart() {
         super.onStart()
         val token = defaultSharedPreferences.getString("fb_token", "no token")!!
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val uploadWorkRequest: WorkRequest =
+            OneTimeWorkRequestBuilder<UploadWorker>()
+                .setInputData(UploadWorker.createInputData(mapOf(
+                    Pair("url", NetworkUtils.POST_CLEAR_NOTIFICATION.toString()),
+                    Pair("token", token),
+                    Pair("from", "foreground"))))
+                .setConstraints(constraints)
+                .build()
+
+        WorkManager.getInstance(this)
+            .enqueue(uploadWorkRequest)
+            .result
+
+
         doAsync {
             NetworkUtils.sendPostRequest(
                 JSONClearPost(
@@ -165,16 +185,16 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         cancelNotifications()
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
         backgroundLocationService.stopLocationUpdates()
-//        if (!Validator.isBackgroundLocationPermissionGranted(
-//                this
-//            ) && defaultSharedPreferences.getBoolean("notification", false)
-//        ) {
-//            defaultSharedPreferences.edit()
-//                .putBoolean("notification", false)
-//                .putBoolean("map_zoom", false)
-//                .apply()
-//            // TODO Show hint that this is not working
-//        }
+        if (!Validator.isBackgroundLocationPermissionGranted(
+                this
+            ) && defaultSharedPreferences.getBoolean("notification", false)
+        ) {
+            defaultSharedPreferences.edit()
+                .putBoolean("notification", false)
+                .apply()
+            val alert = LocationAlertFragment(R.string.bg_dialog_msg)
+            alert.show(supportFragmentManager, "BackgroundLocationAlertFragment")
+        }
     }
 
     override fun onPause() {

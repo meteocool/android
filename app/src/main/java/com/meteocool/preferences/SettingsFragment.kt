@@ -12,7 +12,6 @@ import androidx.preference.SwitchPreferenceCompat
 import com.meteocool.R
 import com.meteocool.security.Validator
 import com.meteocool.injection.InjectorUtils
-import com.meteocool.location.service.LocationServiceFactory
 import com.meteocool.network.NetworkUtils
 import com.meteocool.ui.map.LocationAlertFragment
 import com.meteocool.view.WebViewModel
@@ -66,7 +65,7 @@ class SettingsFragment() : PreferenceFragmentCompat() {
             true
         }
         findPreference<Preference>("impressum")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(NetworkUtils.IMPRESSUM_URL)
+            val webpage: Uri = Uri.parse(NetworkUtils.IMPRESS_URL)
             val intent = Intent(Intent.ACTION_VIEW, webpage)
             if (intent.resolveActivity(requireActivity().packageManager) != null) {
                 startActivity(intent)
