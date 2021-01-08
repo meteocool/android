@@ -105,26 +105,4 @@ class SettingsFragment() : PreferenceFragmentCompat() {
             true
         }
     }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when(requestCode){
-            Validator.LOCATION -> {
-                if ((grantResults.isNotEmpty() &&
-                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                ) {
-//                    LocationServiceFactory.getLocationService(requireContext())?.requestLocationUpdates()
-                    //TODO replace with foreground
-                } else {
-                    findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked = false
-                    val alert = LocationAlertFragment(R.string.gp_dialog_msg)
-                    alert.show(requireActivity().supportFragmentManager, "LocationAlertFragment")
-                }
-            }
-        }
-    }
 }

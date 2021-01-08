@@ -2,6 +2,7 @@ package com.meteocool.ui.map
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -40,6 +41,7 @@ class WebFragment() : Fragment() {
 
     private lateinit var locationObserver: Observer<MeteocoolLocation?>
     private lateinit var requestSettingsObserver: VoidEventObserver<VoidEvent>
+    private lateinit var requestingForegroundLocation: Observer<Boolean>
 
     private lateinit var foregroundLocationService: LocationService
 
@@ -63,6 +65,14 @@ class WebFragment() : Fragment() {
         }
 
         foregroundLocationService = LocationServiceFactory.getLocationService(requireContext(), ServiceType.FRONT)
+        requestingForegroundLocation = Observer<Boolean>{
+            if(it){
+                foregroundLocationService.requestLocationUpdates()
+            }else{
+                foregroundLocationService.stopLocationUpdates()
+            }
+        }
+
 
         requestSettingsObserver = VoidEventObserver {
             Timber.d("requestSetting")
@@ -129,6 +139,13 @@ class WebFragment() : Fragment() {
             viewLifecycleOwner,
             locationObserver
         )
+
+        webViewModel.requestingLocationUpdatesForeground.observe(
+            viewLifecycleOwner,
+            requestingForegroundLocation
+        )
+
+
 
         if (Validator.isLocationPermissionGranted(requireContext())) {
             Timber.d("Called manual tile")
@@ -224,7 +241,7 @@ class WebFragment() : Fragment() {
                 Timber.d("Injected")
                 zoomOnLastKnownLocation()
             } else {
-                Validator.checkLocationPermissionFragment(requireContext(), requireActivity())
+                Validator.checkLocationPermission(requireContext(), requireActivity())
                 Timber.d("Requested")
             }
         }
