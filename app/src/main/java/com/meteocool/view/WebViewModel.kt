@@ -19,7 +19,7 @@ class WebViewModel(private val sharedPreferences: SharedPreferences, private val
     private val _areNotificationsEnabled = sharedPreferences.booleanLiveData("notification", false)
     private val _url = sharedPreferences.stringLiveData("map_url", NetworkUtils.MAP_URL)
     private val _injectDrawer = MutableLiveData<VoidEvent>()
-    private val _requestingLocationUpdatesForeground = MutableLiveData<Event<Boolean>>()
+    private val _requestingLocationUpdatesForeground = MutableLiveData<Boolean>()
     private val _requestingSettings = MutableLiveData<VoidEvent>()
 
     private val _locationData = locationRepository.currentLocation
@@ -27,7 +27,7 @@ class WebViewModel(private val sharedPreferences: SharedPreferences, private val
     val locationData : LiveData<MeteocoolLocation?>
         get() = _locationData
 
-    val requestingLocationUpdatesForeground  : LiveData<Event<Boolean>>
+    val requestingLocationUpdatesForeground  : LiveData<Boolean>
         get() = _requestingLocationUpdatesForeground
 
 
@@ -53,6 +53,10 @@ class WebViewModel(private val sharedPreferences: SharedPreferences, private val
     fun sendSettings(){
         Timber.d("updateSettings")
         _requestingSettings.value = VoidEvent()
+    }
+
+    fun requestForegroundLocationUpdates(){
+        _requestingLocationUpdatesForeground.value = true
     }
 
 }

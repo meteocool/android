@@ -35,6 +35,7 @@ import com.meteocool.view.VoidEventObserver
 import com.meteocool.view.WebViewModel
 import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import timber.log.Timber
 
 /**
@@ -105,48 +106,6 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             }
         }
     }
-
-
-    /**
-     * Handles the Request Updates button and requests start of location updates.
-     */
-    private fun requestBackgroundLocationUpdates() {
-//        task.addOnFailureListener { exception ->
-//            if (exception is ResolvableApiException) {
-//                // Location settings are not satisfied, but this can be fixed
-//                // by showing the user a dialog.
-//                try {
-//                    // Show the dialog by calling startResolutionForResult(),
-//                    // and check the result in onActivityResult().
-//                    exception.startResolutionForResult(
-//                        this@MeteocoolActivity,
-//                        REQUEST_CHECK_SETTINGS
-//                    )
-//                    Timber.d("No location permission")
-//                } catch (sendEx: IntentSender.SendIntentException) {
-//                    // Ignore the error.
-//                }
-//            }
-//        }
-    }
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        when (requestCode) {
-//            REQUEST_CHECK_SETTINGS -> {
-//                when (resultCode) {
-//                    Activity.RESULT_OK -> {
-//                    }
-//                    Activity.RESULT_CANCELED -> {
-//                        webViewModel.requestingBackgroundLocationUpdates(false)
-//                        defaultSharedPreferences.edit().putBoolean("notification", false)
-//                            .putBoolean("map_zoom", false).apply()
-//                    }
-//                }
-//            }
-//
-//        }
-//    }
 
     override fun onStart() {
         super.onStart()
@@ -278,8 +237,8 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 ) {
-                    //TODO replace with foreground
-                } else {
+                    webViewModel.requestForegroundLocationUpdates()
+                }else{
                     defaultSharedPreferences.edit().putBoolean("map_zoom", false).apply()
                     val alert = LocationAlertFragment(R.string.gp_dialog_msg)
                     alert.show(supportFragmentManager, "LocationAlertFragment")
