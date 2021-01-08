@@ -27,8 +27,6 @@
             android:fitsSystemWindows="true"
             app:headerLayout="@layout/nav_header_main"
             app:menu="@menu/meteocool_drawer"
-            app:itemTextColor="@color/textColor"
-            app:itemIconTint="@color/textColor"
             >
         <View style="@style/Divider"/>
 
