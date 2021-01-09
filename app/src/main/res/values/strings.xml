@@ -19,7 +19,8 @@
     </string>
     <string name="onboarding_description3">Lasse dich durch Push-Nachrichten über kommenden Niederschlag informieren.
     </string>
-    <string name="onboarding_description4">Aktiviere jetzt deinen Standortzugriff, um Push-Nachrichten zu erhalten.
+    <string name="onboarding_description4">Diese App sammelt Standortdaten, um Push-Nachrichten über ankommenden Regen an Ihrem Standort zu ermöglichen, auch wenn die App geschlossen oder nicht in Gebrauch ist.
+    Aktiviere dafür Standortzugriff <b>immer erlauben</b>.
     </string>
     <string name="onboarding_description5">Erzähle es deinen Bekannten und gib uns Feedback!</string>
 
