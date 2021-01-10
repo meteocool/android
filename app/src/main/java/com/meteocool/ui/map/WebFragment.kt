@@ -1,5 +1,6 @@
 package com.meteocool.ui.map
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,19 +11,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.meteocool.R
-import com.meteocool.security.Validator
 import com.meteocool.injection.InjectorUtils
 import com.meteocool.location.*
 import com.meteocool.location.service.LocationService
 import com.meteocool.location.service.LocationServiceFactory
 import com.meteocool.location.service.ServiceType
 import com.meteocool.network.NetworkUtils
+import com.meteocool.permissions.PermUtils
 import com.meteocool.preferences.SharedPrefUtils
 import com.meteocool.view.*
+import com.vmadalin.easypermissions.EasyPermissions
+import com.vmadalin.easypermissions.annotations.AfterPermissionGranted
 import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import timber.log.Timber
@@ -45,7 +53,9 @@ class WebFragment() : Fragment() {
 
     private lateinit var foregroundLocationService: LocationService
 
+//    private lateinit var requestPermissionLauncher : ActivityResultLauncher<String>
     private var isRequestSettingsCalled : Boolean = false
+    private var isZoom : Boolean = false
 
     private val webViewModel: WebViewModel by activityViewModels {
         InjectorUtils.provideWebViewModelFactory(requireContext(), requireActivity().application)
@@ -58,20 +68,39 @@ class WebFragment() : Fragment() {
             Timber.d("Called")
             if (it != null && isRequestSettingsCalled) {
                 Timber.d("Updated location: ${it.latitude}, ${it.longitude}, ${it.accuracy}, ${it.altitude}")
-                updateUserLocation(it, false)
+                updateUserLocation(it, isZoom)
+                isZoom = false
             } else {
                 // TODO Show hint?
             }
         }
 
         foregroundLocationService = LocationServiceFactory.getLocationService(requireContext(), ServiceType.FRONT)
-        requestingForegroundLocation = Observer<Boolean>{
-            if(it){
-                foregroundLocationService.requestLocationUpdates()
-            }else{
-                foregroundLocationService.stopLocationUpdates()
-            }
-        }
+//        requestingForegroundLocation = Observer<Boolean>{
+//            if(it){
+//                foregroundLocationService.requestLocationUpdates()
+//            }else{
+//                foregroundLocationService.stopLocationUpdates()
+//            }
+//        }
+
+//        requestPermissionLauncher =
+//            registerForActivityResult(
+//                ActivityResultContracts.RequestPermission()
+//            ) { isGranted: Boolean ->
+//                if (isGranted) {
+//                    // Permission is granted. Continue the action or workflow in your
+//                    // app.
+//                    Timber.d("Granted")
+//                } else {
+//                    // Explain to the user that the feature is unavailable because the
+//                    // features requires a permission that the user has denied. At the
+//                    // same time, respect the user's decision. Don't link to system
+//                    // settings in an effort to convince the user to change their
+//                    // decision.
+//                    Timber.d("not granted")
+//                }
+//            }
 
 
         requestSettingsObserver = VoidEventObserver {
@@ -107,6 +136,11 @@ class WebFragment() : Fragment() {
         }
         webViewModel.url.observe(viewLifecycleOwner, urlObserver)
 
+        val btn = view.findViewById<FloatingActionButton>(R.id.locateMe)
+        btn.setOnClickListener {
+            locateMe()
+        }
+
         val webSettings = mWebView.settings
         webSettings.javaScriptEnabled = true
         webSettings.domStorageEnabled = true
@@ -119,16 +153,33 @@ class WebFragment() : Fragment() {
         return view
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStart() {
+        super.onStart()
+        mWebView.addJavascriptInterface(WebAppInterface(), "Android")
+        if (EasyPermissions.hasPermissions(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+            foregroundLocationService.requestLocationUpdates()
+        }
+        if (EasyPermissions.hasPermissions(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+            Timber.d("Called manual tile")
+            val function = "if (window.manualTileUpdateFn) window.manualTileUpdateFn(true);"
+            mWebView.post {
+                run {
+                    mWebView.evaluateJavascript(function) {}
+                }
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
         mWebView.removeJavascriptInterface("Android")
         defaultSharedPreferences.edit().putString("map_url", mWebView.url).apply()
         foregroundLocationService.stopLocationUpdates()
     }
 
+
     override fun onResume() {
         super.onResume()
-        mWebView.addJavascriptInterface(WebAppInterface(), "Android")
 
         webViewModel.requestingSettings.observe(
             viewLifecycleOwner,
@@ -139,25 +190,13 @@ class WebFragment() : Fragment() {
             viewLifecycleOwner,
             locationObserver
         )
+//
+//        webViewModel.requestingLocationUpdatesForeground.observe(
+//            viewLifecycleOwner,
+//            requestingForegroundLocation
+//        )
 
-        webViewModel.requestingLocationUpdatesForeground.observe(
-            viewLifecycleOwner,
-            requestingForegroundLocation
-        )
 
-
-
-        if (Validator.isLocationPermissionGranted(requireContext())) {
-            Timber.d("Called manual tile")
-            val function = "if (window.manualTileUpdateFn) window.manualTileUpdateFn(true);"
-            mWebView.post {
-                run {
-                    mWebView.evaluateJavascript(function) {}
-                }
-            }
-            zoomOnLastKnownLocation()
-            foregroundLocationService.requestLocationUpdates()
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -234,17 +273,55 @@ class WebFragment() : Fragment() {
         }
     }
 
-    inner class WebAppInterface {
-        @JavascriptInterface
-        fun injectLocation() {
-            if (Validator.isLocationPermissionGranted(requireContext())) {
-                Timber.d("Injected")
-                zoomOnLastKnownLocation()
-            } else {
-                Validator.checkLocationPermission(requireContext(), requireActivity())
-                Timber.d("Requested")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Timber.d("bla")
+    }
+
+    @AfterPermissionGranted(PermUtils.LOCATION)
+    private fun locateMe() {
+        Timber.d("locateMe")
+        when {
+            ContextCompat.checkSelfPermission(
+                requireActivity().applicationContext,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                Timber.d("Granted")
+                foregroundLocationService.requestLocationUpdates()
+            }
+//            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+//                val alert = LocationAlertFragment(R.string.bg_dialog_msg)
+//                alert.show(
+//                    requireActivity().supportFragmentManager,
+//                    "BackgroundLocationAlertFragment"
+//                )
+//        }
+            else -> {
+//
+//                requestPermissionLauncher.launch(
+//                    Manifest.permission.ACCESS_FINE_LOCATION)
+
+
+
+                EasyPermissions.requestPermissions(
+                    host = this,
+                    rationale = getString(R.string.gp_dialog_msg),
+                    requestCode = PermUtils.LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
             }
         }
+    }
+
+    inner class WebAppInterface {
+//        @JavascriptInterface
+//        fun injectLocation() {
+//            locateMe()
+//        }
 
         @JavascriptInterface
         fun showSettings() {

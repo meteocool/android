@@ -17,7 +17,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.meteocool.R
-import com.meteocool.security.Validator
 import com.meteocool.preferences.SettingsFragment
 import com.meteocool.injection.InjectorUtils
 import com.meteocool.location.service.LocationService
@@ -27,12 +26,14 @@ import com.meteocool.network.JSONClearPost
 import com.meteocool.network.JSONUnregisterNotification
 import com.meteocool.network.NetworkUtils
 import com.meteocool.network.UploadWorker
+import com.meteocool.permissions.PermUtils
 import com.meteocool.ui.map.LocationAlertFragment
 import com.meteocool.ui.map.ErrorFragment
 import com.meteocool.ui.map.WebFragment
 import com.meteocool.view.VoidEvent
 import com.meteocool.view.VoidEventObserver
 import com.meteocool.view.WebViewModel
+import com.vmadalin.easypermissions.EasyPermissions
 import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
@@ -46,6 +47,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
 
     private lateinit var openDrawerObserver: VoidEventObserver<VoidEvent>
     private lateinit var backgroundLocationService: LocationService
+    private val myWebFrag = WebFragment()
 
     private val webViewModel: WebViewModel by viewModels {
         InjectorUtils.provideWebViewModelFactory(this, application)
@@ -64,7 +66,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             })
 
         backgroundLocationService = LocationServiceFactory.getLocationService(this, ServiceType.BACK)
-        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, WebFragment())
+        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, myWebFrag)
             .commit()
 
         supportFragmentManager
@@ -127,24 +129,14 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             .enqueue(uploadWorkRequest)
             .result
 
-
-        doAsync {
-            NetworkUtils.sendPostRequest(
-                JSONClearPost(
-                    token,
-                    "foreground"
-                ),
-                NetworkUtils.POST_CLEAR_NOTIFICATION
-            )
-        }
+        backgroundLocationService.stopLocationUpdates()
     }
 
     override fun onResume() {
         super.onResume()
         cancelNotifications()
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
-        backgroundLocationService.stopLocationUpdates()
-        if (!Validator.isBackgroundLocationPermissionGranted(
+        if (!PermUtils.isBackgroundLocationPermissionGranted(
                 this
             ) && defaultSharedPreferences.getBoolean("notification", false)
         ) {
@@ -156,12 +148,16 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        if(PermUtils.isBackgroundLocationPermissionGranted(this) && defaultSharedPreferences.getBoolean("notification", false)){
+            backgroundLocationService.requestLocationUpdates()
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
-        if(Validator.isBackgroundLocationPermissionGranted(this) && defaultSharedPreferences.getBoolean("notification", false)){
-           backgroundLocationService.requestLocationUpdates()
-        }
     }
 
     override fun onBackPressed() {
@@ -220,11 +216,12 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, myWebFrag)
         Timber.d("$requestCode")
         permissions.forEach { Timber.d(it) }
         grantResults.forEach { Timber.d("$it") }
         when (requestCode) {
-            Validator.LOCATION_BACKGROUND -> {
+            PermUtils.LOCATION_BACKGROUND -> {
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] != PackageManager.PERMISSION_GRANTED)
                 ) {
@@ -233,7 +230,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                     alert.show(supportFragmentManager, "BackgroundLocationAlertFragment")
                 }
             }
-            Validator.LOCATION -> {
+            PermUtils.LOCATION -> {
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 ) {
