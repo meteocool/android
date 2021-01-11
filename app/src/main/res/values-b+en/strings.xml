@@ -18,7 +18,9 @@
     <string name="onboarding_description2">Inform yourself about the current and future situation of the rain clouds and
         thunderstorms.</string>
     <string name="onboarding_description3">Get informed about upcoming rainfall with push messages.</string>
-    <string name="onboarding_description4">Now activate your location access to receive push messages.</string>
+    <string name="onboarding_description4">This app collects location data to enable push messages about incoming rain at your location even when the app is closed or not in use.”
+    Enable <b>always allow</b> site access for this.
+    </string>
     <string name="onboarding_description5">Tell your friends and give us feedback!</string>
 
     <string name="gps_button_toast">Bad GPS signal.</string>
