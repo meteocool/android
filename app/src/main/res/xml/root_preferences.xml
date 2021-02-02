@@ -17,6 +17,7 @@
 <androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <PreferenceCategory
             app:icon="@drawable/ic_notification"
         app:title="@string/notification_header">

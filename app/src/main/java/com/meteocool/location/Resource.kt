@@ -1,7 +1,12 @@
+package com.meteocool.location
+
 class Resource<out T> private constructor(
     private val data: T?,
     private val error: Throwable?
 ) {
+
+    var hasBeenHandled = false
+        private set // Allow external read but not write
 
     val isSuccessful: Boolean
         get() = data != null && error == null

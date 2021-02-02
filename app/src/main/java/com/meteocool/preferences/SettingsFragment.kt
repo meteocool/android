@@ -3,9 +3,7 @@ package com.meteocool.preferences
 import android.Manifest
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.preference.Preference
@@ -15,7 +13,7 @@ import com.meteocool.R
 import com.meteocool.injection.InjectorUtils
 import com.meteocool.network.NetworkUtils
 import com.meteocool.permissions.PermUtils
-import com.meteocool.view.WebViewModel
+import com.meteocool.ui.map.WebViewModel
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.annotations.AfterPermissionGranted
 import timber.log.Timber
@@ -27,7 +25,7 @@ import org.jetbrains.anko.support.v4.defaultSharedPreferences
 class SettingsFragment() : PreferenceFragmentCompat() {
 
     private val webViewModel : WebViewModel by activityViewModels{
-        InjectorUtils.provideWebViewModelFactory(requireContext(), requireActivity().application)
+        InjectorUtils.provideWebViewModelFactory(requireActivity().application)
     }
 
 
@@ -60,35 +58,19 @@ class SettingsFragment() : PreferenceFragmentCompat() {
 
     private fun registerPreferenceClickListener(){
         findPreference<Preference>("feedback")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(NetworkUtils.FEEDBACK_URL + defaultSharedPreferences.getString("fb_token", "no token")!!)
-            val intent = Intent(Intent.ACTION_VIEW, webpage)
-            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                startActivity(intent)
-            }
+            handleExternalLink(NetworkUtils.FEEDBACK_URL + defaultSharedPreferences.getString("fb_token", "no token")!!)
             true
         }
         findPreference<Preference>("impressum")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(NetworkUtils.IMPRESS_URL)
-            val intent = Intent(Intent.ACTION_VIEW, webpage)
-            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                startActivity(intent)
-            }
+            handleExternalLink(NetworkUtils.IMPRESS_URL)
             true
         }
         findPreference<Preference>("github")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(NetworkUtils.GITHUB_URL)
-            val intent = Intent(Intent.ACTION_VIEW, webpage)
-            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                startActivity(intent)
-            }
+            handleExternalLink(NetworkUtils.GITHUB_URL)
             true
         }
         findPreference<Preference>("twitter")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(NetworkUtils.TWITTER_URL)
-            val intent = Intent(Intent.ACTION_VIEW, webpage)
-            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                startActivity(intent)
-            }
+            handleExternalLink(NetworkUtils.TWITTER_URL)
             true
         }
 
@@ -101,7 +83,6 @@ class SettingsFragment() : PreferenceFragmentCompat() {
         }
         findPreference<SwitchPreferenceCompat>("notification")?.setOnPreferenceChangeListener { preference, newValue ->
             Timber.d("$preference, $newValue")
-            val value = newValue.toString().toBoolean()
             if(newValue.toString().toBoolean()){
                 requiresBackgroundLocation()
             }
@@ -109,13 +90,19 @@ class SettingsFragment() : PreferenceFragmentCompat() {
         }
     }
 
+    private fun handleExternalLink(uri : String) {
+        val link : Uri = Uri.parse(uri)
+        val intent = Intent(Intent.ACTION_VIEW, link)
+        if (intent.resolveActivity(requireActivity().packageManager) != null) {
+            startActivity(intent)
+        }
+    }
+
     @AfterPermissionGranted(PermUtils.LOCATION)
     private fun requiresLocation() {
         if (EasyPermissions.hasPermissions(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-            // Already have permission, do the thing
-            // ...
+            webViewModel.requestForegroundLocationUpdates()
         } else {
-            // Do not have permissions, request them now
             EasyPermissions.requestPermissions(
                 this,
                 getString(R.string.gp_dialog_msg),
@@ -148,13 +135,5 @@ class SettingsFragment() : PreferenceFragmentCompat() {
                 )
             }
         }
-    }
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 }

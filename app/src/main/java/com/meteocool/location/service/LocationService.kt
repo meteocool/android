@@ -1,10 +1,15 @@
 package com.meteocool.location.service
 
+import com.meteocool.location.Resource
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.meteocool.location.LocationUpdatesBroadcastReceiver
 import com.meteocool.location.MeteocoolLocation
+import com.meteocool.preferences.SharedPrefUtils
+import org.jetbrains.anko.defaultSharedPreferences
 import java.util.concurrent.TimeUnit
 
 abstract class LocationService(protected val context : Context){
@@ -42,5 +47,8 @@ abstract class LocationService(protected val context : Context){
 
     abstract fun requestLocationUpdates()
     abstract fun stopLocationUpdates()
+    open fun liveData() : LiveData<Resource<MeteocoolLocation>> {
+        return MutableLiveData(Resource(SharedPrefUtils.getSavedLocationResult(context.defaultSharedPreferences)))
+    }
 
 }

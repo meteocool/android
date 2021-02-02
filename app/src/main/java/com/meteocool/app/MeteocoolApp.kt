@@ -4,6 +4,8 @@ import android.app.Application
 import android.util.Log
 import com.meteocool.BuildConfig
 import com.meteocool.location.LocationRepository
+import com.meteocool.location.service.LocationServiceFactory
+import com.meteocool.location.service.ServiceType
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -11,6 +13,9 @@ import timber.log.Timber.DebugTree
 class MeteocoolApp : Application() {
 
     val repository by lazy { LocationRepository(defaultSharedPreferences) }
+
+    val foregroundLocationService by lazy {LocationServiceFactory.getLocationService(applicationContext, ServiceType.FRONT) }
+
 
     override fun onCreate() {
         super.onCreate()
