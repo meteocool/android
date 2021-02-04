@@ -1,9 +1,7 @@
 package com.meteocool.ui.map
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
-import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -16,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.gson.Gson
 import com.meteocool.R
@@ -37,16 +36,9 @@ import timber.log.Timber
  */
 class WebFragment : Fragment() {
 
-    interface WebViewClientListener {
-        fun receivedWebViewError()
-    }
-
-    private lateinit var listener: WebViewClientListener
-
     private lateinit var locationObserver: Observer<Resource<MeteocoolLocation>>
     private lateinit var requestSettingsObserver: VoidEventObserver<VoidEvent>
     private lateinit var requestingForegroundLocation: Observer<Boolean>
-
 
     /**
      * Use databinding for this fragment.
@@ -55,14 +47,47 @@ class WebFragment : Fragment() {
 
     //    private lateinit var requestPermissionLauncher : ActivityResultLauncher<String>
     private var isRequestSettingsCalled: Boolean = false
-    private var isZoom: Boolean = false
+    private var wasButtonLocateMePressed: Boolean = false
 
     private val webViewModel: WebViewModel by activityViewModels {
         InjectorUtils.provideWebViewModelFactory(requireActivity().application)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
+
+        viewDataBinding.lifecycleOwner = viewLifecycleOwner
+        viewDataBinding.viewmodel = webViewModel
+        viewDataBinding.layerFunction = Runnable {
+            viewDataBinding.webView.evaluateJavascript("window.openLayerswitcher();") {
+            }
+        }
+
+        val webSettings = viewDataBinding.webView.settings
+        webSettings.javaScriptEnabled = true
+        webSettings.domStorageEnabled = true
+        webSettings.databaseEnabled = true
+        webSettings.setGeolocationEnabled(true)
+
+        viewDataBinding.webView.webViewClient = MyWebViewClient()
+
+        return viewDataBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        webViewModel.url.observe(viewLifecycleOwner, { newUrl ->
+            viewDataBinding.webView.stopLoading()
+            viewDataBinding.webView.loadUrl(newUrl)
+        })
+
+        viewDataBinding.locateMe.setOnClickListener {
+            locateMe()
+        }
 
         requestSettingsObserver = VoidEventObserver {
             Timber.d("requestSetting")
@@ -86,6 +111,8 @@ class WebFragment : Fragment() {
             Timber.d("Location Live Data")
             if (it.isSuccessful) {
                 Timber.d(it.data().toString())
+                updateUserLocation(it.data(), false, wasButtonLocateMePressed)
+                wasButtonLocateMePressed = false
             }else {
                 if (it.error() != null && it.error() is ResolvableApiException) {
                     (it.error() as ResolvableApiException).startResolutionForResult(
@@ -96,41 +123,6 @@ class WebFragment : Fragment() {
                 Timber.d(it.error())
             }
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
-
-        viewDataBinding.lifecycleOwner = viewLifecycleOwner
-        viewDataBinding.viewmodel = webViewModel
-
-
-        val webSettings = viewDataBinding.webView.settings
-        webSettings.javaScriptEnabled = true
-        webSettings.domStorageEnabled = true
-        webSettings.databaseEnabled = true
-        webSettings.setGeolocationEnabled(true)
-
-        viewDataBinding.webView.webViewClient = MyWebViewClient(listener)
-
-        return viewDataBinding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        webViewModel.url.observe(viewLifecycleOwner, { newUrl ->
-            viewDataBinding.webView.stopLoading()
-            viewDataBinding.webView.loadUrl(newUrl)
-        })
-
-        viewDataBinding.locateMe.setOnClickListener {
-            locateMe()
-        }
-
 
     }
 
@@ -166,14 +158,11 @@ class WebFragment : Fragment() {
 
         webViewModel.locationData.observe(viewLifecycleOwner, locationObserver)
 
-
-
 //        webViewModel.requestingLocationUpdatesForeground.observe(
 //            viewLifecycleOwner,
 //            requestingForegroundLocation
 //        )
     }
-
 
     override fun onStop() {
         super.onStop()
@@ -182,28 +171,14 @@ class WebFragment : Fragment() {
         webViewModel.stopForegroundLocationUpdates()
     }
 
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         defaultSharedPreferences.edit().putString("map_url", viewDataBinding.webView.url).apply()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        try {
-            listener = context as WebViewClientListener
-        } catch (e: ClassCastException) {
-            // The activity doesn't implement the interface, throw exception
-            throw ClassCastException(
-                (context.toString() +
-                        " must implement WebViewClientListener")
-            )
-        }
-    }
-
-    private fun updateUserLocation(location: MeteocoolLocation, locateMe: Boolean) {
+    private fun updateUserLocation(location: MeteocoolLocation, isZoom: Boolean, isFocus:  Boolean) {
         val string =
-            "window.injectLocation(${location.latitude} , ${location.longitude} , ${location.accuracy} , ${locateMe});"
+            "window.lm.updateLocation(${location.latitude}, ${location.longitude}, ${location.accuracy}, ${isZoom}, ${isFocus});"
         viewDataBinding.webView.post {
             run {
                 viewDataBinding.webView.evaluateJavascript(string) {}
@@ -216,11 +191,12 @@ class WebFragment : Fragment() {
             Timber.d("Zoomed")
             val lastLocation =
                 SharedPrefUtils.getSavedLocationResult(requireContext().defaultSharedPreferences)
-            updateUserLocation(lastLocation, true)
+            updateUserLocation(lastLocation, true, true)
+            wasButtonLocateMePressed = true
         }
     }
 
-    inner class MyWebViewClient(private val listener: WebViewClientListener) : WebViewClient() {
+    inner class MyWebViewClient() : WebViewClient() {
 
         override fun onReceivedError(
             view: WebView?,
@@ -231,7 +207,7 @@ class WebFragment : Fragment() {
             Timber.d("onReceivedError ${error!!.description}")
             Timber.d("onReceivedError ${request!!.url}")
             if (request.url.toString() == NetworkUtils.MAP_URL) {
-                listener.receivedWebViewError()
+                viewDataBinding.webView.findNavController().navigate(R.id.event_error)
             }
         }
 
@@ -274,7 +250,9 @@ class WebFragment : Fragment() {
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) -> {
                 Timber.d("Granted")
+                //TODO? Fix the zoom on cached location if location is turned off
                 webViewModel.requestForegroundLocationUpdates()
+                zoomOnLastKnownLocation()
             }
             else -> {
                 EasyPermissions.requestPermissions(
@@ -288,18 +266,6 @@ class WebFragment : Fragment() {
     }
 
     inner class WebAppInterface {
-//        @JavascriptInterface
-//        fun injectLocation() {
-//            locateMe()
-//        }
-
-        @JavascriptInterface
-        fun showSettings() {
-            requireActivity().runOnUiThread {
-                webViewModel.openDrawer()
-            }
-        }
-
         @JavascriptInterface
         fun requestSettings() {
             Timber.d("requestSettings injected")

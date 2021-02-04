@@ -8,6 +8,12 @@
         <variable
                 name="viewmodel"
                 type="com.meteocool.ui.map.WebViewModel" />
+
+        <variable
+                name="layerFunction"
+                type="Runnable" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,12 +22,11 @@
             tools:context=".ui.map.WebFragment">
 
         <WebView
-
                 android:id="@+id/webView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="-16dp">
+                tools:layout_editor_absoluteY="0dp">
 
         </WebView>
 
@@ -36,6 +41,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline7"
                 app:layout_constraintTop_toTopOf="@+id/guideline4" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/layers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:onClick="@{() -> webView.post(layerFunction)}"
+                app:layout_constraintBottom_toTopOf="@+id/guideline4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline7"
+                app:srcCompat="@drawable/ic_layer" />
 
         <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline4"

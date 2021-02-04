@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Base.Theme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorSurface</item>
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">false</item>
         <item name="android:navigationBarColor" tools:ignore="NewApi">?android:attr/colorBackground</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
         <item name="android:navigationBarDividerColor" tools:ignore="NewApi">?attr/colorControlHighlight</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
     <style name="Base.Theme.Meteocool" parent="Base.Theme">
         <item name="colorPrimary">@color/turquoise_cloud_0</item>
-        <item name="colorSecondary">@color/black_0</item>
+        <item name="colorSecondary">@color/turquoise_cloud_0</item>
         <item name="colorPrimaryDark">@color/black_10</item>
         <item name="colorAccent">@color/turquoise_cloud_0</item>
         <!--colorBackground appears behind scrollable content and is used for the default window-->
@@ -33,6 +35,17 @@
         <item name="colorPrimary">@color/black_10</item>
         <item name="android:windowBackground">@drawable/launch_screen</item>
     </style>
+
+    <style name="Toolbar" parent="ThemeOverlay.AppCompat.ActionBar">
+
+    </style>
+
+    <style name="AppbarLayout" parent="ThemeOverlay.AppCompat.Dark">
+
+    </style>
+
+
+
 
     <style name="OnBoardingTheme" parent="Base.Theme">
     </style>

@@ -7,10 +7,10 @@
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_map"
         android:title="@string/map_header"/>
-<item
-        android:id="@+id/nav_documentation"
-        android:icon="@drawable/ic_file"
-        android:title="@string/menu_documentation"/>
+<!--<item-->
+<!--        android:id="@+id/nav_documentation"-->
+<!--        android:icon="@drawable/ic_file"-->
+<!--        android:title="@string/menu_documentation"/>-->
 
 </group>
 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.meteocool.ui.map.WebFragment"
+        android:label="@string/map_header"
+            tools:layout="@layout/fragment_map" >
+        <action
+                android:id="@+id/event_error"
+                app:destination="@id/error" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_documentation"
+        android:name="com.meteocool.preferences.SettingsFragment"
+        android:label="@string/menu_documentation"
+        tools:layout="@layout/fragment_map" />
+
+
+    <fragment
+            android:id="@+id/error"
+            android:name="com.meteocool.ui.map.ErrorFragment"
+            tools:layout="@layout/fragment_error">
+        <action
+                android:id="@+id/action_retryMap"
+                app:destination="@id/nav_home" />
+    </fragment>
+
+</navigation>

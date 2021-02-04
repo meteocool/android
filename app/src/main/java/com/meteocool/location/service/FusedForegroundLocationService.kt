@@ -66,6 +66,10 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
                 val task: Task<LocationSettingsResponse> =
                     client.checkLocationSettings(builder.build())
                 task.addOnSuccessListener {
+                    mFusedLocationClient.lastLocation
+                        .addOnSuccessListener { location : Location? ->
+                            updateLocationIfBetter(location)
+                        }
                     val looper = Looper.getMainLooper()
 //                Timber.d("Starting location updates $looper")
                     mFusedLocationClient.requestLocationUpdates(

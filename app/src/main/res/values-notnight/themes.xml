@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Base.Theme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorSurface</item>
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
         <item name="android:navigationBarColor" tools:ignore="NewApi">?android:attr/colorBackground</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
         <item name="android:navigationBarDividerColor" tools:ignore="NewApi">?attr/colorControlHighlight</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
     <style name="Base.Theme.Meteocool" parent="Base.Theme">
         <item name="colorPrimary">@color/turquoise_cloud_0</item>
@@ -32,6 +34,14 @@
     <style name="SplashTheme" parent="Base.Theme.Meteocool">
         <item name="colorPrimary">@color/white_10</item>
         <item name="android:windowBackground" >@drawable/launch_screen</item>
+    </style>
+
+    <style name="Toolbar" parent="Base.Theme.Meteocool">
+
+    </style>
+
+    <style name="AppbarLayout" parent="ThemeOverlay.AppCompat.ActionBar">
+
     </style>
 
     <style name="OnBoardingTheme" parent="Base.Theme">
