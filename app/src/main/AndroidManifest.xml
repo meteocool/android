@@ -78,7 +78,7 @@
 
         <receiver
                 android:name=".location.LocationUpdatesBroadcastReceiver"
-                android:exported="true">
+                android:exported="false">
             <intent-filter>
                 <action android:name="com.meteocool.location.LocationUpdatesBroadcastReceiver.ACTION_PROCESS_UPDATES" />
             </intent-filter>

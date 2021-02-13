@@ -19,13 +19,13 @@ android {
         applicationId "com.meteocool"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 22
-        versionName "2.1a"
+        versionCode 25
+        versionName "2.1d"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
