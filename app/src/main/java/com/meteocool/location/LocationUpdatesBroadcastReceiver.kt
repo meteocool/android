@@ -1,5 +1,6 @@
 package com.meteocool.location
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -8,8 +9,8 @@ import android.location.Location
 import com.google.android.gms.location.LocationResult
 import com.meteocool.location.service.LocationServiceFactory
 import com.meteocool.location.service.ServiceType
-import com.meteocool.security.Validator
 import com.meteocool.preferences.SharedPrefUtils
+import com.vmadalin.easypermissions.EasyPermissions
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
@@ -41,7 +42,7 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver(){
                             Timber.i("$isDistanceBiggerThan500F")
                             Timber.i("$location is better than $lastLocation")
 
-                           val token = preferences.getString("fb_token", "no token")
+                           val token = SharedPrefUtils.getFirebaseToken(preferences)
                            Timber.d(" Token $token")
                            UploadLocation().execute(location, token, preferences)
                         }else{
@@ -53,7 +54,7 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver(){
                 }
             }
             else if(Intent.ACTION_BOOT_COMPLETED == action){
-                if(Validator.isBackgroundLocationPermissionGranted(context)) {
+                if(EasyPermissions.hasPermissions(context, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
                     LocationServiceFactory.getLocationService(context, ServiceType.BACK).requestLocationUpdates()
                 }
             }

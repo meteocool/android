@@ -52,5 +52,4 @@ class FusedBackgroundLocationService(context: Context) : LocationService(context
         mFusedLocationClient.removeLocationUpdates(pendingIntent)
     }
 
-
 }

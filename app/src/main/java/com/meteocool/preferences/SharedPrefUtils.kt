@@ -3,6 +3,7 @@ package com.meteocool.preferences
 import android.content.SharedPreferences
 import android.location.Location
 import com.meteocool.location.MeteocoolLocation
+import org.jetbrains.anko.defaultSharedPreferences
 
 /**
  * Helper
@@ -13,7 +14,8 @@ class SharedPrefUtils {
         const val KEY_LOCATION_LON = "longitude"
         const val KEY_LOCATION_ALT = "altitude"
         const val KEY_LOCATION_ACC = "accuracy"
-        const val KEY_LOCATION_NANOS = "elapsedNanos"
+        private const val KEY_LOCATION_NANOS = "elapsedNanos"
+        private const val KEY_FIREBASE_TOKEN = "fb_token"
 
         /**
          * Saves location result as a string to [android.content.SharedPreferences].
@@ -27,6 +29,14 @@ class SharedPrefUtils {
                 .putFloat(KEY_LOCATION_ACC, mLocation.accuracy)
                 .putLong(KEY_LOCATION_NANOS, mLocation.elapsedRealtimeNanos)
                 .apply()
+        }
+
+        fun saveFirebaseToken(sharedPrefs: SharedPreferences, token: String) {
+            sharedPrefs.edit().putString(SharedPrefUtils.KEY_FIREBASE_TOKEN, token).apply()
+        }
+
+        fun getFirebaseToken(sharedPrefs: SharedPreferences): String {
+            return sharedPrefs.getString(KEY_FIREBASE_TOKEN, "no token")!!
         }
 
         /**

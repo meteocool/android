@@ -7,17 +7,26 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.AttributeSet
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.meteocool.R
-import com.meteocool.security.Validator
+import com.meteocool.databinding.ActivityMeteocoolBinding
 import com.meteocool.preferences.SettingsFragment
 import com.meteocool.injection.InjectorUtils
 import com.meteocool.location.service.LocationService
@@ -27,45 +36,44 @@ import com.meteocool.network.JSONClearPost
 import com.meteocool.network.JSONUnregisterNotification
 import com.meteocool.network.NetworkUtils
 import com.meteocool.network.UploadWorker
+import com.meteocool.permissions.PermUtils
+import com.meteocool.preferences.SharedPrefUtils
 import com.meteocool.ui.map.LocationAlertFragment
 import com.meteocool.ui.map.ErrorFragment
 import com.meteocool.ui.map.WebFragment
+import com.meteocool.ui.map.WebViewModel
 import com.meteocool.view.VoidEvent
 import com.meteocool.view.VoidEventObserver
-import com.meteocool.view.WebViewModel
+import com.vmadalin.easypermissions.EasyPermissions
 import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import timber.log.Timber
+import java.util.*
 
 /**
  * Main Activity from meteocool
  */
-class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
-    WebFragment.WebViewClientListener {
+class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private lateinit var openDrawerObserver: VoidEventObserver<VoidEvent>
     private lateinit var backgroundLocationService: LocationService
 
     private val webViewModel: WebViewModel by viewModels {
-        InjectorUtils.provideWebViewModelFactory(this, application)
+        InjectorUtils.provideWebViewModelFactory(application)
     }
+
+    private lateinit var binding : ActivityMeteocoolBinding
+
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_meteocool)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_meteocool)
 
-        FirebaseInstanceId.getInstance().instanceId
-            .addOnCompleteListener(OnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    Timber.w(task.exception, "getInstanceId failed")
-                    return@OnCompleteListener
-                }
-            })
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
         backgroundLocationService = LocationServiceFactory.getLocationService(this, ServiceType.BACK)
-        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, WebFragment())
-            .commit()
 
         supportFragmentManager
             .beginTransaction()
@@ -73,38 +81,15 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             .commit()
         cancelNotifications()
 
-        val navView: NavigationView = findViewById(R.id.nav_drawer_main)
-        addClickListenerTo(navView)
-
-        openDrawerObserver = VoidEventObserver {
-            val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-            drawerLayout.openDrawer(GravityCompat.START)
-        }
-        webViewModel.injectDrawer.observe(this, openDrawerObserver)
-
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.error), binding.drawerLayout)
+        val navController = findNavController(R.id.nav_host_fragment)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        binding.navDrawerMain.setupWithNavController(navController)
     }
 
-    private fun addClickListenerTo(navView: NavigationView) {
-        navView.setNavigationItemSelectedListener { menuItem ->
-            Timber.d("{${webViewModel.url.value} + before change")
-
-            when (menuItem.itemId) {
-                R.id.nav_home -> {
-                    val drawerLayout: DrawerLayout = this.findViewById(R.id.drawer_layout)
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    true
-                }
-                R.id.nav_documentation -> {
-                    val webpage: Uri = Uri.parse(NetworkUtils.DOC_URL)
-                    val intent = Intent(Intent.ACTION_VIEW, webpage)
-                    if (intent.resolveActivity(packageManager) != null) {
-                        startActivity(intent)
-                    }
-                    true
-                }
-                else -> false
-            }
-        }
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     override fun onStart() {
@@ -127,41 +112,36 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             .enqueue(uploadWorkRequest)
             .result
 
-
-        doAsync {
-            NetworkUtils.sendPostRequest(
-                JSONClearPost(
-                    token,
-                    "foreground"
-                ),
-                NetworkUtils.POST_CLEAR_NOTIFICATION
-            )
-        }
+        backgroundLocationService.stopLocationUpdates()
     }
 
     override fun onResume() {
         super.onResume()
+        Timber.d("onResume")
         cancelNotifications()
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
-        backgroundLocationService.stopLocationUpdates()
-        if (!Validator.isBackgroundLocationPermissionGranted(
+        if (!PermUtils.isBackgroundLocationPermissionGranted(
                 this
             ) && defaultSharedPreferences.getBoolean("notification", false)
         ) {
             defaultSharedPreferences.edit()
                 .putBoolean("notification", false)
                 .apply()
-            val alert = LocationAlertFragment(R.string.bg_dialog_msg)
+            val alert = LocationAlertFragment(R.string.bg_dialog_msg_deactivate)
             alert.show(supportFragmentManager, "BackgroundLocationAlertFragment")
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if(PermUtils.isBackgroundLocationPermissionGranted(this) && defaultSharedPreferences.getBoolean("notification", false)){
+            backgroundLocationService.requestLocationUpdates()
         }
     }
 
     override fun onPause() {
         super.onPause()
         defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
-        if(Validator.isBackgroundLocationPermissionGranted(this) && defaultSharedPreferences.getBoolean("notification", false)){
-           backgroundLocationService.requestLocationUpdates()
-        }
     }
 
     override fun onBackPressed() {
@@ -172,7 +152,6 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             super.onBackPressed()
         }
     }
-
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         Timber.d("OnSharedPref was changed $key")
@@ -190,7 +169,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                     }
                 }
             }
-            "map_zoom", "map_mode", "map_rotate" -> {
+            "map_mode", "map_rotate" -> {
                 webViewModel.sendSettings()
             }
         }
@@ -214,26 +193,37 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Timber.d("Result $requestCode | $resultCode")
+        if(resultCode == RESULT_OK){
+            webViewModel.requestForegroundLocationUpdates()
+        }else{
+            webViewModel.stopForegroundLocationUpdates()
+        }
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
         Timber.d("$requestCode")
         permissions.forEach { Timber.d(it) }
         grantResults.forEach { Timber.d("$it") }
         when (requestCode) {
-            Validator.LOCATION_BACKGROUND -> {
+            PermUtils.LOCATION_BACKGROUND -> {
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] != PackageManager.PERMISSION_GRANTED)
                 ) {
                     defaultSharedPreferences.edit().putBoolean("notification", false).apply()
-                    val alert = LocationAlertFragment(R.string.bg_dialog_msg)
+                    val alert = LocationAlertFragment(R.string.bg_dialog_msg_deactivate)
                     alert.show(supportFragmentManager, "BackgroundLocationAlertFragment")
                 }
             }
-            Validator.LOCATION -> {
+            PermUtils.LOCATION -> {
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 ) {
@@ -245,10 +235,5 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                 }
             }
         }
-    }
-
-    override fun receivedWebViewError() {
-        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, ErrorFragment())
-            .addToBackStack(null).commit()
     }
 }

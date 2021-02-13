@@ -1,8 +1,13 @@
 package com.meteocool.location.service
 
+import com.meteocool.location.Resource
 import android.content.Context
+import android.content.IntentSender
+import android.location.GnssStatus
 import android.location.Location
 import android.os.Looper
+import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.meteocool.location.MeteocoolLocation
@@ -20,6 +25,10 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
     private val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
 
+    private var resultAsLiveData : MutableLiveData<Resource<MeteocoolLocation>> = MutableLiveData(super.liveData().value)
+
+    private var requesting : Boolean = false
+
     private var locationCallback: LocationCallback
 
     init{
@@ -28,7 +37,7 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
                 locationResult ?: return
                 Timber.d("new location $locationResult")
                 for (location in locationResult.locations){
-                    getBetterLocation(location)
+                    updateLocationIfBetter(location)
                 }
             }
         }
@@ -45,30 +54,44 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
         }
 
     override fun requestLocationUpdates() {
-        Timber.d("Request Updates")
-        super.updateInterval = TimeUnit.SECONDS.toMillis(20)
-        super.fastestUpdateInterval = TimeUnit.SECONDS.toMillis(10)
-        super.maxWaitTime = TimeUnit.SECONDS.toMillis(20)
-        try {
-            val builder =
-                LocationSettingsRequest.Builder()
-                    .addLocationRequest(locationRequest)
-            val client: SettingsClient = LocationServices.getSettingsClient(context)
-            val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
-            task.addOnSuccessListener {
-                val looper = Looper.getMainLooper()
-                Timber.d("Starting location updates $looper")
-                mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, looper)
+            Timber.d("Request Updates")
+            super.updateInterval = TimeUnit.SECONDS.toMillis(20)
+            super.fastestUpdateInterval = TimeUnit.SECONDS.toMillis(10)
+            super.maxWaitTime = TimeUnit.SECONDS.toMillis(20)
+            try {
+
+                val builder =
+                    LocationSettingsRequest.Builder()
+                        .addLocationRequest(locationRequest)
+                val client: SettingsClient = LocationServices.getSettingsClient(context)
+                val task: Task<LocationSettingsResponse> =
+                    client.checkLocationSettings(builder.build())
+                task.addOnSuccessListener {
+                    mFusedLocationClient.lastLocation
+                        .addOnSuccessListener { location : Location? ->
+                            updateLocationIfBetter(location)
+                        }
+                    val looper = Looper.getMainLooper()
+//                Timber.d("Starting location updates $looper")
+                    mFusedLocationClient.requestLocationUpdates(
+                        locationRequest,
+                        locationCallback,
+                        looper
+                    )
+                }
+                task.addOnFailureListener {
+                    if (it is ResolvableApiException) {
+                        try {
+                            Timber.e(it)
+                            resultAsLiveData.value = Resource(it)
+                        } catch (sendEx: IntentSender.SendIntentException) {
+                            // Ignore the error.
+                        }
+                    }
+                }
+            } catch (e: SecurityException) {
+                Timber.e(e)
             }
-            task.addOnFailureListener {
-                Timber.e(it)
-                context.defaultSharedPreferences.edit()
-                    .putBoolean("permissionEnabled", false)
-                    .apply()
-            }
-        } catch (e: SecurityException) {
-            Timber.e(e)
-        }
     }
 
     override fun stopLocationUpdates() {
@@ -76,26 +99,25 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
         mFusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
-    private fun getBetterLocation(location : Location?) : MeteocoolLocation {
-        var result: MeteocoolLocation? = null
+    private fun updateLocationIfBetter(location : Location?){
         val preferences = context.defaultSharedPreferences
-        result = SharedPrefUtils.getSavedLocationResult(preferences)
+        val lastLocation = SharedPrefUtils.getSavedLocationResult(preferences)
         if (location != null) {
-            val lastLocation = MeteocoolLocation(
+            val currentLocation = MeteocoolLocation(
                 location.latitude,
                 location.longitude,
                 location.altitude,
                 location.accuracy,
                 location.elapsedRealtimeNanos
             )
-            if (lastLocation > result) {
-                result = lastLocation
+            if (currentLocation > lastLocation) {
+                Timber.d("Update location to $currentLocation")
+                resultAsLiveData.value = Resource(currentLocation)
                 SharedPrefUtils.saveResults(preferences, location)
-//                UploadLocation().execute(location, token, preferences)
+                UploadLocation().execute(location, SharedPrefUtils.getFirebaseToken(preferences), preferences)
             }
         }
-        return result
     }
 
-
+    override fun liveData() = resultAsLiveData
 }

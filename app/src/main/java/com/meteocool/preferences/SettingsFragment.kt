@@ -1,20 +1,25 @@
 package com.meteocool.preferences
 
+import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.meteocool.R
-import com.meteocool.security.Validator
 import com.meteocool.injection.InjectorUtils
 import com.meteocool.network.NetworkUtils
-import com.meteocool.ui.map.LocationAlertFragment
-import com.meteocool.view.WebViewModel
+import com.meteocool.permissions.PermUtils
+import com.meteocool.ui.map.WebViewModel
+import com.vmadalin.easypermissions.EasyPermissions
+import com.vmadalin.easypermissions.annotations.AfterPermissionGranted
 import timber.log.Timber
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 
@@ -24,7 +29,7 @@ import org.jetbrains.anko.support.v4.defaultSharedPreferences
 class SettingsFragment() : PreferenceFragmentCompat() {
 
     private val webViewModel : WebViewModel by activityViewModels{
-        InjectorUtils.provideWebViewModelFactory(requireContext(), requireActivity().application)
+        InjectorUtils.provideWebViewModelFactory(requireActivity().application)
     }
 
 
@@ -57,52 +62,82 @@ class SettingsFragment() : PreferenceFragmentCompat() {
 
     private fun registerPreferenceClickListener(){
         findPreference<Preference>("feedback")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(NetworkUtils.FEEDBACK_URL + defaultSharedPreferences.getString("fb_token", "no token")!!)
-            val intent = Intent(Intent.ACTION_VIEW, webpage)
-            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                startActivity(intent)
-            }
+            handleExternalLink(NetworkUtils.FEEDBACK_URL + defaultSharedPreferences.getString("fb_token", "no token")!!)
             true
         }
         findPreference<Preference>("impressum")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(NetworkUtils.IMPRESS_URL)
-            val intent = Intent(Intent.ACTION_VIEW, webpage)
-            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                startActivity(intent)
-            }
+            handleExternalLink(NetworkUtils.IMPRESS_URL)
             true
         }
         findPreference<Preference>("github")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(NetworkUtils.GITHUB_URL)
-            val intent = Intent(Intent.ACTION_VIEW, webpage)
-            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                startActivity(intent)
-            }
+            handleExternalLink(NetworkUtils.GITHUB_URL)
             true
         }
         findPreference<Preference>("twitter")?.setOnPreferenceClickListener {
-            val webpage: Uri = Uri.parse(NetworkUtils.TWITTER_URL)
-            val intent = Intent(Intent.ACTION_VIEW, webpage)
-            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                startActivity(intent)
-            }
+            handleExternalLink(NetworkUtils.TWITTER_URL)
             true
         }
 
         findPreference<SwitchPreferenceCompat>("map_zoom")?.setOnPreferenceChangeListener { preference, newValue ->
             Timber.d("$preference, $newValue")
-            if(newValue.toString().toBoolean() && !Validator.isLocationPermissionGranted(requireContext())){
-                Validator.checkLocationPermission(requireContext(), requireActivity())
+            if(newValue.toString().toBoolean()){
+                requiresLocation()
             }
             true
         }
         findPreference<SwitchPreferenceCompat>("notification")?.setOnPreferenceChangeListener { preference, newValue ->
             Timber.d("$preference, $newValue")
-            val value = newValue.toString().toBoolean()
-            if(value && !Validator.isBackgroundLocationPermissionGranted(requireContext())){
-                Validator.checkBackgroundLocationPermission(requireContext(), requireActivity())
+            if(newValue.toString().toBoolean()){
+                requiresBackgroundLocation()
             }
             true
+        }
+    }
+
+    private fun handleExternalLink(uri : String) {
+        val link : Uri = Uri.parse(uri)
+        val intent = Intent(Intent.ACTION_VIEW, link)
+        if (intent.resolveActivity(requireActivity().packageManager) != null) {
+            startActivity(intent)
+        }
+    }
+
+    @AfterPermissionGranted(PermUtils.LOCATION)
+    private fun requiresLocation() {
+        if (EasyPermissions.hasPermissions(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+            webViewModel.requestForegroundLocationUpdates()
+        } else {
+            EasyPermissions.requestPermissions(
+                this,
+                getString(R.string.gp_dialog_msg),
+                PermUtils.LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        }
+    }
+
+    @AfterPermissionGranted(PermUtils.LOCATION_BACKGROUND)
+    private fun requiresBackgroundLocation() {
+        if (EasyPermissions.hasPermissions(requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+            // Already have permission, do the thing
+            // ...
+        } else {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                EasyPermissions.requestPermissions(
+                    this,
+                    getString(R.string.bg_dialog_msg),
+                    PermUtils.LOCATION_BACKGROUND,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            }else{
+                EasyPermissions.requestPermissions(
+                    this,
+                    getString(R.string.bg_dialog_msg),
+                    PermUtils.LOCATION_BACKGROUND,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            }
         }
     }
 }

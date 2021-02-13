@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import com.meteocool.network.JSONClearPost
 import com.meteocool.network.NetworkUtils
+import com.meteocool.preferences.SharedPrefUtils
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
@@ -14,7 +15,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
-        defaultSharedPreferences.edit().putString("fb_token", p0).apply()
+        SharedPrefUtils.saveFirebaseToken(defaultSharedPreferences, p0)
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -31,7 +32,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancelAll()
-        val token = defaultSharedPreferences.getString("fb_token", "no token")!!
+        val token = SharedPrefUtils.getFirebaseToken(defaultSharedPreferences)
         NetworkUtils.sendPostRequest(
             JSONClearPost(
                 token,

@@ -1,16 +1,21 @@
-package com.meteocool.security
+package com.meteocool.permissions
 
 import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat.requestPermissions
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
+import com.meteocool.R
+import com.meteocool.ui.map.LocationAlertFragment
+import com.vmadalin.easypermissions.EasyPermissions
+import com.vmadalin.easypermissions.annotations.AfterPermissionGranted
 
 /**
  * Helper class for validating app permission constraints.
  */
-class Validator {
+class PermUtils {
     companion object {
 
         const val LOCATION = 10
@@ -21,13 +26,20 @@ class Validator {
                 ContextCompat.checkSelfPermission(
                     context,
                     Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED -> {
+                ) == PackageManager.PERMISSION_GRANTED -> {
+
+                }
+                shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                    val alert = LocationAlertFragment(R.string.gp_dialog_msg)
+//                    alert.show(/, "LocationAlertFragment")
+            }
+                else -> {
                     requestPermissions(
                         activity,
                         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                         LOCATION
                     )
-                }
+            }
             }
         }
 
@@ -84,5 +96,6 @@ class Validator {
             isLocationPermissionGranted(context)
         }
     }
+
 }
 }

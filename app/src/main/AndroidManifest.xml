@@ -43,7 +43,6 @@
         <activity
                 android:name=".ui.MeteocoolActivity"
                 android:configChanges="uiMode">
-            <tools:validation testUrl="http://meteocool.com" />
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
