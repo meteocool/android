@@ -2,8 +2,7 @@ package com.meteocool.location
 
 import android.content.Context
 import android.location.Location
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.meteocool.location.service.LocationServiceFactory
@@ -27,4 +26,32 @@ class LocationLiveData(private val context : Context) : LiveData<Resource<Meteoc
         locationClient.stopLocationUpdates()
     }
 
+}
+
+internal class MyLocationListener(
+    private val context: Context,
+    private val lifecycle: Lifecycle,
+    private val callback: (Location) -> Unit
+): LifecycleObserver {
+
+    private var enabled = false
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    fun start() {
+        if (enabled) {
+            // connect
+        }
+    }
+
+    fun enable() {
+        enabled = true
+        if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+            // connect if not connected
+        }
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    fun stop() {
+        // disconnect if connected
+    }
 }

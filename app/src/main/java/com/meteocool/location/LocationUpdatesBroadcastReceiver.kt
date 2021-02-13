@@ -42,7 +42,7 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver(){
                             Timber.i("$isDistanceBiggerThan500F")
                             Timber.i("$location is better than $lastLocation")
 
-                           val token = preferences.getString("fb_token", "no token")
+                           val token = SharedPrefUtils.getFirebaseToken(preferences)
                            Timber.d(" Token $token")
                            UploadLocation().execute(location, token, preferences)
                         }else{

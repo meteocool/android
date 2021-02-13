@@ -12,13 +12,13 @@ android {
             // storeFile file('C:\\Users\\jerem\\Google Drive\\PlayStore\\meteocool.jks')
         }
     }
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.meteocool"
         minSdkVersion 23
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 22
         versionName "2.1a"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -50,7 +50,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.media:media:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation "androidx.fragment:fragment-ktx:1.3.0-rc02"
+    implementation "androidx.fragment:fragment-ktx:1.3.0"
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
 
@@ -72,6 +72,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.1.0'
 
     // Firebase
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:26.4.0')
+
     implementation 'com.google.firebase:firebase-messaging-ktx:21.0.1'
 
     // Settings

@@ -119,8 +119,8 @@ class WebFragment : Fragment() {
                         requireActivity(),
                         1
                     )
+                    Timber.d(it.error())
                 }
-                Timber.d(it.error())
             }
         }
 
@@ -130,11 +130,8 @@ class WebFragment : Fragment() {
         super.onStart()
         viewDataBinding.webView.addJavascriptInterface(WebAppInterface(), "Android")
 
-        val function = "if (window.manualTileUpdateFn) window.manualTileUpdateFn(true);"
-        viewDataBinding.webView.post {
-            run {
-                viewDataBinding.webView.evaluateJavascript(function) {}
-            }
+        if(isRequestSettingsCalled) {
+            updateTiles()
         }
 
         if (EasyPermissions.hasPermissions(
@@ -143,6 +140,15 @@ class WebFragment : Fragment() {
             )
         ) {
             webViewModel.requestForegroundLocationUpdates()
+        }
+    }
+
+    private fun updateTiles() {
+        val function = "window.enterForeground();"
+        viewDataBinding.webView.post {
+            run {
+                viewDataBinding.webView.evaluateJavascript(function) {}
+            }
         }
     }
 
@@ -270,6 +276,7 @@ class WebFragment : Fragment() {
         fun requestSettings() {
             Timber.d("requestSettings injected")
             isRequestSettingsCalled = true
+            updateTiles()
             if (defaultSharedPreferences.getBoolean("map_zoom", false)) {
                 zoomOnLastKnownLocation()
             }
