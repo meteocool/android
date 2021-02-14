@@ -4,26 +4,22 @@ import android.content.Context
 import android.location.Location
 import androidx.work.*
 import com.meteocool.location.MeteocoolLocation
+import com.meteocool.location.MeteocoolLocationFactory
 import com.meteocool.network.UploadWorker
+import com.meteocool.preferences.SharedPrefUtils
+import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
 class LocationPersistenceWorker(private val context: Context, params: WorkerParameters) :
     Worker(context, params)  {
 
     override fun doWork(): Result {
-        val loc = MeteocoolLocation(uid = 1,
-            latitude = inputData.keyValueMap[MeteocoolLocation.KEY_LATITUDE] as Double,
-            longitude = inputData.keyValueMap[MeteocoolLocation.KEY_LONGITUDE] as Double,
-            altitude = inputData.keyValueMap[MeteocoolLocation.KEY_ALTITUDE] as Double,
-            accuracy = inputData.keyValueMap[MeteocoolLocation.KEY_ACCURACY] as Float,
-            verticalAccuracy = inputData.keyValueMap[MeteocoolLocation.KEY_VERTICAL_ACCURACY] as Float,
-            elapsedNanosSinceBoot = inputData.keyValueMap[MeteocoolLocation.KEY_ELAPSED_NANOS] as Long,
-        )
-        Timber.d("$loc")
-        insertOrUpdateLocation(loc)
+        val meteocoolLocation = MeteocoolLocationFactory.new(inputData.keyValueMap)
+        Timber.d("$meteocoolLocation")
+        SharedPrefUtils.saveResults(context.defaultSharedPreferences, meteocoolLocation)
+        insertOrUpdateLocation(meteocoolLocation)
         return Result.success()
     }
-
 
     private fun insertOrUpdateLocation(location: MeteocoolLocation) {
         val isEntryExisting =

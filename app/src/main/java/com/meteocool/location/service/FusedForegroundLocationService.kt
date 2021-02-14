@@ -11,6 +11,8 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.meteocool.location.MeteocoolLocation
+import com.meteocool.location.MeteocoolLocationFactory
+import com.meteocool.location.storage.LocationPersistenceWorker
 import com.meteocool.network.UploadWorker
 import com.meteocool.preferences.SharedPrefUtils
 import org.jetbrains.anko.defaultSharedPreferences
@@ -27,7 +29,6 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
 
     private var resultAsLiveData : MutableLiveData<Resource<MeteocoolLocation>> = MutableLiveData(super.liveData().value)
 
-    private var requesting : Boolean = false
 
     private var locationCallback: LocationCallback
 
@@ -103,24 +104,17 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
         val preferences = context.defaultSharedPreferences
         val lastLocation = SharedPrefUtils.getSavedLocationResult(preferences)
         if (location != null) {
-//            val currentLocation = MeteocoolLocation(
-//                1,
-//                location.latitude,
-//                location.longitude,
-//                location.altitude,
-//                location.accuracy,
-//                location.verticalAccuracyMeters,
-//                location.elapsedRealtimeNanos
-//            )
+            val currentLocation = MeteocoolLocationFactory.new(location)
             val distance = FloatArray(1)
             Location.distanceBetween(location.latitude, location.longitude, lastLocation.latitude, lastLocation.longitude, distance)
+            Timber.d("Distance ${distance[0]}")
             if(distance[0] > 499f){
                 Timber.d("Update location to $location")
-//                resultAsLiveData.value = Resource(location)
-                SharedPrefUtils.saveResults(preferences, location)
-                val request = UploadWorker.createRequest(UploadWorker.createDataForLocationPost(preferences, location))
+                resultAsLiveData.value = Resource(currentLocation)
+                val uploadLocation = UploadWorker.createRequest(UploadWorker.createDataForLocationPost(preferences, location))
+                val persistLocation = LocationPersistenceWorker.createRequest(LocationPersistenceWorker.createMeteocooLocationData(location))
                 WorkManager.getInstance(context)
-                    .enqueue(request)
+                    .enqueue(listOf(uploadLocation, persistLocation))
                     .result
             }
         }

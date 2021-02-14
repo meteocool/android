@@ -20,19 +20,19 @@ class SharedPrefUtils {
         /**
          * Saves location result as a string to [android.content.SharedPreferences].
          */
-        fun saveResults(sharedPrefs: SharedPreferences, mLocation: Location) {
+        fun saveResults(sharedPrefs: SharedPreferences, mLocation: MeteocoolLocation) {
             sharedPrefs
                 .edit()
                 .putFloat(KEY_LOCATION_LAT, mLocation.latitude.toFloat())
                 .putFloat(KEY_LOCATION_LON, mLocation.longitude.toFloat())
                 .putFloat(KEY_LOCATION_ALT, mLocation.altitude.toFloat())
                 .putFloat(KEY_LOCATION_ACC, mLocation.accuracy)
-                .putLong(KEY_LOCATION_NANOS, mLocation.elapsedRealtimeNanos)
+                .putLong(KEY_LOCATION_NANOS, mLocation.elapsedNanosSinceBoot)
                 .apply()
         }
 
         fun saveFirebaseToken(sharedPrefs: SharedPreferences, token: String) {
-            sharedPrefs.edit().putString(SharedPrefUtils.KEY_FIREBASE_TOKEN, token).apply()
+            sharedPrefs.edit().putString(KEY_FIREBASE_TOKEN, token).apply()
         }
 
         fun getFirebaseToken(sharedPrefs: SharedPreferences): String {

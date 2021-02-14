@@ -1,5 +1,6 @@
 package com.meteocool.location
 
+import android.location.Location
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -34,6 +35,26 @@ class MeteocoolLocationFactory{
                 map[MeteocoolLocation.KEY_VERTICAL_ACCURACY] as Float,
                 map[MeteocoolLocation.KEY_ELAPSED_NANOS] as Long
             )
+
+        fun new(location: Location) = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            MeteocoolLocation(1,
+                location.latitude,
+                location.longitude,
+                location.altitude,
+                location.accuracy,
+                location.verticalAccuracyMeters,
+                location.elapsedRealtimeNanos
+            )
+        } else {
+            MeteocoolLocation(1,
+                location.latitude,
+                location.longitude,
+                location.altitude,
+                location.accuracy,
+                -1.0f,
+                location.elapsedRealtimeNanos
+            )
+        }
     }
 }
 
