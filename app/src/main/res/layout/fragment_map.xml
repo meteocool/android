@@ -52,7 +52,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline7"
                 app:layout_constraintTop_toTopOf="@+id/topButtonBoundary"
-                app:srcCompat="@drawable/ic_layer" />
+                app:srcCompat="@drawable/ic_layer"
+                android:focusable="true" />
 
         <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/topButtonBoundary"
