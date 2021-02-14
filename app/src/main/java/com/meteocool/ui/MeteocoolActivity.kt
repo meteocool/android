@@ -22,6 +22,7 @@ import com.meteocool.R
 import com.meteocool.databinding.ActivityMeteocoolBinding
 import com.meteocool.preferences.SettingsFragment
 import com.meteocool.injection.InjectorUtils
+import com.meteocool.location.ListenableLocationUpdateWorker
 import com.meteocool.location.service.LocationService
 import com.meteocool.location.service.LocationServiceFactory
 import com.meteocool.location.service.ServiceType
@@ -30,11 +31,13 @@ import com.meteocool.network.JSONUnregisterNotification
 import com.meteocool.network.NetworkUtils
 import com.meteocool.network.UploadWorker
 import com.meteocool.permissions.PermUtils
+import com.meteocool.preferences.SharedPrefUtils
 import com.meteocool.ui.map.LocationAlertFragment
 import com.meteocool.ui.map.WebViewModel
 import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.doAsync
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 /**
  * Main Activity from meteocool
@@ -50,6 +53,8 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     private lateinit var binding : ActivityMeteocoolBinding
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    private val PERIODIC_LOCATION_TAG = "location_updater"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,7 +98,8 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             .enqueue(UploadWorker.createRequest(data))
             .result
 
-        backgroundLocationService.stopLocationUpdates()
+//        backgroundLocationService.stopLocationUpdates()
+        stopBackgroundWork()
     }
 
     override fun onResume() {
@@ -116,13 +122,35 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     override fun onStop() {
         super.onStop()
         if(PermUtils.isBackgroundLocationPermissionGranted(this) && defaultSharedPreferences.getBoolean("notification", false)){
-            backgroundLocationService.requestLocationUpdates()
+            startBackgroundWork()
         }
     }
 
     override fun onPause() {
         super.onPause()
         defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    private fun startBackgroundWork(){
+        val uploadWorkRequest: PeriodicWorkRequest =
+            PeriodicWorkRequestBuilder<ListenableLocationUpdateWorker>(
+                15, TimeUnit.MINUTES
+            )
+                .setBackoffCriteria(
+                    BackoffPolicy.LINEAR, 5,
+                    TimeUnit.MINUTES
+                )
+                .build()
+
+        WorkManager
+            .getInstance(this)
+            .enqueueUniquePeriodicWork(PERIODIC_LOCATION_TAG, ExistingPeriodicWorkPolicy.REPLACE, uploadWorkRequest)
+    }
+
+    private fun stopBackgroundWork(){
+        WorkManager
+            .getInstance(this)
+            .cancelAllWorkByTag(PERIODIC_LOCATION_TAG)
     }
 
     override fun onBackPressed() {
@@ -141,10 +169,9 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                 val isNotificationON = sharedPreferences!!.getBoolean(key, false)
                 Timber.i("Preference value $key was updated to $isNotificationON ")
                 if (!isNotificationON) {
-                    val token = defaultSharedPreferences.getString("fb_token", "no token")!!
                     doAsync {
                         NetworkUtils.sendPostRequest(
-                            JSONUnregisterNotification(token),
+                            JSONUnregisterNotification(SharedPrefUtils.getFirebaseToken(defaultSharedPreferences)),
                             NetworkUtils.POST_UNREGISTER_TOKEN
                         )
                     }

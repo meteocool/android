@@ -1,6 +1,7 @@
 package com.meteocool.network
 
 import android.content.Context
+import android.location.Location
 import androidx.work.*
 import com.google.gson.Gson
 import timber.log.Timber
@@ -10,6 +11,7 @@ import java.io.OutputStreamWriter
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.*
 
 /**
  * Upload post requests.
@@ -88,6 +90,30 @@ class UploadWorker(private val context: Context, params: WorkerParameters) :
                 .setInputData(inputData)
                 .build()
         }
+
+        fun buildLocationData(location : Location) : Data{
+            val verticalMeters = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                location.verticalAccuracyMeters
+            } else{
+                -1.0
+            }
+
+            return createInputData(mapOf(
+                Pair("url", NetworkUtils.POST_CLIENT_DATA.toString()),
+                Pair("lat", location.latitude),
+                Pair("lon", location.longitude),
+                Pair("altitude", location.altitude),
+                Pair("accuracy", location.accuracy),
+                Pair("verticalAccuracy", verticalMeters),
+                Pair("pressure", 123.0),
+                Pair("timestamp", System.currentTimeMillis().toDouble()),
+                Pair("token", location.accuracy), //TODO
+                Pair("source", "android"),
+                Pair("ahead", location.accuracy), //TODO
+                Pair("intensity", location.accuracy), //TODO
+                Pair("lang", Locale.getDefault().language)))
+        }
+
     }
 }
 

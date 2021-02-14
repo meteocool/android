@@ -12,6 +12,8 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.meteocool.location.MeteocoolLocation
 import com.meteocool.location.UploadLocation
+import com.meteocool.network.NetworkUtils
+import com.meteocool.network.UploadWorker
 import com.meteocool.preferences.SharedPrefUtils
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
@@ -114,6 +116,16 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
                 Timber.d("Update location to $currentLocation")
                 resultAsLiveData.value = Resource(currentLocation)
                 SharedPrefUtils.saveResults(preferences, location)
+
+                val data = UploadWorker.createInputData(mapOf(
+                    Pair("url", NetworkUtils.POST_CLEAR_NOTIFICATION.toString()),
+                    Pair("token", location.latitude),
+                    Pair("token", location.longitude),
+                    Pair("token", location.altitude),
+                    Pair("token", location.accuracy),
+                    Pair("token", location.accuracy),
+                    Pair("from", "foreground")))
+
                 UploadLocation().execute(location, SharedPrefUtils.getFirebaseToken(preferences), preferences)
             }
         }
