@@ -6,10 +6,9 @@ import androidx.work.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.common.util.concurrent.ListenableFuture
+import com.meteocool.location.storage.LocationPersistenceWorker
 import com.meteocool.network.UploadWorker
-import com.meteocool.preferences.SharedPrefUtils
 import org.jetbrains.anko.defaultSharedPreferences
-import java.util.*
 
 class ListenableLocationUpdateWorker(private val context: Context, params: WorkerParameters) :
     ListenableWorker(context, params) {
@@ -22,19 +21,32 @@ class ListenableLocationUpdateWorker(private val context: Context, params: Worke
         return CallbackToFutureAdapter.getFuture {
             try {
                 fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                    if(location != null) {
-                        SharedPrefUtils.saveResults(context.defaultSharedPreferences, location)
+                    if (location != null) {
+
+
                         WorkManager.getInstance(applicationContext)
-                            .enqueue(UploadWorker.createRequest(UploadWorker.createDataForLocationPost(context.defaultSharedPreferences, location)))
+                            .enqueue(
+                                listOf(
+                                    LocationPersistenceWorker.createRequest(
+                                        LocationPersistenceWorker.createMeteocooLocationData(location)
+                                ),
+                                UploadWorker.createRequest(
+                                    UploadWorker.createDataForLocationPost(
+                                        context.defaultSharedPreferences,
+                                        location
+                                    )
+                                ))
+                            )
                         it.set(Result.success())
-                    }else{
+                    } else {
                         //TODO Request updates, but maybe not even needed.
                         it.set(Result.retry())
                     }
                 }
-            }catch(e : SecurityException){
+            } catch (e: SecurityException) {
                 it.set(Result.failure())
             }
         }
     }
+
 }

@@ -1,5 +1,6 @@
 package com.meteocool.location.storage
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.meteocool.location.MeteocoolLocation
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +15,7 @@ interface LocationDao {
     fun updateLocation(location: MeteocoolLocation)
 
     @Query("SELECT * FROM MeteocoolLocation LIMIT 1")
-    fun getLastLocation() : Flow<MeteocoolLocation>
+    fun getLastLocation() : LiveData<MeteocoolLocation>
 
     @Query("SELECT EXISTS(SELECT * FROM MeteocoolLocation)")
     fun isExists() : Boolean

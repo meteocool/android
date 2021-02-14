@@ -23,7 +23,6 @@ import com.meteocool.databinding.ActivityMeteocoolBinding
 import com.meteocool.preferences.SettingsFragment
 import com.meteocool.injection.InjectorUtils
 import com.meteocool.location.ListenableLocationUpdateWorker
-import com.meteocool.location.service.LocationService
 import com.meteocool.location.service.LocationServiceFactory
 import com.meteocool.location.service.ServiceType
 import com.meteocool.network.NetworkUtils
@@ -33,7 +32,6 @@ import com.meteocool.preferences.SharedPrefUtils
 import com.meteocool.ui.map.LocationAlertFragment
 import com.meteocool.ui.map.WebViewModel
 import org.jetbrains.anko.defaultSharedPreferences
-import org.jetbrains.anko.doAsync
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -42,7 +40,6 @@ import java.util.concurrent.TimeUnit
  */
 class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private lateinit var backgroundLocationService: LocationService
 
     private val webViewModel: WebViewModel by viewModels {
         InjectorUtils.provideWebViewModelFactory(application)
@@ -60,8 +57,6 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-
-        backgroundLocationService = LocationServiceFactory.getLocationService(this, ServiceType.BACK)
 
         supportFragmentManager
             .beginTransaction()
@@ -83,9 +78,6 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     override fun onStart() {
         super.onStart()
         val token = defaultSharedPreferences.getString("fb_token", "no token")!!
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
 
         val data = UploadWorker.createInputData(mapOf(
             Pair("url", NetworkUtils.POST_CLEAR_NOTIFICATION.toString()),

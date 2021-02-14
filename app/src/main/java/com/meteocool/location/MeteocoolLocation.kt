@@ -2,7 +2,6 @@ package com.meteocool.location
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlin.math.roundToInt
 
 @Entity
 data class MeteocoolLocation(
@@ -13,24 +12,28 @@ data class MeteocoolLocation(
     val accuracy: Float,
     val verticalAccuracy: Float,
     val elapsedNanosSinceBoot: Long
-) : Comparable<MeteocoolLocation?> {
-    override fun compareTo(other: MeteocoolLocation?): Int {
-        if(other == null){
-            return 1
-        }
-
-        val adjustedLat = (this.latitude * 1000).roundToInt() / 1000.0
-        val adjustedLatOther = (other.latitude * 1000).roundToInt() / 1000.0
-
-        val adjustedLon = (this.longitude * 1000).roundToInt() / 1000.0
-        val adjustedLonOther = (other.longitude * 1000).roundToInt() / 1000.0
-
-        if(adjustedLat == adjustedLatOther && adjustedLon == adjustedLonOther){
-            return (this.accuracy - other.accuracy).toInt()
-        }
-
-        return (this.elapsedNanosSinceBoot - other.elapsedNanosSinceBoot).toInt()
+){
+    companion object{
+        const val  KEY_LATITUDE = "lat"
+        const val  KEY_LONGITUDE = "lon"
+        const val  KEY_ALTITUDE = "altitude"
+        const val  KEY_ACCURACY = "accuracy"
+        const val  KEY_VERTICAL_ACCURACY = "verticalAccuracy"
+        const val  KEY_ELAPSED_NANOS = "elapsedNanos"
     }
-
-
 }
+
+class MeteocoolLocationFactory{
+    companion object{
+        fun new(map: Map<String, Any>) =
+            MeteocoolLocation(1,
+                map[MeteocoolLocation.KEY_LATITUDE] as Double,
+                map[MeteocoolLocation.KEY_LONGITUDE] as Double,
+                map[MeteocoolLocation.KEY_ALTITUDE] as Double,
+                map[MeteocoolLocation.KEY_ACCURACY] as Float,
+                map[MeteocoolLocation.KEY_VERTICAL_ACCURACY] as Float,
+                map[MeteocoolLocation.KEY_ELAPSED_NANOS] as Long
+            )
+    }
+}
+
