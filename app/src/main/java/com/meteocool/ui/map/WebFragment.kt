@@ -110,9 +110,11 @@ class WebFragment : Fragment() {
         locationObserver = Observer {
             Timber.d("Location Live Data")
             if (it.isSuccessful) {
-                Timber.d(it.data().toString())
-                updateUserLocation(it.data(), false, wasButtonLocateMePressed)
-                wasButtonLocateMePressed = false
+                if(isRequestSettingsCalled) {
+                    Timber.d(it.data().toString())
+                    updateUserLocation(it.data(), false, wasButtonLocateMePressed)
+                    wasButtonLocateMePressed = false
+                }
             }else {
                 if (it.error() != null && it.error() is ResolvableApiException) {
                     (it.error() as ResolvableApiException).startResolutionForResult(
