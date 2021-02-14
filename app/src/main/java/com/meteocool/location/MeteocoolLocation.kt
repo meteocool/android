@@ -1,12 +1,17 @@
 package com.meteocool.location
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlin.math.roundToInt
 
+@Entity
 data class MeteocoolLocation(
+    @PrimaryKey val uid: Int,
     val latitude: Double,
     val longitude: Double,
     val altitude: Double,
     val accuracy: Float,
+    val verticalAccuracy: Float,
     val elapsedNanosSinceBoot: Long
 ) : Comparable<MeteocoolLocation?> {
     override fun compareTo(other: MeteocoolLocation?): Int {
@@ -26,4 +31,6 @@ data class MeteocoolLocation(
 
         return (this.elapsedNanosSinceBoot - other.elapsedNanosSinceBoot).toInt()
     }
+
+
 }

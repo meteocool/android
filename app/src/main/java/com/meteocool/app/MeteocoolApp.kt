@@ -6,14 +6,16 @@ import com.meteocool.BuildConfig
 import com.meteocool.location.LocationRepository
 import com.meteocool.location.service.LocationServiceFactory
 import com.meteocool.location.service.ServiceType
+import com.meteocool.location.storage.BasicLocationDatabase
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
 class MeteocoolApp : Application() {
 
-    val repository by lazy { LocationRepository(defaultSharedPreferences) }
-
+    private val database by lazy { BasicLocationDatabase.getDatabase(this)}
+    private val dao by lazy {database.meteoLocationDao()}
+    val repository by lazy { LocationRepository(defaultSharedPreferences, dao) }
     val foregroundLocationService by lazy {LocationServiceFactory.getLocationService(applicationContext, ServiceType.FRONT) }
 
 

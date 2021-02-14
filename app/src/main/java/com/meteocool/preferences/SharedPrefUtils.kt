@@ -42,8 +42,9 @@ class SharedPrefUtils {
         /**
          * Fetches location results from [android.content.SharedPreferences].
          */
-        fun getSavedLocationResult(sharedPrefs: SharedPreferences): MeteocoolLocation {
+        fun getSavedLocationResult(sharedPrefs: SharedPreferences) : MeteocoolLocation {
             return MeteocoolLocation(
+                1,
                 sharedPrefs.getFloat(
                     KEY_LOCATION_LAT, -1.0f
                 ).toDouble(),
@@ -56,6 +57,7 @@ class SharedPrefUtils {
                 sharedPrefs.getFloat(
                     KEY_LOCATION_ACC, -1.0f
                 ),
+                123f,
                 sharedPrefs.getLong(
                     KEY_LOCATION_NANOS, -1
                 )

@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.meteocool.location.LocationUpdatesBroadcastReceiver
 import com.meteocool.location.MeteocoolLocation
 import com.meteocool.preferences.SharedPrefUtils
 import org.jetbrains.anko.defaultSharedPreferences
@@ -18,6 +17,8 @@ abstract class LocationService(protected val context : Context){
         const val BACKGROUND_SETTING = 998
         const val FOREGROUND_SETTING = 1000
         const val REQUEST_CHECK_GPS_SETTINGS = 999
+
+
     }
 
     /**
@@ -36,14 +37,6 @@ abstract class LocationService(protected val context : Context){
      * delivered sooner than this interval.
      */
     protected var maxWaitTime : Long = TimeUnit.MINUTES.toMillis(15)
-
-
-    protected val pendingIntent : PendingIntent
-        get() {
-            val intent = Intent(context, LocationUpdatesBroadcastReceiver::class.java)
-            intent.action = LocationUpdatesBroadcastReceiver.ACTION_PROCESS_UPDATES
-            return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        }
 
     abstract fun requestLocationUpdates()
     abstract fun stopLocationUpdates()

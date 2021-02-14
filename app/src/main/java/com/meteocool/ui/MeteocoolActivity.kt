@@ -26,8 +26,6 @@ import com.meteocool.location.ListenableLocationUpdateWorker
 import com.meteocool.location.service.LocationService
 import com.meteocool.location.service.LocationServiceFactory
 import com.meteocool.location.service.ServiceType
-import com.meteocool.network.JSONClearPost
-import com.meteocool.network.JSONUnregisterNotification
 import com.meteocool.network.NetworkUtils
 import com.meteocool.network.UploadWorker
 import com.meteocool.permissions.PermUtils
@@ -169,12 +167,12 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                 val isNotificationON = sharedPreferences!!.getBoolean(key, false)
                 Timber.i("Preference value $key was updated to $isNotificationON ")
                 if (!isNotificationON) {
-                    doAsync {
-                        NetworkUtils.sendPostRequest(
-                            JSONUnregisterNotification(SharedPrefUtils.getFirebaseToken(defaultSharedPreferences)),
-                            NetworkUtils.POST_UNREGISTER_TOKEN
-                        )
-                    }
+                    val data = UploadWorker.createInputData(mapOf(
+                        Pair("url",  NetworkUtils.POST_UNREGISTER_TOKEN.toString()),
+                        Pair("token", SharedPrefUtils.getFirebaseToken(defaultSharedPreferences))))
+                    WorkManager.getInstance(this)
+                        .enqueue(UploadWorker.createRequest(data))
+                        .result
                 }
             }
             "map_mode", "map_rotate" -> {
@@ -188,16 +186,14 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (notificationManager.activeNotifications.isNotEmpty()) {
             notificationManager.cancelAll()
-            val token = defaultSharedPreferences.getString("fb_token", "no token")!!
-            doAsync {
-                NetworkUtils.sendPostRequest(
-                    JSONClearPost(
-                        token,
-                        "launch_screen"
-                    ),
-                    NetworkUtils.POST_CLEAR_NOTIFICATION
-                )
-            }
+            val data = UploadWorker.createInputData(mapOf(
+                Pair("url",  NetworkUtils.POST_CLEAR_NOTIFICATION.toString()),
+                Pair("token", SharedPrefUtils.getFirebaseToken(defaultSharedPreferences)),
+                Pair("from", "launch_screen"),
+                ))
+            WorkManager.getInstance(this)
+                .enqueue(UploadWorker.createRequest(data))
+                .result
         }
     }
 

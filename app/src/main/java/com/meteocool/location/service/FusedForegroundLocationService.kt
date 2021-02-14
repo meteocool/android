@@ -3,16 +3,14 @@ package com.meteocool.location.service
 import com.meteocool.location.Resource
 import android.content.Context
 import android.content.IntentSender
-import android.location.GnssStatus
 import android.location.Location
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
+import androidx.work.WorkManager
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.meteocool.location.MeteocoolLocation
-import com.meteocool.location.UploadLocation
-import com.meteocool.network.NetworkUtils
 import com.meteocool.network.UploadWorker
 import com.meteocool.preferences.SharedPrefUtils
 import org.jetbrains.anko.defaultSharedPreferences
@@ -105,28 +103,25 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
         val preferences = context.defaultSharedPreferences
         val lastLocation = SharedPrefUtils.getSavedLocationResult(preferences)
         if (location != null) {
-            val currentLocation = MeteocoolLocation(
-                location.latitude,
-                location.longitude,
-                location.altitude,
-                location.accuracy,
-                location.elapsedRealtimeNanos
-            )
-            if (currentLocation > lastLocation) {
-                Timber.d("Update location to $currentLocation")
-                resultAsLiveData.value = Resource(currentLocation)
+//            val currentLocation = MeteocoolLocation(
+//                1,
+//                location.latitude,
+//                location.longitude,
+//                location.altitude,
+//                location.accuracy,
+//                location.verticalAccuracyMeters,
+//                location.elapsedRealtimeNanos
+//            )
+            val distance = FloatArray(1)
+            Location.distanceBetween(location.latitude, location.longitude, lastLocation.latitude, lastLocation.longitude, distance)
+            if(distance[0] > 499f){
+                Timber.d("Update location to $location")
+//                resultAsLiveData.value = Resource(location)
                 SharedPrefUtils.saveResults(preferences, location)
-
-                val data = UploadWorker.createInputData(mapOf(
-                    Pair("url", NetworkUtils.POST_CLEAR_NOTIFICATION.toString()),
-                    Pair("token", location.latitude),
-                    Pair("token", location.longitude),
-                    Pair("token", location.altitude),
-                    Pair("token", location.accuracy),
-                    Pair("token", location.accuracy),
-                    Pair("from", "foreground")))
-
-                UploadLocation().execute(location, SharedPrefUtils.getFirebaseToken(preferences), preferences)
+                val request = UploadWorker.createRequest(UploadWorker.createDataForLocationPost(preferences, location))
+                WorkManager.getInstance(context)
+                    .enqueue(request)
+                    .result
             }
         }
     }

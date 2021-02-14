@@ -1,9 +1,11 @@
 package com.meteocool.network
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.location.Location
 import androidx.work.*
 import com.google.gson.Gson
+import com.meteocool.preferences.SharedPrefUtils
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -79,6 +81,31 @@ class UploadWorker(private val context: Context, params: WorkerParameters) :
             return Data.Builder()
                 .putAll(data)
                 .build()
+        }
+
+        fun createDataForLocationPost(sharedPreferences: SharedPreferences, location : Location) : Data{
+            val verticalMeters = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                location.verticalAccuracyMeters
+            } else{
+                -1.0
+            }
+            return createInputData(
+                mapOf(
+                    Pair("url", NetworkUtils.POST_CLIENT_DATA.toString()),
+                    Pair("lat", location.latitude),
+                    Pair("lon", location.longitude),
+                    Pair("altitude", location.altitude),
+                    Pair("accuracy", location.accuracy),
+                    Pair("verticalAccuracy", verticalMeters),
+                    Pair("pressure", 123.0),
+                    Pair("timestamp", System.currentTimeMillis().toDouble()),
+                    Pair("token", SharedPrefUtils.getFirebaseToken(sharedPreferences)),
+                    Pair("source", "android"),
+                    Pair("ahead", sharedPreferences.getString("notification_time", "15")!!.toInt()), //TODO
+                    Pair("intensity", sharedPreferences.getString("notification_intensity", "10")!!.toInt()), //TODO
+                    Pair("lang", Locale.getDefault().language)
+                )
+            )
         }
 
         fun createRequest(inputData: Data): OneTimeWorkRequest {

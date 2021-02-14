@@ -15,11 +15,11 @@ class LocationServiceFactory {
         fun getLocationService(context : Context, type : ServiceType) : LocationService {
              return if(isGooglePlayServicesAvailable(context)){
                  when(type){
-                     ServiceType.BACK -> FusedBackgroundLocationService(context)
                      ServiceType.FRONT -> FusedForegroundLocationService(context)
+                     ServiceType.BACK -> FusedForegroundLocationService(context)
                  }
             }else {
-                FusedBackgroundLocationService(context) //TODO Implement LocationManager
+                 FusedForegroundLocationService(context) //TODO Implement LocationManager
             }
         }
 

@@ -4,8 +4,9 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import android.app.NotificationManager
 import android.content.Context
-import com.meteocool.network.JSONClearPost
+import androidx.work.WorkManager
 import com.meteocool.network.NetworkUtils
+import com.meteocool.network.UploadWorker
 import com.meteocool.preferences.SharedPrefUtils
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
@@ -32,12 +33,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancelAll()
-        val token = SharedPrefUtils.getFirebaseToken(defaultSharedPreferences)
-        NetworkUtils.sendPostRequest(
-            JSONClearPost(
-                token,
-                "launch_screen"
-            ), NetworkUtils.POST_CLEAR_NOTIFICATION
-        )
+        val data = UploadWorker.createInputData(mapOf(
+            Pair("url",  NetworkUtils.POST_CLEAR_NOTIFICATION.toString()),
+            Pair("token", SharedPrefUtils.getFirebaseToken(defaultSharedPreferences)),
+            Pair("from", "launch_screen"),
+        ))
+        WorkManager.getInstance(this)
+            .enqueue(UploadWorker.createRequest(data))
+            .result
     }
 }
