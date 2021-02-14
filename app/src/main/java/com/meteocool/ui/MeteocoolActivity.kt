@@ -23,8 +23,6 @@ import com.meteocool.databinding.ActivityMeteocoolBinding
 import com.meteocool.preferences.SettingsFragment
 import com.meteocool.injection.InjectorUtils
 import com.meteocool.location.ListenableLocationUpdateWorker
-import com.meteocool.location.service.LocationServiceFactory
-import com.meteocool.location.service.ServiceType
 import com.meteocool.network.NetworkUtils
 import com.meteocool.network.UploadWorker
 import com.meteocool.permissions.PermUtils
@@ -68,6 +66,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         val navController = findNavController(R.id.nav_host_fragment)
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navDrawerMain.setupWithNavController(navController)
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -88,7 +87,6 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             .enqueue(UploadWorker.createRequest(data))
             .result
 
-//        backgroundLocationService.stopLocationUpdates()
         stopBackgroundWork()
     }
 
@@ -122,6 +120,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     }
 
     private fun startBackgroundWork(){
+        Timber.d("Start background work")
         val uploadWorkRequest: PeriodicWorkRequest =
             PeriodicWorkRequestBuilder<ListenableLocationUpdateWorker>(
                 15, TimeUnit.MINUTES
@@ -138,6 +137,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     }
 
     private fun stopBackgroundWork(){
+        Timber.d("Stop background work")
         WorkManager
             .getInstance(this)
             .cancelAllWorkByTag(PERIODIC_LOCATION_TAG)
