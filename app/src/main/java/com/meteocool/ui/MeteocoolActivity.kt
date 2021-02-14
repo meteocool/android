@@ -5,10 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -21,10 +18,6 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
-import com.google.android.gms.location.*
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.navigation.NavigationView
-import com.google.firebase.iid.FirebaseInstanceId
 import com.meteocool.R
 import com.meteocool.databinding.ActivityMeteocoolBinding
 import com.meteocool.preferences.SettingsFragment
@@ -37,19 +30,11 @@ import com.meteocool.network.JSONUnregisterNotification
 import com.meteocool.network.NetworkUtils
 import com.meteocool.network.UploadWorker
 import com.meteocool.permissions.PermUtils
-import com.meteocool.preferences.SharedPrefUtils
 import com.meteocool.ui.map.LocationAlertFragment
-import com.meteocool.ui.map.ErrorFragment
-import com.meteocool.ui.map.WebFragment
 import com.meteocool.ui.map.WebViewModel
-import com.meteocool.view.VoidEvent
-import com.meteocool.view.VoidEventObserver
-import com.vmadalin.easypermissions.EasyPermissions
 import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import timber.log.Timber
-import java.util.*
 
 /**
  * Main Activity from meteocool
@@ -99,17 +84,13 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val uploadWorkRequest: WorkRequest =
-            OneTimeWorkRequestBuilder<UploadWorker>()
-                .setInputData(UploadWorker.createInputData(mapOf(
-                    Pair("url", NetworkUtils.POST_CLEAR_NOTIFICATION.toString()),
-                    Pair("token", token),
-                    Pair("from", "foreground"))))
-                .setConstraints(constraints)
-                .build()
+        val data = UploadWorker.createInputData(mapOf(
+            Pair("url", NetworkUtils.POST_CLEAR_NOTIFICATION.toString()),
+            Pair("token", token),
+            Pair("from", "foreground")))
 
         WorkManager.getInstance(this)
-            .enqueue(uploadWorkRequest)
+            .enqueue(UploadWorker.createRequest(data))
             .result
 
         backgroundLocationService.stopLocationUpdates()

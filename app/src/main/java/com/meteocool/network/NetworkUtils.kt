@@ -1,5 +1,9 @@
 package com.meteocool.network
 
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
 import com.google.gson.Gson
 import timber.log.Timber
 import java.io.*
