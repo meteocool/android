@@ -1,6 +1,7 @@
 package com.meteocool.preferences
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -94,6 +95,7 @@ class SettingsFragment() : PreferenceFragmentCompat() {
         }
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun handleExternalLink(uri : String) {
         val link : Uri = Uri.parse(uri)
         val intent = Intent(Intent.ACTION_VIEW, link)

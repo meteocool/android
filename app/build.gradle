@@ -66,7 +66,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
     // Onboarding screen
-    implementation 'com.github.AppIntro:AppIntro:6.0.0'
+    implementation 'com.github.AppIntro:AppIntro:6.1.0'
 
     // Fused Location Client
     implementation 'com.google.android.gms:play-services-location:17.1.0'

@@ -3,7 +3,7 @@ package com.meteocool.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.meteocool.ui.onboard.OnboardingActivity
+import com.meteocool.ui.intro.IntroActivity
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
@@ -15,7 +15,7 @@ class SplashActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         Timber.d(isOnboardingCompleted().toString())
         if(!isOnboardingCompleted()) {
-            startActivity(Intent(this.applicationContext, OnboardingActivity::class.java))
+            startActivity(Intent(this.applicationContext, IntroActivity::class.java))
         }else {
             startActivity(Intent(this.applicationContext, MeteocoolActivity::class.java))
         }
@@ -23,6 +23,6 @@ class SplashActivity : AppCompatActivity(){
     }
 
     private fun isOnboardingCompleted() : Boolean {
-        return defaultSharedPreferences.getBoolean(OnboardingActivity.IS_ONBOARD_COMPLETED, false)
+        return defaultSharedPreferences.getBoolean(IntroActivity.IS_INTRO_COMPLETED, false)
     }
 }
