@@ -64,11 +64,11 @@
             app:title="@string/map_rotate_title"
         />
 
-        <SwitchPreferenceCompat
-                app:key="map_mode"
-                app:defaultValue="false"
-                app:title="@string/map_mode_title"
-        />
+<!--        <SwitchPreferenceCompat-->
+<!--                app:key="map_mode"-->
+<!--                app:defaultValue="false"-->
+<!--                app:title="@string/map_mode_title"-->
+<!--        />-->
 
     </PreferenceCategory>
 
@@ -95,7 +95,7 @@
         <Preference
                 app:key="impressum"
                 app:title="Copyright"
-                android:summary="© DWD © blitzortung.org\n© OpenStreetMap © CARTO\n© meteocool Contributors ❤️">
+                android:summary="© DWD © blitzortung.org\n© OpenStreetMap © CARTO\n© Contains Modified Copernicus Sentinel Data, 2021\n© Who's On First © Natural Earth\n© meteocool Contributors ❤️">
 
         </Preference>
     </PreferenceCategory>
