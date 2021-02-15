@@ -23,7 +23,7 @@ class ListenableLocationUpdateWorker(private val context: Context, params: Worke
                 fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                     if (location != null) {
 
-
+                        val meteocoolLocation = MeteocoolLocationFactory.new(location)
                         WorkManager.getInstance(applicationContext)
                             .enqueue(
                                 listOf(
@@ -33,7 +33,7 @@ class ListenableLocationUpdateWorker(private val context: Context, params: Worke
                                 UploadWorker.createRequest(
                                     UploadWorker.createDataForLocationPost(
                                         context.defaultSharedPreferences,
-                                        location
+                                        meteocoolLocation
                                     )
                                 ))
                             )

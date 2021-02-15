@@ -36,7 +36,6 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult ?: return
-                Timber.d("new location $locationResult")
                 for (location in locationResult.locations){
                     updateLocationIfBetter(location)
                 }
@@ -107,11 +106,11 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
             val currentLocation = MeteocoolLocationFactory.new(location)
             val distance = FloatArray(1)
             Location.distanceBetween(location.latitude, location.longitude, lastLocation.latitude, lastLocation.longitude, distance)
-            Timber.d("Distance ${distance[0]}")
+            Timber.d("Old: $lastLocation New: $currentLocation Distance ${distance[0]}")
             if(distance[0] > 499f){
                 Timber.d("Update location to $location")
                 resultAsLiveData.value = Resource(currentLocation)
-                val uploadLocation = UploadWorker.createRequest(UploadWorker.createDataForLocationPost(preferences, location))
+                val uploadLocation = UploadWorker.createRequest(UploadWorker.createDataForLocationPost(preferences, currentLocation))
                 val persistLocation = LocationPersistenceWorker.createRequest(LocationPersistenceWorker.createMeteocooLocationData(location))
                 WorkManager.getInstance(context)
                     .enqueue(listOf(uploadLocation, persistLocation))

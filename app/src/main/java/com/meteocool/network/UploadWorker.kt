@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.location.Location
 import androidx.work.*
 import com.google.gson.Gson
+import com.meteocool.location.MeteocoolLocation
 import com.meteocool.preferences.SharedPrefUtils
 import timber.log.Timber
 import java.io.BufferedReader
@@ -83,9 +84,9 @@ class UploadWorker(private val context: Context, params: WorkerParameters) :
                 .build()
         }
 
-        fun createDataForLocationPost(sharedPreferences: SharedPreferences, location : Location) : Data{
+        fun createDataForLocationPost(sharedPreferences: SharedPreferences, location : MeteocoolLocation) : Data{
             val verticalMeters = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                location.verticalAccuracyMeters
+                location.verticalAccuracy
             } else{
                 -1.0
             }
