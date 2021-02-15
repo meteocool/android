@@ -67,6 +67,11 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navDrawerMain.setupWithNavController(navController)
 
+
+        val uploadLocation = UploadWorker.createRequest(UploadWorker.createDataForLocationPost(defaultSharedPreferences, SharedPrefUtils.getSavedLocationResult(defaultSharedPreferences)))
+        WorkManager.getInstance(this)
+            .enqueue(uploadLocation)
+            .result
     }
 
     override fun onSupportNavigateUp(): Boolean {
