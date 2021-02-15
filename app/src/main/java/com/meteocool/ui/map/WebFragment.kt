@@ -175,13 +175,11 @@ class WebFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         viewDataBinding.webView.removeJavascriptInterface("Android")
-        defaultSharedPreferences.edit().putString("map_url", viewDataBinding.webView.url).apply()
         webViewModel.stopForegroundLocationUpdates()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        defaultSharedPreferences.edit().putString("map_url", viewDataBinding.webView.url).apply()
     }
 
     private fun updateUserLocation(location: MeteocoolLocation, isZoom: Boolean, isFocus:  Boolean) {

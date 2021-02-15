@@ -29,7 +29,7 @@ class WebViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _isZoomEnabled = sharedPreferences.booleanLiveData("map_zoom", false)
     private val _areNotificationsEnabled = sharedPreferences.booleanLiveData("notification", false)
-    private val _url = sharedPreferences.stringLiveData("map_url", NetworkUtils.MAP_URL)
+    private val _url =  MutableLiveData(NetworkUtils.MAP_URL)
     private val _requestingLocationUpdatesForeground = MutableLiveData<Boolean>()
     private val _requestingSettings = MutableLiveData<VoidEvent>()
 
