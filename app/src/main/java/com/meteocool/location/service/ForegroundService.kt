@@ -1,24 +1,17 @@
 package com.meteocool.location.service
 
 import com.meteocool.location.Resource
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.meteocool.location.MeteocoolLocation
-import com.meteocool.preferences.SharedPrefUtils
-import org.jetbrains.anko.defaultSharedPreferences
 import java.util.concurrent.TimeUnit
 
-abstract class LocationService(protected val context : Context){
+abstract class ForegroundService(protected val context : Context){
 
     companion object{
         const val BACKGROUND_SETTING = 998
         const val FOREGROUND_SETTING = 1000
         const val REQUEST_CHECK_GPS_SETTINGS = 999
-
-
     }
 
     /**
@@ -40,8 +33,6 @@ abstract class LocationService(protected val context : Context){
 
     abstract fun requestLocationUpdates()
     abstract fun stopLocationUpdates()
-    open fun liveData() : LiveData<Resource<MeteocoolLocation>> {
-        return MutableLiveData(Resource(SharedPrefUtils.getSavedLocationResult(context.defaultSharedPreferences)))
-    }
+    abstract fun liveData() : LiveData<Resource<MeteocoolLocation>>
 
 }

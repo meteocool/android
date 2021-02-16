@@ -15,11 +15,16 @@ import com.meteocool.location.MeteocoolLocationFactory
 import com.meteocool.location.storage.LocationPersistenceWorker
 import com.meteocool.network.UploadWorker
 import com.meteocool.preferences.SharedPrefUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.coroutineContext
 
-class FusedForegroundLocationService(context: Context) : LocationService(context) {
+class FusedLocationService(context: Context) : ForegroundService(context) {
 
     /**
      * The entry point to Google Play Services.
@@ -27,10 +32,11 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
     private val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
 
-    private var resultAsLiveData : MutableLiveData<Resource<MeteocoolLocation>> = MutableLiveData(super.liveData().value)
+    private var resultAsLiveData : MutableLiveData<Resource<MeteocoolLocation>> = MutableLiveData(Resource(SharedPrefUtils.getSavedLocationResult(context.defaultSharedPreferences)))
 
 
     private var locationCallback: LocationCallback
+    private lateinit var job : Job
 
     init{
         locationCallback = object : LocationCallback() {
@@ -54,50 +60,57 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
         }
 
     override fun requestLocationUpdates() {
-            Timber.d("Request Updates")
-            super.updateInterval = TimeUnit.SECONDS.toMillis(20)
-            super.fastestUpdateInterval = TimeUnit.SECONDS.toMillis(10)
-            super.maxWaitTime = TimeUnit.SECONDS.toMillis(20)
-            try {
+        Timber.d("Request Updates")
+        super.updateInterval = TimeUnit.SECONDS.toMillis(20)
+        super.fastestUpdateInterval = TimeUnit.SECONDS.toMillis(10)
+        super.maxWaitTime = TimeUnit.SECONDS.toMillis(20)
+        try {
 
-                val builder =
-                    LocationSettingsRequest.Builder()
-                        .addLocationRequest(locationRequest)
-                val client: SettingsClient = LocationServices.getSettingsClient(context)
-                val task: Task<LocationSettingsResponse> =
-                    client.checkLocationSettings(builder.build())
-                task.addOnSuccessListener {
-                    mFusedLocationClient.lastLocation
-                        .addOnSuccessListener { location : Location? ->
-                            updateLocationIfBetter(location)
-                        }
+            val builder =
+                LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationRequest)
+            val client: SettingsClient = LocationServices.getSettingsClient(context)
+            val task: Task<LocationSettingsResponse> =
+                client.checkLocationSettings(builder.build())
+            task.addOnSuccessListener {
+                mFusedLocationClient.lastLocation
+                    .addOnSuccessListener { location : Location? ->
+                        updateLocationIfBetter(location)
+                    }
+                val test = Looper.getMainLooper()
+                job =  CoroutineScope(Dispatchers.Default).launch{
                     val looper = Looper.getMainLooper()
-//                Timber.d("Starting location updates $looper")
+                    Timber.d("Starting location updates $looper $test")
                     mFusedLocationClient.requestLocationUpdates(
                         locationRequest,
                         locationCallback,
                         looper
                     )
                 }
-                task.addOnFailureListener {
-                    if (it is ResolvableApiException) {
-                        try {
-                            Timber.e(it)
-                            resultAsLiveData.value = Resource(it)
-                        } catch (sendEx: IntentSender.SendIntentException) {
-                            // Ignore the error.
-                        }
+                Timber.d("Job started: ${job.start()}")
+            }
+            task.addOnFailureListener {
+                if (it is ResolvableApiException) {
+                    try {
+                        Timber.e(it)
+                        resultAsLiveData.value = Resource(it)
+                    } catch (sendEx: IntentSender.SendIntentException) {
+                        // Ignore the error.
                     }
                 }
-            } catch (e: SecurityException) {
-                Timber.e(e)
             }
+        } catch (e: SecurityException) {
+            Timber.e(e)
+        }
     }
 
     override fun stopLocationUpdates() {
         Timber.d("Stopped")
         mFusedLocationClient.removeLocationUpdates(locationCallback)
+        job.cancel()
     }
+
+    override fun liveData() = resultAsLiveData
 
     private fun updateLocationIfBetter(location : Location?){
         val preferences = context.defaultSharedPreferences
@@ -119,5 +132,4 @@ class FusedForegroundLocationService(context: Context) : LocationService(context
         }
     }
 
-    override fun liveData() = resultAsLiveData
 }
