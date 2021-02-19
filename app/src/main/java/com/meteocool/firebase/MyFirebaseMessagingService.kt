@@ -41,7 +41,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Timber.d("Notification Message Body: %s", remoteMessage.data["clear_all"])
 
         if (remoteMessage.data["clear_all"] == "true") {
-            cancelNotification(this, "MyFirebaseMessagingService")
+            cancelNotification(this, "push")
         }
     }
 }

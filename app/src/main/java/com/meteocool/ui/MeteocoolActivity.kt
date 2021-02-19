@@ -81,24 +81,13 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
 
     override fun onStart() {
         super.onStart()
-        val token = defaultSharedPreferences.getString("fb_token", "no token")!!
-
-        val data = UploadWorker.createInputData(mapOf(
-            Pair("url", NetworkUtils.POST_CLEAR_NOTIFICATION.toString()),
-            Pair("token", token),
-            Pair("from", "foreground")))
-
-        WorkManager.getInstance(this)
-            .enqueue(UploadWorker.createRequest(data))
-            .result
-
         stopBackgroundWork()
     }
 
     override fun onResume() {
         super.onResume()
         Timber.d("onResume")
-        MyFirebaseMessagingService.cancelNotification(this, "MeteocoolActivity: onResume")
+        MyFirebaseMessagingService.cancelNotification(this, "foreground")
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
         if (!PermUtils.isBackgroundLocationPermissionGranted(
                 this
