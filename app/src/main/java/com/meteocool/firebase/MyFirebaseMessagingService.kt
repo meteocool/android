@@ -14,6 +14,22 @@ import timber.log.Timber
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
+    companion object{
+        fun cancelNotification(context: Context, from : String) {
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.cancelAll()
+            val data = UploadWorker.createInputData(mapOf(
+                Pair("url",  NetworkUtils.POST_CLEAR_NOTIFICATION.toString()),
+                Pair("token", SharedPrefUtils.getFirebaseToken(context.defaultSharedPreferences)),
+                Pair("from", from),
+            ))
+            WorkManager.getInstance(context)
+                .enqueue(UploadWorker.createRequest(data))
+                .result
+        }
+    }
+
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
         SharedPrefUtils.saveFirebaseToken(defaultSharedPreferences, p0)
@@ -25,21 +41,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Timber.d("Notification Message Body: %s", remoteMessage.data["clear_all"])
 
         if (remoteMessage.data["clear_all"] == "true") {
-            cancelNotification()
+            cancelNotification(this, "MyFirebaseMessagingService")
         }
-    }
-
-    private fun cancelNotification() {
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancelAll()
-        val data = UploadWorker.createInputData(mapOf(
-            Pair("url",  NetworkUtils.POST_CLEAR_NOTIFICATION.toString()),
-            Pair("token", SharedPrefUtils.getFirebaseToken(defaultSharedPreferences)),
-            Pair("from", "launch_screen"),
-        ))
-        WorkManager.getInstance(this)
-            .enqueue(UploadWorker.createRequest(data))
-            .result
     }
 }

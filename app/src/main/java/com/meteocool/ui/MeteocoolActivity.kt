@@ -20,6 +20,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
 import com.meteocool.R
 import com.meteocool.databinding.ActivityMeteocoolBinding
+import com.meteocool.firebase.MyFirebaseMessagingService
 import com.meteocool.preferences.SettingsFragment
 import com.meteocool.injection.InjectorUtils
 import com.meteocool.location.ListenableLocationUpdateWorker
@@ -60,7 +61,6 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             .beginTransaction()
             .replace(R.id.settings, SettingsFragment())
             .commit()
-        cancelNotifications()
 
         appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.error), binding.drawerLayout)
         val navController = findNavController(R.id.nav_host_fragment)
@@ -98,7 +98,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     override fun onResume() {
         super.onResume()
         Timber.d("onResume")
-        cancelNotifications()
+        MyFirebaseMessagingService.cancelNotification(this, "MeteocoolActivity: onResume")
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
         if (!PermUtils.isBackgroundLocationPermissionGranted(
                 this
@@ -175,22 +175,6 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             "map_mode", "map_rotate" -> {
                 webViewModel.sendSettings()
             }
-        }
-    }
-
-    private fun cancelNotifications() {
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if (notificationManager.activeNotifications.isNotEmpty()) {
-            notificationManager.cancelAll()
-            val data = UploadWorker.createInputData(mapOf(
-                Pair("url",  NetworkUtils.POST_CLEAR_NOTIFICATION.toString()),
-                Pair("token", SharedPrefUtils.getFirebaseToken(defaultSharedPreferences)),
-                Pair("from", "launch_screen"),
-                ))
-            WorkManager.getInstance(this)
-                .enqueue(UploadWorker.createRequest(data))
-                .result
         }
     }
 
