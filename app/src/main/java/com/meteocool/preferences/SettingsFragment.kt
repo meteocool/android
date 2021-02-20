@@ -3,6 +3,9 @@ package com.meteocool.preferences
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.Intent.CATEGORY_BROWSABLE
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -66,10 +69,10 @@ class SettingsFragment() : PreferenceFragmentCompat() {
             handleExternalLink(NetworkUtils.FEEDBACK_URL + defaultSharedPreferences.getString("fb_token", "no token")!!)
             true
         }
-        findPreference<Preference>("impressum")?.setOnPreferenceClickListener {
-            handleExternalLink(NetworkUtils.IMPRESS_URL)
-            true
-        }
+//        findPreference<Preference>("impressum")?.setOnPreferenceClickListener {
+//            handleExternalLink(NetworkUtils.IMPRESS_URL)
+//            true
+//        }
         findPreference<Preference>("github")?.setOnPreferenceClickListener {
             handleExternalLink(NetworkUtils.GITHUB_URL)
             true
@@ -95,7 +98,6 @@ class SettingsFragment() : PreferenceFragmentCompat() {
         }
     }
 
-    @SuppressLint("QueryPermissionsNeeded")
     private fun handleExternalLink(uri : String) {
         val link : Uri = Uri.parse(uri)
         val intent = Intent(Intent.ACTION_VIEW, link)

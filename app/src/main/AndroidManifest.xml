@@ -10,6 +10,17 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- Needed only if your app targets Android 5.0 (API level 21) or higher. -->
     <uses-feature android:name="android.hardware.location" />
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto" />
+        </intent>
+        <package android:name="com.github.android" />
+    </queries>
 
     <application
             android:name=".app.MeteocoolApp"
@@ -51,7 +62,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                        android:host="meteocool.com"
+                        android:host="app.ng.meteocool.com"
                         android:scheme="http" />
             </intent-filter>
         </activity>
