@@ -13,7 +13,7 @@ data class MeteocoolLocation(
     val accuracy: Float,
     val verticalAccuracy: Float,
     val elapsedNanosSinceBoot: Long
-){
+): Comparable<MeteocoolLocation>{
     companion object{
         const val  KEY_LATITUDE = "lat"
         const val  KEY_LONGITUDE = "lon"
@@ -21,6 +21,10 @@ data class MeteocoolLocation(
         const val  KEY_ACCURACY = "accuracy"
         const val  KEY_VERTICAL_ACCURACY = "verticalAccuracy"
         const val  KEY_ELAPSED_NANOS = "elapsedNanos"
+    }
+
+    override fun compareTo(other: MeteocoolLocation): Int {
+        return (this.elapsedNanosSinceBoot - other.elapsedNanosSinceBoot).toInt()
     }
 }
 
