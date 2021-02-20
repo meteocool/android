@@ -10,7 +10,7 @@ class LocationServiceFactory {
 
     companion object {
 
-        fun getLocationService(context : Context) : ForegroundService {
+        fun getLocationService(context : Context) : ForegroundLocationService {
              return if(isGooglePlayServicesAvailable(context)) {
                  FusedLocationService(context)
              }else{

@@ -7,13 +7,11 @@ import com.meteocool.app.MeteocoolApp
 import com.meteocool.location.LocationRepository
 import com.meteocool.location.MeteocoolLocation
 import com.meteocool.location.Resource
-import com.meteocool.location.service.ForegroundService
+import com.meteocool.location.service.ForegroundLocationService
 import com.meteocool.location.service.LocationServiceFactory
 import com.meteocool.network.NetworkUtils
 import com.meteocool.preferences.booleanLiveData
 import com.meteocool.view.VoidEvent
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
@@ -25,7 +23,7 @@ class WebViewModel(application: Application) : AndroidViewModel(application) {
     private val sharedPreferences: SharedPreferences =
         (application as MeteocoolApp).defaultSharedPreferences
     private val locationRepository: LocationRepository = (application as MeteocoolApp).repository
-    private val foregroundLocationService: ForegroundService = LocationServiceFactory.getLocationService(application.applicationContext)
+    private val foregroundLocationService: ForegroundLocationService = LocationServiceFactory.getLocationService(application.applicationContext)
 
 
     private val _isZoomEnabled = sharedPreferences.booleanLiveData("map_zoom", false)

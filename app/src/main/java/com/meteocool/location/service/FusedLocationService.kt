@@ -21,10 +21,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
-import kotlin.coroutines.coroutineContext
 
-class FusedLocationService(context: Context) : ForegroundService(context) {
+class FusedLocationService(context: Context) : ForegroundLocationService(context) {
 
     /**
      * The entry point to Google Play Services.
@@ -61,11 +59,7 @@ class FusedLocationService(context: Context) : ForegroundService(context) {
 
     override fun requestLocationUpdates() {
         Timber.d("Request Updates")
-        super.updateInterval = TimeUnit.SECONDS.toMillis(20)
-        super.fastestUpdateInterval = TimeUnit.SECONDS.toMillis(10)
-        super.maxWaitTime = TimeUnit.SECONDS.toMillis(20)
         try {
-
             val builder =
                 LocationSettingsRequest.Builder()
                     .addLocationRequest(locationRequest)
@@ -73,10 +67,9 @@ class FusedLocationService(context: Context) : ForegroundService(context) {
             val task: Task<LocationSettingsResponse> =
                 client.checkLocationSettings(builder.build())
             task.addOnSuccessListener {
-                mFusedLocationClient.lastLocation
-                    .addOnSuccessListener { location : Location? ->
-                        updateLocationIfBetter(location)
-                    }
+                mFusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener { location : Location? ->
+                    updateLocationIfBetter(location)
+                }
                 val test = Looper.getMainLooper()
                 job =  CoroutineScope(Dispatchers.Default).launch{
                     val looper = Looper.getMainLooper()
@@ -119,7 +112,7 @@ class FusedLocationService(context: Context) : ForegroundService(context) {
             val currentLocation = MeteocoolLocationFactory.new(location)
             val distance = FloatArray(1)
             Location.distanceBetween(location.latitude, location.longitude, lastLocation.latitude, lastLocation.longitude, distance)
-            Timber.d("Old: $lastLocation New: $currentLocation Distance ${distance[0]}")
+            Timber.d("Distance ${distance[0]}")
             if(distance[0] > 499f){
                 Timber.d("Update location to $location")
                 resultAsLiveData.value = Resource(currentLocation)
