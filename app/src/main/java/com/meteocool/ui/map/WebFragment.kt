@@ -38,7 +38,6 @@ class WebFragment : Fragment() {
 
     private lateinit var locationObserver: Observer<Resource<MeteocoolLocation>>
     private lateinit var requestSettingsObserver: VoidEventObserver<VoidEvent>
-    private lateinit var requestingForegroundLocation: Observer<Boolean>
 
     /**
      * Use databinding for this fragment.
@@ -133,7 +132,7 @@ class WebFragment : Fragment() {
         viewDataBinding.webView.addJavascriptInterface(WebAppInterface(), "Android")
 
         if(isRequestSettingsCalled) {
-            updateTiles()
+            registerTileUpdates()
         }
 
         if (EasyPermissions.hasPermissions(
@@ -145,8 +144,17 @@ class WebFragment : Fragment() {
         }
     }
 
-    private fun updateTiles() {
+    private fun registerTileUpdates() {
         val function = "window.enterForeground();"
+        viewDataBinding.webView.post {
+            run {
+                viewDataBinding.webView.evaluateJavascript(function) {}
+            }
+        }
+    }
+
+    private fun unregisterTileUpdates() {
+        val function = "window.leaveForeground();"
         viewDataBinding.webView.post {
             run {
                 viewDataBinding.webView.evaluateJavascript(function) {}
@@ -166,20 +174,16 @@ class WebFragment : Fragment() {
 
         webViewModel.locationData.observe(viewLifecycleOwner, locationObserver)
 
-//        webViewModel.requestingLocationUpdatesForeground.observe(
-//            viewLifecycleOwner,
-//            requestingForegroundLocation
-//        )
+        if (defaultSharedPreferences.getBoolean("map_zoom", false)) {
+            zoomOnLastKnownLocation()
+        }
     }
 
     override fun onStop() {
         super.onStop()
         viewDataBinding.webView.removeJavascriptInterface("Android")
         webViewModel.stopForegroundLocationUpdates()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+        unregisterTileUpdates()
     }
 
     private fun updateUserLocation(location: MeteocoolLocation, isZoom: Boolean, isFocus:  Boolean) {
@@ -239,14 +243,6 @@ class WebFragment : Fragment() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        Timber.d("bla")
-    }
-
     @AfterPermissionGranted(PermUtils.LOCATION)
     private fun locateMe() {
         Timber.d("locateMe")
@@ -276,7 +272,7 @@ class WebFragment : Fragment() {
         fun requestSettings() {
             Timber.d("requestSettings injected")
             isRequestSettingsCalled = true
-            updateTiles()
+            registerTileUpdates()
             if (defaultSharedPreferences.getBoolean("map_zoom", false)) {
                 zoomOnLastKnownLocation()
             }
