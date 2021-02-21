@@ -82,6 +82,14 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     override fun onStart() {
         super.onStart()
         stopBackgroundWork()
+
+        if (!PermUtils.isLocationPermissionGranted(
+                this
+            ) && defaultSharedPreferences.getBoolean("map_zoom", false)
+        ) {
+            val alert = LocationAlertFragment(R.string.gp_dialog_msg_deactivate)
+            alert.show(supportFragmentManager, "ForegroundLocationAlterFragmentDisable")
+        }
     }
 
     override fun onResume() {

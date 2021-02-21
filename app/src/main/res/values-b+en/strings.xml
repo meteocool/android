@@ -52,6 +52,7 @@
 
     <!-- Background Dialog -->
     <string name="gp_dialog_msg">Location permission is required for <b>locate me</b> to work</string>
+    <string name="gp_dialog_msg_deactivate">Permission for location access is required for <b>Zoom after start</b>. The last used location stored in the application is used.</string>
     <string name="bg_dialog_msg_deactivate">Location permission <b>Allow all the time</b> is required for notifications to work. Feature will be disabled.</string>
     <string name="bg_dialog_msg">Location permission <b>Allow all the time</b> is required for notifications to work.</string>
     <string name="bg_dialog_pos">Open Settings</string>
