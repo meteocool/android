@@ -3,6 +3,7 @@ package com.meteocool.ui.map
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -71,6 +72,13 @@ class WebFragment : Fragment() {
         webSettings.domStorageEnabled = true
         webSettings.databaseEnabled = true
         webSettings.setGeolocationEnabled(true)
+
+        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                webSettings.forceDark = WebSettings.FORCE_DARK_ON
+            }
+        }
 
         viewDataBinding.webView.webViewClient = MyWebViewClient()
 
