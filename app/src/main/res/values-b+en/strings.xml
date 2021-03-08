@@ -9,19 +9,28 @@
 
 
     <string name="onboarding_title1">Hi there!</string>
-    <string name="onboarding_title2">Stormchaser or couch potato?</string>
+    <string name="onboarding_title2">Nowcasting</string>
     <string name="onboarding_title3">Notifications</string>
-    <string name="onboarding_title4">Location</string>
-    <string name="onboarding_title5">Go outside and enjoy the sun!</string>
+    <string name="onboarding_title4">Location Access</string>
+    <string name="onboarding_title7">Now Go Outside!</string>
 
-    <string name="onboarding_description1">No rain radar like any other. It is free of advertising and free of charge.</string>
-    <string name="onboarding_description2">Inform yourself about the current and future situation of the rain clouds and
-        thunderstorms.</string>
-    <string name="onboarding_description3">Get informed about upcoming rainfall with push messages.</string>
-    <string name="onboarding_description4">This app collects location data to enable push messages about incoming rain at your location even when the app is closed or not in use.”
-    Enable <b>always allow</b> site access for this.
+    <string name="onboarding_description1">The meteocool project is an ongoing effort to make freely available meteorological data useful to everyone.\n\n
+        We process and aggregate data from different sources and try to visualize them in an intuitive way.</string>
+    <string name="onboarding_description2">We use a super-accurate forecast model (a so-called \"nowcast\") to predict the path and extent of rain clouds based on factors like wind, air pressure and lightning activity.\n\n
+        Obviously, longer times are less accurate. But in our experience, at least the first 45 minutes are pretty spot-on.</string>
+    <string name="onboarding_description3">Based on this data, do you want us to inform you about upcoming rain at your location?</string>
+    <string name="onboarding_notification_dialog_explanation">Nice! For notifications to work, you first need to select <b>\"Allow only while using the app\"</b> in the following dialog.\n\nAfterwards you need to select <b>\"Allow all the time\"</b>.\nDon\'t worry, this won\'t drain your battery.</string>
+    <string name="onboarding_description4">
+        We only store your location data temporarily and will never pass your data on.
     </string>
-    <string name="onboarding_description5">Tell your friends and give us feedback!</string>
+    <string name="onboarding_description5">☀️ Something for cloudless days: A new “near-realtime” satellite layer is now available from the layers menu!\n\n
+        🛰 Satellite overpasses are expected every 5 days with a ground resolution ±10m/pixel.</string>
+
+    <string name="onboarding_description6">Notifications 📱 (among other things) can now be configured in the Settings menu.\n\n
+    To open the Settings menu, click on the top-left corner of the toolbar or swipe it in from the left screen side.</string>
+
+    <string name="onboarding_description7">Did you know?\n\nmeteocool is free and open source. It\'s run and built by volunteers in their leisure time.\n\n
+        If you like our App, please tell your friends!</string>
 
     <string name="gps_button_toast">Bad GPS signal.</string>
 
@@ -57,5 +66,9 @@
     <string name="bg_dialog_msg">Location permission <b>Allow all the time</b> is required for notifications to work.</string>
     <string name="bg_dialog_pos">Open Settings</string>
     <string name="bg_dialog_neg">Got it</string>
+
+
+    <!-- Background Dialog -->
+    <string name="intro_toggle_notifications">Enable notifications</string>
 
 </resources>

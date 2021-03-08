@@ -70,8 +70,7 @@ class WebViewModel(application: Application) : AndroidViewModel(application) {
 }
 
 /**
- * Factory for creating a [WebViewModel] with a constructor that takes [SharedPreferences]
- * for the stored values.
+ * Factory for creating a [WebViewModel] which inherits from [AndroidViewModel].
  */
 class WebViewModelFactory(private val application: Application) :
     ViewModelProvider.NewInstanceFactory() {

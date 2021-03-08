@@ -6,27 +6,35 @@
     <string name="notifications_admin_channel_id">meteocool</string>
     <string name="default_notification_channel_id">meteocool</string>
 
-    <string name="onboarding_title1">Servus!</string>
-    <string name="onboarding_title2">Sturmjäger/in oder Couchpotato?</string>
+    <string name="onboarding_title1">Hallo Du!</string>
+    <string name="onboarding_title2">Kurzzeitvorhersage</string>
     <string name="onboarding_title3">Benachrichtigungen</string>
-    <string name="onboarding_title4">Standort</string>
-    <string name="onboarding_title5">Geh raus und genieß die Sonne!</string>
+    <string name="onboarding_title4">Standort-Zugriff</string>
+    <string name="onboarding_title7">Ab nach draußen!</string>
 
-    <string name="onboarding_description1">Kein Regenradar wie jedes andere. Es ist werbefrei und kostenlos.
+    <string name="onboarding_description1">Meteorologische Daten für alle verständlich zu gestalten - das ist das Ziel von meteocool.\n\n
+        Informationen aus verschiedenen Quellen werden von uns - für Dich - verarbeitet, kombiniert und intuitiv visualisiert.
     </string>
-    <string name="onboarding_description2">Informiere dich über die aktuelle und zukünftige Lage der Regenwolken und
-        Gewitter.
+    <string name="onboarding_description2">Anhand von Windrichtung, Luftdruck und Blitzen berechnen wir mit einem super-genauen mathematischen Modell (\"Nowcasting\") die Zugrichtung und Größe von Regenwolken und Gewitterzellen.\n\n
+        Vorhersagen im Bereich der nächsten 45 Minuten sind erfahrungsgemäß sehr genau.
     </string>
-    <string name="onboarding_description3">Lasse dich durch Push-Nachrichten über kommenden Niederschlag informieren.
+    <string name="onboarding_description3">Auf Basis dieser Daten können wir Dich benachrichtigen, bevor es an deinem aktuellen Standort anfängt zu regnen.
     </string>
-    <string name="onboarding_description4">Diese App sammelt Standortdaten, um Push-Nachrichten über ankommenden Regen an Ihrem Standort zu ermöglichen, auch wenn die App geschlossen oder nicht in Gebrauch ist.
-    Aktiviere dafür Standortzugriff <b>immer erlauben</b>.
+    <string name="onboarding_notification_dialog_explanation">Klasse - um Benachrichtigungen für deinen Aufenthaltsort zu erhalten, musst du zunächst <b>\"Bei Nutzung der App\"</b> auswählen.\n\nDamit die Benachrichtigungen wirklich funktionieren, musst du im Anschluss <b>\"Immer zulassen\"</b> auswählen.\nMach dir keine Sorgen, dies wird deinen Akku nicht belasten.</string>
+    <string name="onboarding_description4">
+       Wir werden deine Standortdaten nur temporär speichern und nicht weitergeben.
     </string>
-    <string name="onboarding_description5">Erzähle es deinen Bekannten und gib uns Feedback!</string>
+    <string name="onboarding_description5">☀️ Etwas für wolkenlose Tage: Du kannst jetzt im Layer-Menü \"Near-Realtime\"-Satellitenbilder 🛰 ansehen.\n\n
+    Alle fünf Tage werden neue Bilder mit einer Auflösung von ±10m/Pixel aufgenommen.</string>
+
+    <string name="onboarding_description6">Die Benachrichtigungen 📱 (und vieles mehr) kannst du ab jetzt in den Einstellungen konfigurieren.\n\n
+        Um die Einstellungen zu öffnen klicke in die linke obere Ecke in der App-Leiste oder öffne das Menü durch Wischen von der linken Bildschirmseite.</string>
+
+    <string name="onboarding_description7">Wusstest du schon?\n\nmeteocool ist frei und open source. Wir betreiben und entwickeln alles in unserer Freizeit. \n\n
+        Wenn dir unsere App gefällt, erzähl doch deinen Freunden davon.</string>
 
     <string name="gps_button_toast">Schlechtes GPS-Signal.</string>
     <string name="title_activity_settings">Einstellungen</string>
-
 
     <string name="menu_documentation">Dokumentation</string>
 
@@ -58,5 +66,8 @@
     <string name="bg_dialog_msg">Berechtigung für Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt.</string>
     <string name="bg_dialog_pos">Öffne Einstellungen</string>
     <string name="bg_dialog_neg">Verstanden</string>
+
+    <!-- Background Dialog -->
+    <string name="intro_toggle_notifications">Notifications aktivieren</string>
 
 </resources>

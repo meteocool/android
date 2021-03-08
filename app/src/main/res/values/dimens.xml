@@ -8,4 +8,5 @@
     <dimen name="ball_radius">30dp</dimen>
     <dimen name="font_size_logo">25sp</dimen>
     <dimen name="font_size_version">14sp</dimen>
+    <dimen name="navbar_size">35dp</dimen>
 </resources>

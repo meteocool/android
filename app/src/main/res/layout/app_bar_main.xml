@@ -8,14 +8,14 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/navbar_size"
         android:theme="@style/AppbarLayout">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="@dimen/navbar_size"
+            android:background="?attr/colorPrimaryDark"
             app:popupTheme="@style/Toolbar" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -26,6 +26,7 @@
 <!--    </FrameLayout>-->
 
     <fragment
+            android:layout_marginTop="@dimen/navbar_size"
             android:id="@+id/nav_host_fragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"

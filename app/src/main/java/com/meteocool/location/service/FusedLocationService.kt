@@ -100,7 +100,9 @@ class FusedLocationService(context: Context) : ForegroundLocationService(context
     override fun stopLocationUpdates() {
         Timber.d("Stopped")
         mFusedLocationClient.removeLocationUpdates(locationCallback)
-        job.cancel()
+        if(this::job.isInitialized) {
+            job.cancel()
+        }
     }
 
     override fun liveData() = resultAsLiveData

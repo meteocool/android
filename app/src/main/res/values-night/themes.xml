@@ -11,7 +11,7 @@
     </style>
     <style name="Base.Theme.Meteocool" parent="Base.Theme">
         <item name="colorPrimary">@color/turquoise_cloud_0</item>
-        <item name="colorSecondary">@color/turquoise_cloud_0</item>
+        <item name="colorSecondary">@color/black_0</item>
         <item name="colorPrimaryDark">@color/black_10</item>
         <item name="colorAccent">@color/turquoise_cloud_0</item>
         <!--colorBackground appears behind scrollable content and is used for the default window-->
@@ -48,5 +48,8 @@
 
 
     <style name="OnBoardingTheme" parent="Base.Theme">
+        <item name="colorPrimary">@color/turquoise_cloud_0</item>
+        <item name="colorAccent">@color/white_10</item>
+        <item name="android:colorBackground">@color/turquoise_cloud_0</item>
     </style>
 </resources>

@@ -4,15 +4,16 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
 import com.github.appintro.AppIntro2
 import com.github.appintro.AppIntroFragment
 import com.meteocool.ui.MeteocoolActivity
 import com.meteocool.R
+import com.meteocool.injection.InjectorUtils
 import com.meteocool.permissions.PermUtils
-import com.meteocool.ui.map.LocationAlertFragment
+import com.meteocool.ui.map.WebViewModel
 import com.vmadalin.easypermissions.EasyPermissions
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
@@ -38,8 +39,7 @@ class IntroActivity : AppIntro2() {
             AppIntroFragment.newInstance(
                 title = getString(R.string.onboarding_title1),
                 description = getString(R.string.onboarding_description1),
-                imageDrawable = R.drawable.volunteers_c,
-                backgroundColor = ContextCompat.getColor(this, R.color.turquoise_cloud_0)
+                imageDrawable = R.drawable.intro_sun_rain,
             )
         )
 
@@ -47,43 +47,51 @@ class IntroActivity : AppIntro2() {
             AppIntroFragment.newInstance(
                 title = getString(R.string.onboarding_title2),
                 description = getString(R.string.onboarding_description2),
-                imageDrawable = R.drawable.jacket,
-                backgroundColor = ContextCompat.getColor(this, R.color.turquoise_cloud_0)
+                imageDrawable = R.drawable.intro_jacket,
             )
         )
 
+        /* Custom slide with notification enabling. Bell */
         addSlide(
-            AppIntroFragment.newInstance(
-                title = getString(R.string.onboarding_title3),
-                description = getString(R.string.onboarding_description3),
-                imageDrawable = R.drawable.bell,
-                backgroundColor = ContextCompat.getColor(this, R.color.turquoise_cloud_0)
-            )
+            IntroEnableNotificationsFragment.newInstance()
         )
 
         addSlide(
             AppIntroFragment.newInstance(
                 title = getString(R.string.onboarding_title4),
                 description = getString(R.string.onboarding_description4),
-                imageDrawable = R.drawable.maps_and_location,
-                backgroundColor = ContextCompat.getColor(this, R.color.turquoise_cloud_0)
+                imageDrawable = R.drawable.intro_location,
             )
         )
 
         addSlide(
             AppIntroFragment.newInstance(
-                title = getString(R.string.onboarding_title5),
+                title = getString(R.string.onboarding_title4),
                 description = getString(R.string.onboarding_description5),
-                imageDrawable = R.drawable.sun_rain_composit_4,
-                backgroundColor = ContextCompat.getColor(this, R.color.turquoise_cloud_0)
+                imageDrawable = R.drawable.intro_satellite,
             )
         )
 
-        askForPermissions(
-            permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            slideNumber = 4,
-            required = false
+        addSlide(
+            AppIntroFragment.newInstance(
+                description = getString(R.string.onboarding_description6),
+                imageDrawable = R.drawable.intro_settings,
+            )
         )
+
+        addSlide(
+            AppIntroFragment.newInstance(
+                title = getString(R.string.onboarding_title7),
+                description = getString(R.string.onboarding_description7),
+                imageDrawable = R.drawable.intro_volunteers,
+            )
+        )
+
+//        askForPermissions(
+//            permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+//            slideNumber = 4,
+//            required = false
+//        )
 
     }
 
