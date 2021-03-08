@@ -66,7 +66,7 @@ class SettingsFragment() : PreferenceFragmentCompat() {
 
     private fun registerPreferenceClickListener(){
         findPreference<Preference>("feedback")?.setOnPreferenceClickListener {
-            handleExternalLink(NetworkUtils.FEEDBACK_URL + defaultSharedPreferences.getString("fb_token", "no token")!!)
+            handleExternalLink(getString(R.string.feedback_url) + defaultSharedPreferences.getString("fb_token", "no token")!!)
             true
         }
 //        findPreference<Preference>("impressum")?.setOnPreferenceClickListener {

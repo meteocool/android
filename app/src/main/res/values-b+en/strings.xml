@@ -69,6 +69,7 @@
 
 
     <!-- Background Dialog -->
-    <string name="intro_toggle_notifications">Enable notifications</string>
+    <string name="intro_toggle_notifications">notifications</string>
+    <string name="feedback_url"><![CDATA[mailto:support@meteocool.com?subject=Android%20App%20Feedback&body=%0A%0A—%0APlease%20include%20the%20following%20information%20when%20reporting%20issues%21%0A%0ADebug-Token:%2]]></string>
 
 </resources>
