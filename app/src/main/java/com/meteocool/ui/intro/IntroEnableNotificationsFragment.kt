@@ -2,7 +2,6 @@ package com.meteocool.ui.intro
 
 import android.Manifest
 import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +11,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.meteocool.R
 import com.meteocool.databinding.IntroEnableNotificationBinding
-import com.meteocool.injection.InjectorUtils
 import com.meteocool.permissions.PermUtils
-import com.meteocool.ui.map.WebViewModel
 import org.jetbrains.anko.sdk25.coroutines.onCheckedChange
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import timber.log.Timber
@@ -40,16 +36,14 @@ class IntroEnableNotificationsFragment : Fragment() {
                 ActivityResultContracts.RequestPermission()
             ) { isGranted: Boolean ->
                 defaultSharedPreferences.edit().putBoolean("notification", isGranted).apply()
+                Timber.d("$isGranted")
                 if (isGranted) {
-
-                    Timber.d("$isGranted")
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                         requestPermissionLauncher.launch(
                             Manifest.permission.ACCESS_BACKGROUND_LOCATION
                         )
                     }
                 } else {
-                    Timber.d("$isGranted")
                     viewDataBinding.switch1.isChecked = false
                 }
             }
@@ -78,7 +72,7 @@ class IntroEnableNotificationsFragment : Fragment() {
                         val alertDialog: AlertDialog? = activity?.let {
                             val builder = AlertDialog.Builder(it)
                             builder.apply {
-                                setMessage(R.string.onboarding_notification_dialog_explanation)
+                                setMessage(R.string.intro_notification_dialog_explanation)
                                 setPositiveButton("Ok") { _, _ ->
                                     requestPermissionLauncher.launch(
                                         ACCESS_FINE_LOCATION

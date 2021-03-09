@@ -1,17 +1,13 @@
 package com.meteocool.preferences
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.Intent.CATEGORY_BROWSABLE
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
+import android.provider.Settings
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.preference.Preference
@@ -22,8 +18,6 @@ import com.meteocool.injection.InjectorUtils
 import com.meteocool.network.NetworkUtils
 import com.meteocool.permissions.PermUtils
 import com.meteocool.ui.map.WebViewModel
-import com.vmadalin.easypermissions.EasyPermissions
-import com.vmadalin.easypermissions.annotations.AfterPermissionGranted
 import timber.log.Timber
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 
@@ -32,13 +26,16 @@ import org.jetbrains.anko.support.v4.defaultSharedPreferences
  */
 class SettingsFragment() : PreferenceFragmentCompat() {
 
-    private val webViewModel : WebViewModel by activityViewModels{
+    private val webViewModel: WebViewModel by activityViewModels {
         InjectorUtils.provideWebViewModelFactory(requireActivity().application)
     }
 
 
     private lateinit var isZoomEnabledObserver: Observer<Boolean>
     private lateinit var areNotificationsEnabledObserver: Observer<Boolean>
+    private lateinit var requestLocationPermissionLauncher: ActivityResultLauncher<String>
+    private lateinit var requestBackgroundLocationPermissionLauncher: ActivityResultLauncher<String>
+    private var isBackgroundRequest = false
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
@@ -47,32 +44,67 @@ class SettingsFragment() : PreferenceFragmentCompat() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        isZoomEnabledObserver = androidx.lifecycle.Observer<Boolean>{
-                this.preferenceManager.findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked =
-                    it
+        isZoomEnabledObserver = androidx.lifecycle.Observer<Boolean> {
+            this.preferenceManager.findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked =
+                it
         }
         webViewModel.isZoomEnabled.observe(viewLifecycleOwner, isZoomEnabledObserver)
 
-        areNotificationsEnabledObserver = androidx.lifecycle.Observer<Boolean>{
-           findPreference<SwitchPreferenceCompat>("notification")?.isChecked = it
+        areNotificationsEnabledObserver = androidx.lifecycle.Observer<Boolean> {
+            findPreference<SwitchPreferenceCompat>("notification")?.isChecked = it
         }
-        webViewModel.areNotificationsEnabled.observe(viewLifecycleOwner, areNotificationsEnabledObserver)
+        webViewModel.areNotificationsEnabled.observe(
+            viewLifecycleOwner,
+            areNotificationsEnabledObserver
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestLocationPermissionLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { isGranted: Boolean ->
+                Timber.d("$isGranted")
+                if (isGranted) {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q && isBackgroundRequest) {
+                        requestBackgroundLocationPermissionLauncher.launch(
+                            Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                        )
+                        isBackgroundRequest = false
+                    }
+                }
+            }
+        requestBackgroundLocationPermissionLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { isGranted: Boolean ->
+                Timber.d("$isGranted")
+                if (!isGranted) {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    val uri = Uri.fromParts(
+                        "package",
+                        requireActivity().packageName,
+                        null
+                    )
+                    intent.data = uri
+                    startActivity(intent)
+                }
+            }
         registerPreferenceClickListener()
     }
 
-    private fun registerPreferenceClickListener(){
+    private fun registerPreferenceClickListener() {
         findPreference<Preference>("feedback")?.setOnPreferenceClickListener {
-            handleExternalLink(getString(R.string.feedback_url) + defaultSharedPreferences.getString("fb_token", "no token")!!)
+            handleExternalLink(
+                getString(R.string.feedback_url) + defaultSharedPreferences.getString(
+                    "fb_token",
+                    "no token"
+                )!!
+            )
             true
         }
-//        findPreference<Preference>("impressum")?.setOnPreferenceClickListener {
-//            handleExternalLink(NetworkUtils.IMPRESS_URL)
-//            true
-//        }
         findPreference<Preference>("github")?.setOnPreferenceClickListener {
             handleExternalLink(NetworkUtils.GITHUB_URL)
             true
@@ -84,64 +116,76 @@ class SettingsFragment() : PreferenceFragmentCompat() {
 
         findPreference<SwitchPreferenceCompat>("map_zoom")?.setOnPreferenceChangeListener { preference, newValue ->
             Timber.d("$preference, $newValue")
-            if(newValue.toString().toBoolean()){
+            if (newValue.toString().toBoolean()) {
                 requiresLocation()
             }
             true
         }
         findPreference<SwitchPreferenceCompat>("notification")?.setOnPreferenceChangeListener { preference, newValue ->
             Timber.d("$preference, $newValue")
-            if(newValue.toString().toBoolean()){
+            if (newValue.toString().toBoolean()) {
                 requiresBackgroundLocation()
             }
             true
         }
     }
 
-    private fun handleExternalLink(uri : String) {
-        val link : Uri = Uri.parse(uri)
+    private fun handleExternalLink(uri: String) {
+        val link: Uri = Uri.parse(uri)
         val intent = Intent(Intent.ACTION_VIEW, link)
         if (intent.resolveActivity(requireActivity().packageManager) != null) {
             startActivity(intent)
         }
     }
 
-    @AfterPermissionGranted(PermUtils.LOCATION)
     private fun requiresLocation() {
-        if (EasyPermissions.hasPermissions(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (PermUtils.isLocationPermissionGranted(requireContext())) {
             webViewModel.requestForegroundLocationUpdates()
         } else {
-            EasyPermissions.requestPermissions(
-                this,
-                getString(R.string.gp_dialog_msg),
-                PermUtils.LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
+            val alertDialog: AlertDialog? = activity?.let {
+                val builder = AlertDialog.Builder(it)
+                builder.apply {
+                    setMessage(R.string.dialog_msg_map_zoom)
+                    setPositiveButton(getString(R.string.bg_dialog_pos)) { _, _ ->
+                        requestLocationPermissionLauncher.launch(
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        )
+                    }
+                    setNegativeButton(
+                        getString(R.string.bg_dialog_neg)
+                    ) { _, _ ->
+                        findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked = false
+                    }
+                    setCancelable(false)
+                }
+                builder.create()
+            }
+            alertDialog?.show()
         }
     }
 
-    @AfterPermissionGranted(PermUtils.LOCATION_BACKGROUND)
     private fun requiresBackgroundLocation() {
-        if (EasyPermissions.hasPermissions(requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
-            // Already have permission, do the thing
-            // ...
-        } else {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                EasyPermissions.requestPermissions(
-                    this,
-                    getString(R.string.bg_dialog_msg),
-                    PermUtils.LOCATION_BACKGROUND,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
-            }else{
-                EasyPermissions.requestPermissions(
-                    this,
-                    getString(R.string.bg_dialog_msg),
-                    PermUtils.LOCATION_BACKGROUND,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
+        if (!PermUtils.isBackgroundLocationPermissionGranted(requireContext())) {
+            val alertDialog: AlertDialog? = activity?.let {
+                val builder = AlertDialog.Builder(it)
+                builder.apply {
+                    setMessage(R.string.dialog_msg_push)
+                    setPositiveButton(getString(R.string.bg_dialog_pos)) { _, _ ->
+                        isBackgroundRequest = true
+                        requestLocationPermissionLauncher.launch(
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        )
+                    }
+                    setNegativeButton(
+                        getString(R.string.bg_dialog_neg)
+                    ) { _, _ ->
+                        findPreference<SwitchPreferenceCompat>("notification")?.isChecked = false
+                    }
+                    setCancelable(false)
+                }
+                builder.create()
             }
+            alertDialog?.show()
         }
     }
 }

@@ -4,16 +4,13 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
 import com.github.appintro.AppIntro2
 import com.github.appintro.AppIntroFragment
 import com.meteocool.ui.MeteocoolActivity
 import com.meteocool.R
-import com.meteocool.injection.InjectorUtils
 import com.meteocool.permissions.PermUtils
-import com.meteocool.ui.map.WebViewModel
 import com.vmadalin.easypermissions.EasyPermissions
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
@@ -37,16 +34,16 @@ class IntroActivity : AppIntro2() {
 
         addSlide(
             AppIntroFragment.newInstance(
-                title = getString(R.string.onboarding_title1),
-                description = getString(R.string.onboarding_description1),
+                title = getString(R.string.intro_title1),
+                description = getString(R.string.intro_description1),
                 imageDrawable = R.drawable.intro_sun_rain,
             )
         )
 
         addSlide(
             AppIntroFragment.newInstance(
-                title = getString(R.string.onboarding_title2),
-                description = getString(R.string.onboarding_description2),
+                title = getString(R.string.intro_title2),
+                description = getString(R.string.intro_description2),
                 imageDrawable = R.drawable.intro_jacket,
             )
         )
@@ -58,31 +55,31 @@ class IntroActivity : AppIntro2() {
 
         addSlide(
             AppIntroFragment.newInstance(
-                title = getString(R.string.onboarding_title4),
-                description = getString(R.string.onboarding_description4),
+                title = getString(R.string.intro_title4),
+                description = getString(R.string.intro_description4),
                 imageDrawable = R.drawable.intro_location,
             )
         )
 
         addSlide(
             AppIntroFragment.newInstance(
-                title = getString(R.string.onboarding_title4),
-                description = getString(R.string.onboarding_description5),
+                title = getString(R.string.intro_title4),
+                description = getString(R.string.intro_description5),
                 imageDrawable = R.drawable.intro_satellite,
             )
         )
 
         addSlide(
             AppIntroFragment.newInstance(
-                description = getString(R.string.onboarding_description6),
+                description = getString(R.string.intro_description6),
                 imageDrawable = R.drawable.intro_settings,
             )
         )
 
         addSlide(
             AppIntroFragment.newInstance(
-                title = getString(R.string.onboarding_title7),
-                description = getString(R.string.onboarding_description7),
+                title = getString(R.string.intro_title7),
+                description = getString(R.string.intro_description7),
                 imageDrawable = R.drawable.intro_volunteers,
             )
         )
@@ -130,7 +127,7 @@ class IntroActivity : AppIntro2() {
                         isBackgroundPermissionRequested = true
                         EasyPermissions.requestPermissions(
                             this,
-                            getString(R.string.bg_dialog_msg),
+                            getString(R.string.dialog_msg_push),
                             PermUtils.LOCATION_BACKGROUND,
                             Manifest.permission.ACCESS_BACKGROUND_LOCATION,
                             Manifest.permission.ACCESS_FINE_LOCATION

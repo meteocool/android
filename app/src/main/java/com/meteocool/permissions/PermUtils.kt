@@ -9,8 +9,6 @@ import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import com.meteocool.R
 import com.meteocool.ui.map.LocationAlertFragment
-import com.vmadalin.easypermissions.EasyPermissions
-import com.vmadalin.easypermissions.annotations.AfterPermissionGranted
 
 /**
  * Helper class for validating app permission constraints.
@@ -30,7 +28,7 @@ class PermUtils {
 
                 }
                 shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                    val alert = LocationAlertFragment(R.string.gp_dialog_msg)
+                    val alert = LocationAlertFragment(R.string.dialog_msg_locate_me)
 //                    alert.show(/, "LocationAlertFragment")
             }
                 else -> {

@@ -6,34 +6,34 @@
     <string name="notifications_admin_channel_id">meteocool</string>
     <string name="default_notification_channel_id">meteocool</string>
 
-    <string name="onboarding_title1">Hallo Du!</string>
-    <string name="onboarding_title2">Kurzzeitvorhersage</string>
-    <string name="onboarding_title3">Benachrichtigungen</string>
-    <string name="onboarding_title4">Standort-Zugriff</string>
-    <string name="onboarding_title7">Ab nach draußen!</string>
+    <!-- Intro -->
+    <string name="intro_title1">Hallo Du!</string>
+    <string name="intro_title2">Kurzzeitvorhersage</string>
+    <string name="intro_title3">Benachrichtigungen</string>
+    <string name="intro_title4">Standort-Zugriff</string>
+    <string name="intro_title7">Ab nach draußen!</string>
 
-    <string name="onboarding_description1">Meteorologische Daten für alle verständlich zu gestalten - das ist das Ziel von meteocool.\n\n
+    <string name="intro_description1">Meteorologische Daten für alle verständlich zu gestalten - das ist das Ziel von meteocool.\n\n
         Informationen aus verschiedenen Quellen werden von uns - für Dich - verarbeitet, kombiniert und intuitiv visualisiert.
     </string>
-    <string name="onboarding_description2">Anhand von Windrichtung, Luftdruck und Blitzen berechnen wir mit einem super-genauen mathematischen Modell (\"Nowcasting\") die Zugrichtung und Größe von Regenwolken und Gewitterzellen.\n\n
+    <string name="intro_description2">Anhand von Windrichtung, Luftdruck und Blitzen berechnen wir mit einem super-genauen mathematischen Modell (\"Nowcasting\") die Zugrichtung und Größe von Regenwolken und Gewitterzellen.\n\n
         Vorhersagen im Bereich der nächsten 45 Minuten sind erfahrungsgemäß sehr genau.
     </string>
-    <string name="onboarding_description3">Auf Basis dieser Daten können wir Dich benachrichtigen, bevor es an deinem aktuellen Standort anfängt zu regnen.
+    <string name="intro_description3">Auf Basis dieser Daten können wir Dich benachrichtigen, bevor es an deinem aktuellen Standort anfängt zu regnen.
     </string>
-    <string name="onboarding_notification_dialog_explanation">Klasse - um Benachrichtigungen für deinen Aufenthaltsort zu erhalten, musst du zunächst <b>\"Bei Nutzung der App\"</b> auswählen.\n\nDamit die Benachrichtigungen wirklich funktionieren, musst du im Anschluss <b>\"Immer zulassen\"</b> auswählen.\nMach dir keine Sorgen, dies wird deinen Akku nicht belasten.</string>
-    <string name="onboarding_description4">
+    <string name="intro_notification_dialog_explanation">Klasse - um Benachrichtigungen für deinen Aufenthaltsort zu erhalten, musst du zunächst <b>\"Bei Nutzung der App\"</b> auswählen.\n\nDamit die Benachrichtigungen wirklich funktionieren, musst du im Anschluss <b>\"Immer zulassen\"</b> auswählen.\nMach dir keine Sorgen, dies wird deinen Akku nicht belasten.</string>
+    <string name="intro_description4">
        Wir werden deine Standortdaten nur temporär speichern und nicht weitergeben.
     </string>
-    <string name="onboarding_description5">☀️ Etwas für wolkenlose Tage: Du kannst jetzt im Layer-Menü \"Near-Realtime\"-Satellitenbilder 🛰 ansehen.\n\n
+    <string name="intro_description5">☀️ Etwas für wolkenlose Tage: Du kannst jetzt im Layer-Menü \"Near-Realtime\"-Satellitenbilder 🛰 ansehen.\n\n
     Alle fünf Tage werden neue Bilder mit einer Auflösung von ±10m/Pixel aufgenommen.</string>
 
-    <string name="onboarding_description6">Die Benachrichtigungen 📱 (und vieles mehr) kannst du ab jetzt in den Einstellungen konfigurieren.\n\n
+    <string name="intro_description6">Die Benachrichtigungen 📱 (und vieles mehr) kannst du ab jetzt in den Einstellungen konfigurieren.\n\n
         Um die Einstellungen zu öffnen klicke in die linke obere Ecke in der App-Leiste oder öffne das Menü durch Wischen von der linken Bildschirmseite.</string>
 
-    <string name="onboarding_description7">Wusstest du schon?\n\nmeteocool ist frei und open source. Wir betreiben und entwickeln alles in unserer Freizeit. \n\n
+    <string name="intro_description7">Wusstest du schon?\n\nmeteocool ist frei und open source. Wir betreiben und entwickeln alles in unserer Freizeit. \n\n
         Wenn dir unsere App gefällt, erzähl doch deinen Freunden davon.</string>
 
-    <string name="gps_button_toast">Schlechtes GPS-Signal.</string>
     <string name="title_activity_settings">Einstellungen</string>
 
     <string name="menu_documentation">Dokumentation</string>
@@ -60,12 +60,13 @@
     <string name="map_mode_title">Nachtmodus</string>
 
     <!-- Background Dialog -->
-    <string name="gp_dialog_msg">Berechtigung für Standortzugriff wird für <b>Mich Lokalisieren</b> benötigt</string>
-    <string name="gp_dialog_msg_deactivate">Berechtigung für Standortzugriff wird für <b>Zoom nach Start</b> benötigt. Es wird der zuletzt verwendete, in der Applikation gespeicherte, Standort verwendet.</string>
-    <string name="bg_dialog_msg_deactivate">Berechtigung für Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt. Feature wird deaktiviert.</string>
-    <string name="bg_dialog_msg">Berechtigung für Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt.</string>
-    <string name="bg_dialog_pos">Öffne Einstellungen</string>
-    <string name="bg_dialog_neg">Verstanden</string>
+    <string name="dialog_msg_locate_me"><b>Berechtigung</b> Standortzugriff wird für Mich Lokalisieren benötigt</string>
+    <string name="dialog_msg_map_zoom"><b>Berechtigung</b> Standortzugriff wird für  Zoom nach Start benötigt</string>
+    <string name="dialog_msg_negative_info_map_zoom"><b>Berechtigung</b> Standortzugriff wird für <b>Zoom nach Start</b> benötigt. Es wird der zuletzt verwendete, in der Applikation gespeicherte, Standort verwendet.</string>
+    <string name="dialog_msg_negative_info_push">Berechtigung Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt. Push-Nachrichten können inkorrekt sein.</string>
+    <string name="dialog_msg_push">Berechtigung Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt.</string>
+    <string name="bg_dialog_pos">OK</string>
+    <string name="bg_dialog_neg">Abbrechen</string>
 
     <!-- Background Dialog -->
     <string name="intro_toggle_notifications">Push-Nachrichten</string>

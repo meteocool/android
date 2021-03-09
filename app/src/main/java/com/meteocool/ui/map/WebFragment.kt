@@ -99,12 +99,11 @@ class WebFragment : Fragment() {
         requestSettingsObserver = VoidEventObserver {
             Timber.d("requestSetting")
             val settings: Gson = Gson().newBuilder().create()
-            val currentSettings = mapOf<String, Boolean>(
-                Pair("darkMode", defaultSharedPreferences.getBoolean("map_mode", false)),
+            val currentSettings = mapOf(
                 Pair("mapRotation", defaultSharedPreferences.getBoolean("map_rotate", false))
             )
             Timber.d("Updated ")
-            val string = "window.injectSettings(${settings.toJson(currentSettings)});"
+            val string = "window.settings.injectSettings(${settings.toJson(currentSettings)});"
             viewDataBinding.webView.post {
                 run {
                     viewDataBinding.webView.evaluateJavascript(string) {
@@ -117,12 +116,12 @@ class WebFragment : Fragment() {
         locationObserver = Observer {
             Timber.d("Location Live Data")
             if (it.isSuccessful) {
-                if(isRequestSettingsCalled) {
+                if (isRequestSettingsCalled) {
                     Timber.d(it.data().toString())
                     updateUserLocation(it.data(), false, wasButtonLocateMePressed)
                     wasButtonLocateMePressed = false
                 }
-            }else {
+            } else {
                 if (it.error() != null && it.error() is ResolvableApiException) {
                     (it.error() as ResolvableApiException).startResolutionForResult(
                         requireActivity(),
@@ -139,7 +138,7 @@ class WebFragment : Fragment() {
         super.onStart()
         viewDataBinding.webView.addJavascriptInterface(WebAppInterface(), "Android")
 
-        if(isRequestSettingsCalled) {
+        if (isRequestSettingsCalled) {
             registerTileUpdates()
         }
 
@@ -194,7 +193,7 @@ class WebFragment : Fragment() {
         unregisterTileUpdates()
     }
 
-    private fun updateUserLocation(location: MeteocoolLocation, isZoom: Boolean, isFocus:  Boolean) {
+    private fun updateUserLocation(location: MeteocoolLocation, isZoom: Boolean, isFocus: Boolean) {
         val string =
             "window.lm.updateLocation(${location.latitude}, ${location.longitude}, ${location.accuracy}, ${isZoom}, ${isFocus});"
         viewDataBinding.webView.post {
@@ -267,7 +266,7 @@ class WebFragment : Fragment() {
             else -> {
                 EasyPermissions.requestPermissions(
                     host = this,
-                    rationale = getString(R.string.gp_dialog_msg),
+                    rationale = getString(R.string.dialog_msg_locate_me),
                     requestCode = PermUtils.LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION
                 )

@@ -1,12 +1,10 @@
 package com.meteocool.ui
 
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -28,7 +26,6 @@ import com.meteocool.network.NetworkUtils
 import com.meteocool.network.UploadWorker
 import com.meteocool.permissions.PermUtils
 import com.meteocool.preferences.SharedPrefUtils
-import com.meteocool.ui.map.LocationAlertFragment
 import com.meteocool.ui.map.WebViewModel
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
@@ -82,13 +79,33 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     override fun onStart() {
         super.onStart()
         stopBackgroundWork()
-
         if (!PermUtils.isLocationPermissionGranted(
                 this
             ) && defaultSharedPreferences.getBoolean("map_zoom", false)
         ) {
-            val alert = LocationAlertFragment(R.string.gp_dialog_msg_deactivate)
-            alert.show(supportFragmentManager, "ForegroundLocationAlterFragmentDisable")
+            val alertDialog: AlertDialog = this.let {
+                val builder = AlertDialog.Builder(it)
+                builder.apply {
+                    setMessage(R.string.dialog_msg_negative_info_map_zoom)
+                    setPositiveButton(getString(R.string.bg_dialog_pos)) { _, _ ->}
+                }
+                builder.create()
+            }
+            alertDialog.show()
+        }
+        if (!PermUtils.isBackgroundLocationPermissionGranted(
+                this
+            ) && defaultSharedPreferences.getBoolean("notification", false)
+        ) {
+            val alertDialog: AlertDialog = this.let {
+                val builder = AlertDialog.Builder(it)
+                builder.apply {
+                    setMessage(R.string.dialog_msg_negative_info_push)
+                    setPositiveButton(getString(R.string.bg_dialog_pos)) { _, _ ->}
+                }
+                builder.create()
+            }
+            alertDialog.show()
         }
     }
 
@@ -97,16 +114,6 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         Timber.d("onResume")
         MyFirebaseMessagingService.cancelNotification(this, "foreground")
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
-        if (!PermUtils.isBackgroundLocationPermissionGranted(
-                this
-            ) && defaultSharedPreferences.getBoolean("notification", false)
-        ) {
-            defaultSharedPreferences.edit()
-                .putBoolean("notification", false)
-                .apply()
-            val alert = LocationAlertFragment(R.string.bg_dialog_msg_deactivate)
-            alert.show(supportFragmentManager, "BackgroundLocationAlertFragment")
-        }
     }
 
     override fun onStop() {
@@ -169,7 +176,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                         .result
                 }
             }
-            "map_mode", "map_rotate" -> {
+            "map_rotate" -> {
                 webViewModel.sendSettings()
             }
         }
@@ -182,40 +189,6 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             webViewModel.requestForegroundLocationUpdates()
         }else{
             webViewModel.stopForegroundLocationUpdates()
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
-        Timber.d("$requestCode")
-        permissions.forEach { Timber.d(it) }
-        grantResults.forEach { Timber.d("$it") }
-        when (requestCode) {
-            PermUtils.LOCATION_BACKGROUND -> {
-                if ((grantResults.isNotEmpty() &&
-                            grantResults[0] != PackageManager.PERMISSION_GRANTED)
-                ) {
-                    defaultSharedPreferences.edit().putBoolean("notification", false).apply()
-                    val alert = LocationAlertFragment(R.string.bg_dialog_msg_deactivate)
-                    alert.show(supportFragmentManager, "BackgroundLocationAlertFragment")
-                }
-            }
-            PermUtils.LOCATION -> {
-                if ((grantResults.isNotEmpty() &&
-                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                ) {
-                    webViewModel.requestForegroundLocationUpdates()
-                }else{
-                    defaultSharedPreferences.edit().putBoolean("map_zoom", false).apply()
-                    val alert = LocationAlertFragment(R.string.gp_dialog_msg)
-                    alert.show(supportFragmentManager, "LocationAlertFragment")
-                }
-            }
         }
     }
 }
