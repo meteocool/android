@@ -102,26 +102,29 @@ class ListenableLocationUpdateWorker(private val context: Context, params: Worke
                         if (distance[0] < 499f) {
                             val locationCallback = object : LocationCallback() {
                                 override fun onLocationResult(locationResult: LocationResult?) {
-                                    if(locationResult != null) {
-                                        for (callbackLocation in locationResult.locations) {
-                                            Timber.d("Old: $savedLocation")
-                                            Timber.d("New: $callbackLocation")
-                                            Timber.d(
-                                                "Called ${
-                                                    isDistanceGreaterThan500F(
-                                                        callbackLocation,
-                                                        savedLocation
-                                                    )
-                                                }"
-                                            )
-                                            if (isDistanceGreaterThan500F(callbackLocation, savedLocation)) {
-                                                handleLocation(callbackLocation, it)
-                                            }
-                                        }
                                     fusedLocationClient.removeLocationUpdates(this)
+                                    if (locationResult != null) {
+                                        var newestLocation: Location = locationResult.locations[0]
+                                        for (callbackLocation in locationResult.locations) {
+                                            if (newestLocation.elapsedRealtimeNanos < callbackLocation.elapsedRealtimeNanos) {
+                                                newestLocation = callbackLocation
+                                            }
+
+                                        }
+                                        Timber.d("Old: $savedLocation")
+                                        Timber.d("New: $newestLocation")
+                                        val isDistanceGreaterThan500F = isDistanceGreaterThan500F(
+                                            newestLocation,
+                                            savedLocation
+                                        )
+                                        Timber.d("Called $isDistanceGreaterThan500F")
+                                        if (isDistanceGreaterThan500F) {
+                                            handleLocation(newestLocation, it)
+                                        }
+
                                         Timber.d("Called")
-                                    it.set(Result.success())
-                                    }else{
+                                        it.set(Result.success())
+                                    } else {
                                         it.set(Result.failure())
                                     }
                                 }
@@ -166,7 +169,10 @@ class ListenableLocationUpdateWorker(private val context: Context, params: Worke
         it.set(Result.success())
     }
 
-    private fun isDistanceGreaterThan500F(newLocation: Location, oldLocation: MeteocoolLocation): Boolean {
+    private fun isDistanceGreaterThan500F(
+        newLocation: Location,
+        oldLocation: MeteocoolLocation
+    ): Boolean {
         val distance = FloatArray(1)
         Location.distanceBetween(
             newLocation.latitude,
