@@ -2,16 +2,18 @@
     <!-- Notification intensity Preference -->
     <string-array name="notification_intensity_entries">
         <item>@string/level_drizzle</item>
+        <item>@string/level_light</item>
         <item>@string/level_rain</item>
         <item>@string/level_heavy_rain</item>
         <item>@string/level_hail</item>
     </string-array>
 
     <string-array name="notification_intensity_values">
-        <item>18</item>
-        <item>25</item>
-        <item>40</item>
-        <item>53</item>
+        <item>14</item>
+        <item>20</item>
+        <item>26</item>
+        <item>36</item>
+        <item>41</item>
     </string-array>
 
     <!-- Reply Preference -->

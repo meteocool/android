@@ -32,7 +32,7 @@
                 app:title="@string/notification_push_level_title"
                 app:entries="@array/notification_intensity_entries"
                 app:entryValues="@array/notification_intensity_values"
-                app:defaultValue="18"
+                app:defaultValue="20"
                 app:useSimpleSummaryProvider="true"
                 app:dependency="notification"/>
 

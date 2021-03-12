@@ -48,6 +48,7 @@
     <string name="notification_push_title">Push-Nachrichten</string>
     <string name="notification_push_level_title">Benachrichtigen ab…</string>
     <string name="level_drizzle">Nieselregen</string>
+    <string name="level_light">Leichtem Regen</string>
     <string name="level_rain">Regen</string>
     <string name="level_heavy_rain">Starkem Regen</string>
     <string name="level_hail">Hagel</string>
