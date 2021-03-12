@@ -114,6 +114,19 @@ class SettingsFragment() : PreferenceFragmentCompat() {
             true
         }
 
+        findPreference<Preference>("share")?.setOnPreferenceClickListener {
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.meteocool")
+                type = "text/html"
+            }
+
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
+
+            true
+        }
+
         findPreference<SwitchPreferenceCompat>("map_zoom")?.setOnPreferenceChangeListener { preference, newValue ->
             Timber.d("$preference, $newValue")
             if (newValue.toString().toBoolean()) {
