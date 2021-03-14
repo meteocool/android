@@ -176,6 +176,12 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                         .result
                 }
             }
+            "notification_details", "notification_intensity", "notification_time" -> {
+                val data = UploadWorker.createDataForLocationPost(defaultSharedPreferences, SharedPrefUtils.getSavedLocationResult(defaultSharedPreferences))
+                WorkManager.getInstance(this)
+                    .enqueue(UploadWorker.createRequest(data))
+                    .result
+            }
             "map_rotate" -> {
                 webViewModel.sendSettings()
             }

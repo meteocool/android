@@ -100,7 +100,7 @@ class WebFragment : Fragment() {
             Timber.d("requestSetting")
             val settings: Gson = Gson().newBuilder().create()
             val currentSettings = mapOf(
-                Pair("mapRotation", defaultSharedPreferences.getBoolean("map_rotate", false))
+                Pair("mapRotation", defaultSharedPreferences.getBoolean("map_rotate", false)),
             )
             Timber.d("Updated ")
             val string = "window.settings.injectSettings(${settings.toJson(currentSettings)});"

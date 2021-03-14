@@ -104,6 +104,7 @@ class UploadWorker(private val context: Context, params: WorkerParameters) :
                     Pair("source", "android"),
                     Pair("ahead", sharedPreferences.getString("notification_time", "15")!!.toInt()), //TODO
                     Pair("intensity", sharedPreferences.getString("notification_intensity", "10")!!.toInt()), //TODO
+                    Pair("details", sharedPreferences.getBoolean("notification_details", false)), //TODO
                     Pair("lang", Locale.getDefault().language)
                 )
             )

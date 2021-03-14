@@ -44,6 +44,7 @@
 
     <!-- Push Preferences -->
     <string name="notification_push_title">Notifications</string>
+    <string name="notification_push_details">Details</string>
     <string name="notification_push_level_title">Notification From…</string>
     <string name="level_drizzle">Drizzle</string>
     <string name="level_light">Light Rain</string>

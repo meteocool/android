@@ -22,10 +22,18 @@
             app:icon="@drawable/ic_notification"
         app:title="@string/notification_header">
 
+
+
         <SwitchPreferenceCompat
-            app:key="notification"
-            app:title="@string/notification_push_title"
-            app:defaultValue="false"/>
+                app:key="notification"
+                app:title="@string/notification_push_title"
+                app:defaultValue="false"/>
+
+        <SwitchPreferenceCompat
+                app:key="notification_details"
+                app:title="@string/notification_push_details"
+                app:defaultValue="false"
+                app:dependency="notification"/>
 
         <ListPreference
                 app:key="notification_intensity"
