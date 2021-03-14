@@ -13,6 +13,10 @@ import androidx.lifecycle.Observer
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.installations.FirebaseInstallations
+import com.google.firebase.messaging.FirebaseMessaging
 import com.meteocool.R
 import com.meteocool.injection.InjectorUtils
 import com.meteocool.network.NetworkUtils
@@ -97,12 +101,20 @@ class SettingsFragment() : PreferenceFragmentCompat() {
 
     private fun registerPreferenceClickListener() {
         findPreference<Preference>("feedback")?.setOnPreferenceClickListener {
-            handleExternalLink(
-                getString(R.string.feedback_url) + defaultSharedPreferences.getString(
-                    "fb_token",
-                    "no token"
-                )!!
-            )
+            val tokenInShared = SharedPrefUtils.getFirebaseToken(defaultSharedPreferences)
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    handleExternalLink(
+                        getString(R.string.feedback_url) +  "\n" + "Token fetch failed\nShared-Token: $tokenInShared"
+                    )
+                    return@OnCompleteListener
+                }
+
+                val token = task.result
+                handleExternalLink(
+                    getString(R.string.feedback_url) +  "\n" + token +"\nShared-Token: $tokenInShared"
+                )
+            })
             true
         }
         findPreference<Preference>("github")?.setOnPreferenceClickListener {

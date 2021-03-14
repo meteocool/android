@@ -71,7 +71,7 @@
 
     <!-- Background Dialog -->
     <string name="intro_toggle_notifications">Push-Nachrichten</string>
-    <string name="feedback_url"><![CDATA[mailto:support@meteocool.com?subject=Android%20App%20Feedback&body=%0A%0A—%0ABitte%20geben%20Sie%20beim%20Melden%20von%20Problemen%20folgende%20Informationen%20an%21%0A%0ADebug-Token:%2]]></string>
+    <string name="feedback_url"><![CDATA[mailto:support@meteocool.com?subject=Android%20App%20Feedback&body=%0A%0A—%0ABitte%20geben%20Sie%20beim%20Melden%20von%20Problemen%20folgende%20Informationen%20an%21%0A%0AFCM-Token:]]></string>
 
 
 </resources>
