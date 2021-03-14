@@ -138,7 +138,6 @@ class ListenableLocationUpdateWorker(private val context: Context, params: Worke
                             handleLocation(lastLocation, it)
                         }
                     } else {
-                        //TODO Request updates, but maybe not even needed.
                         it.set(Result.retry())
                     }
                 }
@@ -148,6 +147,11 @@ class ListenableLocationUpdateWorker(private val context: Context, params: Worke
         }
     }
 
+    /**
+     * Persist location to database and upload it to the server.
+     * @param location to persist and upload
+     * @param it result for the worker
+     */
     private fun handleLocation(
         location: Location,
         it: CallbackToFutureAdapter.Completer<Result>
