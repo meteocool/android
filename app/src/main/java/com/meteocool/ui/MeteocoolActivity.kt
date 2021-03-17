@@ -195,6 +195,14 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                     WorkManager.getInstance(this)
                         .enqueue(UploadWorker.createRequest(data))
                         .result
+                }else{
+                    val data = UploadWorker.createDataForLocationPost(
+                        defaultSharedPreferences,
+                        SharedPrefUtils.getSavedLocationResult(defaultSharedPreferences)
+                    )
+                    WorkManager.getInstance(this)
+                        .enqueue(UploadWorker.createRequest(data))
+                        .result
                 }
             }
             "notification_details", "notification_intensity", "notification_time" -> {
