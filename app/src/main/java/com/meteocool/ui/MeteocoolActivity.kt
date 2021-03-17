@@ -121,7 +121,9 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     override fun onResume() {
         super.onResume()
         Timber.d("onResume")
-        MyFirebaseMessagingService.cancelNotification(this, "foreground")
+        if(defaultSharedPreferences.getBoolean("notification", false)) {
+            MyFirebaseMessagingService.cancelNotification(this, "foreground")
+        }
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
     }
 
