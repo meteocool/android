@@ -19,6 +19,7 @@ import androidx.work.*
 import com.meteocool.R
 import com.meteocool.databinding.ActivityMeteocoolBinding
 import com.meteocool.firebase.MyFirebaseMessagingService
+import com.meteocool.firebase.NLService
 import com.meteocool.preferences.SettingsFragment
 import com.meteocool.injection.InjectorUtils
 import com.meteocool.location.ListenableLocationUpdateWorker
@@ -41,7 +42,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         InjectorUtils.provideWebViewModelFactory(application)
     }
 
-    private lateinit var binding : ActivityMeteocoolBinding
+    private lateinit var binding: ActivityMeteocoolBinding
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -59,16 +60,24 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             .replace(R.id.settings, SettingsFragment())
             .commit()
 
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.error), binding.drawerLayout)
+        appBarConfiguration =
+            AppBarConfiguration(setOf(R.id.nav_home, R.id.error), binding.drawerLayout)
         val navController = findNavController(R.id.nav_host_fragment)
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navDrawerMain.setupWithNavController(navController)
 
 
-        val uploadLocation = UploadWorker.createRequest(UploadWorker.createDataForLocationPost(defaultSharedPreferences, SharedPrefUtils.getSavedLocationResult(defaultSharedPreferences)))
+        val uploadLocation = UploadWorker.createRequest(
+            UploadWorker.createDataForLocationPost(
+                defaultSharedPreferences,
+                SharedPrefUtils.getSavedLocationResult(defaultSharedPreferences)
+            )
+        )
         WorkManager.getInstance(this)
             .enqueue(uploadLocation)
             .result
+
+        startService(Intent(this, NLService::class.java))
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -87,7 +96,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                 val builder = AlertDialog.Builder(it)
                 builder.apply {
                     setMessage(R.string.dialog_msg_negative_info_map_zoom)
-                    setPositiveButton(getString(R.string.bg_dialog_pos)) { _, _ ->}
+                    setPositiveButton(getString(R.string.bg_dialog_pos)) { _, _ -> }
                 }
                 builder.create()
             }
@@ -101,7 +110,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                 val builder = AlertDialog.Builder(it)
                 builder.apply {
                     setMessage(R.string.dialog_msg_negative_info_push)
-                    setPositiveButton(getString(R.string.bg_dialog_pos)) { _, _ ->}
+                    setPositiveButton(getString(R.string.bg_dialog_pos)) { _, _ -> }
                 }
                 builder.create()
             }
@@ -118,7 +127,11 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
 
     override fun onStop() {
         super.onStop()
-        if(PermUtils.isBackgroundLocationPermissionGranted(this) && defaultSharedPreferences.getBoolean("notification", false)){
+        if (PermUtils.isBackgroundLocationPermissionGranted(this) && defaultSharedPreferences.getBoolean(
+                "notification",
+                false
+            )
+        ) {
             startBackgroundWork()
         }
     }
@@ -128,24 +141,24 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
     }
 
-    private fun startBackgroundWork(){
+    private fun startBackgroundWork() {
         Timber.d("Start background work")
         val uploadWorkRequest: PeriodicWorkRequest =
             PeriodicWorkRequestBuilder<ListenableLocationUpdateWorker>(
                 15, TimeUnit.MINUTES
             )
-                .setBackoffCriteria(
-                    BackoffPolicy.LINEAR, 5,
-                    TimeUnit.MINUTES
-                )
                 .build()
 
         WorkManager
             .getInstance(this)
-            .enqueueUniquePeriodicWork(PERIODIC_LOCATION_TAG, ExistingPeriodicWorkPolicy.REPLACE, uploadWorkRequest)
+            .enqueueUniquePeriodicWork(
+                PERIODIC_LOCATION_TAG,
+                ExistingPeriodicWorkPolicy.REPLACE,
+                uploadWorkRequest
+            )
     }
 
-    private fun stopBackgroundWork(){
+    private fun stopBackgroundWork() {
         Timber.d("Stop background work")
         WorkManager
             .getInstance(this)
@@ -168,16 +181,25 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                 val isNotificationON = sharedPreferences!!.getBoolean(key, false)
                 Timber.i("Preference value $key was updated to $isNotificationON ")
                 if (!isNotificationON) {
-                    val data = UploadWorker.createInputData(mapOf(
-                        Pair("url",  NetworkUtils.POST_UNREGISTER_TOKEN.toString()),
-                        Pair("token", SharedPrefUtils.getFirebaseToken(defaultSharedPreferences))))
+                    val data = UploadWorker.createInputData(
+                        mapOf(
+                            Pair("url", NetworkUtils.POST_UNREGISTER_TOKEN.toString()),
+                            Pair(
+                                "token",
+                                SharedPrefUtils.getFirebaseToken(defaultSharedPreferences)
+                            )
+                        )
+                    )
                     WorkManager.getInstance(this)
                         .enqueue(UploadWorker.createRequest(data))
                         .result
                 }
             }
             "notification_details", "notification_intensity", "notification_time" -> {
-                val data = UploadWorker.createDataForLocationPost(defaultSharedPreferences, SharedPrefUtils.getSavedLocationResult(defaultSharedPreferences))
+                val data = UploadWorker.createDataForLocationPost(
+                    defaultSharedPreferences,
+                    SharedPrefUtils.getSavedLocationResult(defaultSharedPreferences)
+                )
                 WorkManager.getInstance(this)
                     .enqueue(UploadWorker.createRequest(data))
                     .result
@@ -191,9 +213,9 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Timber.d("Result $requestCode | $resultCode")
-        if(resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
             webViewModel.requestForegroundLocationUpdates()
-        }else{
+        } else {
             webViewModel.stopForegroundLocationUpdates()
         }
     }
