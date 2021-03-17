@@ -30,17 +30,18 @@ class FusedLocationService(context: Context) : ForegroundLocationService(context
     private val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
 
-    private var resultAsLiveData : MutableLiveData<Resource<MeteocoolLocation>> = MutableLiveData(Resource(SharedPrefUtils.getSavedLocationResult(context.defaultSharedPreferences)))
+    private var resultAsLiveData: MutableLiveData<Resource<MeteocoolLocation>> =
+        MutableLiveData(Resource(SharedPrefUtils.getSavedLocationResult(context.defaultSharedPreferences)))
 
 
     private var locationCallback: LocationCallback
-    private lateinit var job : Job
+    private lateinit var job: Job
 
-    init{
+    init {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult ?: return
-                for (location in locationResult.locations){
+                for (location in locationResult.locations) {
                     updateLocationIfBetter(location)
                 }
             }
@@ -67,11 +68,14 @@ class FusedLocationService(context: Context) : ForegroundLocationService(context
             val task: Task<LocationSettingsResponse> =
                 client.checkLocationSettings(builder.build())
             task.addOnSuccessListener {
-                mFusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener { location : Location? ->
+                mFusedLocationClient.getCurrentLocation(
+                    LocationRequest.PRIORITY_HIGH_ACCURACY,
+                    null
+                ).addOnSuccessListener { location: Location? ->
                     updateLocationIfBetter(location)
                 }
                 val test = Looper.getMainLooper()
-                job =  CoroutineScope(Dispatchers.Default).launch{
+                job = CoroutineScope(Dispatchers.Default).launch {
                     val looper = Looper.getMainLooper()
                     Timber.d("Starting location updates $looper $test")
                     mFusedLocationClient.requestLocationUpdates(
@@ -100,28 +104,46 @@ class FusedLocationService(context: Context) : ForegroundLocationService(context
     override fun stopLocationUpdates() {
         Timber.d("Stopped")
         mFusedLocationClient.removeLocationUpdates(locationCallback)
-        if(this::job.isInitialized) {
+        if (this::job.isInitialized) {
             job.cancel()
         }
     }
 
     override fun liveData() = resultAsLiveData
 
-    private fun updateLocationIfBetter(location : Location?){
+    private fun updateLocationIfBetter(location: Location?) {
         val preferences = context.defaultSharedPreferences
         val lastLocation = SharedPrefUtils.getSavedLocationResult(preferences)
         if (location != null) {
             val currentLocation = MeteocoolLocationFactory.new(location)
             val distance = FloatArray(1)
-            Location.distanceBetween(location.latitude, location.longitude, lastLocation.latitude, lastLocation.longitude, distance)
+            Location.distanceBetween(
+                location.latitude,
+                location.longitude,
+                lastLocation.latitude,
+                lastLocation.longitude,
+                distance
+            )
             Timber.d("Distance ${distance[0]}")
-            if(distance[0] > 499f){
+            if (distance[0] > 499f) {
                 Timber.d("Update location to $location")
                 resultAsLiveData.value = Resource(currentLocation)
-                val uploadLocation = UploadWorker.createRequest(UploadWorker.createDataForLocationPost(preferences, currentLocation))
-                val persistLocation = LocationPersistenceWorker.createRequest(LocationPersistenceWorker.createMeteocooLocationData(location))
+                if (preferences.getBoolean("notification", false)) {
+                    val uploadLocation = UploadWorker.createRequest(
+                        UploadWorker.createDataForLocationPost(
+                            preferences,
+                            currentLocation
+                        )
+                    )
+                    WorkManager.getInstance(context)
+                        .enqueue(listOf(uploadLocation))
+                        .result
+                }
+                val persistLocation = LocationPersistenceWorker.createRequest(
+                    LocationPersistenceWorker.createMeteocooLocationData(location)
+                )
                 WorkManager.getInstance(context)
-                    .enqueue(listOf(uploadLocation, persistLocation))
+                    .enqueue(listOf(persistLocation))
                     .result
             }
         }
