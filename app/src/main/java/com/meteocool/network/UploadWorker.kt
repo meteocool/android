@@ -111,7 +111,11 @@ class UploadWorker(private val context: Context, params: WorkerParameters) :
         }
 
         fun createRequest(inputData: Data): OneTimeWorkRequest {
+            val constraints: Constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
             return OneTimeWorkRequestBuilder<UploadWorker>()
+                .setConstraints(constraints)
                 .setInputData(inputData)
                 .build()
         }
