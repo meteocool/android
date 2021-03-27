@@ -19,7 +19,6 @@ import androidx.work.*
 import com.meteocool.R
 import com.meteocool.databinding.ActivityMeteocoolBinding
 import com.meteocool.firebase.MyFirebaseMessagingService
-import com.meteocool.firebase.NLService
 import com.meteocool.preferences.SettingsFragment
 import com.meteocool.injection.InjectorUtils
 import com.meteocool.location.ListenableLocationUpdateWorker
@@ -77,7 +76,6 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             .enqueue(uploadLocation)
             .result
 
-        startService(Intent(this, NLService::class.java))
     }
 
     override fun onSupportNavigateUp(): Boolean {
