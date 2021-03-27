@@ -87,10 +87,6 @@ class WebFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        webViewModel.url.observe(viewLifecycleOwner, { newUrl ->
-            viewDataBinding.webView.stopLoading()
-            viewDataBinding.webView.loadUrl(newUrl)
-        })
 
         viewDataBinding.locateMe.setOnClickListener {
             locateMe()
@@ -112,6 +108,11 @@ class WebFragment : Fragment() {
                 }
             }
         }
+
+        webViewModel.url.observe(viewLifecycleOwner, { newUrl ->
+            viewDataBinding.webView.stopLoading()
+            viewDataBinding.webView.loadUrl(newUrl)
+        })
 
         locationObserver = Observer {
             Timber.d("Location Live Data")
