@@ -17,7 +17,7 @@ class LocationPersistenceWorker(private val context: Context, params: WorkerPara
         val meteocoolLocation = MeteocoolLocationFactory.new(inputData.keyValueMap)
         Timber.d("$meteocoolLocation")
         SharedPrefUtils.saveResults(context.defaultSharedPreferences, meteocoolLocation)
-        insertOrUpdateLocation(meteocoolLocation)
+//        insertOrUpdateLocation(meteocoolLocation)
         return Result.success()
     }
 
