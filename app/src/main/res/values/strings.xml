@@ -61,6 +61,10 @@
     <string name="map_rotate_title">Rotation</string>
     <string name="map_mode_title">Nachtmodus</string>
 
+    <!-- About Preferences -->
+    <string name="share_title">Teilen</string>
+    <string name="privacy_title">Datenschutz</string>
+
     <!-- Background Dialog -->
     <string name="dialog_msg_locate_me"><b>Berechtigung</b> Standortzugriff wird für <b>Mich Lokalisieren</b> benötigt</string>
     <string name="dialog_msg_map_zoom"><b>Berechtigung</b> Standortzugriff wird für <b>Zoom nach Start</b> benötigt</string>

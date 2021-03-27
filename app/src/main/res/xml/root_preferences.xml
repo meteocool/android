@@ -98,12 +98,17 @@
         <Preference
                 app:key="share"
                 app:icon="@drawable/ic_share"
-                app:title="Teilen">
+                app:title="@string/share_title">
         </Preference>
 
         <Preference
                 app:key="feedback"
                 app:title="Feedback">
+        </Preference>
+
+        <Preference
+                app:key="privacy"
+                app:title="@string/privacy_title">
         </Preference>
 
         <Preference

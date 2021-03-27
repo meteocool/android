@@ -14,8 +14,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import com.meteocool.R
 import com.meteocool.injection.InjectorUtils
@@ -123,6 +121,11 @@ class SettingsFragment() : PreferenceFragmentCompat() {
         }
         findPreference<Preference>("twitter")?.setOnPreferenceClickListener {
             handleExternalLink(NetworkUtils.TWITTER_URL)
+            true
+        }
+
+        findPreference<Preference>("privacy")?.setOnPreferenceClickListener {
+            handleExternalLink(NetworkUtils.PRIVACY_URL)
             true
         }
 
