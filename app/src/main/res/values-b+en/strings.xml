@@ -14,23 +14,23 @@
     <string name="intro_title4">Location Access</string>
     <string name="intro_title7">Now Go Outside!</string>
 
-    <string name="intro_description1">The meteocool project is an ongoing effort to make freely available meteorological data useful to everyone.\n\n
-        We process and aggregate data from different sources and try to visualize them in an intuitive way.</string>
+    <string name="intro_description1">meteocool is an ongoing effort to make freely available meteorological data useful to everyone.\n\n
+        We process and aggregate data from different sources and try to visualize them intuitively.</string>
     <string name="intro_description2">We use a super-accurate forecast model (a so-called \"nowcast\") to predict the path and extent of rain clouds based on factors like wind, air pressure and lightning activity.\n\n
-        Obviously, longer times are less accurate. But in our experience, at least the first 45 minutes are pretty spot-on.</string>
+        Longer time-frames are less accurate, but in our experience at least the first 45 minutes are spot-on.</string>
     <string name="intro_description3">Based on this data, do you want us to inform you about upcoming rain at your location?</string>
-    <string name="intro_notification_dialog_explanation">Nice! For notifications to work, you first need to select <b>\"Allow only while using the app\"</b> in the following dialog.\n\nAfterwards you need to select <b>\"Allow all the time\"</b>.\nDon\'t worry, this won\'t drain your battery.</string>
+    <string name="intro_notification_dialog_explanation">Nice! For notifications to work, you need to select <b>\"Allow only while using the app\"</b> in the following dialog.\n\nAfterwards you need to select <b>\"Allow all the time\"</b>.\nThis won\'t drain your battery.</string>
     <string name="intro_description4">
-        We only store your location data temporarily and will never pass your data on.
+        We don't store any data, you can find more information in our privacy policy.
     </string>
     <string name="intro_description5">☀️ Something for cloudless days: A new “near-realtime” satellite layer is now available from the layers menu!\n\n
         🛰 Satellite overpasses are expected every 5 days with a ground resolution ±10m/pixel.</string>
 
-    <string name="intro_description6">Notifications 📱 (among other things) can now be configured in the Settings menu.\n\n
-    To open the Settings menu, click on the top-left corner of the toolbar or swipe it in from the left screen side.</string>
+    <string name="intro_description6">Notifications 📱 and much more can be configured in the Settings menu.\n\n
+    To open the Settings menu, click on the top-left corner of the toolbar or swipe it in from the left side of the screen.</string>
 
     <string name="intro_description7">Did you know?\n\nmeteocool is free and open source. It\'s run and built by volunteers in their leisure time.\n\n
-        If you like our App, please tell your friends!</string>
+        We appreciate any feedback and recommendations.</string>
 
 
     <string name="title_activity_settings">Settings</string>
@@ -63,8 +63,8 @@
     <!-- Background Dialog -->
     <string name="dialog_msg_locate_me">Location permission is required for <b>locate me</b> to work</string>
     <string name="dialog_msg_map_zoom">Location permission is required for <b>Zoom after start</b> to work</string>
-    <string name="dialog_msg_negative_info_map_zoom">Permission for location access is required for <b>Zoom after start</b>. The last used location stored in the application is used.</string>
-    <string name="dialog_msg_negative_info_push">Location permission <b>Allow all the time</b> is required for notifications to work. Notification may be incorrect.</string>
+    <string name="dialog_msg_negative_info_map_zoom">Permission for location access is required for <b>Zoom after start</b>. The last known location is used.</string>
+    <string name="dialog_msg_negative_info_push">Location permission <b>Allow all the time</b> is required for notifications to work.</string>
     <string name="dialog_msg_push">Location permission <b>Allow all the time</b> is required for notifications to work.</string>
     <string name="bg_dialog_pos">OK</string>
     <string name="bg_dialog_neg">Cancel</string>
