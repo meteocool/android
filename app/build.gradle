@@ -19,8 +19,8 @@ android {
         applicationId "com.meteocool"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 28
-        versionName "2.1g"
+        versionCode 29
+        versionName "2.1f"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
