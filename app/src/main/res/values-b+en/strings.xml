@@ -52,8 +52,7 @@
     <string name="level_heavy_rain">Heavy Rain</string>
     <string name="level_hail">Hail</string>
 
-    <string name="notification_time_title">Notification Period</string>
-
+    <string name="notification_time_title">Time window smaller, equal…</string>
 
     <!-- Map Preferences -->
     <string name="map_zoom_title">Zoom After Start</string>
