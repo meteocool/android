@@ -10,7 +10,7 @@
     <string name="intro_title1">Hallo!</string>
     <string name="intro_title2">Kurzzeit-Vorhersage</string>
     <string name="intro_title3">Benachrichtigungen</string>
-    <string name="intro_title4">Standort freigeben</string>
+    <string name="intro_title4">Datenschutzbestimmung Standort</string>
     <string name="intro_title7">Ab nach draußen!</string>
 
     <string name="intro_description1">Meteorologische Daten für alle verständlich zu gestalten - das ist das Ziel von meteocool.\n\n
@@ -23,7 +23,7 @@
     </string>
     <string name="intro_notification_dialog_explanation">Klasse - um Benachrichtigungen für deinen Aufenthaltsort zu erhalten, musst du zunächst <b>\"Bei Nutzung der App\"</b> auswählen.\n\nDamit die Benachrichtigungen wirklich funktionieren, musst du im Anschluss <b>\"Immer zulassen\"</b> auswählen.\nMach dir keine Sorgen, dies wird die Batterielaufzeit nicht belasten.</string>
     <string name="intro_description4">
-       Wir speichern keine Daten, mehr dazu in unserer Datenschutzerklärung.
+       Wir speichern keine Daten, mehr dazu in unserer <a href="https://app.ng.meteocool.com/privacy.html">Datenschutzerklärung</a>.
     </string>
     <string name="intro_description5">☀️ Etwas für wolkenlose Tage: Du kannst jetzt im Layer-Menü \"Near-Realtime\"-Satellitenbilder 🛰 ansehen.\n\n
     Alle fünf Tage werden neue Bilder mit einer Auflösung von ±10m/Pixel aufgenommen.</string>

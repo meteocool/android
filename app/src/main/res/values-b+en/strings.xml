@@ -11,7 +11,7 @@
     <string name="intro_title1">Hi there!</string>
     <string name="intro_title2">Nowcasting</string>
     <string name="intro_title3">Notifications</string>
-    <string name="intro_title4">Location Access</string>
+    <string name="intro_title4">Privacy Policy for Location Access</string>
     <string name="intro_title7">Now Go Outside!</string>
 
     <string name="intro_description1">meteocool is an ongoing effort to make freely available meteorological data useful to everyone.\n\n
@@ -21,7 +21,7 @@
     <string name="intro_description3">Based on this data, do you want us to inform you about upcoming rain at your location?</string>
     <string name="intro_notification_dialog_explanation">Nice! For notifications to work, you need to select <b>\"Allow only while using the app\"</b> in the following dialog.\n\nAfterwards you need to select <b>\"Allow all the time\"</b>.\nThis won\'t drain your battery.</string>
     <string name="intro_description4">
-        We don\'t store any data, you can find more information in our privacy policy.
+        We don\'t store any data, you can find more information in our <a href="https://app.ng.meteocool.com/privacy.html">privacy policy</a>.
     </string>
     <string name="intro_description5">☀️ Something for cloudless days: A new “near-realtime” satellite layer is now available from the layers menu!\n\n
         🛰 Satellite overpasses are expected every 5 days with a ground resolution ±10m/pixel.</string>

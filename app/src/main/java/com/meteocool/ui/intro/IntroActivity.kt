@@ -45,13 +45,8 @@ class IntroActivity : AppIntro2() {
             IntroEnableNotificationsFragment.newInstance()
         )
 
-        addSlide(
-            AppIntroFragment.newInstance(
-                title = getString(R.string.intro_title4),
-                description = getString(R.string.intro_description4),
-                imageDrawable = R.drawable.intro_location,
-            )
-        )
+        /* Custom slide with privacy policy link. Umbrella (Location)  */
+        addSlide(IntroPrivacyPolicyFragment.newInstance())
 
         addSlide(
             AppIntroFragment.newInstance(
