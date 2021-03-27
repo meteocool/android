@@ -138,7 +138,7 @@ class ListenableLocationUpdateWorker(private val context: Context, params: Worke
                             handleLocation(lastLocation, it)
                         }
                     } else {
-                        it.set(Result.retry())
+                        it.set(Result.failure())
                     }
                 }
             } catch (e: SecurityException) {
