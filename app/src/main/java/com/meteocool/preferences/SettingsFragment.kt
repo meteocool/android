@@ -2,6 +2,7 @@ package com.meteocool.preferences
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -20,8 +21,9 @@ import com.meteocool.injection.InjectorUtils
 import com.meteocool.network.NetworkUtils
 import com.meteocool.permissions.PermUtils
 import com.meteocool.ui.map.WebViewModel
-import timber.log.Timber
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
+import timber.log.Timber
+
 
 /**
  * Shows the settings from meteocool.
@@ -103,14 +105,25 @@ class SettingsFragment() : PreferenceFragmentCompat() {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
                     handleExternalLink(
-                        getString(R.string.feedback_url) +  "\n" + "Token fetch failed\nShared-Token: $tokenInShared"
+                        getString(R.string.feedback_url) + "\n" + "Token fetch failed\nShared-Token: $tokenInShared"
                     )
                     return@OnCompleteListener
                 }
 
                 val token = task.result
+                var version: String = ""
+                try {
+                    val pInfo = requireContext().packageManager.getPackageInfo(
+                        requireContext().packageName,
+                        0
+                    )
+                    version = pInfo.versionName
+                } catch (e: PackageManager.NameNotFoundException) {
+                    e.printStackTrace()
+                }
                 handleExternalLink(
-                    getString(R.string.feedback_url) +  "\n" + token +"\nShared-Token: $tokenInShared"
+                    getString(R.string.feedback_url) + "\n" + token + "\nShared-Token: $tokenInShared" + "\n" + version
+
                 )
             })
             true
@@ -132,7 +145,10 @@ class SettingsFragment() : PreferenceFragmentCompat() {
         findPreference<Preference>("share")?.setOnPreferenceClickListener {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.meteocool")
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    "https://play.google.com/store/apps/details?id=com.meteocool"
+                )
                 type = "text/html"
             }
 
