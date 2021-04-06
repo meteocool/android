@@ -109,6 +109,8 @@ class WebFragment : Fragment() {
             }
         }
 
+        viewDataBinding.webView.addJavascriptInterface(WebAppInterface(), "Android")
+
         webViewModel.url.observe(viewLifecycleOwner, { newUrl ->
             viewDataBinding.webView.stopLoading()
             viewDataBinding.webView.loadUrl(newUrl)
@@ -137,7 +139,7 @@ class WebFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        viewDataBinding.webView.addJavascriptInterface(WebAppInterface(), "Android")
+
 
         if (isRequestSettingsCalled) {
             registerTileUpdates()
@@ -189,7 +191,6 @@ class WebFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        viewDataBinding.webView.removeJavascriptInterface("Android")
         webViewModel.stopForegroundLocationUpdates()
         unregisterTileUpdates()
     }
