@@ -2,8 +2,11 @@ package com.meteocool.preferences
 
 import android.content.SharedPreferences
 import android.location.Location
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.meteocool.location.MeteocoolLocation
 import org.jetbrains.anko.defaultSharedPreferences
+import timber.log.Timber
 
 /**
  * Helper
@@ -36,7 +39,19 @@ class SharedPrefUtils {
         }
 
         fun getFirebaseToken(sharedPrefs: SharedPreferences): String {
-            return sharedPrefs.getString(KEY_FIREBASE_TOKEN, "no token")!!
+            var token= sharedPrefs.getString(KEY_FIREBASE_TOKEN, "no token")!!
+            if(token == "no token") {
+                FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        Timber.w(task.exception, "Fetching FCM registration token failed")
+                        return@OnCompleteListener
+                    }
+                    // Get new FCM registration token
+                    token = task.result
+                    saveFirebaseToken(sharedPrefs, token)
+                })
+            }
+            return token
         }
 
         /**
