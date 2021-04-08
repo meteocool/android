@@ -11,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -26,8 +28,6 @@ import com.meteocool.network.NetworkUtils
 import com.meteocool.permissions.PermUtils
 import com.meteocool.preferences.SharedPrefUtils
 import com.meteocool.view.*
-import com.vmadalin.easypermissions.EasyPermissions
-import com.vmadalin.easypermissions.annotations.AfterPermissionGranted
 import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import timber.log.Timber
@@ -49,8 +49,23 @@ class WebFragment : Fragment() {
     private var isRequestSettingsCalled: Boolean = false
     private var wasButtonLocateMePressed: Boolean = false
 
+    private lateinit var requestLocationPermissionLauncher: ActivityResultLauncher<String>
+
     private val webViewModel: WebViewModel by activityViewModels {
         InjectorUtils.provideWebViewModelFactory(requireActivity().application)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requestLocationPermissionLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { isGranted: Boolean ->
+                Timber.d("$isGranted")
+                if (isGranted) {
+                    locateMe()
+                }
+            }
     }
 
     override fun onCreateView(
@@ -121,7 +136,11 @@ class WebFragment : Fragment() {
             if (it.isSuccessful) {
                 if (isRequestSettingsCalled) {
                     Timber.d(it.data().toString())
-                    updateUserLocation(it.data(), false, wasButtonLocateMePressed)
+                    updateUserLocation(
+                        it.data(),
+                        wasButtonLocateMePressed,
+                        wasButtonLocateMePressed
+                    )
                     wasButtonLocateMePressed = false
                 }
             } else {
@@ -145,11 +164,7 @@ class WebFragment : Fragment() {
             registerTileUpdates()
         }
 
-        if (EasyPermissions.hasPermissions(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-        ) {
+        if (PermUtils.isLocationPermissionGranted(requireContext())) {
             webViewModel.requestForegroundLocationUpdates()
         }
     }
@@ -252,24 +267,19 @@ class WebFragment : Fragment() {
         }
     }
 
-    @AfterPermissionGranted(PermUtils.LOCATION)
     private fun locateMe() {
         Timber.d("locateMe")
+        wasButtonLocateMePressed = true
         when (PackageManager.PERMISSION_GRANTED) {
             ContextCompat.checkSelfPermission(
                 requireActivity().applicationContext,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) -> {
                 Timber.d("Granted")
-                //TODO? Fix the zoom on cached location if location is turned off
                 webViewModel.requestForegroundLocationUpdates()
-                zoomOnLastKnownLocation()
             }
             else -> {
-                EasyPermissions.requestPermissions(
-                    host = this,
-                    rationale = getString(R.string.dialog_msg_locate_me),
-                    requestCode = PermUtils.LOCATION,
+                requestLocationPermissionLauncher.launch(
                     Manifest.permission.ACCESS_FINE_LOCATION
                 )
             }

@@ -127,7 +127,6 @@ class FusedLocationService(context: Context) : ForegroundLocationService(context
             Timber.d("Distance ${distance[0]}")
             if (distance[0] > 499f) {
                 Timber.d("Update location to $location")
-                resultAsLiveData.value = Resource(currentLocation)
                 if (preferences.getBoolean("notification", false)) {
                     val uploadLocation = UploadWorker.createRequest(
                         UploadWorker.createDataForLocationPost(
@@ -139,13 +138,14 @@ class FusedLocationService(context: Context) : ForegroundLocationService(context
                         .enqueue(listOf(uploadLocation))
                         .result
                 }
-                val persistLocation = LocationPersistenceWorker.createRequest(
-                    LocationPersistenceWorker.createMeteocooLocationData(location)
-                )
-                WorkManager.getInstance(context)
-                    .enqueue(listOf(persistLocation))
-                    .result
             }
+            resultAsLiveData.value = Resource(currentLocation)
+            val persistLocation = LocationPersistenceWorker.createRequest(
+                LocationPersistenceWorker.createMeteocooLocationData(location)
+            )
+            WorkManager.getInstance(context)
+                .enqueue(listOf(persistLocation))
+                .result
         }
     }
 

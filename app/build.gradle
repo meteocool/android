@@ -111,9 +111,6 @@ dependencies {
     // Kotlin
     implementation "androidx.activity:activity-ktx:1.2.0"
 
-    // For developers using AndroidX in their applications
-    implementation 'com.vmadalin:easypermissions-ktx:0.1.0'
-
     // Navigation graph
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
