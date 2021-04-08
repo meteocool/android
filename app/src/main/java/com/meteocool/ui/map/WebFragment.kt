@@ -73,12 +73,12 @@ class WebFragment : Fragment() {
         webSettings.databaseEnabled = true
         webSettings.setGeolocationEnabled(true)
 
-//        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-//        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
-//            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-//                webSettings.forceDark = WebSettings.FORCE_DARK_ON
-//            }
-//        }
+        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                webSettings.forceDark = WebSettings.FORCE_DARK_ON
+            }
+        }
 
         viewDataBinding.webView.webViewClient = MyWebViewClient()
 
