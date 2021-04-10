@@ -46,7 +46,8 @@
 
     <!-- Push Preferences -->
     <string name="notification_push_title">Push-Nachrichten</string>
-    <string name="notification_push_details">Details</string>
+    <string name="notification_push_details">Meteorologische Details</string>
+    <string name="notification_push_details_desc">Es werden ausführlichere Informationen (z.B. dbZ-Werte) im Benachrichtigungstext angezeigt.</string>
     <string name="notification_push_level_title">Benachrichtigen ab…</string>
     <string name="level_drizzle">Nieselregen</string>
     <string name="level_light">Leichtem Regen</string>
