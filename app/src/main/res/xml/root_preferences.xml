@@ -33,6 +33,7 @@
                 app:key="notification_details"
                 app:title="@string/notification_push_details"
                 app:defaultValue="false"
+                app:summary="@string/notification_push_details_desc"
                 app:dependency="notification"/>
 
         <ListPreference
