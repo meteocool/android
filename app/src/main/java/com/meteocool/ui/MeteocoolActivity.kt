@@ -26,6 +26,7 @@ import com.meteocool.network.NetworkUtils
 import com.meteocool.network.UploadWorker
 import com.meteocool.permissions.PermUtils
 import com.meteocool.preferences.SharedPrefUtils
+import com.meteocool.ui.map.MissingLocationPermissionAlertFragment
 import com.meteocool.ui.map.WebViewModel
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
@@ -90,29 +91,15 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                 this
             ) && defaultSharedPreferences.getBoolean("map_zoom", false)
         ) {
-            val alertDialog: AlertDialog = this.let {
-                val builder = AlertDialog.Builder(it)
-                builder.apply {
-                    setMessage(R.string.dialog_msg_negative_info_map_zoom)
-                    setPositiveButton(getString(R.string.bg_dialog_pos)) { _, _ -> }
-                }
-                builder.create()
-            }
-            alertDialog.show()
+            MissingLocationPermissionAlertFragment(R.string.dialog_msg_negative_info_map_zoom)
+                .showNow(supportFragmentManager, "No_LOC")
         }
         if (!PermUtils.isBackgroundLocationPermissionGranted(
                 this
             ) && defaultSharedPreferences.getBoolean("notification", false)
         ) {
-            val alertDialog: AlertDialog = this.let {
-                val builder = AlertDialog.Builder(it)
-                builder.apply {
-                    setMessage(R.string.dialog_msg_negative_info_push)
-                    setPositiveButton(getString(R.string.bg_dialog_pos)) { _, _ -> }
-                }
-                builder.create()
-            }
-            alertDialog.show()
+            MissingLocationPermissionAlertFragment(R.string.dialog_msg_negative_info_push)
+                .showNow(supportFragmentManager, "No_BLOC")
         }
     }
 

@@ -190,13 +190,13 @@ class SettingsFragment() : PreferenceFragmentCompat() {
                 val builder = AlertDialog.Builder(it)
                 builder.apply {
                     setMessage(R.string.dialog_msg_map_zoom)
-                    setPositiveButton(getString(R.string.bg_dialog_pos)) { _, _ ->
+                    setPositiveButton(getString(R.string.dialog_pos)) { _, _ ->
                         requestLocationPermissionLauncher.launch(
                             Manifest.permission.ACCESS_FINE_LOCATION
                         )
                     }
                     setNegativeButton(
-                        getString(R.string.bg_dialog_neg)
+                        getString(R.string.dialog_neg)
                     ) { _, _ ->
                         findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked = false
                     }
@@ -214,14 +214,14 @@ class SettingsFragment() : PreferenceFragmentCompat() {
                 val builder = AlertDialog.Builder(it)
                 builder.apply {
                     setMessage(R.string.dialog_msg_push)
-                    setPositiveButton(getString(R.string.bg_dialog_pos)) { _, _ ->
+                    setPositiveButton(getString(R.string.dialog_pos)) { _, _ ->
                         isBackgroundRequest = true
                         requestLocationPermissionLauncher.launch(
                             Manifest.permission.ACCESS_FINE_LOCATION
                         )
                     }
                     setNegativeButton(
-                        getString(R.string.bg_dialog_neg)
+                        getString(R.string.dialog_neg)
                     ) { _, _ ->
                         findPreference<SwitchPreferenceCompat>("notification")?.isChecked = false
                     }

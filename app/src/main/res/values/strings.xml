@@ -71,8 +71,8 @@
     <string name="dialog_msg_negative_info_map_zoom"><b>Berechtigung</b> Standortzugriff wird für <b>Zoom nach Start</b> benötigt. Es wird der zuletzt verwendete Standort verwendet.</string>
     <string name="dialog_msg_negative_info_push">Berechtigung Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt.</string>
     <string name="dialog_msg_push">Berechtigung Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt.</string>
-    <string name="bg_dialog_pos">OK</string>
-    <string name="bg_dialog_neg">Abbrechen</string>
+    <string name="dialog_pos">OK</string>
+    <string name="dialog_neg">Abbrechen</string>
 
     <!-- Background Dialog -->
     <string name="intro_toggle_notifications">Push-Nachrichten</string>
