@@ -22,7 +22,7 @@ class NetworkUtils {
 
         const val MAP_URL = "https://app.ng.meteocool.com/android.html"
         const val PRIVACY_URL = "https://app.ng.meteocool.com/privacy.html"
-        const val TWITTER_URL = "https://twitter.com/meteocool_de"
+        const val TWITTER_URL = "https://twitter.com/meteocool_app"
         const val GITHUB_URL = "https://github.com/meteocool"
 
         val POST_CLIENT_DATA = URL(prod + "post_location")
