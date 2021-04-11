@@ -14,6 +14,8 @@ import timber.log.Timber
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
+    private var lastPushTime : Long = 0
+
     companion object{
         fun cancelNotification(context: Context, from : String) {
             val notificationManager =
@@ -39,9 +41,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(remoteMessage)
         Timber.d("From: %s", remoteMessage.from!!)
         Timber.d("Notification Message Body: %s", remoteMessage.data["clear_all"])
-
-        if (remoteMessage.data["clear_all"] == "true") {
+        if (remoteMessage.sentTime - lastPushTime  >= 10000 && remoteMessage.data["clear_all"] == "true") {
             cancelNotification(this, "push")
         }
+        lastPushTime = remoteMessage.sentTime
     }
 }
