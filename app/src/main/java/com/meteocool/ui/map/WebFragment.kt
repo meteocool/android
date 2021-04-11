@@ -159,10 +159,7 @@ class WebFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-
-        if (isRequestSettingsCalled) {
-            registerTileUpdates()
-        }
+        registerTileUpdates()
 
         if (PermUtils.isLocationPermissionGranted(requireContext())) {
             webViewModel.requestForegroundLocationUpdates()
@@ -170,10 +167,16 @@ class WebFragment : Fragment() {
     }
 
     private fun registerTileUpdates() {
-        val function = "window.enterForeground();"
-        viewDataBinding.webView.post {
-            run {
-                viewDataBinding.webView.evaluateJavascript(function) {}
+        if (isRequestSettingsCalled) {
+            val function = "window.enterForeground();"
+            try {
+                viewDataBinding.webView.post {
+                    run {
+                        viewDataBinding.webView.evaluateJavascript(function) {}
+                    }
+                }
+            } catch (e: Exception) {
+                Timber.w(e)
             }
         }
     }
