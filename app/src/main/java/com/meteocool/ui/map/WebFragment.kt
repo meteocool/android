@@ -47,7 +47,8 @@ class WebFragment : Fragment() {
 
     //    private lateinit var requestPermissionLauncher : ActivityResultLauncher<String>
     private var isRequestSettingsCalled: Boolean = false
-    private var wasButtonLocateMePressed: Boolean = false
+    private var isZoom: Boolean = false
+    private var isStartFocus: Boolean = true
 
     private lateinit var requestLocationPermissionLauncher: ActivityResultLauncher<String>
 
@@ -138,10 +139,11 @@ class WebFragment : Fragment() {
                     Timber.d(it.data().toString())
                     updateUserLocation(
                         it.data(),
-                        wasButtonLocateMePressed,
-                        wasButtonLocateMePressed
+                        isZoom,
+                        isStartFocus || isZoom
                     )
-                    wasButtonLocateMePressed = false
+                    isZoom = false
+                    isStartFocus = false
                 }
             } else {
                 if (it.error() != null && it.error() is ResolvableApiException) {
@@ -216,9 +218,11 @@ class WebFragment : Fragment() {
     private fun updateUserLocation(location: MeteocoolLocation, isZoom: Boolean, isFocus: Boolean) {
         val string =
             "window.lm.updateLocation(${location.latitude}, ${location.longitude}, ${location.accuracy}, ${isZoom}, ${isFocus});"
+        Timber.d(string)
         viewDataBinding.webView.post {
             run {
-                viewDataBinding.webView.evaluateJavascript(string) {}
+                viewDataBinding.webView.evaluateJavascript(string) {
+                }
             }
         }
     }
@@ -229,7 +233,7 @@ class WebFragment : Fragment() {
             val lastLocation =
                 SharedPrefUtils.getSavedLocationResult(requireContext().defaultSharedPreferences)
             updateUserLocation(lastLocation, true, true)
-            wasButtonLocateMePressed = true
+            isZoom = true
         }
     }
 
@@ -272,7 +276,7 @@ class WebFragment : Fragment() {
 
     private fun locateMe() {
         Timber.d("locateMe")
-        wasButtonLocateMePressed = true
+        isZoom = true
         when (PackageManager.PERMISSION_GRANTED) {
             ContextCompat.checkSelfPermission(
                 requireActivity().applicationContext,
