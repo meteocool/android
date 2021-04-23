@@ -18,19 +18,24 @@ class IntroPrivacyPolicyFragment : Fragment() {
         }
     }
 
-    private lateinit var viewDataBinding: IntroPrivacyPolicyBinding
+    private var viewDataBinding: IntroPrivacyPolicyBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         viewDataBinding =
             DataBindingUtil.inflate(inflater, R.layout.intro_privacy_policy, container, false)
-        return viewDataBinding.root
+        return viewDataBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewDataBinding.description.movementMethod = LinkMovementMethod.getInstance()
+        viewDataBinding?.description?.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewDataBinding = null
     }
 }

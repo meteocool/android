@@ -47,7 +47,6 @@ class IntroEnableNotificationsFragment : Fragment() {
                     viewDataBinding.switch1.isChecked = false
                 }
             }
-
     }
 
     override fun onCreateView(
