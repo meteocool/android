@@ -15,6 +15,7 @@ class SharedPrefUtils {
         const val KEY_LOCATION_LON = "longitude"
         const val KEY_LOCATION_ALT = "altitude"
         const val KEY_LOCATION_ACC = "accuracy"
+        const val APP_VERSION = "app_version"
         private const val KEY_LOCATION_NANOS = "elapsedNanos"
         private const val KEY_FIREBASE_TOKEN = "fb_token"
 
@@ -43,6 +44,14 @@ class SharedPrefUtils {
                 saveFirebaseToken(sharedPrefs, token)
             }
             return token
+        }
+
+        fun saveAppVersion(sharedPrefs: SharedPreferences, version: String) {
+            sharedPrefs.edit().putString(APP_VERSION, version).apply()
+        }
+
+        fun getAppVersion(sharedPrefs: SharedPreferences) : String {
+            return sharedPrefs.getString(APP_VERSION, "no version")!!
         }
 
         /**
