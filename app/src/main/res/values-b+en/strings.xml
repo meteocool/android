@@ -67,10 +67,13 @@
     <!-- Background Dialog -->
     <string name="dialog_msg_locate_me">Location permission is required for <b>locate me</b> to work</string>
     <string name="dialog_msg_map_zoom">Location permission is required for <b>Zoom after start</b> to work</string>
-    <string name="dialog_msg_negative_info_map_zoom">Permission for location access is required for <b>Zoom after start</b>. The last known location is used.</string>
+    <string name="dialog_msg_negative_info_map_zoom">Permission for location access is required for <b>Zoom after start</b>.</string>
     <string name="dialog_msg_negative_info_push">Location permission <b>Allow all the time</b> is required for notifications to work.</string>
     <string name="dialog_msg_push">Location permission <b>Allow all the time</b> is required for notifications to work.</string>
     <string name="dialog_pos">OK</string>
+    <string name="dg_settings">Open Settings</string>
+    <string name="dg_neg_map_zoom">Deactivate "Zoom After Start"</string>
+    <string name="dg_neg_notification">Deactivate "Notifications"</string>
     <string name="dialog_neg">Cancel</string>
 
 

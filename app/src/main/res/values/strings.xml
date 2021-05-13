@@ -69,10 +69,14 @@
     <!-- Background Dialog -->
     <string name="dialog_msg_locate_me"><b>Berechtigung</b> Standortzugriff wird für <b>Mich Lokalisieren</b> benötigt</string>
     <string name="dialog_msg_map_zoom"><b>Berechtigung</b> Standortzugriff wird für <b>Zoom nach Start</b> benötigt</string>
-    <string name="dialog_msg_negative_info_map_zoom"><b>Berechtigung</b> Standortzugriff wird für <b>Zoom nach Start</b> benötigt. Es wird der zuletzt verwendete Standort verwendet.</string>
+    <string name="dialog_msg_negative_info_map_zoom"><b>Berechtigung</b> Standortzugriff wird für <b>Zoom nach Start</b> benötigt.</string>
     <string name="dialog_msg_negative_info_push">Berechtigung Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt.</string>
     <string name="dialog_msg_push">Berechtigung Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt.</string>
+
     <string name="dialog_pos">OK</string>
+    <string name="dg_settings">Öffne Einstellungen</string>
+    <string name="dg_neg_map_zoom">Deaktiviere "Zoom nach Start"</string>
+    <string name="dg_neg_notification">Deaktiviere "Push-Nachrichten"</string>
     <string name="dialog_neg">Abbrechen</string>
 
     <!-- Background Dialog -->

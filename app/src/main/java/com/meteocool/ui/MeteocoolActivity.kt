@@ -2,7 +2,9 @@ package com.meteocool.ui
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +28,6 @@ import com.meteocool.network.NetworkUtils
 import com.meteocool.network.UploadWorker
 import com.meteocool.permissions.PermUtils
 import com.meteocool.preferences.SharedPrefUtils
-import com.meteocool.ui.map.MissingLocationPermissionAlertFragment
 import com.meteocool.ui.map.WebViewModel
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
@@ -91,22 +92,54 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                 this
             ) && defaultSharedPreferences.getBoolean("map_zoom", false)
         ) {
-            MissingLocationPermissionAlertFragment(R.string.dialog_msg_negative_info_map_zoom)
-                .showNow(supportFragmentManager, "No_LOC")
+            this.let {
+                val builder = AlertDialog.Builder(it)
+                builder.apply {
+                    setMessage(getString(R.string.dialog_msg_negative_info_map_zoom))
+                    openSettings()
+                    setNegativeButton(getString(R.string.dg_neg_map_zoom)) { _, _ ->
+                        defaultSharedPreferences.edit().putBoolean("map_zoom", false).apply()
+                    }
+                }
+                builder.create()
+            }.show()
         }
         if (!PermUtils.isBackgroundLocationPermissionGranted(
                 this
             ) && defaultSharedPreferences.getBoolean("notification", false)
         ) {
-            MissingLocationPermissionAlertFragment(R.string.dialog_msg_negative_info_push)
-                .showNow(supportFragmentManager, "No_BLOC")
+            this.let {
+                val builder = AlertDialog.Builder(it)
+                builder.apply {
+                    setMessage(getString(R.string.dialog_msg_negative_info_map_zoom))
+                    openSettings()
+                    setNegativeButton(getString(R.string.dg_neg_map_zoom)) { _, _ ->
+                        defaultSharedPreferences.edit().putBoolean("notification", false).apply()
+                    }
+                }
+                builder.create()
+            }.show()
+        }
+    }
+
+    private fun AlertDialog.Builder.openSettings() {
+        setPositiveButton(getString(R.string.dg_settings)) { _, _ ->
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            val uri = Uri.fromParts(
+                "package",
+                packageName,
+                null
+            )
+            intent.data = uri
+            startActivity(intent)
         }
     }
 
     override fun onResume() {
         super.onResume()
         Timber.d("onResume")
-        if(defaultSharedPreferences.getBoolean("notification", false)) {
+        if (defaultSharedPreferences.getBoolean("notification", false)) {
             MyFirebaseMessagingService.cancelNotification(this, "foreground")
         }
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
@@ -180,7 +213,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                     WorkManager.getInstance(this)
                         .enqueue(UploadWorker.createRequest(data))
                         .result
-                }else{
+                } else {
                     val data = UploadWorker.createDataForLocationPost(
                         defaultSharedPreferences,
                         SharedPrefUtils.getSavedLocationResult(defaultSharedPreferences)
