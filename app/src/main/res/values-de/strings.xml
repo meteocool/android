@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">meteocool.com</string>
+    <string name="notifications_admin_channel_name">meteocool</string>
+    <string name="notifications_admin_channel_description">meteocool</string>
+    <string name="notifications_admin_channel_id">meteocool</string>
+    <string name="default_notification_channel_id">meteocool</string>
+
+    <!-- Intro -->
+    <string name="intro_title1">Hallo!</string>
+    <string name="intro_title2">Kurzzeit-Vorhersage</string>
+    <string name="intro_title3">Benachrichtigungen</string>
+    <string name="intro_title4">Datenschutzbestimmung Standort</string>
+    <string name="intro_title7">Ab nach draußen!</string>
+
+    <string name="intro_description1">Meteorologische Daten für alle verständlich zu gestalten - das ist das Ziel von meteocool.\n\n
+        Informationen aus verschiedenen Quellen werden von uns verarbeitet, kombiniert und intuitiv visualisiert.
+    </string>
+    <string name="intro_description2">Anhand von Windrichtung, Luftdruck und Blitzen berechnen wir mit einem super-genauen mathematischen Modell (\"Nowcasting\") die Zugrichtung und Größe von Regenwolken und Gewitterzellen.\n\n
+        Vorhersagen im Bereich der nächsten 45 Minuten sind erfahrungsgemäß sehr genau.
+    </string>
+    <string name="intro_description3">Auf Basis dieser Daten können wir dich benachrichtigen, bevor es an deinem aktuellen Standort anfängt zu regnen.
+    </string>
+    <string name="intro_notification_dialog_explanation">Klasse - um Benachrichtigungen für deinen Aufenthaltsort zu erhalten, musst du zunächst <b>\"Bei Nutzung der App\"</b> auswählen.\n\nDamit die Benachrichtigungen wirklich funktionieren, musst du im Anschluss <b>\"Immer zulassen\"</b> auswählen.\nMach dir keine Sorgen, dies wird die Batterielaufzeit nicht belasten.</string>
+    <string name="intro_description4">
+       Wir speichern keine Daten, mehr dazu in unserer <a href="https://app.ng.meteocool.com/privacy.html">Datenschutzerklärung</a>.
+    </string>
+    <string name="intro_description5">☀️ Etwas für wolkenlose Tage: Du kannst jetzt im Layer-Menü \"Near-Realtime\"-Satellitenbilder 🛰 ansehen.\n\n
+    Alle fünf Tage werden neue Bilder mit einer Auflösung von ±10m/Pixel aufgenommen.</string>
+
+    <string name="intro_description6">Die Benachrichtigungen 📱 (und vieles mehr) kannst du ab jetzt in den Einstellungen konfigurieren.\n\n
+        Um die Einstellungen zu öffnen klicke in die linke obere Ecke in der App-Leiste oder öffne das Menü durch Wischen von der linken Bildschirmseite.</string>
+
+    <string name="intro_description7">Wusstest du schon?\n\nmeteocool ist frei und open source. Wir betreiben und entwickeln alles in unserer Freizeit. \n\n
+        Wir freuen uns über Feedback und Weiterempfehlungen.</string>
+
+    <string name="title_activity_settings">Einstellungen</string>
+
+    <string name="menu_documentation">Dokumentation</string>
+
+
+    <!-- Preference Titles -->
+    <string name="notification_header">Benachrichtigungen</string>
+    <string name="map_header">Karte</string>
+    <string name="about_header">Über</string>
+
+    <!-- Push Preferences -->
+    <string name="notification_push_title">Push-Nachrichten</string>
+    <string name="notification_push_details">Meteorologische Details</string>
+    <string name="notification_push_details_desc">Es werden ausführlichere Informationen (z.B. dbZ-Werte) im Benachrichtigungstext angezeigt.</string>
+    <string name="notification_push_level_title">Benachrichtigen ab…</string>
+    <string name="level_drizzle">Nieselregen</string>
+    <string name="level_light">Leichtem Regen</string>
+    <string name="level_rain">Regen</string>
+    <string name="level_heavy_rain">Starkem Regen</string>
+    <string name="level_hail">Hagel</string>
+
+    <string name="notification_time_title">Zeitfenster kleiner, gleich…</string>
+
+    <!-- Map Preferences -->
+    <string name="map_zoom_title">Zoom nach Start</string>
+    <string name="map_rotate_title">Rotation</string>
+    <string name="map_mode_title">Nachtmodus</string>
+
+    <!-- About Preferences -->
+    <string name="share_title">Teilen</string>
+    <string name="privacy_title">Datenschutz</string>
+
+    <!-- Background Dialog -->
+    <string name="dialog_msg_locate_me"><b>Berechtigung</b> Standortzugriff wird für <b>Mich Lokalisieren</b> benötigt</string>
+    <string name="dialog_msg_map_zoom"><b>Berechtigung</b> Standortzugriff wird für <b>Zoom nach Start</b> benötigt</string>
+    <string name="dialog_msg_negative_info_map_zoom"><b>Berechtigung</b> Standortzugriff wird für <b>Zoom nach Start</b> benötigt.</string>
+    <string name="dialog_msg_negative_info_push">Berechtigung Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt.</string>
+    <string name="dialog_msg_push">Berechtigung Standortzugriff <b>immer erlauben</b> wird für Push-Nachrichten benötigt.</string>
+
+    <string name="dialog_pos">OK</string>
+    <string name="dg_settings">Öffne Einstellungen</string>
+    <string name="dg_neg_map_zoom">Deaktiviere "Zoom nach Start"</string>
+    <string name="dg_neg_notification">Deaktiviere "Push-Nachrichten"</string>
+    <string name="dialog_neg">Abbrechen</string>
+
+    <!-- Background Dialog -->
+    <string name="intro_toggle_notifications">Push-Nachrichten</string>
+    <string name="feedback_url"><![CDATA[mailto:support@meteocool.com?subject=Android%20App%20Feedback&body=%0A%0A%E2%80%94%0Ameteocool%20Fehlercode%3A%0A%0AFCM-Token:]]></string>
+
+
+</resources>
