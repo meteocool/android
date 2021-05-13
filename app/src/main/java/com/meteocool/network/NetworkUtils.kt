@@ -20,7 +20,7 @@ class NetworkUtils {
         private const val test = "http://10.10.4.162:8040/"
         private const val prod = "https://api.ng.meteocool.com/"
 
-        const val MAP_URL = "https://app.ng.meteocool.com/android.html"
+        const val MAP_URL = "https://app.ng.meteocool.com/android.html?"
         const val PRIVACY_URL = "https://app.ng.meteocool.com/privacy.html"
         const val TWITTER_URL = "https://twitter.com/meteocool_app"
         const val GITHUB_URL = "https://github.com/meteocool"
@@ -28,6 +28,7 @@ class NetworkUtils {
         val POST_CLIENT_DATA = URL(prod + "post_location")
         val POST_CLEAR_NOTIFICATION = URL(prod + "clear_notification")
         val POST_UNREGISTER_TOKEN = URL(prod + "unregister")
+
 
     }
 }

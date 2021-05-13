@@ -128,7 +128,7 @@ class WebFragment : Fragment() {
 
         webViewModel.url.observe(viewLifecycleOwner, { newUrl ->
             viewDataBinding.webView.stopLoading()
-            viewDataBinding.webView.loadUrl(newUrl)
+            viewDataBinding.webView.loadUrl(newUrl+"v=${SharedPrefUtils.getAppVersion(defaultSharedPreferences)}")
         })
 
         locationObserver = Observer {

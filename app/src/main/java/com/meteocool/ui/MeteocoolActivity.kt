@@ -2,6 +2,7 @@ package com.meteocool.ui
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -55,7 +56,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-
+        storeAppVersionInSharedPref()
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.settings, SettingsFragment())
@@ -245,6 +246,18 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             webViewModel.requestForegroundLocationUpdates()
         } else {
             webViewModel.stopForegroundLocationUpdates()
+        }
+    }
+
+    private fun storeAppVersionInSharedPref() {
+        try {
+            val pInfo = packageManager.getPackageInfo(
+                packageName,
+                0
+            )
+            SharedPrefUtils.saveAppVersion(defaultSharedPreferences, pInfo.versionName)
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
         }
     }
 }
