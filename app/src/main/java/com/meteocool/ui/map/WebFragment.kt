@@ -29,6 +29,7 @@ import com.meteocool.preferences.SharedPrefUtils
 import com.meteocool.view.*
 import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
+import org.jetbrains.anko.support.v4.runOnUiThread
 import timber.log.Timber
 
 /**
@@ -306,7 +307,9 @@ class WebFragment : Fragment() {
         fun requestSettings() {
             Timber.d("requestSettings injected")
             isRequestSettingsCalled = true
-            webViewModel.sendSettings()
+            runOnUiThread {
+                webViewModel.sendSettings()
+            }
             if (defaultSharedPreferences.getBoolean("map_zoom", false)) {
                 zoomOnLastKnownLocation()
             }
