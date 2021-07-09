@@ -17,7 +17,7 @@ import java.net.URL
 class NetworkUtils {
     companion object {
 
-        private const val test = "http://10.10.4.162:8040/"
+        private const val test = "http://better.meteocool.com"
         private const val prod = "https://api.ng.meteocool.com/"
 
         const val MAP_URL = "https://app.ng.meteocool.com/android.html?"
