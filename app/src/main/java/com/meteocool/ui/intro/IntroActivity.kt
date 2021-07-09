@@ -28,7 +28,7 @@ class IntroActivity : AppIntro2() {
             AppIntroFragment.newInstance(
                 title = getString(R.string.intro_title1),
                 description = getString(R.string.intro_description1),
-                imageDrawable = R.drawable.intro_sun_rain,
+                imageDrawable = R.drawable.intro_bell_512,
             )
         )
 
