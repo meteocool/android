@@ -1,0 +1,16 @@
+Du willst nicht nass werden oder Gewitter verfolgen? Dann ist das genau die richtige Applikation für dich. 
+
+Du wirst, basierend auf der aktuellen Wolkenlage und den Forecast-Berechnungen des deutschen Wetterdienstes, über Push-Nachrichten über kommenden Niederschlag an deiner Position informiert.
+
+Aktuell wird nur der Mitteleuropäische Raum abgedeckt. Wir sind bemüht dies in Zukunft zu erweitern! 
+
+Die Applikation ist Open-Source und damit frei von Werbung und Kosten. 
+
+Features im Überblick:
+- Echtzeit Benachrichtigung über Niederschlag
+- Benachrichtigungen über Niederschlag (Regen/Schnee/Hagel) bis zu 60 Minuten im voraus (Push -> Standortzugriff benötigt)
+- Live-Ansicht über Vorhersage der Wolkenbewegung bis zu 45 Minuten in die Zukunft 
+- Regenradar mit automatischer, schneller Aktualisierung
+- Live Blitzkarte (via blitzortung.org)
+- unterstützt Android weiten "Dark Mode" ab Android 10
+- Frei und Open Source!

@@ -1,0 +1,1 @@
+Meteocool ist eine freie App zur Visualisierung und Aggregation von Wetterdaten für Mitteleuropa
