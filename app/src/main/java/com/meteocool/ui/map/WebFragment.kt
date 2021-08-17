@@ -18,7 +18,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
-import com.google.android.gms.common.api.ResolvableApiException
 import com.google.gson.Gson
 import com.meteocool.R
 import com.meteocool.databinding.FragmentMapBinding
