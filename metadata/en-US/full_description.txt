@@ -1,0 +1,16 @@
+You do not want to get wet or follow thunderstorms? Then this is just the right application for you.
+
+Based on the current cloud situation and the forecast calculations of the German weather service, you will be informed about upcoming rainfall at your location via push messages.
+
+Currently only the Central European area is covered. We try to expand this in the future!
+
+The application is open-source and therefore free of advertising and costs.
+
+Features at a glance:
+- Real-time notification of precipitation
+- Notifications of rainfall (rain / snow / hail) up to 60 minutes in advance (push -> location access required)
+- Live view on cloud movement forecast up to 45 minutes in the future
+- Rain radar with automatic, fast update
+- Live lightning card (via blitzortung.org)
+- supports Android wide "Dark Mode" as of Android 10
+- Free and Open Source!
