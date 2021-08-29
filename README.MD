@@ -1,4 +1,9 @@
 # Meteocool - Android
 The official android application of the [meteocool project](https://github.com/v4lli/meteocool)
 
-<a href="https://play.google.com/store/apps/details?id=com.meteocool"><img src="https://user-images.githubusercontent.com/1577223/57536457-84883480-7344-11e9-899d-c31ac124917c.png" style="width: 49%" alt="Download on Google Play Store"></a>
+[<img src="metadata/en_fdroid.png"
+    alt="Get it on F-Droid"
+    height="80">](https://f-droid.org/packages/com.meteocool/)
+[<img src="metadata/en_google_play.png"
+    alt="Download on Google Play Store"
+    height="80">](https://play.google.com/store/apps/details?id=com.meteocool)
