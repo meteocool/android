@@ -1,29 +1,24 @@
 package com.meteocool.location.service
 
-import com.meteocool.location.Resource
 import android.content.Context
-import android.content.IntentSender
-import android.location.Location
-import android.os.Looper
 import androidx.lifecycle.MutableLiveData
-import androidx.work.WorkManager
 import com.meteocool.location.MeteocoolLocation
-import com.meteocool.location.MeteocoolLocationFactory
-import com.meteocool.location.storage.LocationPersistenceWorker
-import com.meteocool.network.UploadWorker
+import com.meteocool.location.Resource
 import com.meteocool.preferences.SharedPrefUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.yayandroid.locationmanager.LocationManager
+import com.yayandroid.locationmanager.configuration.Configurations
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
 class FusedLocationService(context: Context) : ForegroundLocationService(context) {
 
-    /**
-     * The entry point to Google Play Services.
-     */
+
+    private val locationManager: LocationManager =
+        LocationManager.Builder(context)
+            .configuration(Configurations.silentConfiguration())
+            .notify(com.meteocool.location.LocationListener(context))
+            .build()
 
 
     private var resultAsLiveData: MutableLiveData<Resource<MeteocoolLocation>> =
@@ -37,6 +32,7 @@ class FusedLocationService(context: Context) : ForegroundLocationService(context
 
     override fun requestLocationUpdates() {
         Timber.d("Request Updates")
+        locationManager.get()
         try {
         } catch (e: SecurityException) {
             Timber.e(e)

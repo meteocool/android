@@ -106,7 +106,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     override fun onResume() {
         super.onResume()
         Timber.d("onResume")
-        if(defaultSharedPreferences.getBoolean("notification", false)) {
+        if (defaultSharedPreferences.getBoolean("notification", false)) {
             MyFirebaseMessagingService.cancelNotification(this, "foreground")
         }
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
@@ -114,7 +114,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
 
     override fun onStop() {
         super.onStop()
-        if (PermUtils.isBackgroundLocationPermissionGranted(this) && defaultSharedPreferences.getBoolean(
+        if (defaultSharedPreferences.getBoolean(
                 "notification",
                 false
             )
@@ -180,7 +180,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                     WorkManager.getInstance(this)
                         .enqueue(UploadWorker.createRequest(data))
                         .result
-                }else{
+                } else {
                     val data = UploadWorker.createDataForLocationPost(
                         defaultSharedPreferences,
                         SharedPrefUtils.getSavedLocationResult(defaultSharedPreferences)
