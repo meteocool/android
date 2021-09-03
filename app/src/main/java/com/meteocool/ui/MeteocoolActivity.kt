@@ -148,7 +148,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
 
     override fun onStop() {
         super.onStop()
-        if (PermUtils.isBackgroundLocationPermissionGranted(this) && defaultSharedPreferences.getBoolean(
+        if (defaultSharedPreferences.getBoolean(
                 "notification",
                 false
             )
