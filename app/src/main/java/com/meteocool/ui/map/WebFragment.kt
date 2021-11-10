@@ -283,6 +283,7 @@ class WebFragment : Fragment() {
             ) -> {
                 Timber.d("Granted")
                 webViewModel.requestForegroundLocationUpdates()
+                zoomOnLastKnownLocation()
             }
             else -> {
                 requestLocationPermissionLauncher.launch(
