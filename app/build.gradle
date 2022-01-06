@@ -11,13 +11,13 @@ android {
             // storeFile file('C:\\Users\\jerem\\Google Drive\\PlayStore\\meteocool.jks')
         }
     }
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "com.meteocool"
         minSdkVersion 23
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 34
         versionName "2.1l"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
