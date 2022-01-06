@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
-import com.meteocool.preferences.FirebaseMessagingWrapper
 import com.meteocool.R
 import com.meteocool.injection.InjectorUtils
 import com.meteocool.network.NetworkUtils
@@ -49,7 +48,7 @@ class SettingsFragment() : PreferenceFragmentCompat() {
 
         isZoomEnabledObserver = androidx.lifecycle.Observer<Boolean> {
             this.preferenceManager.findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked =
-                it
+                    it
         }
         webViewModel.isZoomEnabled.observe(viewLifecycleOwner, isZoomEnabledObserver)
 
@@ -57,61 +56,54 @@ class SettingsFragment() : PreferenceFragmentCompat() {
             findPreference<SwitchPreferenceCompat>("notification")?.isChecked = it
         }
         webViewModel.areNotificationsEnabled.observe(
-            viewLifecycleOwner,
-            areNotificationsEnabledObserver
+                viewLifecycleOwner,
+                areNotificationsEnabledObserver
         )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestLocationPermissionLauncher =
-            registerForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) { isGranted: Boolean ->
-                Timber.d("$isGranted")
-                if (isGranted) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q && isBackgroundRequest) {
-                        requestBackgroundLocationPermissionLauncher.launch(
-                            Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                        )
-                        isBackgroundRequest = false
+                registerForActivityResult(
+                        ActivityResultContracts.RequestPermission()
+                ) { isGranted: Boolean ->
+                    Timber.d("$isGranted")
+                    if (isGranted) {
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q && isBackgroundRequest) {
+                            requestBackgroundLocationPermissionLauncher.launch(
+                                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                            )
+                            isBackgroundRequest = false
+                        }
                     }
                 }
-            }
         requestBackgroundLocationPermissionLauncher =
-            registerForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) { isGranted: Boolean ->
-                Timber.d("$isGranted")
-                if (!isGranted) {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    val uri = Uri.fromParts(
-                        "package",
-                        requireActivity().packageName,
-                        null
-                    )
-                    intent.data = uri
-                    startActivity(intent)
+                registerForActivityResult(
+                        ActivityResultContracts.RequestPermission()
+                ) { isGranted: Boolean ->
+                    Timber.d("$isGranted")
+                    if (!isGranted) {
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        val uri = Uri.fromParts(
+                                "package",
+                                requireActivity().packageName,
+                                null
+                        )
+                        intent.data = uri
+                        startActivity(intent)
+                    }
                 }
-            }
         registerPreferenceClickListener()
     }
 
     private fun registerPreferenceClickListener() {
         findPreference<Preference>("feedback")?.setOnPreferenceClickListener {
-            val tokenInShared = SharedPrefUtils.getFirebaseToken(defaultSharedPreferences)
-            val token = FirebaseMessagingWrapper.getFirebaseToken()
-            if (token == "no token") {
-                handleExternalLink(
-                    getString(R.string.feedback_url) + "\n" + "Token fetch failed\nShared-Token: $tokenInShared"
-                )
-            }
+            val token = SharedPrefUtils.getFirebaseToken(defaultSharedPreferences)
 
-                val token = task.result
-                val version: String = SharedPrefUtils.getAppVersion(defaultSharedPreferences)
-                handleExternalLink(
-                    getString(R.string.feedback_url) + "\n" + token + "\nShared-Token: $tokenInShared" + "\n" + version
+            val version: String = SharedPrefUtils.getAppVersion(defaultSharedPreferences)
+            handleExternalLink(
+                    getString(R.string.feedback_url) + "\nToken: $token\nVersion: $version"
 
             )
             true
@@ -134,8 +126,8 @@ class SettingsFragment() : PreferenceFragmentCompat() {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(
-                    Intent.EXTRA_TEXT,
-                    "https://play.google.com/store/apps/details?id=com.meteocool"
+                        Intent.EXTRA_TEXT,
+                        "https://play.google.com/store/apps/details?id=com.meteocool"
                 )
                 type = "text/html"
             }
@@ -166,8 +158,8 @@ class SettingsFragment() : PreferenceFragmentCompat() {
         var version: String = ""
         try {
             val pInfo = requireContext().packageManager.getPackageInfo(
-                requireContext().packageName,
-                0
+                    requireContext().packageName,
+                    0
             )
             version = pInfo.versionName
         } catch (e: PackageManager.NameNotFoundException) {
@@ -194,11 +186,11 @@ class SettingsFragment() : PreferenceFragmentCompat() {
                     setMessage(R.string.dialog_msg_map_zoom)
                     setPositiveButton(getString(R.string.dialog_pos)) { _, _ ->
                         requestLocationPermissionLauncher.launch(
-                            Manifest.permission.ACCESS_FINE_LOCATION
+                                Manifest.permission.ACCESS_FINE_LOCATION
                         )
                     }
                     setNegativeButton(
-                        getString(R.string.dialog_neg)
+                            getString(R.string.dialog_neg)
                     ) { _, _ ->
                         findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked = false
                     }
@@ -219,11 +211,11 @@ class SettingsFragment() : PreferenceFragmentCompat() {
                     setPositiveButton(getString(R.string.dialog_pos)) { _, _ ->
                         isBackgroundRequest = true
                         requestLocationPermissionLauncher.launch(
-                            Manifest.permission.ACCESS_FINE_LOCATION
+                                Manifest.permission.ACCESS_FINE_LOCATION
                         )
                     }
                     setNegativeButton(
-                        getString(R.string.dialog_neg)
+                            getString(R.string.dialog_neg)
                     ) { _, _ ->
                         findPreference<SwitchPreferenceCompat>("notification")?.isChecked = false
                     }
