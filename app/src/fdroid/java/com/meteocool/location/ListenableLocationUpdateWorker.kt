@@ -18,13 +18,6 @@ class ListenableLocationUpdateWorker(context: Context, params: WorkerParameters)
         .configuration(Configurations.silentConfiguration())
         .notify(LocationListener(context))
         .build()
-    private val criteria: Criteria = Criteria()
-
-    init {
-        criteria.accuracy = Criteria.ACCURACY_FINE
-        criteria.powerRequirement = Criteria.POWER_LOW
-    }
-
 
     override fun startWork(): ListenableFuture<Result> {
         return CallbackToFutureAdapter.getFuture { completer ->
