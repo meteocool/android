@@ -6,24 +6,37 @@ import com.meteocool.location.MeteocoolLocation
 import com.meteocool.location.Resource
 import com.meteocool.preferences.SharedPrefUtils
 import com.yayandroid.locationmanager.LocationManager
-import com.yayandroid.locationmanager.configuration.Configurations
+import com.yayandroid.locationmanager.configuration.DefaultProviderConfiguration
+import com.yayandroid.locationmanager.configuration.LocationConfiguration
+import com.yayandroid.locationmanager.constants.ProviderType
 import kotlinx.coroutines.Job
 import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
 class FusedLocationService(context: Context) : ForegroundLocationService(context) {
 
+    var awesomeConfiguration = LocationConfiguration.Builder()
+        .keepTracking(true)
+        .useDefaultProviders(
+            DefaultProviderConfiguration.Builder()
+                .requiredTimeInterval((5 * 1000).toLong())
+                .requiredDistanceInterval(0)
+                .acceptableAccuracy(5.0f)
+                .acceptableTimePeriod((5 * 1000).toLong())
+                .setWaitPeriod(ProviderType.GPS, (2 * 1000).toLong())
+                .setWaitPeriod(ProviderType.NETWORK, (2 * 1000).toLong())
+                .build()
+        )
+        .build()
 
     private val locationManager: LocationManager =
         LocationManager.Builder(context)
-            .configuration(Configurations.silentConfiguration())
+            .configuration(awesomeConfiguration)
             .notify(com.meteocool.location.LocationListener(context))
             .build()
 
-
     private var resultAsLiveData: MutableLiveData<Resource<MeteocoolLocation>> =
         MutableLiveData(Resource(SharedPrefUtils.getSavedLocationResult(context.defaultSharedPreferences)))
-
 
     private lateinit var job: Job
 
@@ -47,6 +60,4 @@ class FusedLocationService(context: Context) : ForegroundLocationService(context
     }
 
     override fun liveData() = resultAsLiveData
-
-
 }
