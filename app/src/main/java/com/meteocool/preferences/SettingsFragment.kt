@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
-import com.meteocool.preferences.FirebaseMessagingWrapper
 import com.meteocool.R
 import com.meteocool.injection.InjectorUtils
 import com.meteocool.network.NetworkUtils
@@ -108,10 +107,9 @@ class SettingsFragment() : PreferenceFragmentCompat() {
                 )
             }
 
-                val token = task.result
-                val version: String = SharedPrefUtils.getAppVersion(defaultSharedPreferences)
-                handleExternalLink(
-                    getString(R.string.feedback_url) + "\n" + token + "\nShared-Token: $tokenInShared" + "\n" + version
+            val version: String = SharedPrefUtils.getAppVersion(defaultSharedPreferences)
+            handleExternalLink(
+                getString(R.string.feedback_url) + "\n" + token + "\nShared-Token: $tokenInShared" + "\n" + version
 
             )
             true
