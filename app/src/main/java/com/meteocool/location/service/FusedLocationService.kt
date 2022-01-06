@@ -2,6 +2,7 @@ package com.meteocool.location.service
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import androidx.preference.PreferenceManager
 import com.meteocool.location.MeteocoolLocation
 import com.meteocool.location.Resource
 import com.meteocool.preferences.SharedPrefUtils
@@ -10,7 +11,6 @@ import com.yayandroid.locationmanager.configuration.DefaultProviderConfiguration
 import com.yayandroid.locationmanager.configuration.LocationConfiguration
 import com.yayandroid.locationmanager.constants.ProviderType
 import kotlinx.coroutines.Job
-import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
 class FusedLocationService(context: Context) : ForegroundLocationService(context) {
@@ -36,7 +36,15 @@ class FusedLocationService(context: Context) : ForegroundLocationService(context
             .build()
 
     private var resultAsLiveData: MutableLiveData<Resource<MeteocoolLocation>> =
-        MutableLiveData(Resource(SharedPrefUtils.getSavedLocationResult(context.defaultSharedPreferences)))
+        MutableLiveData(
+            Resource(
+                SharedPrefUtils.getSavedLocationResult(
+                    PreferenceManager.getDefaultSharedPreferences(
+                        context
+                    )
+                )
+            )
+        )
 
     private lateinit var job: Job
 

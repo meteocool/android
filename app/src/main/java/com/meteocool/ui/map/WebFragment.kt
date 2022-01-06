@@ -6,18 +6,20 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.UiThread
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.meteocool.R
 import com.meteocool.databinding.FragmentMapBinding
@@ -27,9 +29,7 @@ import com.meteocool.network.NetworkUtils
 import com.meteocool.permissions.PermUtils
 import com.meteocool.preferences.SharedPrefUtils
 import com.meteocool.view.*
-import org.jetbrains.anko.defaultSharedPreferences
-import org.jetbrains.anko.support.v4.defaultSharedPreferences
-import org.jetbrains.anko.support.v4.runOnUiThread
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 /**
@@ -112,7 +112,11 @@ class WebFragment : Fragment() {
             Timber.d("requestSetting")
             val settings: Gson = Gson().newBuilder().create()
             val currentSettings = mapOf(
-                Pair("mapRotation", defaultSharedPreferences.getBoolean("map_rotate", false)),
+                Pair(
+                    "mapRotation",
+                    PreferenceManager.getDefaultSharedPreferences(requireContext())
+                        .getBoolean("map_rotate", false)
+                ),
             )
             Timber.d("Updated ")
             windowSettingsInjectSettings(settings, currentSettings)
@@ -122,7 +126,13 @@ class WebFragment : Fragment() {
 
         webViewModel.url.observe(viewLifecycleOwner, { newUrl ->
             viewDataBinding.webView.stopLoading()
-            viewDataBinding.webView.loadUrl(newUrl+"v=${SharedPrefUtils.getAppVersion(defaultSharedPreferences)}")
+            viewDataBinding.webView.loadUrl(
+                newUrl + "v=${
+                    SharedPrefUtils.getAppVersion(
+                        PreferenceManager.getDefaultSharedPreferences(requireContext())
+                    )
+                }"
+            )
         })
 
         locationObserver = Observer {
@@ -204,7 +214,7 @@ class WebFragment : Fragment() {
         super.onResume()
         Timber.d("onResume")
 
-        if(isRequestSettingsCalled) {
+        if (isRequestSettingsCalled) {
             webViewModel.requestingSettings.observe(
                 viewLifecycleOwner,
                 requestSettingsObserver
@@ -213,7 +223,9 @@ class WebFragment : Fragment() {
 
         webViewModel.locationData.observe(viewLifecycleOwner, locationObserver)
 
-        if (defaultSharedPreferences.getBoolean("map_zoom", false)) {
+        if (PreferenceManager.getDefaultSharedPreferences(requireContext())
+                .getBoolean("map_zoom", false)
+        ) {
             zoomOnLastKnownLocation()
         }
     }
@@ -240,7 +252,11 @@ class WebFragment : Fragment() {
         if (isRequestSettingsCalled) {
             Timber.d("Zoomed")
             val lastLocation =
-                SharedPrefUtils.getSavedLocationResult(requireContext().defaultSharedPreferences)
+                SharedPrefUtils.getSavedLocationResult(
+                    PreferenceManager.getDefaultSharedPreferences(
+                        requireContext()
+                    )
+                )
             updateUserLocation(lastLocation, true, true)
             isZoom = true
         }
@@ -308,10 +324,10 @@ class WebFragment : Fragment() {
         fun requestSettings() {
             Timber.d("requestSettings injected")
             isRequestSettingsCalled = true
-            runOnUiThread {
-                webViewModel.sendSettings()
-            }
-            if (defaultSharedPreferences.getBoolean("map_zoom", false)) {
+            webViewModel.sendSettings()
+            if (PreferenceManager.getDefaultSharedPreferences(requireContext())
+                    .getBoolean("map_zoom", false)
+            ) {
                 zoomOnLastKnownLocation()
             }
         }

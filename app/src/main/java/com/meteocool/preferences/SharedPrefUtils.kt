@@ -1,10 +1,7 @@
 package com.meteocool.preferences
 
 import android.content.SharedPreferences
-import android.location.Location
-import com.meteocool.preferences.FirebaseMessagingWrapper
 import com.meteocool.location.MeteocoolLocation
-import org.jetbrains.anko.defaultSharedPreferences
 
 /**
  * Helper
@@ -38,8 +35,8 @@ class SharedPrefUtils {
         }
 
         fun getFirebaseToken(sharedPrefs: SharedPreferences): String {
-            var token= sharedPrefs.getString(KEY_FIREBASE_TOKEN, "no token")!!
-            if(token == "no token") {
+            var token = sharedPrefs.getString(KEY_FIREBASE_TOKEN, "no token")!!
+            if (token == "no token") {
                 token = FirebaseMessagingWrapper.getFirebaseToken()
                 saveFirebaseToken(sharedPrefs, token)
             }
@@ -50,14 +47,14 @@ class SharedPrefUtils {
             sharedPrefs.edit().putString(APP_VERSION, version).apply()
         }
 
-        fun getAppVersion(sharedPrefs: SharedPreferences) : String {
+        fun getAppVersion(sharedPrefs: SharedPreferences): String {
             return sharedPrefs.getString(APP_VERSION, "no version")!!
         }
 
         /**
          * Fetches location results from [android.content.SharedPreferences].
          */
-        fun getSavedLocationResult(sharedPrefs: SharedPreferences) : MeteocoolLocation {
+        fun getSavedLocationResult(sharedPrefs: SharedPreferences): MeteocoolLocation {
             return MeteocoolLocation(
                 1,
                 sharedPrefs.getFloat(
