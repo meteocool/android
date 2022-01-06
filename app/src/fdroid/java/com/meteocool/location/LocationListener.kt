@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.work.WorkManager
 import com.meteocool.location.storage.LocationPersistenceWorker
 import com.yayandroid.locationmanager.listener.LocationListener
+import timber.log.Timber
 
 class LocationListener(val context: Context) : LocationListener {
     override fun onProcessTypeChanged(processType: Int) {
@@ -13,6 +14,7 @@ class LocationListener(val context: Context) : LocationListener {
     }
 
     override fun onLocationChanged(location: Location?) {
+        Timber.d("Location: $location")
         if (location !== null) {
             handleLocation(location)
         }
