@@ -115,7 +115,7 @@
         <Preference
                 app:key="impressum"
                 app:title="Copyright"
-                android:summary="© DWD © blitzortung.org\n© OpenStreetMap © CARTO\n© Contains Modified Copernicus Sentinel Data, 2021\n© Who's On First © Natural Earth\n© meteocool Contributors ❤️">
+                android:summary="© meteocool Contributors ❤️ (AGPL-3.0)\n\nData Providers:\n© DWD © blitzortung.org © Contains Modified Copernicus Sentinel Data © OroraTech\n\nMap Providers:\n© OpenStreetMap Contributors © CARTO © Who's On First © Natural Earth © CyclOSM\n\nArtwork designed by Freepik from Flaticon.">
 
         </Preference>
     </PreferenceCategory>
