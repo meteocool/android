@@ -76,22 +76,22 @@ dependencies {
 
 
     // JSON library
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     // Onboarding screen
     implementation 'com.github.AppIntro:AppIntro:6.1.0'
 
     // Fused Location Client
-    gmsImplementation 'com.google.android.gms:play-services-location:18.0.0'
+    gmsImplementation 'com.google.android.gms:play-services-location:21.3.0'
 
     // Location Service with and without google play service
     implementation 'com.yayandroid:LocationManager:2.4.1'
 
     // Firebase
     // Import the BoM for the Firebase platform
-    gmsImplementation platform('com.google.firebase:firebase-bom:26.4.0')
+    gmsImplementation platform('com.google.firebase:firebase-bom:33.1.1')
 
-    gmsImplementation 'com.google.firebase:firebase-messaging-ktx:21.0.1'
+    gmsImplementation 'com.google.firebase:firebase-messaging-ktx:24.0.0'
 
     // Settings
     implementation 'androidx.preference:preference-ktx:1.2.1'
