@@ -2,15 +2,14 @@
 
 buildscript {
     ext{
-        kotlin_version = '1.4.31'
+        kotlin_version = '1.6.21'
     }
     repositories {
         google()
         mavenCentral()
-        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.2'
+        classpath 'com.android.tools.build:gradle:7.0.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.3.5'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.4"
@@ -24,7 +23,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter()
         maven { url 'https://jitpack.io' }
     }
 }
