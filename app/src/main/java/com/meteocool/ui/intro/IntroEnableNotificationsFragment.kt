@@ -9,13 +9,12 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.meteocool.R
 import com.meteocool.databinding.IntroEnableNotificationBinding
 import com.meteocool.permissions.PermUtils
-import org.jetbrains.anko.sdk25.coroutines.onCheckedChange
-import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import timber.log.Timber
 
 class IntroEnableNotificationsFragment : Fragment() {
@@ -35,7 +34,7 @@ class IntroEnableNotificationsFragment : Fragment() {
             registerForActivityResult(
                 ActivityResultContracts.RequestPermission()
             ) { isGranted: Boolean ->
-                defaultSharedPreferences.edit().putBoolean("notification", isGranted).apply()
+                requireContext().getSharedPreferences("default", MODE_PRIVATE).edit().putBoolean("notification", isGranted).apply()
                 Timber.d("$isGranted")
                 if (isGranted) {
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
@@ -60,13 +59,16 @@ class IntroEnableNotificationsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewDataBinding.switch1.onCheckedChange { _, isChecked ->
-            defaultSharedPreferences.edit().putBoolean("notification", isChecked).apply()
+        viewDataBinding.switch1.setOnCheckedChangeListener { _, isChecked ->
+            requireContext().getSharedPreferences("default", MODE_PRIVATE).edit()
+                .putBoolean("notification", isChecked).apply()
             if (isChecked) {
                 when {
                     (PermUtils.isBackgroundLocationPermissionGranted(requireContext())) -> {
-                        defaultSharedPreferences.edit().putBoolean("notification", true).apply()
+                        requireContext().getSharedPreferences("default", MODE_PRIVATE).edit()
+                            .putBoolean("notification", true).apply()
                     }
+
                     else -> {
                         val alertDialog: AlertDialog? = activity?.let {
                             val builder = AlertDialog.Builder(it)

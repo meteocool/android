@@ -7,7 +7,6 @@ import com.meteocool.location.MeteocoolLocation
 import com.meteocool.location.MeteocoolLocationFactory
 import com.meteocool.network.UploadWorker
 import com.meteocool.preferences.SharedPrefUtils
-import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
 class LocationPersistenceWorker(private val context: Context, params: WorkerParameters) :
@@ -16,7 +15,7 @@ class LocationPersistenceWorker(private val context: Context, params: WorkerPara
     override suspend fun doWork(): Result {
         val meteocoolLocation = MeteocoolLocationFactory.new(inputData.keyValueMap)
         Timber.d("$meteocoolLocation")
-        SharedPrefUtils.saveResults(context.defaultSharedPreferences, meteocoolLocation)
+        SharedPrefUtils.saveResults(context.getSharedPreferences("default", Context.MODE_PRIVATE), meteocoolLocation)
 //        insertOrUpdateLocation(meteocoolLocation)
         return Result.success()
     }

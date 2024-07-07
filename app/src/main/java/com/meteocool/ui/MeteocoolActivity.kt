@@ -30,7 +30,6 @@ import com.meteocool.network.UploadWorker
 import com.meteocool.permissions.PermUtils
 import com.meteocool.preferences.SharedPrefUtils
 import com.meteocool.ui.map.WebViewModel
-import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -71,8 +70,8 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
 
         val uploadLocation = UploadWorker.createRequest(
             UploadWorker.createDataForLocationPost(
-                defaultSharedPreferences,
-                SharedPrefUtils.getSavedLocationResult(defaultSharedPreferences)
+                getSharedPreferences("default", MODE_PRIVATE),
+                SharedPrefUtils.getSavedLocationResult(getSharedPreferences("default", MODE_PRIVATE))
             )
         )
         WorkManager.getInstance(this)
@@ -91,7 +90,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         stopBackgroundWork()
         if (!PermUtils.isLocationPermissionGranted(
                 this
-            ) && defaultSharedPreferences.getBoolean("map_zoom", false)
+            ) && getSharedPreferences("default", MODE_PRIVATE).getBoolean("map_zoom", false)
         ) {
             this.let {
                 val builder = AlertDialog.Builder(it)
@@ -99,7 +98,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                     setMessage(getString(R.string.dialog_msg_negative_info_map_zoom))
                     openSettings()
                     setNegativeButton(getString(R.string.dg_neg_map_zoom)) { _, _ ->
-                        defaultSharedPreferences.edit().putBoolean("map_zoom", false).apply()
+                        getSharedPreferences("default", MODE_PRIVATE).edit().putBoolean("map_zoom", false).apply()
                     }
                 }
                 builder.create()
@@ -107,7 +106,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         }
         if (!PermUtils.isBackgroundLocationPermissionGranted(
                 this
-            ) && defaultSharedPreferences.getBoolean("notification", false)
+            ) && getSharedPreferences("default", MODE_PRIVATE).getBoolean("notification", false)
         ) {
             this.let {
                 val builder = AlertDialog.Builder(it)
@@ -115,7 +114,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                     setMessage(getString(R.string.dialog_msg_negative_info_map_zoom))
                     openSettings()
                     setNegativeButton(getString(R.string.dg_neg_map_zoom)) { _, _ ->
-                        defaultSharedPreferences.edit().putBoolean("notification", false).apply()
+                        getSharedPreferences("default", MODE_PRIVATE).edit().putBoolean("notification", false).apply()
                     }
                 }
                 builder.create()
@@ -140,15 +139,15 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     override fun onResume() {
         super.onResume()
         Timber.d("onResume")
-        if (defaultSharedPreferences.getBoolean("notification", false)) {
+        if (getSharedPreferences("default", MODE_PRIVATE).getBoolean("notification", false)) {
             MyFirebaseMessagingService.cancelNotification(this, "foreground")
         }
-        defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        getSharedPreferences("default", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(this)
     }
 
     override fun onStop() {
         super.onStop()
-        if (defaultSharedPreferences.getBoolean(
+        if (getSharedPreferences("default", MODE_PRIVATE).getBoolean(
                 "notification",
                 false
             )
@@ -159,7 +158,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
 
     override fun onPause() {
         super.onPause()
-        defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        getSharedPreferences("default", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(this)
     }
 
     private fun startBackgroundWork() {
@@ -174,7 +173,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             .getInstance(this)
             .enqueueUniquePeriodicWork(
                 PERIODIC_LOCATION_TAG,
-                ExistingPeriodicWorkPolicy.REPLACE,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 uploadWorkRequest
             )
     }
@@ -207,7 +206,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                             Pair("url", NetworkUtils.POST_UNREGISTER_TOKEN.toString()),
                             Pair(
                                 "token",
-                                SharedPrefUtils.getFirebaseToken(defaultSharedPreferences)
+                                SharedPrefUtils.getFirebaseToken(getSharedPreferences("default", MODE_PRIVATE))
                             )
                         )
                     )
@@ -216,8 +215,8 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                         .result
                 } else {
                     val data = UploadWorker.createDataForLocationPost(
-                        defaultSharedPreferences,
-                        SharedPrefUtils.getSavedLocationResult(defaultSharedPreferences)
+                        getSharedPreferences("default", MODE_PRIVATE),
+                        SharedPrefUtils.getSavedLocationResult(getSharedPreferences("default", MODE_PRIVATE))
                     )
                     WorkManager.getInstance(this)
                         .enqueue(UploadWorker.createRequest(data))
@@ -226,8 +225,8 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             }
             "notification_details", "notification_intensity", "notification_time" -> {
                 val data = UploadWorker.createDataForLocationPost(
-                    defaultSharedPreferences,
-                    SharedPrefUtils.getSavedLocationResult(defaultSharedPreferences)
+                    getSharedPreferences("default", MODE_PRIVATE),
+                    SharedPrefUtils.getSavedLocationResult(getSharedPreferences("default", MODE_PRIVATE))
                 )
                 WorkManager.getInstance(this)
                     .enqueue(UploadWorker.createRequest(data))
@@ -255,7 +254,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                 packageName,
                 0
             )
-            SharedPrefUtils.saveAppVersion(defaultSharedPreferences, pInfo.versionName)
+            SharedPrefUtils.saveAppVersion(getSharedPreferences("default", MODE_PRIVATE), pInfo.versionName)
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }

@@ -7,7 +7,6 @@ import com.github.appintro.AppIntro2
 import com.github.appintro.AppIntroFragment
 import com.meteocool.ui.MeteocoolActivity
 import com.meteocool.R
-import org.jetbrains.anko.defaultSharedPreferences
 
 /**
  * Introduction to the user for first use.
@@ -74,7 +73,7 @@ class IntroActivity : AppIntro2() {
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
-        defaultSharedPreferences.edit().apply {
+        getSharedPreferences("default", MODE_PRIVATE).edit().apply {
             putBoolean(IS_INTRO_COMPLETED, true)
             apply()
         }

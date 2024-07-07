@@ -2,6 +2,7 @@ package com.meteocool.ui.map
 
 import android.app.Application
 import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.lifecycle.*
 import com.meteocool.app.MeteocoolApp
 import com.meteocool.location.LocationRepository
@@ -12,7 +13,6 @@ import com.meteocool.location.service.LocationServiceFactory
 import com.meteocool.network.NetworkUtils
 import com.meteocool.preferences.booleanLiveData
 import com.meteocool.view.VoidEvent
-import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
 /**
@@ -21,7 +21,7 @@ import timber.log.Timber
 class WebViewModel(application: Application) : AndroidViewModel(application) {
 
     private val sharedPreferences: SharedPreferences =
-        (application as MeteocoolApp).defaultSharedPreferences
+        (application as MeteocoolApp).getSharedPreferences("default", MODE_PRIVATE)
     private val locationRepository: LocationRepository = (application as MeteocoolApp).repository
     private val foregroundLocationService: ForegroundLocationService = LocationServiceFactory.getLocationService(application.applicationContext)
 

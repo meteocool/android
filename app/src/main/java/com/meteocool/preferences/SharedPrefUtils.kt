@@ -1,10 +1,7 @@
 package com.meteocool.preferences
 
 import android.content.SharedPreferences
-import android.location.Location
-import com.meteocool.preferences.FirebaseMessagingWrapper
 import com.meteocool.location.MeteocoolLocation
-import org.jetbrains.anko.defaultSharedPreferences
 
 /**
  * Helper

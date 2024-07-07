@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.meteocool.ui.intro.IntroActivity
-import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
 /**
@@ -23,6 +22,6 @@ class SplashActivity : AppCompatActivity(){
     }
 
     private fun isOnboardingCompleted() : Boolean {
-        return defaultSharedPreferences.getBoolean(IntroActivity.IS_INTRO_COMPLETED, false)
+        return getSharedPreferences("default", MODE_PRIVATE).getBoolean(IntroActivity.IS_INTRO_COMPLETED, false)
     }
 }

@@ -1,6 +1,7 @@
 package com.meteocool.preferences
 
 import android.Manifest
+import android.app.Application.MODE_PRIVATE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -19,7 +20,6 @@ import com.meteocool.injection.InjectorUtils
 import com.meteocool.network.NetworkUtils
 import com.meteocool.permissions.PermUtils
 import com.meteocool.ui.map.WebViewModel
-import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import timber.log.Timber
 
 
@@ -99,7 +99,7 @@ class SettingsFragment() : PreferenceFragmentCompat() {
 
     private fun registerPreferenceClickListener() {
         findPreference<Preference>("feedback")?.setOnPreferenceClickListener {
-            val tokenInShared = SharedPrefUtils.getFirebaseToken(defaultSharedPreferences)
+            val tokenInShared = SharedPrefUtils.getFirebaseToken(requireContext().getSharedPreferences("default", MODE_PRIVATE))
             val token = FirebaseMessagingWrapper.getFirebaseToken()
             if (token == "no token") {
                 handleExternalLink(
@@ -107,7 +107,7 @@ class SettingsFragment() : PreferenceFragmentCompat() {
                 )
             }
 
-            val version: String = SharedPrefUtils.getAppVersion(defaultSharedPreferences)
+            val version: String = SharedPrefUtils.getAppVersion(requireContext().getSharedPreferences("default", MODE_PRIVATE))
             handleExternalLink(
                 getString(R.string.feedback_url) + "\n" + token + "\nShared-Token: $tokenInShared" + "\n" + version
 
