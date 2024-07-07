@@ -11,9 +11,9 @@ import org.jetbrains.anko.defaultSharedPreferences
 import timber.log.Timber
 
 class LocationPersistenceWorker(private val context: Context, params: WorkerParameters) :
-    Worker(context, params)  {
+    CoroutineWorker(context, params)  {
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         val meteocoolLocation = MeteocoolLocationFactory.new(inputData.keyValueMap)
         Timber.d("$meteocoolLocation")
         SharedPrefUtils.saveResults(context.defaultSharedPreferences, meteocoolLocation)

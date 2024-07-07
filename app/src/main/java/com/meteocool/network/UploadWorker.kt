@@ -20,13 +20,13 @@ import java.util.*
  * Upload post requests.
  */
 class UploadWorker(private val context: Context, params: WorkerParameters) :
-    Worker(context, params) {
+    CoroutineWorker(context, params) {
 
     /**
      * Input data is converted to a simple json.
      * IMPORTANT: Always needs to have a Pair("url", <Endpoint-URL as String> in input data to perform a successfull upload.
      */
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         val url = URL(inputData.getString("url"))
         val dataForUpload = mutableMapOf<String, Any>()
         dataForUpload.putAll(inputData.keyValueMap)
