@@ -1,8 +1,12 @@
 package com.meteocool.ui.intro
 
 import android.Manifest
+import android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.POST_NOTIFICATIONS
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,25 +29,43 @@ class IntroEnableNotificationsFragment : Fragment() {
     }
 
     private lateinit var viewDataBinding: IntroEnableNotificationBinding
-    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<Array<String>>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestPermissionLauncher =
             registerForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) { isGranted: Boolean ->
-                requireContext().getSharedPreferences("default", MODE_PRIVATE).edit().putBoolean("notification", isGranted).apply()
-                Timber.d("$isGranted")
-                if (isGranted) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                ActivityResultContracts.RequestMultiplePermissions()
+            ) { grants: Map<String, Boolean> ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+                    && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+                ) {
+                    if (grants[ACCESS_FINE_LOCATION] == true && grants[ACCESS_BACKGROUND_LOCATION] == false) {
                         requestPermissionLauncher.launch(
-                            Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                            arrayOf(ACCESS_BACKGROUND_LOCATION)
                         )
+                    } else {
+                        requireContext().getSharedPreferences("default", MODE_PRIVATE).edit()
+                            .putBoolean("notification", true).apply()
+                        viewDataBinding.switch1.isChecked = true
                     }
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (grants.values.all { it } && grants[ACCESS_BACKGROUND_LOCATION] == false) {
+                        requestPermissionLauncher.launch(
+                            arrayOf(ACCESS_BACKGROUND_LOCATION)
+                        )
+                    } else {
+                        requireContext().getSharedPreferences("default", MODE_PRIVATE).edit()
+                            .putBoolean("notification", true).apply()
+                        viewDataBinding.switch1.isChecked = true
+                    }
+
                 } else {
-                    viewDataBinding.switch1.isChecked = false
+                    Timber.e("AKJHSDHJKASDJKH")
+                    requireContext().getSharedPreferences("default", MODE_PRIVATE).edit()
+                        .putBoolean("notification", true).apply()
+                    viewDataBinding.switch1.isChecked = true
                 }
             }
     }
@@ -75,9 +97,15 @@ class IntroEnableNotificationsFragment : Fragment() {
                             builder.apply {
                                 setMessage(R.string.intro_notification_dialog_explanation)
                                 setPositiveButton("Ok") { _, _ ->
-                                    requestPermissionLauncher.launch(
-                                        ACCESS_FINE_LOCATION
-                                    )
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                        requestPermissionLauncher.launch(
+                                            arrayOf(ACCESS_FINE_LOCATION, POST_NOTIFICATIONS)
+                                        )
+                                    } else {
+                                        requestPermissionLauncher.launch(
+                                            arrayOf(ACCESS_FINE_LOCATION)
+                                        )
+                                    }
                                 }
                                 setNegativeButton(
                                     "Cancel"
