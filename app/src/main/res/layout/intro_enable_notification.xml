@@ -32,43 +32,48 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.915" />
+                app:layout_constraintGuide_percent="0.87" />
 
         <TextView
                 android:id="@+id/title"
                 style="@style/AppIntroDefaultHeading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/intro_title3"
-                app:layout_constraintBottom_toTopOf="@+id/guideline8"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@+id/image"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.485"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread"
+                app:layout_constraintVertical_weight="2"
+                android:text="@string/intro_title3" />
+
+        <ImageView
+                android:id="@+id/image"
+                style="@style/AppIntroDefaultImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/app_intro_image_content_description"
+                app:layout_constraintBottom_toTopOf="@+id/description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_weight="5"
+                app:srcCompat="@drawable/intro_bell" />
 
         <TextView
                 android:id="@+id/description"
                 style="@style/AppIntroDefaultText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="504dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:autoLink="web"
+                app:layout_constraintBottom_toTopOf="@id/switch1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image"
+                app:layout_constraintVertical_weight="3"
                 android:text="@string/intro_description3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-                android:id="@+id/imageView3"
-                style="@style/AppIntroDefaultImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/guideline4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/intro_bell" />
+                tools:text="This is a demo of the AppIntro Library" />
 
         <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch1"
@@ -76,10 +81,11 @@
                 android:layout_height="wrap_content"
                 android:text="@string/intro_toggle_notifications"
                 android:textColor="@color/white_0"
+                app:layout_constraintBottom_toTopOf="@id/guideline4"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/description" />
+                app:layout_constraintTop_toBottomOf="@+id/description"
+                app:layout_constraintVertical_weight="1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
