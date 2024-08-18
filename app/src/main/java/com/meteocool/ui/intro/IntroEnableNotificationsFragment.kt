@@ -1,7 +1,7 @@
 package com.meteocool.ui.intro
 
-import android.Manifest
-import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.*
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,14 +9,12 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.meteocool.R
 import com.meteocool.databinding.IntroEnableNotificationBinding
 import com.meteocool.permissions.PermUtils
-import org.jetbrains.anko.sdk25.coroutines.onCheckedChange
-import org.jetbrains.anko.support.v4.defaultSharedPreferences
-import timber.log.Timber
 
 class IntroEnableNotificationsFragment : Fragment() {
     companion object {
@@ -26,27 +24,37 @@ class IntroEnableNotificationsFragment : Fragment() {
     }
 
     private lateinit var viewDataBinding: IntroEnableNotificationBinding
-    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<Array<String>>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestPermissionLauncher =
             registerForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) { isGranted: Boolean ->
-                defaultSharedPreferences.edit().putBoolean("notification", isGranted).apply()
-                Timber.d("$isGranted")
-                if (isGranted) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                        requestPermissionLauncher.launch(
-                            Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                        )
+                ActivityResultContracts.RequestMultiplePermissions()
+            ) { grants: Map<String, Boolean> ->
+                if (grants.values.all { it }) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        if (grants[ACCESS_BACKGROUND_LOCATION] == null || grants[ACCESS_BACKGROUND_LOCATION] == false) {
+                            requestPermissionLauncher.launch(
+                                arrayOf(ACCESS_BACKGROUND_LOCATION)
+                            )
+                        } else {
+                            updateViewAndPreferences(true)
+                        }
+                        return@registerForActivityResult
                     }
+                    updateViewAndPreferences(true)
                 } else {
-                    viewDataBinding.switch1.isChecked = false
+                    updateViewAndPreferences(false)
                 }
             }
+    }
+
+    private fun updateViewAndPreferences(isGranted: Boolean) {
+        requireContext().getSharedPreferences("default", MODE_PRIVATE).edit()
+            .putBoolean("notification", isGranted).apply()
+        viewDataBinding.switch1.isChecked = isGranted
     }
 
     override fun onCreateView(
@@ -60,22 +68,31 @@ class IntroEnableNotificationsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewDataBinding.switch1.onCheckedChange { _, isChecked ->
-            defaultSharedPreferences.edit().putBoolean("notification", isChecked).apply()
+        viewDataBinding.switch1.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 when {
-                    (PermUtils.isBackgroundLocationPermissionGranted(requireContext())) -> {
-                        defaultSharedPreferences.edit().putBoolean("notification", true).apply()
+                    (PermUtils.isNotificationPermissionGranted(requireContext()) && PermUtils.isBackgroundLocationPermissionGranted(
+                        requireContext()
+                    )) -> {
+                        requireContext().getSharedPreferences("default", MODE_PRIVATE).edit()
+                            .putBoolean("notification", true).apply()
                     }
+
                     else -> {
                         val alertDialog: AlertDialog? = activity?.let {
                             val builder = AlertDialog.Builder(it)
                             builder.apply {
                                 setMessage(R.string.intro_notification_dialog_explanation)
                                 setPositiveButton("Ok") { _, _ ->
-                                    requestPermissionLauncher.launch(
-                                        ACCESS_FINE_LOCATION
-                                    )
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                        requestPermissionLauncher.launch(
+                                            arrayOf(ACCESS_FINE_LOCATION, POST_NOTIFICATIONS)
+                                        )
+                                    } else {
+                                        requestPermissionLauncher.launch(
+                                            arrayOf(ACCESS_FINE_LOCATION)
+                                        )
+                                    }
                                 }
                                 setNegativeButton(
                                     "Cancel"

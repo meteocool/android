@@ -4,6 +4,7 @@
         package="com.meteocool">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -44,7 +45,8 @@
 
         <activity
                 android:name=".ui.SplashActivity"
-                android:theme="@style/SplashTheme">
+            android:exported="true"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,7 +55,8 @@
         </activity>
         <activity
                 android:name=".ui.MeteocoolActivity"
-                android:configChanges="uiMode">
+                android:configChanges="uiMode"
+            android:exported="true">
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -61,9 +64,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                        android:host="app.ng.meteocool.com"
-                        android:scheme="http" />
+                <data android:scheme="http"/>
+                <data android:host="app.ng.meteocool.com"/>
+                <data android:scheme="https" />
             </intent-filter>
         </activity>
         <activity
