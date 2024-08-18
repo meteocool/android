@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -14,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreferenceCompat
 import com.meteocool.R
 import com.meteocool.injection.InjectorUtils
@@ -33,8 +35,6 @@ class SettingsFragment() : PreferenceFragmentCompat() {
     }
 
 
-    private lateinit var isZoomEnabledObserver: Observer<Boolean>
-    private lateinit var areNotificationsEnabledObserver: Observer<Boolean>
     private lateinit var mapZoomPermissionsLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var notificationsPermissionsLauncher: ActivityResultLauncher<Array<String>>
 
@@ -42,22 +42,19 @@ class SettingsFragment() : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        PreferenceManager.getDefaultSharedPreferences(requireActivity())
+            .registerOnSharedPreferenceChangeListener(webViewModel)
+        webViewModel.isZoomEnabled.observe(viewLifecycleOwner, Observer { isZoomEnabled ->
+            Timber.i("isZoomEnabled: $isZoomEnabled")
+            findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked = isZoomEnabled
+        })
 
-        isZoomEnabledObserver = androidx.lifecycle.Observer<Boolean> {
-            this.preferenceManager.findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked =
-                it
-        }
-        webViewModel.isZoomEnabled.observe(viewLifecycleOwner, isZoomEnabledObserver)
-
-        areNotificationsEnabledObserver = androidx.lifecycle.Observer<Boolean> {
-            findPreference<SwitchPreferenceCompat>("notification")?.isChecked = it
-        }
-        webViewModel.areNotificationsEnabled.observe(
-            viewLifecycleOwner,
-            areNotificationsEnabledObserver
-        )
+        webViewModel.areNotificationsEnabled.observe(viewLifecycleOwner, Observer { areNotificationsEnabled ->
+            Timber.i("areNotificationsEnabled: $areNotificationsEnabled")
+            findPreference<SwitchPreferenceCompat>("notification")?.isChecked = areNotificationsEnabled
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,16 +69,17 @@ class SettingsFragment() : PreferenceFragmentCompat() {
                             notificationsPermissionsLauncher.launch(
                                 arrayOf(ACCESS_BACKGROUND_LOCATION)
                             )
+                        } else {
+                            PreferenceManager.getDefaultSharedPreferences(requireActivity()).edit()
+                                .putBoolean("notification", true).apply()
                         }
                         return@registerForActivityResult
                     }
-                    requireContext().getSharedPreferences("default", MODE_PRIVATE).edit()
+                    PreferenceManager.getDefaultSharedPreferences(requireActivity()).edit()
                         .putBoolean("notification", true).apply()
-                    findPreference<SwitchPreferenceCompat>("notification")?.isChecked = true
                 } else {
-                    requireContext().getSharedPreferences("default", MODE_PRIVATE).edit()
+                    PreferenceManager.getDefaultSharedPreferences(requireActivity()).edit()
                         .putBoolean("notification", false).apply()
-                    findPreference<SwitchPreferenceCompat>("notification")?.isChecked = false
                 }
             }
 
@@ -90,13 +88,11 @@ class SettingsFragment() : PreferenceFragmentCompat() {
                 ActivityResultContracts.RequestMultiplePermissions()
             ) { grants: Map<String, Boolean> ->
                 if (grants.values.all { it }) {
-                    requireContext().getSharedPreferences("default", MODE_PRIVATE).edit()
-                        .putBoolean("notification", true).apply()
-                    findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked = true
+                    PreferenceManager.getDefaultSharedPreferences(requireActivity()).edit()
+                        .putBoolean("map_zoom", true).apply()
                 } else {
-                    requireContext().getSharedPreferences("default", MODE_PRIVATE).edit()
-                        .putBoolean("notification", true).apply()
-                    findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked = false
+                    PreferenceManager.getDefaultSharedPreferences(requireActivity()).edit()
+                        .putBoolean("map_zoom", false).apply()
                 }
             }
         registerPreferenceClickListener()
@@ -205,7 +201,8 @@ class SettingsFragment() : PreferenceFragmentCompat() {
                     setNegativeButton(
                         getString(R.string.dialog_neg)
                     ) { _, _ ->
-                        findPreference<SwitchPreferenceCompat>("map_zoom")?.isChecked = false
+                        PreferenceManager.getDefaultSharedPreferences(requireActivity()).edit()
+                            .putBoolean("map_zoom", false).apply()
                     }
                     setCancelable(false)
                 }
@@ -216,9 +213,9 @@ class SettingsFragment() : PreferenceFragmentCompat() {
     }
 
     private fun requiresBackgroundLocationAndNotificationPermission() {
-        if (!PermUtils.isNotificationPermissionGranted(requireContext()) && !PermUtils.isBackgroundLocationPermissionGranted(
+        if (!(PermUtils.isNotificationPermissionGranted(requireContext()) && PermUtils.isBackgroundLocationPermissionGranted(
                 requireContext()
-            )
+            ))
         ) {
             val alertDialog: AlertDialog? = activity?.let {
                 val builder = AlertDialog.Builder(it)
@@ -238,7 +235,8 @@ class SettingsFragment() : PreferenceFragmentCompat() {
                     setNegativeButton(
                         getString(R.string.dialog_neg)
                     ) { _, _ ->
-                        findPreference<SwitchPreferenceCompat>("notification")?.isChecked = false
+                        PreferenceManager.getDefaultSharedPreferences(requireActivity()).edit()
+                            .putBoolean("notification", false).apply()
                     }
                     setCancelable(false)
                 }

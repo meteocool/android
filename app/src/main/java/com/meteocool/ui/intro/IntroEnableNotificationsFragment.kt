@@ -39,6 +39,8 @@ class IntroEnableNotificationsFragment : Fragment() {
                             requestPermissionLauncher.launch(
                                 arrayOf(ACCESS_BACKGROUND_LOCATION)
                             )
+                        } else {
+                            updateViewAndPreferences(true)
                         }
                         return@registerForActivityResult
                     }

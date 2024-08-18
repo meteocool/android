@@ -18,6 +18,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.meteocool.R
 import com.meteocool.databinding.ActivityMeteocoolBinding
@@ -36,7 +37,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Main Activity from meteocool
  */
-class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class MeteocoolActivity : AppCompatActivity() {
 
 
     private val webViewModel: WebViewModel by viewModels {
@@ -87,10 +88,13 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
 
     override fun onStart() {
         super.onStart()
+
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .registerOnSharedPreferenceChangeListener(webViewModel)
         stopBackgroundWork()
         if (!PermUtils.isLocationPermissionGranted(
                 this
-            ) && getSharedPreferences("default", MODE_PRIVATE).getBoolean("map_zoom", false)
+            ) && PreferenceManager.getDefaultSharedPreferences(this).getBoolean("map_zoom", false)
         ) {
             this.let {
                 val builder = AlertDialog.Builder(it)
@@ -98,7 +102,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                     setMessage(getString(R.string.dialog_msg_negative_info_map_zoom))
                     openSettings()
                     setNegativeButton(getString(R.string.dg_neg_map_zoom)) { _, _ ->
-                        getSharedPreferences("default", MODE_PRIVATE).edit().putBoolean("map_zoom", false).apply()
+                        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("map_zoom", false).apply()
                     }
                 }
                 builder.create()
@@ -106,7 +110,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         }
         if (!PermUtils.isBackgroundLocationPermissionGranted(
                 this
-            ) && getSharedPreferences("default", MODE_PRIVATE).getBoolean("notification", false)
+            ) && PreferenceManager.getDefaultSharedPreferences(this).getBoolean("notification", false)
         ) {
             this.let {
                 val builder = AlertDialog.Builder(it)
@@ -114,7 +118,7 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
                     setMessage(getString(R.string.dialog_msg_negative_info_map_zoom))
                     openSettings()
                     setNegativeButton(getString(R.string.dg_neg_map_zoom)) { _, _ ->
-                        getSharedPreferences("default", MODE_PRIVATE).edit().putBoolean("notification", false).apply()
+                        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("notification", false).apply()
                     }
                 }
                 builder.create()
@@ -139,26 +143,20 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     override fun onResume() {
         super.onResume()
         Timber.d("onResume")
-        if (getSharedPreferences("default", MODE_PRIVATE).getBoolean("notification", false)) {
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("notification", false)) {
             MyFirebaseMessagingService.cancelNotification(this, "foreground")
         }
-        getSharedPreferences("default", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(this)
     }
 
     override fun onStop() {
         super.onStop()
-        if (getSharedPreferences("default", MODE_PRIVATE).getBoolean(
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
                 "notification",
                 false
             )
         ) {
             startBackgroundWork()
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        getSharedPreferences("default", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(this)
     }
 
     private fun startBackgroundWork() {
@@ -191,50 +189,6 @@ class MeteocoolActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
-        }
-    }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        Timber.d("OnSharedPref was changed $key")
-        when (key) {
-            "notification" -> {
-                val isNotificationON = sharedPreferences!!.getBoolean(key, false)
-                Timber.i("Preference value $key was updated to $isNotificationON ")
-                if (!isNotificationON) {
-                    val data = UploadWorker.createInputData(
-                        mapOf(
-                            Pair("url", NetworkUtils.POST_UNREGISTER_TOKEN.toString()),
-                            Pair(
-                                "token",
-                                SharedPrefUtils.getFirebaseToken(getSharedPreferences("default", MODE_PRIVATE))
-                            )
-                        )
-                    )
-                    WorkManager.getInstance(this)
-                        .enqueue(UploadWorker.createRequest(data))
-                        .result
-                } else {
-                    val data = UploadWorker.createDataForLocationPost(
-                        getSharedPreferences("default", MODE_PRIVATE),
-                        SharedPrefUtils.getSavedLocationResult(getSharedPreferences("default", MODE_PRIVATE))
-                    )
-                    WorkManager.getInstance(this)
-                        .enqueue(UploadWorker.createRequest(data))
-                        .result
-                }
-            }
-            "notification_details", "notification_intensity", "notification_time" -> {
-                val data = UploadWorker.createDataForLocationPost(
-                    getSharedPreferences("default", MODE_PRIVATE),
-                    SharedPrefUtils.getSavedLocationResult(getSharedPreferences("default", MODE_PRIVATE))
-                )
-                WorkManager.getInstance(this)
-                    .enqueue(UploadWorker.createRequest(data))
-                    .result
-            }
-            "map_rotate" -> {
-                webViewModel.sendSettings()
-            }
         }
     }
 
