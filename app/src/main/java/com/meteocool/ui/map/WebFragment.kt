@@ -1,8 +1,10 @@
 package com.meteocool.ui.map
 
 import android.Manifest
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.widget.Toast
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
@@ -289,8 +291,10 @@ class WebFragment : Fragment() {
                 return false
             }
             // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
-            Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
-                startActivity(this)
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(requireContext(), R.string.cant_open_link, Toast.LENGTH_SHORT).show()
             }
             return true
         }
