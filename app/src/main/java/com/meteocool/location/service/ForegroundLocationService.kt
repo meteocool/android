@@ -1,38 +1,53 @@
 package com.meteocool.location.service
 
-import com.meteocool.location.Resource
 import android.content.Context
+import android.content.IntentSender
+import android.location.Location
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.meteocool.app.app
 import com.meteocool.location.MeteocoolLocation
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import java.util.concurrent.TimeUnit
 
-abstract class ForegroundLocationService(protected val context : Context){
+/**
+ * Location updates while the map is on screen. Each fix goes to the map, to
+ * the saved last location and to the push registration.
+ */
+abstract class ForegroundLocationService(protected val context: Context) {
 
-    companion object{
-        const val BACKGROUND_SETTING = 998
-        const val FOREGROUND_SETTING = 1000
-        const val REQUEST_CHECK_GPS_SETTINGS = 999
+    protected val updateInterval: Long = TimeUnit.SECONDS.toMillis(10)
+    protected val fastestUpdateInterval: Long = TimeUnit.SECONDS.toMillis(5)
+
+    private val _fixes = MutableLiveData<MeteocoolLocation>()
+    val fixes: LiveData<MeteocoolLocation> = _fixes
+
+    private val _resolutions = MutableSharedFlow<IntentSender>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
+
+    /** Location settings the user has to change first, e.g. turning location on. */
+    val resolutions: SharedFlow<IntentSender> = _resolutions
+
+    var isRunning = false
+        protected set
+
+    abstract fun start()
+    abstract fun stop()
+
+    /** Called on the main thread. */
+    protected fun deliver(location: Location) {
+        val fix = MeteocoolLocation.from(location)
+        _fixes.value = fix
+        val app = context.app
+        app.prefs.saveLastLocation(fix)
+        app.registration.onLocation(fix, background = false)
     }
 
-    /**
-     * The desired interval for location updates. Inexact. Updates may be more or less frequent.
-     */
-    protected var updateInterval : Long = TimeUnit.SECONDS.toMillis(20)
-
-    /**
-     * The fastest rate for active location updates. Updates will never be more frequent
-     * than this value, but they may be less frequent.
-     */
-    protected var fastestUpdateInterval : Long = TimeUnit.SECONDS.toMillis(10)
-
-    /**
-     * The max time before batched results are delivered by location services. Results may be
-     * delivered sooner than this interval.
-     */
-    protected var maxWaitTime : Long =  TimeUnit.SECONDS.toMillis(20)
-
-    abstract fun requestLocationUpdates()
-    abstract fun stopLocationUpdates()
-    abstract fun liveData() : LiveData<Resource<MeteocoolLocation>>
-
+    protected fun requestResolution(intentSender: IntentSender) {
+        _resolutions.tryEmit(intentSender)
+    }
 }

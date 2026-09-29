@@ -1,333 +1,508 @@
 package com.meteocool.ui.map
 
-import android.Manifest
+import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
+import android.webkit.GeolocationPermissions
 import android.webkit.JavascriptInterface
+import android.webkit.RenderProcessGoneDetail
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
-import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
+import androidx.annotation.RequiresApi
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
-import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
+import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
+import com.meteocool.BuildConfig
 import com.meteocool.R
 import com.meteocool.databinding.FragmentMapBinding
-import com.meteocool.injection.InjectorUtils
+import com.meteocool.environment.MeteocoolEnvironment
 import com.meteocool.location.MeteocoolLocation
-import com.meteocool.location.ResolvableApiException
-import com.meteocool.location.Resource
-import com.meteocool.network.NetworkUtils
 import com.meteocool.permissions.PermUtils
-import com.meteocool.preferences.SharedPrefUtils
-import com.meteocool.view.VoidEvent
-import com.meteocool.view.VoidEventObserver
+import com.meteocool.ui.MeteocoolActivity
+import com.meteocool.ui.map.MapViewModel.LocationButtonState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.io.File
+import kotlin.math.abs
 
 /**
- * Loads the webapp "meteocool".
+ * The map: a WebView showing meteocool/core's android.html, with native
+ * layer, settings and location buttons floating on top.
+ *
+ * The page talks back through the `Android` JavaScript interface:
+ * requestSettings() when it is ready, and postMessage() with the same
+ * messages iOS receives on its scriptHandler.
  */
 class WebFragment : Fragment() {
 
-    private lateinit var locationObserver: Observer<Resource<MeteocoolLocation>>
-    private lateinit var requestSettingsObserver: VoidEventObserver<VoidEvent>
-
-    /**
-     * Use databinding for this fragment.
-     */
-    private lateinit var viewDataBinding: FragmentMapBinding
-
-    //    private lateinit var requestPermissionLauncher : ActivityResultLauncher<String>
-    private var isRequestSettingsCalled: Boolean = false
-    private var isZoom: Boolean = false
-    private var isStartFocus: Boolean = true
-
-    private lateinit var requestLocationPermissionLauncher: ActivityResultLauncher<String>
-
-    private val webViewModel: WebViewModel by activityViewModels {
-        InjectorUtils.provideWebViewModelFactory(requireActivity().application)
+    companion object {
+        private const val LOAD_TIMEOUT_MILLIS = 30_000L
+        private const val WEB_CACHE_LIMIT_BYTES = 100L * 1024 * 1024
+        private val gson = Gson()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requestLocationPermissionLauncher =
-            registerForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) { isGranted: Boolean ->
-                Timber.d("$isGranted")
-                if (isGranted) {
-                    locateMe()
-                }
-            }
-    }
+    private var _binding: FragmentMapBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
+    private val viewModel: MapViewModel by activityViewModels()
 
-        viewDataBinding.lifecycleOwner = viewLifecycleOwner
-        viewDataBinding.viewmodel = webViewModel
-        viewDataBinding.layerFunction = Runnable {
-            viewDataBinding.webView.evaluateJavascript("window.openLayerswitcher();") {
+    private var webView: WebView? = null
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private val loadTimeout = Runnable { showLoadFailure() }
+    private var lastFix: MeteocoolLocation? = null
+    private var pendingGeolocation: Pair<String, GeolocationPermissions.Callback>? = null
+
+    private val locationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { grants ->
+            if (grants.values.any { it }) {
+                pressLocationButton()
+            } else {
+                viewModel.prefs.mapZoom = false
+                showLocationPermissionAlert()
             }
         }
 
-        val webSettings = viewDataBinding.webView.settings
-        webSettings.javaScriptEnabled = true
-        webSettings.domStorageEnabled = true
-        webSettings.databaseEnabled = true
-        webSettings.setGeolocationEnabled(true)
+    private val geolocationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { grants ->
+            val (origin, callback) = pendingGeolocation ?: return@registerForActivityResult
+            pendingGeolocation = null
+            callback.invoke(origin, grants.values.any { it }, false)
+        }
 
-        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                webSettings.forceDark = WebSettings.FORCE_DARK_ON
+    private val locationSettingsLauncher =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
+            // Location may have just been turned on; start over so updates flow.
+            if (viewModel.buttonState.value != LocationButtonState.OFF) {
+                viewModel.locationService.stop()
+                viewModel.locationService.start()
             }
         }
 
-        viewDataBinding.webView.webViewClient = MyWebViewClient()
-
-        return viewDataBinding.root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        applyInsets()
 
-        viewDataBinding.locateMe.setOnClickListener {
-            locateMe()
-        }
+        binding.layers.setOnClickListener { openLayerSwitcher() }
+        binding.settings.setOnClickListener { (activity as? MeteocoolActivity)?.openSettings() }
+        binding.locateMe.setOnClickListener { onLocationButtonTapped() }
+        binding.retry.setOnClickListener { viewModel.reloadMap() }
 
-        requestSettingsObserver = VoidEventObserver {
-            Timber.d("requestSetting")
-            val settings: Gson = Gson().newBuilder().create()
-            val currentSettings = mapOf(
-                Pair("mapRotation", requireContext().getSharedPreferences("default", MODE_PRIVATE).getBoolean("map_rotate", false)),
-            )
-            Timber.d("Updated ")
-            windowSettingsInjectSettings(settings, currentSettings)
-        }
+        createWebView()
 
-        viewDataBinding.webView.addJavascriptInterface(WebAppInterface(), "Android")
+        viewModel.mapUrl.observe(viewLifecycleOwner) { loadMap(it) }
+        viewModel.buttonState.observe(viewLifecycleOwner) { renderLocationButton(it) }
+        viewModel.fixes.observe(viewLifecycleOwner) { onFix(it) }
+        viewModel.webSettingsVersion.observe(viewLifecycleOwner) { injectSettings() }
 
-        webViewModel.url.observe(viewLifecycleOwner) { newUrl ->
-            viewDataBinding.webView.stopLoading()
-            viewDataBinding.webView.loadUrl(
-                newUrl + "v=${
-                    SharedPrefUtils.getAppVersion(
-                        requireContext().getSharedPreferences("default", MODE_PRIVATE)
-                    )
-                }"
-            )
-        }
-
-        locationObserver = Observer {
-            Timber.d("Location Live Data")
-            if (it.isSuccessful) {
-                if (isRequestSettingsCalled) {
-                    Timber.d(it.data().toString())
-                    updateUserLocation(
-                        it.data(),
-                        isZoom,
-                        isStartFocus || isZoom
-                    )
-                    isZoom = false
-                    isStartFocus = false
-                }
-            } else {
-                if (it.error() != null && it.error() is ResolvableApiException) {
-                    (it.error() as ResolvableApiException).startResolutionForResult(
-                        requireActivity(),
-                        1
-                    )
-                    Timber.d(it.error())
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.locationService.resolutions.collect { sender ->
+                    locationSettingsLauncher.launch(IntentSenderRequest.Builder(sender).build())
                 }
             }
         }
-
     }
 
-    private fun windowSettingsInjectSettings(
-        settings: Gson,
-        currentSettings: Map<String, Boolean>
-    ) {
-        val string = "window.settings.injectSettings(${settings.toJson(currentSettings)});"
-        viewDataBinding.webView.post {
-            run {
-                viewDataBinding.webView.evaluateJavascript(string) {
-                    Timber.d(string)
-                }
+    /** The map fills the screen between the system bars; the buttons clear the status bar and cutout. */
+    private fun applyInsets() {
+        val margin = resources.getDimensionPixelSize(R.dimen.map_control_margin)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.mapRoot) { _, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
+            binding.webContainer.updatePadding(left = bars.left, top = bars.top, right = bars.right, bottom = bars.bottom)
+            binding.controls.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = bars.top + margin
+                marginEnd = bars.right + margin
             }
+            insets
+        }
+    }
+
+    @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
+    private fun createWebView() {
+        WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
+        val web = WebView(requireContext())
+        web.settings.apply {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            setGeolocationEnabled(true)
+        }
+        web.webViewClient = MapWebViewClient()
+        web.webChromeClient = MapChromeClient()
+        web.addJavascriptInterface(Bridge(), "Android")
+        web.setOnTouchListener(MapGestureListener())
+        binding.webContainer.addView(web, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        webView = web
+    }
+
+    private fun loadMap(url: String) {
+        val web = webView ?: return
+        viewModel.pageReady = false
+        binding.layers.isEnabled = false
+        binding.loadError.isVisible = false
+        mainHandler.removeCallbacks(loadTimeout)
+        mainHandler.postDelayed(loadTimeout, LOAD_TIMEOUT_MILLIS)
+        web.stopLoading()
+        web.loadUrl(url)
+    }
+
+    private fun showLoadFailure() {
+        val b = _binding ?: return
+        mainHandler.removeCallbacks(loadTimeout)
+        viewModel.pageReady = false
+        b.layers.isEnabled = false
+        b.loadError.isVisible = true
+        setControlsVisible(true)
+    }
+
+    /** The page called requestSettings(): its window functions exist now. */
+    private fun onPageReady() {
+        val b = _binding ?: return
+        mainHandler.removeCallbacks(loadTimeout)
+        viewModel.pageReady = true
+        b.loadError.isVisible = false
+        b.layers.isEnabled = true
+        injectSettings()
+        activateLocationIfAuthorized()
+        setControlsVisible(true)
+    }
+
+    private fun handleMessage(message: String) {
+        when (message) {
+            "requestSettings" -> onPageReady()
+            "layerSwitcherOpened", "detailSheetExpanded" -> setControlsVisible(false)
+            "layerSwitcherClosed", "detailSheetCollapsed" -> setControlsVisible(true)
+            "impactLight" -> webView?.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+            "impactMedium" -> webView?.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            "impactHeavy" -> webView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            else -> Timber.d("Unknown message from the page: $message")
+        }
+    }
+
+    private fun setControlsVisible(visible: Boolean) {
+        _binding?.controls?.isVisible = visible
+    }
+
+    private fun evaluate(script: String, callback: ((String?) -> Unit)? = null) {
+        webView?.evaluateJavascript(script) { callback?.invoke(it) }
+    }
+
+    private fun injectSettings() {
+        if (!viewModel.pageReady) return
+        evaluate("window.settings && window.settings.injectSettings(${gson.toJson(viewModel.webSettings())});")
+    }
+
+    private fun openLayerSwitcher() {
+        if (!viewModel.pageReady) return
+        setControlsVisible(false)
+        evaluate("(function(){ try { window.openLayerswitcher(); return true; } catch (e) { return false; } })();") {
+            if (it != "true") setControlsVisible(true)
         }
     }
 
     override fun onStart() {
         super.onStart()
-
-        windowEnterForeground()
-
-        if (PermUtils.isLocationPermissionGranted(requireContext())) {
-            webViewModel.requestForegroundLocationUpdates()
+        if (!PermUtils.isLocationPermissionGranted(requireContext()) &&
+            viewModel.buttonState.value != LocationButtonState.OFF
+        ) {
+            // Permission was revoked while the app was away.
+            setLocationButton(LocationButtonState.OFF)
+            viewModel.prefs.mapZoom = false
         }
-    }
-
-    private fun windowEnterForeground() {
-        if (isRequestSettingsCalled) {
-            val function = "window.enterForeground();"
-            try {
-                viewDataBinding.webView.post {
-                    run {
-                        viewDataBinding.webView.evaluateJavascript(function) {}
-                    }
-                }
-            } catch (e: Exception) {
-                Timber.w(e)
+        if (viewModel.pageReady) {
+            evaluate("window.enterForeground && window.enterForeground();")
+            if (viewModel.prefs.mapZoom) {
+                viewModel.zoomOnce = true
+                viewModel.autoFocusOnce = true
             }
         }
-    }
-
-    private fun unregisterTileUpdates() {
-        val function = "window.leaveForeground();"
-        viewDataBinding.webView.post {
-            run {
-                viewDataBinding.webView.evaluateJavascript(function) {}
-            }
-        }
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("onResume")
-
-        if(isRequestSettingsCalled) {
-            webViewModel.requestingSettings.observe(
-                viewLifecycleOwner,
-                requestSettingsObserver
-            )
-        }
-
-        webViewModel.locationData.observe(viewLifecycleOwner, locationObserver)
-
-        if (requireContext().getSharedPreferences("default", MODE_PRIVATE).getBoolean("map_zoom", false)) {
-            zoomOnLastKnownLocation()
-        }
+        if (viewModel.buttonState.value != LocationButtonState.OFF) viewModel.locationService.start()
     }
 
     override fun onStop() {
         super.onStop()
-        webViewModel.stopForegroundLocationUpdates()
-        unregisterTileUpdates()
+        viewModel.locationService.stop()
+        if (viewModel.pageReady) evaluate("window.leaveForeground && window.leaveForeground();")
+        trimWebCacheIfNeeded()
     }
 
-    private fun updateUserLocation(location: MeteocoolLocation, isZoom: Boolean, isFocus: Boolean) {
-        val string =
-            "window.lm.updateLocation(${location.latitude}, ${location.longitude}, ${location.accuracy}, ${isZoom}, ${isFocus});"
-        Timber.d(string)
-        viewDataBinding.webView.post {
-            run {
-                viewDataBinding.webView.evaluateJavascript(string) {
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mainHandler.removeCallbacks(loadTimeout)
+        webView?.let {
+            binding.webContainer.removeView(it)
+            it.destroy()
+        }
+        webView = null
+        _binding = null
+    }
+
+    /** Back steps back through the page's own history first. Returns whether it did. */
+    fun goBack(): Boolean {
+        val web = webView ?: return false
+        if (!web.canGoBack()) return false
+        web.goBack()
+        return true
+    }
+
+    /* ---- location ------------------------------------------------------ */
+
+    private fun onFix(fix: MeteocoolLocation) {
+        lastFix = fix
+        sendFix(fix)
+    }
+
+    private fun sendFix(fix: MeteocoolLocation) {
+        if (!viewModel.pageReady || viewModel.buttonState.value == LocationButtonState.OFF) return
+        val focus = viewModel.autoFocus || viewModel.autoFocusOnce
+        evaluate(
+            "window.lm && window.lm.updateLocation(${fix.latitude}, ${fix.longitude}, " +
+                "${fix.accuracy.coerceAtLeast(0f)}, ${viewModel.zoomOnce}, $focus);"
+        )
+        viewModel.zoomOnce = false
+        viewModel.autoFocusOnce = false
+    }
+
+    private fun onLocationButtonTapped() {
+        if (viewModel.buttonState.value == LocationButtonState.OFF &&
+            !PermUtils.isLocationPermissionGranted(requireContext())
+        ) {
+            locationPermissionLauncher.launch(PermUtils.LOCATION_PERMISSIONS)
+            return
+        }
+        pressLocationButton()
+    }
+
+    private fun pressLocationButton() {
+        when (viewModel.buttonState.value) {
+            LocationButtonState.OFF, null -> {
+                viewModel.autoFocusOnce = true
+                setLocationButton(LocationButtonState.ACTIVE)
+                viewModel.locationService.start()
+            }
+            LocationButtonState.ACTIVE -> {
+                viewModel.autoFocus = true
+                viewModel.zoomOnce = true
+                setLocationButton(LocationButtonState.TRACKING)
+                lastFix?.let { sendFix(it) }
+            }
+            LocationButtonState.TRACKING -> {
+                viewModel.autoFocus = false
+                viewModel.autoFocusOnce = false
+                viewModel.zoomOnce = false
+                setLocationButton(LocationButtonState.OFF)
+                viewModel.locationService.stop()
+                if (viewModel.pageReady) evaluate("window.lm && window.lm.updateLocation(-1, -1, -1, false, false);")
+            }
+        }
+    }
+
+    /** Turns the location button on once the page is up, if permission is already there. */
+    private fun activateLocationIfAuthorized() {
+        if (!viewModel.pageReady || !viewModel.prefs.onboardingDone) return
+        if (viewModel.buttonState.value != LocationButtonState.OFF) {
+            viewModel.locationService.start()
+            return
+        }
+        if (!PermUtils.isLocationPermissionGranted(requireContext())) return
+        if (viewModel.prefs.mapZoom) viewModel.zoomOnce = true
+        pressLocationButton()
+    }
+
+    /** Dragging the map while tracking stops the following, without re-centring. */
+    private fun onMapGesture() {
+        if (viewModel.buttonState.value != LocationButtonState.TRACKING) return
+        viewModel.autoFocus = false
+        viewModel.autoFocusOnce = false
+        viewModel.zoomOnce = false
+        setLocationButton(LocationButtonState.ACTIVE)
+    }
+
+    private fun setLocationButton(state: LocationButtonState) {
+        viewModel.setButtonState(state)
+    }
+
+    private fun renderLocationButton(state: LocationButtonState) {
+        binding.locateMe.setImageResource(
+            when (state) {
+                LocationButtonState.OFF -> R.drawable.ic_location_off
+                LocationButtonState.ACTIVE -> R.drawable.ic_location_active
+                LocationButtonState.TRACKING -> R.drawable.ic_location_tracking
+            }
+        )
+        ViewCompat.setStateDescription(
+            binding.locateMe,
+            getString(
+                when (state) {
+                    LocationButtonState.OFF -> R.string.location_button_off
+                    LocationButtonState.ACTIVE -> R.string.location_button_active
+                    LocationButtonState.TRACKING -> R.string.location_button_tracking
                 }
+            )
+        )
+    }
+
+    private fun showLocationPermissionAlert() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.location_permission_required)
+            .setMessage(R.string.location_permission_general)
+            .setPositiveButton(R.string.change_in_settings) { _, _ ->
+                startActivity(PermUtils.appSettingsIntent(requireContext()))
+            }
+            .setNegativeButton(R.string.dismiss, null)
+            .show()
+    }
+
+    /* ---- web cache ----------------------------------------------------- */
+
+    /** WebView's HTTP cache has no size limit of its own; drop it past 100 MB. Local storage stays. */
+    private fun trimWebCacheIfNeeded() {
+        val context = context?.applicationContext ?: return
+        lifecycleScope.launch {
+            val size = withContext(Dispatchers.IO) {
+                listOf("WebView", "org.chromium.android_webview")
+                    .map { File(context.cacheDir, it) }
+                    .sumOf { dir -> dir.walkBottomUp().filter { it.isFile }.sumOf { it.length() } }
+            }
+            if (size > WEB_CACHE_LIMIT_BYTES) {
+                Timber.i("Web cache is ${size / (1024 * 1024)} MB, clearing it")
+                webView?.clearCache(true)
             }
         }
     }
 
-    private fun zoomOnLastKnownLocation() {
-        if (isRequestSettingsCalled) {
-            Timber.d("Zoomed")
-            val lastLocation =
-                SharedPrefUtils.getSavedLocationResult(requireContext().getSharedPreferences("default", MODE_PRIVATE))
-            updateUserLocation(lastLocation, isZoom = true, isFocus = true)
-            isZoom = true
+    /* ---- WebView plumbing --------------------------------------------- */
+
+    private fun isMapOrigin(uri: Uri?): Boolean =
+        uri?.scheme == "https" && uri.host == MeteocoolEnvironment.current.webHostName
+
+    /** JavaScript calls arrive on a background thread, from whatever page is loaded. */
+    private inner class Bridge {
+        @JavascriptInterface
+        fun requestSettings() = onMain("requestSettings")
+
+        @JavascriptInterface
+        fun postMessage(message: String) = onMain(message)
+
+        private fun onMain(message: String) {
+            mainHandler.post {
+                val web = webView ?: return@post
+                if (!isMapOrigin(web.url?.toUri())) return@post
+                handleMessage(message)
+            }
         }
     }
 
-    inner class MyWebViewClient() : WebViewClient() {
+    private inner class MapWebViewClient : WebViewClient() {
+        override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+            if (isMapOrigin(request.url)) return false
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, request.url))
+            } catch (e: ActivityNotFoundException) {
+                Timber.w("No app for ${request.url.scheme}")
+            }
+            return true
+        }
 
-        override fun onReceivedError(
-            view: WebView?,
-            request: WebResourceRequest?,
-            error: WebResourceError?
-        ) {
-            super.onReceivedError(view, request, error)
-            Timber.d("onReceivedError ${error!!.description}")
-            Timber.d("onReceivedError ${request!!.url}")
-            if (request.url.toString() == NetworkUtils.MAP_URL) {
-                viewDataBinding.webView.findNavController().navigate(R.id.event_error)
+        override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
+            if (request.isForMainFrame) {
+                Timber.w("Map failed to load: ${error.errorCode}")
+                showLoadFailure()
             }
         }
 
-        override fun onReceivedHttpError(
-            view: WebView?,
-            request: WebResourceRequest?,
-            errorResponse: WebResourceResponse?
-        ) {
-            super.onReceivedHttpError(view, request, errorResponse)
-            Timber.d("onReceivedHttpError")
-        }
-
-        override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-            if (Uri.parse(url).host!!.contains("meteocool.com")) {
-                // This is my web site, so do not override; let my WebView load the page
-                return false
-            }
-            // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
-            Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
-                startActivity(this)
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean {
+            Timber.w("WebView renderer gone, crashed: ${detail.didCrash()}")
+            val b = _binding
+            if (view == webView && b != null) {
+                b.webContainer.removeView(view)
+                view.destroy()
+                webView = null
+                createWebView()
+                showLoadFailure()
             }
             return true
         }
     }
 
-    private fun locateMe() {
-        Timber.d("locateMe")
-        isZoom = true
-        when (PackageManager.PERMISSION_GRANTED) {
-            ContextCompat.checkSelfPermission(
-                requireActivity().applicationContext,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) -> {
-                Timber.d("Granted")
-                webViewModel.requestForegroundLocationUpdates()
-                zoomOnLastKnownLocation()
+    private inner class MapChromeClient : WebChromeClient() {
+        /**
+         * The page's own navigator.geolocation. Answered from the app's
+         * permission; WebView never asks the user itself.
+         */
+        override fun onGeolocationPermissionsShowPrompt(origin: String, callback: GeolocationPermissions.Callback) {
+            if (!isMapOrigin(origin.toUri())) {
+                callback.invoke(origin, false, false)
+                return
             }
-            else -> {
-                requestLocationPermissionLauncher.launch(
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
+            if (PermUtils.isLocationPermissionGranted(requireContext())) {
+                callback.invoke(origin, true, false)
+            } else {
+                pendingGeolocation = origin to callback
+                geolocationPermissionLauncher.launch(PermUtils.LOCATION_PERMISSIONS)
             }
         }
     }
 
-    inner class WebAppInterface {
-        @JavascriptInterface
-        fun requestSettings() {
-            Timber.d("requestSettings injected")
-            isRequestSettingsCalled = true
-            requireActivity().runOnUiThread {
-                webViewModel.sendSettings()
+    /** Pans, pinches and rotations, recognised as they begin. The page still gets every event. */
+    private inner class MapGestureListener : View.OnTouchListener {
+        private val slop = ViewConfiguration.get(requireContext()).scaledTouchSlop
+        private var downX = 0f
+        private var downY = 0f
+        private var reported = false
+
+        @SuppressLint("ClickableViewAccessibility")
+        override fun onTouch(v: View, event: MotionEvent): Boolean {
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    downX = event.x
+                    downY = event.y
+                    reported = false
+                }
+                MotionEvent.ACTION_POINTER_DOWN -> report()
+                MotionEvent.ACTION_MOVE ->
+                    if (abs(event.x - downX) > slop || abs(event.y - downY) > slop) report()
             }
-            if (requireContext().getSharedPreferences("default", MODE_PRIVATE).getBoolean("map_zoom", false)) {
-                zoomOnLastKnownLocation()
-            }
+            return false
+        }
+
+        private fun report() {
+            if (reported) return
+            reported = true
+            onMapGesture()
         }
     }
 }
-
