@@ -2,48 +2,34 @@ package com.meteocool.firebase
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import android.app.NotificationManager
-import android.content.Context
-import androidx.work.WorkManager
-import com.meteocool.network.NetworkUtils
-import com.meteocool.network.UploadWorker
-import com.meteocool.preferences.SharedPrefUtils
-import org.jetbrains.anko.defaultSharedPreferences
-import timber.log.Timber
+import com.meteocool.app.app
+import com.meteocool.notifications.Notifications
+import kotlinx.coroutines.launch
 
-
+/**
+ * Receives FCM messages. The backend sends two kinds: a notification with
+ * title and body when rain is coming, and a data message `clear_all` when it
+ * has stopped. FCM shows the first by itself while the app is in the
+ * background; only messages that arrive while it is open land here.
+ */
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    private var lastPushTime : Long = 0
-
-    companion object{
-        fun cancelNotification(context: Context, from : String) {
-            val notificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.cancelAll()
-            val data = UploadWorker.createInputData(mapOf(
-                Pair("url",  NetworkUtils.POST_CLEAR_NOTIFICATION.toString()),
-                Pair("token", SharedPrefUtils.getFirebaseToken(context.defaultSharedPreferences)),
-                Pair("from", from),
-            ))
-            WorkManager.getInstance(context)
-                .enqueue(UploadWorker.createRequest(data))
-                .result
-        }
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        // Called on a worker thread; the registration lives on the main one.
+        app.scope.launch { app.registration.setToken(token) }
     }
 
-    override fun onNewToken(p0: String) {
-        super.onNewToken(p0)
-        SharedPrefUtils.saveFirebaseToken(defaultSharedPreferences, p0)
-    }
-
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        super.onMessageReceived(remoteMessage)
-        Timber.d("From: %s", remoteMessage.from!!)
-        Timber.d("Notification Message Body: %s", remoteMessage.data["clear_all"])
-        if (remoteMessage.sentTime - lastPushTime  >= 10000 && remoteMessage.data["clear_all"] == "true") {
-            cancelNotification(this, "push")
+    override fun onMessageReceived(message: RemoteMessage) {
+        super.onMessageReceived(message)
+        if (message.data["clear_all"] == "true") {
+            Notifications.clearAll(this)
+            app.registration.acknowledge("push")
+            return
         }
-        lastPushTime = remoteMessage.sentTime
+        val notification = message.notification ?: return
+        if (app.prefs.notification) {
+            Notifications.showAlert(this, notification.title, notification.body)
+        }
     }
 }

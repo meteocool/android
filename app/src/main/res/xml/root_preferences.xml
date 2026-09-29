@@ -1,123 +1,136 @@
-<!--
-  ~ Copyright 2018 The app Open Source Project
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~      http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
-<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android">
-
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-            app:icon="@drawable/ic_notification"
-        app:title="@string/notification_header">
-
-
-
-        <SwitchPreferenceCompat
-                app:key="notification"
-                app:title="@string/notification_push_title"
-                app:defaultValue="false"/>
+            app:key="notifications_category"
+            app:iconSpaceReserved="false"
+            app:title="@string/settings_notifications">
 
         <SwitchPreferenceCompat
-                app:key="notification_details"
-                app:title="@string/notification_push_details"
                 app:defaultValue="false"
-                app:summary="@string/notification_push_details_desc"
-                app:dependency="notification"/>
+                app:iconSpaceReserved="false"
+                app:key="notification"
+                app:title="@string/enable_notifications" />
+
+        <SwitchPreferenceCompat
+                app:defaultValue="false"
+                app:dependency="notification"
+                app:iconSpaceReserved="false"
+                app:key="notification_details"
+                app:title="@string/show_meteorological_details" />
 
         <ListPreference
-                app:key="notification_intensity"
-                app:title="@string/notification_push_level_title"
+                app:defaultValue="20"
+                app:dependency="notification"
                 app:entries="@array/notification_intensity_entries"
                 app:entryValues="@array/notification_intensity_values"
-                app:defaultValue="20"
-                app:useSimpleSummaryProvider="true"
-                app:dependency="notification"/>
+                app:iconSpaceReserved="false"
+                app:key="notification_intensity"
+                app:title="@string/intensity_threshold"
+                app:useSimpleSummaryProvider="true" />
 
         <ListPreference
-                app:key="notification_time"
-                app:title="@string/notification_time_title"
+                app:defaultValue="15"
+                app:dependency="notification"
                 app:entries="@array/notification_time_entries"
                 app:entryValues="@array/notification_time_values"
-                app:defaultValue="15"
-                app:useSimpleSummaryProvider="true"
-                app:dependency="notification"/>
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-            app:icon="@drawable/ic_map"
-        app:title="@string/map_header">
-
-        <SwitchPreferenceCompat
-                android:id="@+id/map_zoom"
-            app:key="map_zoom"
-            app:defaultValue="false"
-            app:title="@string/map_zoom_title"
-        />
-
-        <SwitchPreferenceCompat
-            app:key="map_rotate"
-            app:defaultValue="true"
-            app:title="@string/map_rotate_title"
-        />
-
-<!--        <SwitchPreferenceCompat-->
-<!--                app:key="map_mode"-->
-<!--                app:defaultValue="false"-->
-<!--                app:title="@string/map_mode_title"-->
-<!--        />-->
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-            app:title="@string/about_header">
+                app:iconSpaceReserved="false"
+                app:key="notification_time"
+                app:title="@string/notification_timeframe"
+                app:useSimpleSummaryProvider="true" />
 
         <Preference
-                app:key="github"
+                app:iconSpaceReserved="false"
+                app:key="notifications_footer"
+                app:layout="@layout/preference_footer"
+                app:selectable="false"
+                app:singleLineTitle="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            app:iconSpaceReserved="false"
+            app:title="@string/settings_map_view">
+
+        <SwitchPreferenceCompat
+                app:defaultValue="true"
+                app:iconSpaceReserved="false"
+                app:key="map_rotate"
+                app:title="@string/two_finger_rotation" />
+
+        <SwitchPreferenceCompat
+                app:defaultValue="false"
+                app:iconSpaceReserved="false"
+                app:key="map_zoom"
+                app:title="@string/auto_zoom_after_start" />
+
+        <ListPreference
+                app:defaultValue="system"
+                app:entries="@array/base_layer_entries"
+                app:entryValues="@array/base_layer_values"
+                app:iconSpaceReserved="false"
+                app:key="base_layer"
+                app:title="@string/base_map_layer" />
+
+        <ListPreference
+                app:defaultValue="classic"
+                app:entries="@array/radar_color_mapping_entries"
+                app:entryValues="@array/radar_color_mapping_values"
+                app:iconSpaceReserved="false"
+                app:key="radar_color_mapping"
+                app:title="@string/radar_color_map"
+                app:useSimpleSummaryProvider="true" />
+
+        <Preference
+                app:iconSpaceReserved="false"
+                app:layout="@layout/preference_footer"
+                app:selectable="false"
+                app:summary="@string/colormap_explanation" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            app:iconSpaceReserved="false"
+            app:title="@string/settings_about">
+
+        <Preference
                 app:icon="@drawable/ic_github"
-                app:title="Github">
-        </Preference>
+                app:key="github"
+                app:title="@string/contribute_on_github" />
 
         <Preference
-                app:key="twitter"
-                app:icon="@drawable/ic_twitter"
-                app:title="Twitter">
-        </Preference>
-
-        <Preference
-                app:key="share"
-                app:icon="@drawable/ic_share"
-                app:title="@string/share_title">
-        </Preference>
-
-        <Preference
+                app:iconSpaceReserved="false"
                 app:key="feedback"
-                app:title="Feedback">
-        </Preference>
+                app:title="@string/feedback_and_support" />
 
         <Preference
+                app:iconSpaceReserved="false"
                 app:key="privacy"
-                app:title="@string/privacy_title">
-        </Preference>
+                app:title="@string/imprint_privacy" />
 
         <Preference
-                app:key="impressum"
-                app:title="Copyright"
-                android:summary="© meteocool Contributors ❤️ (AGPL-3.0)\n\nData Providers:\n© DWD © blitzortung.org © Contains Modified Copernicus Sentinel Data © OroraTech\n\nMap Providers:\n© OpenStreetMap Contributors © CARTO © Who's On First © Natural Earth © CyclOSM\n\nArtwork designed by Freepik from Flaticon.">
+                app:icon="@drawable/ic_share"
+                app:key="share"
+                app:title="@string/share_title" />
 
-        </Preference>
+        <SwitchPreferenceCompat
+                app:defaultValue="false"
+                app:iconSpaceReserved="false"
+                app:key="experimental_features"
+                app:title="@string/experimental_features" />
+
+        <SwitchPreferenceCompat
+                app:defaultValue="false"
+                app:iconSpaceReserved="false"
+                app:key="demo_mode"
+                app:title="@string/demo_mode" />
+
+        <Preference
+                app:iconSpaceReserved="false"
+                app:key="version"
+                app:selectable="false" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+            app:iconSpaceReserved="false"
+            app:key="data_sources"
+            app:title="@string/data_sources_header" />
 </androidx.preference.PreferenceScreen>
