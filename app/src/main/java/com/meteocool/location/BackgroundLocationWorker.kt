@@ -3,12 +3,14 @@ package com.meteocool.location
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.meteocool.app.app
 import com.meteocool.location.service.LocationProviders
 import com.meteocool.permissions.PermUtils
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 /**
@@ -24,7 +26,9 @@ class BackgroundLocationWorker(context: Context, params: WorkerParameters) : Cor
         }
         val fix = LocationProviders.currentLocation(applicationContext) ?: return Result.retry()
         app.prefs.saveLastLocation(fix)
-        return if (app.registration.submit(fix, background = true)) Result.success() else Result.retry()
+        val ok = app.registration.submit(fix, background = true)
+        Timber.i("Background location update ${if (ok) "sent" else "failed"}")
+        return if (ok) Result.success() else Result.retry()
     }
 
     companion object {
@@ -40,6 +44,11 @@ class BackgroundLocationWorker(context: Context, params: WorkerParameters) : Cor
             val request = PeriodicWorkRequestBuilder<BackgroundLocationWorker>(15, TimeUnit.MINUTES).build()
             WorkManager.getInstance(context)
                 .enqueueUniquePeriodicWork(NAME, ExistingPeriodicWorkPolicy.KEEP, request)
+        }
+
+        /** Debug builds: run the worker now rather than in 15 minutes. */
+        fun runOnce(context: Context) {
+            WorkManager.getInstance(context).enqueue(OneTimeWorkRequestBuilder<BackgroundLocationWorker>().build())
         }
 
         fun cancel(context: Context) {

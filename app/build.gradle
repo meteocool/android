@@ -26,6 +26,11 @@ android {
         }
     }
 
+    androidResources {
+        // Lets Android 13+ offer English and German in the app's language setting.
+        generateLocaleConfig true
+    }
+
     buildFeatures {
         viewBinding true
         buildConfig true

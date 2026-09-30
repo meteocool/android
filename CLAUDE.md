@@ -95,6 +95,26 @@ The app calls into the page with:
 Geolocation requests from the page itself are granted only for the map's origin, and only
 when the app already holds location permission. WebView has no permission prompt of its own.
 
+## Testing on an emulator
+
+Debug builds accept launch extras (see
+[`app/DebugHooks.kt`](app/src/main/java/com/meteocool/app/DebugHooks.kt)):
+
+- `mc_test_api_url` and `mc_test_token` point the native API at the iOS repo's
+  `tests/mobile-api-recorder.mjs`, which only accepts the token `"a" * 64`;
+- `mc_test_map_url` loads a local core build, e.g. from `vite preview`;
+- `mc_run_background_worker` runs the background worker once.
+
+```bash
+node ../ios/tests/mobile-api-recorder.mjs &
+adb shell am start -n com.meteocool/.ui.SplashActivity \
+    --es mc_test_api_url http://10.0.2.2:18765/ --es mc_test_token $(printf 'a%.0s' {1..64})
+curl -s localhost:18765/requests
+```
+
+The page's console reaches logcat under the tag `WebConsole`, and WebView debugging is on,
+so `chrome://inspect` works.
+
 ## Preferences
 
 Everything lives in the default `SharedPreferences`, accessed through

@@ -92,7 +92,7 @@
             app:title="@string/settings_about">
 
         <Preference
-                app:icon="@drawable/ic_github"
+                app:iconSpaceReserved="false"
                 app:key="github"
                 app:title="@string/contribute_on_github" />
 
@@ -107,7 +107,7 @@
                 app:title="@string/imprint_privacy" />
 
         <Preference
-                app:icon="@drawable/ic_share"
+                app:iconSpaceReserved="false"
                 app:key="share"
                 app:title="@string/share_title" />
 

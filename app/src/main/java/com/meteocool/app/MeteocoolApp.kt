@@ -4,7 +4,9 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.preference.PreferenceManager
 import com.meteocool.BuildConfig
+import com.meteocool.R
 import com.meteocool.environment.MeteocoolEnvironment
 import com.meteocool.location.service.LocationProviders
 import com.meteocool.network.ApiClient
@@ -40,9 +42,12 @@ class MeteocoolApp : Application() {
         super.onCreate()
         Timber.plant(if (BuildConfig.DEBUG) DebugTree() else ReleaseTree())
 
+        // Written now, so the settings screen does not write them later and set off the listeners below.
+        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false)
         prefs = Prefs(this)
         prefs.migrate(this)
         MeteocoolEnvironment.init(prefs)
+        if (BuildConfig.DEBUG) DebugHooks.apply(prefs)
         Notifications.createChannel(this)
 
         registration = RegistrationManager(
@@ -55,7 +60,7 @@ class MeteocoolApp : Application() {
         )
         prefs.sp.registerOnSharedPreferenceChangeListener(registrationSettingsListener)
 
-        if (PushSupport.available) {
+        if (PushSupport.available && !DebugHooks.hasTestToken(prefs)) {
             scope.launch { PushSupport.fetchToken(this@MeteocoolApp)?.let { registration.setToken(it) } }
         }
         registration.refreshAuthorization()
