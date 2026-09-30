@@ -16,6 +16,10 @@ import timber.log.Timber
 /** Location through Google Play services' fused provider. */
 class GmsFusedLocationService(context: Context) : ForegroundLocationService(context) {
 
+    companion object {
+        private var resolutionRequested = false
+    }
+
     private val client = LocationServices.getFusedLocationProviderClient(context)
 
     private val request = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, updateInterval)
@@ -35,8 +39,11 @@ class GmsFusedLocationService(context: Context) : ForegroundLocationService(cont
         LocationServices.getSettingsClient(context)
             .checkLocationSettings(LocationSettingsRequest.Builder().addLocationRequest(request).build())
             .addOnFailureListener { e ->
-                // Location is off; ask the user to turn it on. Updates still start and pick up once it is.
-                if (e is ResolvableApiException) requestResolution(e.resolution.intentSender)
+                // Location is off; ask once per launch. Updates still start and pick up once it is on.
+                if (e is ResolvableApiException && !resolutionRequested) {
+                    resolutionRequested = true
+                    requestResolution(e.resolution.intentSender)
+                }
             }
         try {
             client.lastLocation.addOnSuccessListener { location -> if (location != null && isRunning) deliver(location) }

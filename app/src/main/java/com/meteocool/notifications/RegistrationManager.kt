@@ -50,7 +50,10 @@ class RegistrationManager(
     @Volatile
     private var lastPosted: MeteocoolLocation? = null
 
-    private val currentApi: String get() = MeteocoolEnvironment.current.apiBase
+    /** What the last successful post carried, so an identical refresh is not sent twice. */
+    private var lastPostedBody: Map<String, Any>? = null
+
+    private val currentApi: String get() = MeteocoolEnvironment.currentApiBase
 
     /**
      * Alerts are on, allowed, located and tokened, and nothing is still
@@ -112,7 +115,15 @@ class RegistrationManager(
      * Brings the registration in line with the permissions as they are now,
      * without asking for any. Runs at launch and whenever the app comes back.
      */
-    fun refreshAuthorization(): Job = scope.launch {
+    fun refreshAuthorization(): Job {
+        // Launch and the first activity start both ask; one pass covers both.
+        refreshJob?.takeIf { it.isActive }?.let { return it }
+        return scope.launch { refreshAuthorizationNow() }.also { refreshJob = it }
+    }
+
+    private var refreshJob: Job? = null
+
+    private suspend fun refreshAuthorizationNow() {
         val origin = prefs.registrationOrigin
         if (origin != null && origin != currentApi) {
             if (unregisterNow() && canRegister()) refreshRegistrationNow()
@@ -141,9 +152,13 @@ class RegistrationManager(
         // The reading can take two seconds; alerts may have gone off meanwhile.
         if (!canRegister() || prefs.pushToken != token || !isFresh(fix)) return false
         val base = currentApi
+        val body = Registration.payload(fix, hpa, settings(token))
+        // Launch, onboarding and a settings screen writing its defaults all ask at once.
+        if (!readPressure && body == lastPostedBody && prefs.registrationOrigin == base) return true
         prefs.registrationOrigin = base
-        val ok = api.post(base, Endpoint.POST_LOCATION, Registration.payload(fix, hpa, settings(token)))
+        val ok = api.post(base, Endpoint.POST_LOCATION, body)
         lastPosted = if (ok) fix else null
+        lastPostedBody = if (ok) body else null
         _syncFailed.value = !ok
         // Alerts were turned off while the request was out.
         if (!prefs.notification || !PermUtils.areNotificationsEnabled(context)) unregisterLocked()
@@ -152,6 +167,7 @@ class RegistrationManager(
 
     private suspend fun unregisterLocked(): Boolean {
         lastPosted = null
+        lastPostedBody = null
         val origin = prefs.registrationOrigin
         val token = prefs.pushToken
         if (token == null) {

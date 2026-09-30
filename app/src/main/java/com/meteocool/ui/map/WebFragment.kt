@@ -14,6 +14,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
+import android.webkit.ConsoleMessage
 import android.webkit.GeolocationPermissions
 import android.webkit.JavascriptInterface
 import android.webkit.RenderProcessGoneDetail
@@ -172,6 +173,7 @@ class WebFragment : Fragment() {
         viewModel.pageReady = false
         binding.layers.isEnabled = false
         binding.loadError.isVisible = false
+        binding.webContainer.visibility = View.VISIBLE
         mainHandler.removeCallbacks(loadTimeout)
         mainHandler.postDelayed(loadTimeout, LOAD_TIMEOUT_MILLIS)
         web.stopLoading()
@@ -183,6 +185,8 @@ class WebFragment : Fragment() {
         mainHandler.removeCallbacks(loadTimeout)
         viewModel.pageReady = false
         b.layers.isEnabled = false
+        // WebView's own error page would show through behind the message.
+        b.webContainer.visibility = View.INVISIBLE
         b.loadError.isVisible = true
         setControlsVisible(true)
     }
@@ -224,12 +228,14 @@ class WebFragment : Fragment() {
         evaluate("window.settings && window.settings.injectSettings(${gson.toJson(viewModel.webSettings())});")
     }
 
+    /**
+     * The buttons are hidden by the page's layerSwitcherOpened message, not
+     * here: a frontend that never sends layerSwitcherClosed to Android would
+     * otherwise leave them hidden for good.
+     */
     private fun openLayerSwitcher() {
         if (!viewModel.pageReady) return
-        setControlsVisible(false)
-        evaluate("(function(){ try { window.openLayerswitcher(); return true; } catch (e) { return false; } })();") {
-            if (it != "true") setControlsVisible(true)
-        }
+        evaluate("window.openLayerswitcher && window.openLayerswitcher();")
     }
 
     override fun onStart() {
@@ -405,8 +411,13 @@ class WebFragment : Fragment() {
 
     /* ---- WebView plumbing --------------------------------------------- */
 
-    private fun isMapOrigin(uri: Uri?): Boolean =
-        uri?.scheme == "https" && uri.host == MeteocoolEnvironment.current.webHostName
+    private fun isMapOrigin(uri: Uri?): Boolean {
+        if (uri == null) return false
+        MeteocoolEnvironment.testMapOverride?.toUri()?.let { test ->
+            return uri.scheme == test.scheme && uri.host == test.host && uri.port == test.port
+        }
+        return uri.scheme == "https" && uri.host == MeteocoolEnvironment.current.webHostName
+    }
 
     /** JavaScript calls arrive on a background thread, from whatever page is loaded. */
     private inner class Bridge {
@@ -459,6 +470,11 @@ class WebFragment : Fragment() {
     }
 
     private inner class MapChromeClient : WebChromeClient() {
+        override fun onConsoleMessage(message: ConsoleMessage): Boolean {
+            if (BuildConfig.DEBUG) Timber.tag("WebConsole").d("${message.messageLevel()}: ${message.message()}")
+            return BuildConfig.DEBUG
+        }
+
         /**
          * The page's own navigator.geolocation. Answered from the app's
          * permission; WebView never asks the user itself.

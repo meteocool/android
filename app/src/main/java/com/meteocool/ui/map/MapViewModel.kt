@@ -41,7 +41,7 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
     /** The page has called requestSettings(), so its window functions exist. */
     var pageReady = false
 
-    private val _mapUrl = MutableLiveData(MeteocoolEnvironment.current.mapUrl)
+    private val _mapUrl = MutableLiveData(MeteocoolEnvironment.currentMapUrl)
     val mapUrl: LiveData<String> = _mapUrl
 
     private val _webSettingsVersion = MutableLiveData(0)
@@ -64,7 +64,7 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
 
     /** Reloads the map, for Retry and after the environment changed. */
     fun reloadMap() {
-        _mapUrl.value = MeteocoolEnvironment.current.mapUrl
+        _mapUrl.value = MeteocoolEnvironment.currentMapUrl
     }
 
     /** `window.settings.injectSettings()` takes these keys. */

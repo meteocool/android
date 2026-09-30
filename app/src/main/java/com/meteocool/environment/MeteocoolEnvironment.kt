@@ -34,6 +34,22 @@ enum class MeteocoolEnvironment(val webHost: String, val apiBase: String) {
         var current: MeteocoolEnvironment = APP
             private set
 
+        /** Debug builds only: a local API recorder the UI tests point the app at. */
+        @Volatile
+        var testApiOverride: String? = null
+
+        /** Debug builds only: a local frontend build to load instead of the environment's. */
+        @Volatile
+        var testMapOverride: String? = null
+
+        /** The page the map view loads. */
+        val currentMapUrl: String
+            get() = testMapOverride ?: current.mapUrl
+
+        /** The API native requests go to. */
+        val currentApiBase: String
+            get() = testApiOverride ?: current.apiBase
+
         fun select(demoMode: Boolean, experimentalFeatures: Boolean): MeteocoolEnvironment = when {
             demoMode -> DEMO
             experimentalFeatures -> STAGING
