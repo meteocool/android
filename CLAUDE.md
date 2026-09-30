@@ -72,8 +72,9 @@ five minutes is never sent. In the foreground a fix is only posted if it is:
 In the background, `BackgroundLocationWorker` posts a fix every 15 minutes, provided alerts
 are on and the app has "Allow all the time".
 
-Known gap: ng's Android sender still uses the legacy FCM API, which Google turned off in 2024.
-Android alerts will not arrive until ng moves to FCM v1.
+ng delivers Android alerts through the FCM HTTP v1 API (`libs/meteocool-push` there), with a
+Firebase service account from the same project as `app/google-services.json`. Visible alerts go
+on the `rain_alerts` channel; the clear message is data-only, with `clear_all` set to `"true"`.
 
 ## Web bridge
 
