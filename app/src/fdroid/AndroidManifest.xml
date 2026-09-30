@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    F-Droid builds have no push, so they never show a notification and never
+    need location while closed: rain alerts are what both permissions are for.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission
+            android:name="android.permission.ACCESS_BACKGROUND_LOCATION"
+            tools:node="remove" />
+    <uses-permission
+            android:name="android.permission.POST_NOTIFICATIONS"
+            tools:node="remove" />
+</manifest>

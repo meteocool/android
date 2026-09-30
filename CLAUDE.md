@@ -18,14 +18,27 @@ There are two flavors:
 
 - **`gms`**: Firebase Cloud Messaging for rain alerts, and fused location from Play services.
   The google-services plugin is only applied to tasks whose name contains "Gms".
-- **`fdroid`**: no Google code. It has no push, so the Notifications section and the
-  onboarding alerts page are hidden. Location comes from the platform `LocationManager`.
+- **`fdroid`**: no Google code. It has no push, so the Notifications section, the
+  onboarding alerts page and the rain-alert feature row are hidden, and
+  `app/src/fdroid/AndroidManifest.xml` drops the notification and background-location
+  permissions. Location comes from the platform `LocationManager`.
 
 Flavor-specific code lives in `app/src/{gms,fdroid}` behind two objects with the same
 names in both flavors:
 
 - `push/PushSupport`
 - `location/service/LocationProviders`
+
+## Releasing on F-Droid
+
+F-Droid builds the `fdroid` flavor from a git tag and signs it with its own key; the recipe is
+`metadata/com.meteocool.yml` in [fdroiddata](https://gitlab.com/fdroid/fdroiddata). The 2.2
+build was disabled there (#84) because a location library pulled in Play services; check
+`./gradlew :app:dependencies --configuration fdroidReleaseRuntimeClasspath` has no
+`gms`/`firebase` before tagging.
+
+The store listing comes from `metadata/<locale>/` in this repo: title, descriptions,
+`images/phoneScreenshots/` and `changelogs/<versionCode>.txt` (500 characters at most).
 
 ## Environments
 

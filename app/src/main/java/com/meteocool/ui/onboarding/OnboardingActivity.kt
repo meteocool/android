@@ -108,7 +108,8 @@ class OnboardingActivity : AppCompatActivity() {
                     title.setText(R.string.onboarding_welcome_title)
                     primary.setText(R.string.action_continue)
                     features.removeAllViews()
-                    FEATURES.forEach { feature ->
+                    // No push, no rain alerts: F-Droid builds leave that feature out.
+                    FEATURES.filter { PushSupport.available || it.icon != R.drawable.ic_feature_bell }.forEach { feature ->
                         val row = ItemOnboardingFeatureBinding.inflate(layoutInflater, features, true)
                         row.featureIcon.setImageResource(feature.icon)
                         row.featureTitle.setText(feature.title)

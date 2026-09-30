@@ -48,7 +48,8 @@ class MeteocoolApp : Application() {
         prefs.migrate(this)
         MeteocoolEnvironment.init(prefs)
         if (BuildConfig.DEBUG) DebugHooks.apply(prefs)
-        Notifications.createChannel(this)
+        // Only builds that can receive alerts get a channel to show them on.
+        if (PushSupport.available) Notifications.createChannel(this)
 
         registration = RegistrationManager(
             context = this,

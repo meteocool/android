@@ -1,16 +1,21 @@
-You do not want to get wet or follow thunderstorms? Then this is just the right application for you.
+Don't want to get wet, or want to follow a thunderstorm? meteocool shows rain and storms as they happen and where they are heading next.
 
-Based on the current cloud situation and the forecast calculations of the German weather service, you will be informed about upcoming rainfall at your location via push messages.
+<b>Features</b>
+<ul>
+<li>Live radar, updated every few minutes: Germany, Switzerland, France, Czechia, Poland and the United States</li>
+<li>Nowcast: watch where the rain moves over the next 45 minutes. In our experience the first 45 minutes are pretty spot-on</li>
+<li>Lightning strikes live, from Blitzortung.org</li>
+<li>Storm cells, with a 3D radar view of each one</li>
+<li>Precipitation types, as the radar sees them</li>
+<li>Rain forecast for your location, comparing several weather models</li>
+<li>Base maps: match system, light, dark, OpenStreetMap or CyclOSM for biking</li>
+<li>Radar colour maps, including two for colour vision deficiency</li>
+<li>Your location on the map, followed as you move</li>
+<li>English and German</li>
+</ul>
 
-Currently only the Central European area is covered. We try to expand this in the future!
+Rain alerts, the notification before rain reaches you, need Google's push service and are only in the Google Play version.
 
-The application is open-source and therefore free of advertising and costs.
+meteocool is built and run by volunteers in their spare time. It is free, open source and has no ads.
 
-Features at a glance:
-- Real-time notification of precipitation
-- Notifications of rainfall (rain / snow / hail) up to 60 minutes in advance (push -> location access required)
-- Live view on cloud movement forecast up to 45 minutes in the future
-- Rain radar with automatic, fast update
-- Live lightning card (via blitzortung.org)
-- supports Android wide "Dark Mode" as of Android 10
-- Free and Open Source!
+Radar data from DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB and NOAA; the app lists every source and its licence under Settings.
