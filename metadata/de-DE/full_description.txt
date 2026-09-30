@@ -11,11 +11,11 @@ Du willst nicht nass werden oder ein Gewitter verfolgen? meteocool zeigt Regen u
 <li>Basiskarten: wie System, hell, dunkel, OpenStreetMap oder CyclOSM zum Radfahren</li>
 <li>Radar-Farbschemata, darunter zwei für Farbsehschwäche</li>
 <li>Dein Standort auf der Karte, auf Wunsch mitverfolgt</li>
-<li>Deutsch und Englisch</li>
+<li>Deutsch, Englisch, Französisch, Italienisch, Polnisch und Tschechisch</li>
 </ul>
 
 Regenwarnungen, der Hinweis bevor der Regen bei Dir ankommt, brauchen Googles Push-Dienst und gibt es nur in der Google-Play-Version.
 
-meteocool wird von Freiwilligen in ihrer Freizeit entwickelt und betrieben. Die App ist kostenlos, quelloffen und werbefrei.
+meteocool ist Open Core und wird von Freiwilligen in ihrer Freizeit entwickelt und betrieben. Diese App ist quelloffen (AGPL-3.0), kostenlos und werbefrei.
 
 Radardaten von DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB und NOAA; die App nennt jede Quelle mit Lizenz in den Einstellungen.

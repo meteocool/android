@@ -1,0 +1,6 @@
+meteocool 4.0, rifatto da zero:
+• Nuova mappa con radar per più paesi, celle temporalesche in 3D, fulmini e previsioni dei modelli
+• Pulsante della posizione: mostra dove sei o seguiti mentre ti sposti
+• Nuove impostazioni: mappa di base (anche come il sistema), scale colori, fonti dei dati e licenze
+• Nuova schermata di benvenuto in tre passaggi, in sei lingue
+• Funziona su Android 16; la versione F-Droid non contiene codice Google

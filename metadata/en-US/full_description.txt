@@ -11,11 +11,11 @@ Don't want to get wet, or want to follow a thunderstorm? meteocool shows rain an
 <li>Base maps: match system, light, dark, OpenStreetMap or CyclOSM for biking</li>
 <li>Radar colour maps, including two for colour vision deficiency</li>
 <li>Your location on the map, followed as you move</li>
-<li>English and German</li>
+<li>English, German, French, Italian, Polish and Czech</li>
 </ul>
 
 Rain alerts, the notification before rain reaches you, need Google's push service and are only in the Google Play version.
 
-meteocool is built and run by volunteers in their spare time. It is free, open source and has no ads.
+meteocool is open-core, built and run by volunteers in their spare time. This app is open source (AGPL-3.0), free of charge and has no ads.
 
 Radar data from DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB and NOAA; the app lists every source and its licence under Settings.

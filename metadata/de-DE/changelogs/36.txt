@@ -2,5 +2,5 @@ meteocool 4.0, von Grund auf neu:
 • Neue Karte mit Radar für mehr Länder, Gewitterzellen in 3D, Blitzen und Modellvorhersagen
 • Standort-Knopf: Position anzeigen oder beim Bewegen mitverfolgen
 • Neue Einstellungen: Basiskarte (auch wie System), Farbschemata, Datenquellen und Lizenzen
-• Neue Begrüßung in drei Schritten
+• Neue Begrüßung in drei Schritten; jetzt auch auf Französisch, Italienisch, Polnisch und Tschechisch
 • Läuft unter Android 16; der F-Droid-Build enthält keinen Google-Code

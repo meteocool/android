@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.core.os.ConfigurationCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +27,7 @@ import com.meteocool.app.app
 import com.meteocool.permissions.PermUtils
 import com.meteocool.push.PushSupport
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 /**
  * The settings, shown in the map's drawer: rain alerts, the map's
@@ -226,7 +228,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 if (preference.value == "system" || preference.value == null) {
                     val dark = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
                         Configuration.UI_MODE_NIGHT_YES
+                    // Mid-sentence: "Currently light", "Derzeit dunkel".
                     val current = getString(if (dark) R.string.basemap_dark else R.string.basemap_light)
+                        .lowercase(ConfigurationCompat.getLocales(resources.configuration)[0] ?: Locale.getDefault())
                     "$entry · ${getString(R.string.system_detail, current)}"
                 } else {
                     entry

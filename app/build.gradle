@@ -27,8 +27,11 @@ android {
     }
 
     androidResources {
-        // Lets Android 13+ offer English and German in the app's language setting.
+        // Lets Android 13+ offer the app's languages in its language setting.
         generateLocaleConfig true
+        // The languages of the countries with radar coverage. Libraries bring
+        // dozens more, which would leave a half-translated app in those.
+        localeFilters += ["en", "de", "fr", "it", "cs", "pl"]
     }
 
     buildFeatures {

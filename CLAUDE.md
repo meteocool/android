@@ -129,6 +129,17 @@ curl -s localhost:18765/requests
 The page's console reaches logcat under the tag `WebConsole`, and WebView debugging is on,
 so `chrome://inspect` works.
 
+## Languages
+
+English, German, French, Italian, Czech and Polish: the languages of the countries with radar
+coverage. `localeFilters` in `app/build.gradle` keeps libraries from adding others. Wording follows
+core's `src/locale/*.json` where the two overlap: formal "vous" in French, informal in the rest.
+The web map has no Italian yet, so Italian users see an Italian app around an English map. The
+backend only sends push text in `de` or `en` (`Registration.lang`).
+
+Every string in `values/strings.xml` needs all five translations, and the store listing lives in
+`metadata/{en-US,de-DE,fr-FR,it-IT,cs-CZ,pl-PL}/`.
+
 ## Preferences
 
 Everything lives in the default `SharedPreferences`, accessed through

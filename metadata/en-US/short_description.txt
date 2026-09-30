@@ -1,1 +1,1 @@
-Live rain radar and a 45-minute nowcast, free and open source
+Live rain radar with a 45-minute nowcast. Open core, no ads
