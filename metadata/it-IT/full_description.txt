@@ -1,0 +1,21 @@
+Non vuoi bagnarti, o vuoi seguire un temporale? meteocool mostra pioggia e temporali in tempo reale, e dove si spostano.
+
+<b>Funzioni</b>
+<ul>
+<li>Radar in diretta, aggiornato ogni pochi minuti: Germania, Svizzera, Francia, Cechia, Polonia e Stati Uniti</li>
+<li>Previsione a brevissimo termine: guarda dove va la pioggia nei prossimi 45 minuti. Per esperienza, questi 45 minuti sono molto precisi</li>
+<li>Fulmini in diretta, da Blitzortung.org</li>
+<li>Celle temporalesche, con una vista radar 3D di ciascuna</li>
+<li>Tipi di precipitazione, come li vede il radar</li>
+<li>Previsione di pioggia per la tua posizione, confrontando più modelli meteo</li>
+<li>Mappe di base: come il sistema, chiara, scura, OpenStreetMap o CyclOSM per la bici</li>
+<li>Scale colori del radar, di cui due per il daltonismo</li>
+<li>La tua posizione sulla mappa, seguita mentre ti sposti</li>
+<li>Italiano, tedesco, francese, inglese, polacco e ceco (la mappa stessa non è ancora in italiano)</li>
+</ul>
+
+Gli avvisi pioggia, l'avviso prima che la pioggia ti raggiunga, richiedono il servizio push di Google e sono disponibili solo nella versione Google Play.
+
+meteocool è open core, sviluppato e gestito da volontari nel loro tempo libero. Questa app è open source (AGPL-3.0), gratuita e senza pubblicità.
+
+Dati radar di DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB e NOAA; l'app elenca ogni fonte e la sua licenza nelle impostazioni.

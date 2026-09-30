@@ -1,1 +1,1 @@
-Live-Regenradar mit 45-Minuten-Vorhersage, frei und quelloffen
+Live-Regenradar mit 45-Minuten-Vorhersage. Open Core, werbefrei

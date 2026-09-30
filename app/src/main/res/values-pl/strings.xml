@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Notification channel -->
+    <string name="notification_channel_name">Ostrzeżenia przed deszczem</string>
+    <string name="notification_channel_description">Ostrzeżenie tuż przed tym, jak dotrze do ciebie deszcz.</string>
+
+    <!-- Common -->
+    <string name="action_continue">Dalej</string>
+    <string name="action_not_now">Nie teraz</string>
+    <string name="dismiss">OK</string>
+    <string name="change_in_settings">Zmień w ustawieniach</string>
+    <string name="title_settings">Ustawienia</string>
+    <string name="version_label">Wersja: %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Witaj w meteocool</string>
+    <string name="onboarding_feature_radar_title">Radar na żywo</string>
+    <string name="onboarding_feature_radar_text">Deszcz i burze w czasie rzeczywistym, aktualizowane co kilka minut.</string>
+    <string name="onboarding_feature_nowcast_title">Nowcasting</string>
+    <string name="onboarding_feature_nowcast_text">Śledź, dokąd przesuwa się deszcz. Z naszego doświadczenia pierwsze 45 minut jest bardzo trafne.</string>
+    <string name="rain_alerts">Ostrzeżenia przed deszczem</string>
+    <string name="onboarding_feature_alerts_text">Ostrzeżenie, zanim dotrze do ciebie deszcz, które znika, gdy tylko przestanie padać.</string>
+    <string name="onboarding_feature_free_title">Bezpłatnie i open source</string>
+    <string name="onboarding_feature_free_text">Tworzone i utrzymywane przez wolontariuszy w ich wolnym czasie.</string>
+    <string name="location_access">Dostęp do lokalizacji</string>
+    <string name="onboarding_location_permission">Aby pokazać twoją aktualną lokalizację na mapie, potrzebujemy twojej zgody.\n\nNigdy nie udostępniamy ani nie przechowujemy twoich danych o lokalizacji.</string>
+    <string name="allow_location_access">Zezwól na dostęp do lokalizacji</string>
+    <string name="onboarding_notification_text">Otrzymuj ostrzeżenie tuż przed tym, jak zacznie padać tam, gdzie jesteś, nawet gdy meteocool jest zamknięte.\n\nDlatego urządzenie poprosi też o dostęp do lokalizacji w tle. Bez obaw, nie rozładuje to baterii.</string>
+    <string name="tell_me_before_it_rains">Ostrzeż mnie przed deszczem!</string>
+    <string name="onboarding_settings_footnote">Możesz to zmienić w każdej chwili w ustawieniach.</string>
+    <string name="background_location_title">Ostrzeżenia przy zamkniętym meteocool</string>
+    <string name="background_location_rationale">Ostrzeżenia przed deszczem sprawdzają twoją lokalizację, gdy meteocool jest zamknięte, mniej więcej co 15 minut. Na następnym ekranie wybierz „Zezwalaj zawsze”.\n\nBez tego ostrzeżenia działają tylko wtedy, gdy aplikacja jest otwarta.</string>
+
+    <!-- Map -->
+    <string name="map_layers">Warstwy mapy</string>
+    <string name="location_button">Lokalizacja</string>
+    <string name="location_button_off">Wyłączona</string>
+    <string name="location_button_active">Pokazuje twoją lokalizację</string>
+    <string name="location_button_tracking">Śledzi twoją lokalizację</string>
+    <string name="map_load_failed">Nie udało się wczytać mapy. Sprawdź połączenie i spróbuj ponownie.</string>
+    <string name="retry">Spróbuj ponownie</string>
+    <string name="location_permission_required">Wymagany dostęp do lokalizacji</string>
+    <string name="location_permission_general">Aby korzystać z przycisku lokalizacji lub automatycznego przybliżenia, zezwól na dostęp do lokalizacji w ustawieniach urządzenia. Nie przechowujemy ani nie udostępniamy żadnych danych o lokalizacji.</string>
+
+    <!-- Demo mode -->
+    <string name="demo_notice_title">To nie jest prawdziwa burza</string>
+    <string name="demo_notice_message">Tryb demo jest włączony: mapa odtwarza nagraną burzę, jakby działa się teraz. Nic, co pokazuje, nie jest aktualną pogodą.</string>
+    <string name="demo_notice_disable">Wyłącz tryb demo</string>
+    <string name="demo_notice_continue">Przejdź do demo</string>
+
+    <!-- Settings: rain alerts -->
+    <string name="settings_notifications">Powiadomienia push</string>
+    <string name="enable_notifications">Włącz powiadomienia</string>
+    <string name="show_meteorological_details">Pokaż szczegóły meteorologiczne</string>
+    <string name="intensity_threshold">Próg intensywności</string>
+    <string name="notification_timeframe">Wyprzedzenie ostrzeżenia</string>
+    <string name="level_drizzle">Mżawka</string>
+    <string name="level_light">Słaby deszcz</string>
+    <string name="level_rain">Deszcz</string>
+    <string name="level_heavy_rain">Silny deszcz</string>
+    <string name="level_hail">Grad</string>
+    <string name="notifications_explanation">Jeśli chcesz, możemy ostrzegać cię o nadchodzących opadach w miejscu, w którym jesteś. Aby to działało, twoja lokalizacja musi być wysyłana w tle na nasze serwery.</string>
+    <string name="meteorological_details_help">Pokaż szczegóły meteorologiczne:\nDla zaawansowanych: dodaje do treści powiadomienia szczegóły meteorologiczne (np. wartości dBZ).\n\nPróg intensywności:\nPowiadomienie przychodzi tylko wtedy, gdy nadchodzące opady mają być co najmniej tak intensywne.\n\nWyprzedzenie ostrzeżenia:\nIle czasu przed opadami chcesz dostać ostrzeżenie.</string>
+    <string name="notification_permissions_title">Sprawdź uprawnienia</string>
+    <string name="notification_permissions_help">Ostrzeżenia przed deszczem wymagają powiadomień i dostępu do lokalizacji. Aby dostawać ostrzeżenia w drodze przy zamkniętej aplikacji, ustaw w ustawieniach dostęp do lokalizacji na „Zezwalaj zawsze”. Z mapy możesz korzystać także bez tych uprawnień.</string>
+    <string name="notification_sync_failed">Nie udało się wysłać zmian powiadomień na serwer. Ostrzeżenia mogą nadal używać poprzednich ustawień. Sprawdź połączenie i otwórz aplikację ponownie.</string>
+
+    <!-- Settings: map -->
+    <string name="settings_map_view">Mapa</string>
+    <string name="two_finger_rotation">Obracanie mapy dwoma palcami</string>
+    <string name="auto_zoom_after_start">Automatyczne przybliżenie po uruchomieniu</string>
+    <string name="base_map_layer">Warstwa mapy bazowej</string>
+    <string name="basemap_system">Zgodnie z systemem</string>
+    <string name="basemap_light">Jasna</string>
+    <string name="basemap_dark">Ciemna</string>
+    <string name="basemap_cyclosm">CyclOSM (rowerowa)</string>
+    <string name="system_detail">Obecnie %1$s</string>
+    <string name="radar_color_map">Paleta kolorów radaru</string>
+    <string name="colormap_classic">Klasyczna</string>
+    <string name="colormap_homeyer">Homeyer (deficyt widzenia barw)</string>
+    <string name="colormap_lang">Lang</string>
+    <string name="colormap_explanation">Zmienia kolory, w jakich rysowane są opady na mapie.\n\n⚠️ „Klasyczna” renderuje się najszybciej.</string>
+
+    <!-- Settings: about -->
+    <string name="settings_about">O aplikacji</string>
+    <string name="contribute_on_github">Współtwórz na GitHubie</string>
+    <string name="feedback_and_support">Opinie i pomoc</string>
+    <string name="feedback_body">Opisz tutaj swój problem lub sugestię:\n</string>
+    <string name="imprint_privacy">Nota prawna i prywatność</string>
+    <string name="share_title">Udostępnij meteocool</string>
+    <string name="experimental_features">Funkcje eksperymentalne</string>
+    <string name="experimental_features_require_restart">To ustawienie zacznie działać dopiero po ponownym uruchomieniu aplikacji meteocool.\n\nJest przeznaczone do prac rozwojowych i może powodować nieoczekiwane działanie. 🐛</string>
+    <string name="demo_mode">Tryb demo</string>
+    <string name="demo_mode_require_restart">To ustawienie zacznie działać dopiero po ponownym uruchomieniu aplikacji meteocool.\n\nTryb demo odtwarza nagraną burzę, jakby działa się teraz, ze środowiska demo meteocool. Wyłącza funkcje eksperymentalne.</string>
+
+    <!-- Settings: data sources -->
+    <string name="data_sources_header">Źródła danych i licencje</string>
+    <string name="data_sources_footer">Dostawcy nie popierają meteocool i nie udzielają żadnej gwarancji. Dotknij źródła, aby zobaczyć jego licencję.</string>
+    <string name="source_dwd">Radar Niemcy, komórki burzowe, mapy pogody · CC BY 4.0, zmodyfikowane</string>
+    <string name="source_meteoswiss">Radar Szwajcaria · CC BY 4.0, zmodyfikowane</string>
+    <string name="source_meteofrance">Radar Francja · Licence Ouverte 2.0 (Etalab), zmodyfikowane</string>
+    <string name="source_chmi">Radar Czechy · CC BY 4.0, zmodyfikowane</string>
+    <string name="source_imgw">Radar Polska · CC BY 4.0. Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy. Dane IMGW-PIB zostały przetworzone przez meteocool.</string>
+    <string name="source_noaa">Radar USA · domena publiczna</string>
+    <string name="source_blitzortung">Wyładowania</string>
+    <string name="source_openmeteo">Porównanie modeli · CC BY 4.0</string>
+    <string name="source_copernicus">Zdjęcia satelitarne · zawiera zmodyfikowane dane Copernicus Sentinel</string>
+    <string name="source_osm">Dane mapy · ODbL</string>
+    <string name="source_protomaps">Kafelki mapy</string>
+
+</resources>
