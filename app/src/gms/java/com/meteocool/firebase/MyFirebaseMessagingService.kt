@@ -29,7 +29,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         val notification = message.notification ?: return
         if (app.prefs.notification) {
-            Notifications.showAlert(this, notification.title, notification.body)
+            AlertNotification.show(this, notification.title, notification.body)
         }
     }
 }

@@ -1,0 +1,6 @@
+meteocool 4.0, rebuilt from the ground up:
+• New map with radar for more countries, storm cells in 3D, lightning and model forecasts
+• Location button: show your position, or follow it as you move
+• New settings: base map (incl. match system), colour maps, data sources and licences
+• New three-page welcome
+• Works on Android 16; the F-Droid build contains no Google code

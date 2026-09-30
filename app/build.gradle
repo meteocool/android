@@ -47,9 +47,12 @@ android {
     productFlavors {
         create("gms") {
             dimension "default"
+            // Where "Share meteocool" points: the store this build came from.
+            buildConfigField "String", "STORE_URL", '"https://play.google.com/store/apps/details?id=com.meteocool"'
         }
         create("fdroid") {
             dimension "default"
+            buildConfigField "String", "STORE_URL", '"https://f-droid.org/packages/com.meteocool/"'
         }
     }
     testOptions {

@@ -38,7 +38,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
     companion object {
         private const val GITHUB_URL = "https://github.com/meteocool/android"
         private const val PRIVACY_URL = "https://meteocool.com/privacy.html"
-        private const val STORE_URL = "https://play.google.com/store/apps/details?id=com.meteocool"
         private const val SUPPORT_EMAIL = "support@meteocool.com"
 
         /**
@@ -248,7 +247,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             launch(intent)
         }
         findPreference<Preference>("share")?.setOnPreferenceClickListener {
-            val send = Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, STORE_URL).setType("text/plain")
+            val send = Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, BuildConfig.STORE_URL).setType("text/plain")
             launch(Intent.createChooser(send, null))
         }
         findPreference<Preference>("version")?.title = getString(R.string.version_label, BuildConfig.VERSION_NAME)

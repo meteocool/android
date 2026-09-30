@@ -1,16 +1,21 @@
-Du willst nicht nass werden oder Gewitter verfolgen? Dann ist das genau die richtige Applikation für dich. 
+Du willst nicht nass werden oder ein Gewitter verfolgen? meteocool zeigt Regen und Gewitter in Echtzeit und wohin sie als Nächstes ziehen.
 
-Du wirst, basierend auf der aktuellen Wolkenlage und den Forecast-Berechnungen des deutschen Wetterdienstes, über Push-Nachrichten über kommenden Niederschlag an deiner Position informiert.
+<b>Funktionen</b>
+<ul>
+<li>Live-Radar, alle paar Minuten aktualisiert: Deutschland, Schweiz, Frankreich, Tschechien, Polen und die USA</li>
+<li>Kurzzeitvorhersage: Sieh, wohin der Regen in den nächsten 45 Minuten zieht. Die ersten 45 Minuten sind erfahrungsgemäß sehr genau</li>
+<li>Blitze live, von Blitzortung.org</li>
+<li>Gewitterzellen, mit 3D-Radaransicht für jede einzelne</li>
+<li>Niederschlagsarten, wie das Radar sie erkennt</li>
+<li>Regenvorhersage für Deinen Standort im Vergleich mehrerer Wettermodelle</li>
+<li>Basiskarten: wie System, hell, dunkel, OpenStreetMap oder CyclOSM zum Radfahren</li>
+<li>Radar-Farbschemata, darunter zwei für Farbsehschwäche</li>
+<li>Dein Standort auf der Karte, auf Wunsch mitverfolgt</li>
+<li>Deutsch und Englisch</li>
+</ul>
 
-Aktuell wird nur der Mitteleuropäische Raum abgedeckt. Wir sind bemüht dies in Zukunft zu erweitern! 
+Regenwarnungen, der Hinweis bevor der Regen bei Dir ankommt, brauchen Googles Push-Dienst und gibt es nur in der Google-Play-Version.
 
-Die Applikation ist Open-Source und damit frei von Werbung und Kosten. 
+meteocool wird von Freiwilligen in ihrer Freizeit entwickelt und betrieben. Die App ist kostenlos, quelloffen und werbefrei.
 
-Features im Überblick:
-- Echtzeit Benachrichtigung über Niederschlag
-- Benachrichtigungen über Niederschlag (Regen/Schnee/Hagel) bis zu 60 Minuten im voraus (Push -> Standortzugriff benötigt)
-- Live-Ansicht über Vorhersage der Wolkenbewegung bis zu 45 Minuten in die Zukunft 
-- Regenradar mit automatischer, schneller Aktualisierung
-- Live Blitzkarte (via blitzortung.org)
-- unterstützt Android weiten "Dark Mode" ab Android 10
-- Frei und Open Source!
+Radardaten von DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB und NOAA; die App nennt jede Quelle mit Lizenz in den Einstellungen.
