@@ -177,6 +177,7 @@ class WebFragment : Fragment() {
         mainHandler.removeCallbacks(loadTimeout)
         mainHandler.postDelayed(loadTimeout, LOAD_TIMEOUT_MILLIS)
         web.stopLoading()
+        clearCovers()
         web.loadUrl(url)
     }
 
@@ -188,7 +189,7 @@ class WebFragment : Fragment() {
         // WebView's own error page would show through behind the message.
         b.webContainer.visibility = View.INVISIBLE
         b.loadError.isVisible = true
-        setControlsVisible(true)
+        clearCovers()
     }
 
     /** The page called requestSettings(): its window functions exist now. */
@@ -200,14 +201,19 @@ class WebFragment : Fragment() {
         b.layers.isEnabled = true
         injectSettings()
         activateLocationIfAuthorized()
-        setControlsVisible(true)
+        // Not clearCovers(): a deep-linked storm can open its sheet first.
+        refreshControls()
     }
 
     private fun handleMessage(message: String) {
         when (message) {
             "requestSettings" -> onPageReady()
-            "layerSwitcherOpened", "detailSheetExpanded" -> setControlsVisible(false)
-            "layerSwitcherClosed", "detailSheetCollapsed" -> setControlsVisible(true)
+            "layerSwitcherOpened" -> setCovered(Cover.LAYER_SWITCHER, true)
+            "layerSwitcherClosed" -> setCovered(Cover.LAYER_SWITCHER, false)
+            "detailSheetExpanded" -> setCovered(Cover.EXPANDED_SHEET, true)
+            "detailSheetCollapsed" -> setCovered(Cover.EXPANDED_SHEET, false)
+            "drawerOpened" -> setCovered(Cover.DRAWER, true)
+            "drawerClosed" -> setCovered(Cover.DRAWER, false)
             "impactLight" -> webView?.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
             "impactMedium" -> webView?.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
             "impactHeavy" -> webView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
@@ -215,8 +221,30 @@ class WebFragment : Fragment() {
         }
     }
 
-    private fun setControlsVisible(visible: Boolean) {
-        _binding?.controls?.isVisible = visible
+    /**
+     * What the page has drawn over the buttons' corner. The buttons stay
+     * hidden while any of these is open, so closing the layer switcher over
+     * an open drawer does not bring them back on top of it. drawerOpened
+     * covers every sheet and panel; frontends older than it only send the
+     * other two.
+     */
+    private enum class Cover { LAYER_SWITCHER, EXPANDED_SHEET, DRAWER }
+
+    private val covers = mutableSetOf<Cover>()
+
+    private fun setCovered(cover: Cover, covered: Boolean) {
+        if (covered) covers.add(cover) else covers.remove(cover)
+        refreshControls()
+    }
+
+    /** A new page, or none: nothing it drew is open any more. */
+    private fun clearCovers() {
+        covers.clear()
+        refreshControls()
+    }
+
+    private fun refreshControls() {
+        _binding?.controls?.isVisible = covers.isEmpty()
     }
 
     private fun evaluate(script: String, callback: ((String?) -> Unit)? = null) {
