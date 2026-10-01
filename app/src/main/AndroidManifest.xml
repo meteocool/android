@@ -36,6 +36,7 @@
         <activity
                 android:name=".ui.SplashActivity"
                 android:exported="true"
+                android:label="meteocool"
                 android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
