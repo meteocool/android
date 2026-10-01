@@ -137,7 +137,16 @@ class WebFragment : Fragment() {
         }
     }
 
-    /** The map fills the screen between the system bars; the buttons clear the status bar and cutout. */
+    /**
+     * The map fills the screen between the system bars; the buttons clear the
+     * status bar and cutout.
+     *
+     * The insets stop here. A WebView that receives them reports them to the
+     * page as env(safe-area-inset-*) even though it already sits inside this
+     * padding, and the page would clear the bars a second time: the Live pill
+     * would sit a status bar's height below the top, and the toolbar as far
+     * above the bottom.
+     */
     private fun applyInsets() {
         val margin = resources.getDimensionPixelSize(R.dimen.map_control_margin)
         ViewCompat.setOnApplyWindowInsetsListener(binding.mapRoot) { _, insets ->
@@ -147,7 +156,7 @@ class WebFragment : Fragment() {
                 topMargin = bars.top + margin
                 marginEnd = bars.right + margin
             }
-            insets
+            WindowInsetsCompat.CONSUMED
         }
     }
 
