@@ -1,0 +1,21 @@
+Vous ne voulez pas être mouillé, ou vous voulez suivre un orage ? meteocool montre la pluie et les orages en temps réel, et où ils vont ensuite.
+
+<b>Fonctions</b>
+<ul>
+<li>Radar en direct, mis à jour toutes les quelques minutes : Allemagne, Suisse, France, Tchéquie, Pologne et États-Unis</li>
+<li>Prévision immédiate : voyez où va la pluie dans les 45 prochaines minutes. D'expérience, ces 45 minutes sont très fiables</li>
+<li>Impacts de foudre en direct, depuis Blitzortung.org</li>
+<li>Cellules orageuses, avec une vue radar 3D de chacune</li>
+<li>Types de précipitations, tels que le radar les voit</li>
+<li>Prévision de pluie pour votre position, en comparant plusieurs modèles météo</li>
+<li>Fonds de carte : suivre le système, clair, sombre, OpenStreetMap ou CyclOSM pour le vélo</li>
+<li>Palettes de couleurs radar, dont deux pour le daltonisme</li>
+<li>Votre position sur la carte, suivie pendant vos déplacements</li>
+<li>Français, allemand, anglais, italien, polonais et tchèque</li>
+</ul>
+
+Les alertes pluie, l'avertissement avant que la pluie ne vous atteigne, nécessitent le service push de Google et ne sont disponibles que dans la version Google Play.
+
+meteocool est open core, développé et exploité par des bénévoles sur leur temps libre. Cette application est open source (AGPL-3.0), gratuite et sans publicité.
+
+Données radar du DWD, de MeteoSwiss, de Météo-France, du ČHMÚ, de l'IMGW-PIB et de la NOAA ; l'application indique chaque source et sa licence dans les paramètres.

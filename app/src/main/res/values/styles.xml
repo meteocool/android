@@ -6,9 +6,13 @@
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 
-    <style name="intro_title">
-        <item name="android:fontFamily">@font/emphasis_bold</item>
-        <item name="android:textSize">25sp</item>
+    <style name="MapControl">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/map_control_spacing</item>
+        <item name="fabSize">mini</item>
+        <item name="backgroundTint">?attr/colorSurface</item>
+        <item name="tint">?attr/colorOnSurface</item>
     </style>
 
 </resources>

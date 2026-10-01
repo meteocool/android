@@ -3,25 +3,20 @@ package com.meteocool.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.meteocool.ui.intro.IntroActivity
-import timber.log.Timber
+import com.meteocool.app.DebugHooks
+import com.meteocool.app.app
+import com.meteocool.ui.onboarding.OnboardingActivity
 
 /**
- * Shows the loading screen from meteocool.
+ * The launcher entry: onboarding on first start, the map afterwards.
  */
-class SplashActivity : AppCompatActivity(){
+class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d(isOnboardingCompleted().toString())
-        if(!isOnboardingCompleted()) {
-            startActivity(Intent(this.applicationContext, IntroActivity::class.java))
-        }else {
-            startActivity(Intent(this.applicationContext, MeteocoolActivity::class.java))
-        }
+        DebugHooks.fromIntent(app, intent)
+        val target = if (app.prefs.onboardingDone) MeteocoolActivity::class.java else OnboardingActivity::class.java
+        // Keeps FCM's extras, so a tapped alert can be acknowledged.
+        startActivity(Intent(this, target).putExtras(intent))
         finish()
-    }
-
-    private fun isOnboardingCompleted() : Boolean {
-        return getSharedPreferences("default", MODE_PRIVATE).getBoolean(IntroActivity.IS_INTRO_COMPLETED, false)
     }
 }

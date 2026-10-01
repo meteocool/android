@@ -1,0 +1,21 @@
+Nie chcesz zmoknąć albo chcesz śledzić burzę? meteocool pokazuje deszcz i burze w czasie rzeczywistym i dokąd się przesuwają.
+
+<b>Funkcje</b>
+<ul>
+<li>Radar na żywo, aktualizowany co kilka minut: Niemcy, Szwajcaria, Francja, Czechy, Polska i USA</li>
+<li>Nowcasting: zobacz, dokąd przesunie się deszcz w ciągu najbliższych 45 minut. Z naszego doświadczenia te 45 minut jest bardzo trafne</li>
+<li>Wyładowania na żywo, z Blitzortung.org</li>
+<li>Komórki burzowe, każda z widokiem radaru 3D</li>
+<li>Rodzaje opadów, tak jak widzi je radar</li>
+<li>Prognoza opadów dla twojej lokalizacji, z porównaniem kilku modeli pogodowych</li>
+<li>Mapy bazowe: zgodnie z systemem, jasna, ciemna, OpenStreetMap lub CyclOSM dla rowerzystów</li>
+<li>Palety kolorów radaru, w tym dwie dla osób z deficytem widzenia barw</li>
+<li>Twoja lokalizacja na mapie, śledzona, gdy się przemieszczasz</li>
+<li>Polski, niemiecki, angielski, francuski, włoski i czeski</li>
+</ul>
+
+Ostrzeżenia przed deszczem, czyli powiadomienie, zanim dotrze do ciebie deszcz, wymagają usługi push Google i są dostępne tylko w wersji z Google Play.
+
+meteocool jest open core, tworzone i utrzymywane przez wolontariuszy w ich wolnym czasie. Ta aplikacja jest open source (AGPL-3.0), bezpłatna i bez reklam.
+
+Dane radarowe z DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB i NOAA; aplikacja wymienia w ustawieniach każde źródło wraz z licencją.

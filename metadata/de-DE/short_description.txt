@@ -1,1 +1,1 @@
-Meteocool ist eine freie App zur Visualisierung und Aggregation von Wetterdaten für Mitteleuropa
+Live-Regenradar mit 45-Minuten-Vorhersage. Open Core, werbefrei

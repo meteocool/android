@@ -1,0 +1,6 @@
+meteocool 4.0, entièrement repensé :
+• Nouvelle carte : radar de plus de pays, cellules orageuses en 3D, foudre et modèles
+• Bouton de position : afficher votre position ou la suivre pendant vos déplacements
+• Nouveaux paramètres : fond de carte (dont suivre le système), palettes de couleurs, sources de données et licences
+• Nouvel accueil en trois étapes, en six langues
+• Fonctionne sous Android 16 ; la version F-Droid ne contient aucun code Google

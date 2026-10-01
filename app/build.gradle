@@ -1,8 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -11,122 +9,99 @@ android {
             // storeFile file('C:\\Users\\jerem\\Google Drive\\PlayStore\\meteocool.jks')
         }
     }
-    compileSdk 34
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.meteocool"
         minSdkVersion 23
-        targetSdkVersion 34
-        versionCode 35
-        versionName "2.2"
+        targetSdkVersion 36
+        versionCode 36
+        versionName "4.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += [
-                        "room.schemaLocation"  : "$projectDir/schemas".toString(),
-                        "room.incremental"     : "true",
-                        "room.expandProjection": "true"]
-            }
-        }
-
     }
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    androidResources {
+        // Lets Android 13+ offer the app's languages in its language setting.
+        generateLocaleConfig true
+        // The languages of the countries with radar coverage. Libraries bring
+        // dozens more, which would leave a half-translated app in those.
+        localeFilters += ["en", "de", "fr", "it", "cs", "pl"]
     }
 
     buildFeatures {
-        dataBinding true
+        viewBinding true
+        buildConfig true
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
-    // work-runtime-ktx 2.1.0 and above now requires Java 8
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
-    flavorDimensions "default"
+    flavorDimensions = ["default"]
     productFlavors {
         create("gms") {
+            dimension "default"
+            // Where "Share meteocool" points: the store this build came from.
+            buildConfigField "String", "STORE_URL", '"https://play.google.com/store/apps/details?id=com.meteocool"'
         }
         create("fdroid") {
+            dimension "default"
+            buildConfigField "String", "STORE_URL", '"https://f-droid.org/packages/com.meteocool/"'
         }
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
     namespace 'com.meteocool'
 }
 
 dependencies {
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'androidx.media:media:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation "androidx.fragment:fragment-ktx:1.8.1"
-    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.17.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.activity:activity-ktx:1.11.0'
+    implementation 'androidx.fragment:fragment-ktx:1.8.9'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.2'
+    implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
+    implementation 'androidx.webkit:webkit:1.14.0'
+    implementation 'com.google.android.material:material:1.13.0'
 
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.9.4'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.9.4'
+    implementation 'androidx.lifecycle:lifecycle-process:2.9.4'
+
+    implementation 'androidx.work:work-runtime-ktx:2.10.5'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2'
+
+    // JSON
+    implementation 'com.google.code.gson:gson:2.13.2'
+
+    // Logging
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    // Fused location and push, Google Play builds only
+    gmsImplementation 'com.google.android.gms:play-services-location:21.3.0'
+    gmsImplementation platform('com.google.firebase:firebase-bom:34.4.0')
+    gmsImplementation 'com.google.firebase:firebase-messaging'
+    gmsImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2'
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test:runner:1.6.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
-
-
-    // JSON library
-    implementation 'com.google.code.gson:gson:2.10.1'
-
-    // Onboarding screen
-    implementation 'com.github.AppIntro:AppIntro:6.3.1'
-
-    // Fused Location Client
-    gmsImplementation 'com.google.android.gms:play-services-location:21.3.0'
-
-    // Location Service with and without google play service
-    implementation 'com.yayandroid:LocationManager:2.4.1'
-
-    // Firebase
-    // Import the BoM for the Firebase platform
-    gmsImplementation platform('com.google.firebase:firebase-bom:33.1.1')
-
-    gmsImplementation 'com.google.firebase:firebase-messaging-ktx:24.0.0'
-
-    // Settings
-    implementation 'androidx.preference:preference-ktx:1.2.1'
-
-    // For Drawer layout
-    implementation 'com.google.android.material:material:1.12.0'
-
-    //ktx android
-    implementation 'androidx.core:core-ktx:1.13.1'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3"
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.3'
-
-    // Timber
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-
-    // Kotlin + coroutines
-    implementation "androidx.work:work-runtime-ktx:2.9.0"
-    implementation "androidx.concurrent:concurrent-futures-ktx:1.2.0"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
-
-    // Kotlin
-    implementation "androidx.activity:activity-ktx:1.9.0"
-
-    // Navigation graph
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
-
-    implementation "androidx.room:room-runtime:2.6.1"
-    kapt "androidx.room:room-compiler:2.6.1"
-
-    implementation "androidx.room:room-ktx:2.6.1"
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
 
     // debugImplementation because LeakCanary should only run in debug builds.
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 }
 
 if (getGradle().getStartParameter().getTaskRequests().toString().contains("Gms")) {

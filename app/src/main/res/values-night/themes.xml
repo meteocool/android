@@ -1,55 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme" parent="Theme.AppCompat.DayNight.DarkActionBar">
-        <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorSurface</item>
-        <item name="android:windowLightStatusBar" tools:ignore="NewApi">false</item>
-        <item name="android:navigationBarColor" tools:ignore="NewApi">?android:attr/colorBackground</item>
-        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
-        <item name="android:navigationBarDividerColor" tools:ignore="NewApi">?attr/colorControlHighlight</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="Base.Theme.Meteocool" parent="Base.Theme">
+    <style name="Base.Theme.Meteocool" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/white_0</item>
-        <item name="colorSecondary">@color/black_0</item>
-        <item name="colorPrimaryDark">@color/black_10</item>
+        <item name="colorPrimaryVariant">@color/white_0</item>
+        <item name="colorOnPrimary">@color/black_0</item>
+        <item name="colorSecondary">@color/turquoise_cloud_0</item>
+        <item name="colorSecondaryVariant">@color/turquoise_cloud_0</item>
+        <item name="colorOnSecondary">@color/black_0</item>
         <item name="colorAccent">@color/turquoise_cloud_0</item>
-        <!--colorBackground appears behind scrollable content and is used for the default window-->
-        <!--background. colorSurface is mapped to the surface of components such as cards, sheets-->
-        <!--and menus. colorError is used to indicate an error state for components such as-->
-        <!--text fields.-->
         <item name="android:colorBackground">@color/black_10</item>
         <item name="colorSurface">@color/black_10</item>
-        <item name="colorError">@color/red_600</item>
-
-        <!--"On" colors define how text, icons and strokes are colored in relation to the surface-->
-        <!--on which they appear.-->
-        <item name="colorOnPrimary">@color/black_0</item>
-        <item name="colorOnSecondary">@color/white_0</item>
         <item name="colorOnBackground">@color/white_0</item>
         <item name="colorOnSurface">@color/white_0</item>
-        <item name="colorOnError">@color/black_0</item>
+        <item name="colorError">@color/red_600</item>
+        <item name="colorOnError">@color/white_0</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
     </style>
 
     <style name="SplashTheme" parent="Base.Theme.Meteocool">
-        <item name="colorPrimary">@color/black_10</item>
         <item name="android:windowBackground">@drawable/launch_screen</item>
-    </style>
-
-    <style name="Toolbar" parent="ThemeOverlay.AppCompat.ActionBar">
-
-    </style>
-
-    <style name="AppbarLayout" parent="ThemeOverlay.AppCompat.Dark">
-
-    </style>
-
-
-
-
-    <style name="OnBoardingTheme" parent="Base.Theme">
-        <item name="colorPrimary">@color/turquoise_cloud_0</item>
-        <item name="colorAccent">@color/white_10</item>
-        <item name="android:colorBackground">@color/turquoise_cloud_0</item>
     </style>
 </resources>

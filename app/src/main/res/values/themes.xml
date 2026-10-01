@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.Meteocool" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/black_0</item>
+        <item name="colorPrimaryVariant">@color/black_0</item>
+        <item name="colorOnPrimary">@color/white_0</item>
+        <item name="colorSecondary">@color/turquoise_cloud_0</item>
+        <item name="colorSecondaryVariant">@color/turquoise_cloud_0</item>
+        <item name="colorOnSecondary">@color/black_0</item>
+        <item name="colorAccent">@color/turquoise_cloud_0</item>
+        <item name="android:colorBackground">@color/white_10</item>
+        <item name="colorSurface">@color/white_10</item>
+        <item name="colorOnBackground">@color/black_0</item>
+        <item name="colorOnSurface">@color/black_0</item>
+        <item name="colorError">@color/red_600</item>
+        <item name="colorOnError">@color/white_0</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+    </style>
+
+    <style name="SplashTheme" parent="Base.Theme.Meteocool">
+        <item name="android:windowBackground">@drawable/launch_screen</item>
+    </style>
+</resources>
