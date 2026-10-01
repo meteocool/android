@@ -3,6 +3,7 @@ package com.meteocool.ui.map
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -482,6 +483,15 @@ class WebFragment : Fragment() {
                 Timber.w("No app for ${request.url.scheme}")
             }
             return true
+        }
+
+        /**
+         * Every new page, including the ones the page starts itself: the
+         * service worker reloads it when a new frontend is deployed, and a
+         * drawer open on the old page never says it closed.
+         */
+        override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
+            if (view == webView) clearCovers()
         }
 
         override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
