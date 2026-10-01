@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Notification channel -->
+    <string name="notification_channel_name">Upozornění na déšť</string>
+    <string name="notification_channel_description">Upozornění krátce předtím, než k tobě dorazí déšť.</string>
+
+    <!-- Common -->
+    <string name="action_continue">Pokračovat</string>
+    <string name="action_not_now">Teď ne</string>
+    <string name="dismiss">Rozumím</string>
+    <string name="change_in_settings">Změnit v nastavení</string>
+    <string name="title_settings">Nastavení</string>
+    <string name="version_label">Verze: %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Vítej v meteocool</string>
+    <string name="onboarding_feature_radar_title">Radar naživo</string>
+    <string name="onboarding_feature_radar_text">Déšť a bouřky v reálném čase, aktualizované každých pár minut.</string>
+    <string name="onboarding_feature_nowcast_title">Nowcasting</string>
+    <string name="onboarding_feature_nowcast_text">Sleduj, kam se déšť posouvá. Podle našich zkušeností je prvních 45 minut velmi přesných.</string>
+    <string name="rain_alerts">Upozornění na déšť</string>
+    <string name="onboarding_feature_alerts_text">Upozornění předtím, než k tobě dorazí déšť, které zmizí, jakmile přestane pršet.</string>
+    <string name="onboarding_feature_free_title">Zdarma a open source</string>
+    <string name="onboarding_feature_free_text">Vyvíjí a provozují ho dobrovolníci ve svém volném čase.</string>
+    <string name="location_access">Přístup k poloze</string>
+    <string name="onboarding_location_permission">Abychom mohli ukázat tvou aktuální polohu na mapě, potřebujeme tvé svolení.\n\nTvá data o poloze nikdy nesdílíme ani neukládáme.</string>
+    <string name="allow_location_access">Povolit přístup k poloze</string>
+    <string name="onboarding_notification_text">Nech se upozornit krátce předtím, než tam, kde jsi, začne pršet, i když je meteocool zavřený.\n\nZařízení se proto zeptá také na přístup k poloze na pozadí. Neboj, baterii to nevybije.</string>
+    <string name="tell_me_before_it_rains">Upozorni mě před deštěm!</string>
+    <string name="onboarding_settings_footnote">Kdykoli to můžeš změnit v nastavení.</string>
+    <string name="background_location_title">Upozornění při zavřeném meteocool</string>
+    <string name="background_location_rationale">Upozornění na déšť kontrolují tvou polohu i při zavřeném meteocool, zhruba každých 15 minut. Na další obrazovce zvol „Povolit vždy“.\n\nBez toho tě upozornění sledují jen, když je aplikace otevřená.</string>
+
+    <!-- Map -->
+    <string name="map_layers">Vrstvy mapy</string>
+    <string name="location_button">Poloha</string>
+    <string name="location_button_off">Vypnuto</string>
+    <string name="location_button_active">Ukazuje tvou polohu</string>
+    <string name="location_button_tracking">Sleduje tvou polohu</string>
+    <string name="map_load_failed">Mapu se nepodařilo načíst. Zkontroluj připojení a zkus to znovu.</string>
+    <string name="retry">Zkusit znovu</string>
+    <string name="location_permission_required">Je potřeba oprávnění k poloze</string>
+    <string name="location_permission_general">Chceš-li používat tlačítko polohy nebo automatické přiblížení, povol v nastavení zařízení přístup k poloze. Žádné údaje o poloze neukládáme ani nesdílíme.</string>
+
+    <!-- Demo mode -->
+    <string name="demo_notice_title">Tohle není skutečná bouřka</string>
+    <string name="demo_notice_message">Je zapnutý demo režim: mapa přehrává zaznamenanou bouřku, jako by probíhala právě teď. Nic z toho není aktuální počasí.</string>
+    <string name="demo_notice_disable">Vypnout demo režim</string>
+    <string name="demo_notice_continue">Pokračovat v demu</string>
+
+    <!-- Settings: rain alerts -->
+    <string name="settings_notifications">Push notifikace</string>
+    <string name="enable_notifications">Zapnout notifikace</string>
+    <string name="show_meteorological_details">Zobrazit meteorologické detaily</string>
+    <string name="intensity_threshold">Práh intenzity</string>
+    <string name="notification_timeframe">Předstih upozornění</string>
+    <string name="level_drizzle">Mrholení</string>
+    <string name="level_light">Slabý déšť</string>
+    <string name="level_rain">Déšť</string>
+    <string name="level_heavy_rain">Silný déšť</string>
+    <string name="level_hail">Kroupy</string>
+    <string name="notifications_explanation">Pokud chceš, upozorníme tě na blížící se srážky v místě, kde se právě nacházíš. Aby to fungovalo, musí se tvá poloha na pozadí odesílat na naše servery.</string>
+    <string name="meteorological_details_help">Zobrazit meteorologické detaily:\nPro pokročilé uživatele přidá do textu notifikace meteorologické detaily (například hodnoty dBZ).\n\nPráh intenzity:\nNotifikace přijde, jen pokud mají očekávané srážky alespoň tuto intenzitu.\n\nPředstih upozornění:\nJak dlouho předem chceš být na srážky upozorněn.</string>
+    <string name="notification_permissions_title">Zkontrolovat oprávnění</string>
+    <string name="notification_permissions_help">Upozornění na déšť potřebují notifikace a přístup k poloze. Pro upozornění na cestách při zavřené aplikaci nastav v nastavení přístup k poloze na „Povolit vždy“. Mapu můžeš používat i bez těchto oprávnění.</string>
+    <string name="notification_sync_failed">Změny notifikací se nepodařilo odeslat na server. Upozornění možná stále používají tvé předchozí nastavení. Zkontroluj připojení a otevři aplikaci znovu.</string>
+
+    <!-- Settings: map -->
+    <string name="settings_map_view">Mapa</string>
+    <string name="two_finger_rotation">Otáčení mapy dvěma prsty</string>
+    <string name="auto_zoom_after_start">Automatické přiblížení po spuštění</string>
+    <string name="base_map_layer">Podkladová vrstva mapy</string>
+    <string name="basemap_system">Podle systému</string>
+    <string name="basemap_light">Světlá</string>
+    <string name="basemap_dark">Tmavá</string>
+    <string name="basemap_cyclosm">CyclOSM (cyklistika)</string>
+    <string name="system_detail">Právě %1$s</string>
+    <string name="radar_color_map">Barevná škála radaru</string>
+    <string name="colormap_classic">Klasická</string>
+    <string name="colormap_homeyer">Homeyer (porucha barvocitu)</string>
+    <string name="colormap_lang">Lang</string>
+    <string name="colormap_explanation">Mění barvy, kterými se srážky na mapě vykreslují.\n\n⚠️ „Klasická“ se vykresluje nejrychleji.</string>
+
+    <!-- Settings: about -->
+    <string name="settings_about">O aplikaci</string>
+    <string name="contribute_on_github">Přispět na GitHubu</string>
+    <string name="feedback_and_support">Zpětná vazba a podpora</string>
+    <string name="feedback_body">Popiš sem svůj problém nebo návrh:\n</string>
+    <string name="imprint_privacy">Tiráž a ochrana soukromí</string>
+    <string name="share_title">Sdílet meteocool</string>
+    <string name="experimental_features">Experimentální funkce</string>
+    <string name="experimental_features_require_restart">Toto nastavení začne platit až po restartu aplikace meteocool.\n\nJe určené pro vývoj a může způsobit nečekané chování. 🐛</string>
+    <string name="demo_mode">Demo režim</string>
+    <string name="demo_mode_require_restart">Toto nastavení začne platit až po restartu aplikace meteocool.\n\nDemo režim přehrává zaznamenanou bouřku, jako by probíhala právě teď, z demo prostředí meteocool. Vypne experimentální funkce.</string>
+
+    <!-- Settings: data sources -->
+    <string name="data_sources_header">Zdroje dat a licence</string>
+    <string name="data_sources_footer">Poskytovatelé meteocool nepodporují a neposkytují žádnou záruku. Klepnutím na zdroj zobrazíš jeho licenci.</string>
+    <string name="source_dwd">Radar Německo, bouřkové buňky, mapy počasí · CC BY 4.0, upraveno</string>
+    <string name="source_meteoswiss">Radar Švýcarsko · CC BY 4.0, upraveno</string>
+    <string name="source_meteofrance">Radar Francie · Licence Ouverte 2.0 (Etalab), upraveno</string>
+    <string name="source_chmi">Radar Česko · CC BY 4.0, upraveno</string>
+    <string name="source_imgw">Radar Polsko · CC BY 4.0. Zdrojem dat je Institut meteorologie a vodního hospodářství – Národní výzkumný ústav (IMGW-PIB). Data zpracoval meteocool.</string>
+    <string name="source_noaa">Radar USA · volné dílo</string>
+    <string name="source_blitzortung">Blesky</string>
+    <string name="source_openmeteo">Srovnání modelů · CC BY 4.0</string>
+    <string name="source_copernicus">Satelitní snímky · obsahuje upravená data Copernicus Sentinel</string>
+    <string name="source_osm">Mapová data · ODbL</string>
+    <string name="source_protomaps">Mapové dlaždice</string>
+
+</resources>

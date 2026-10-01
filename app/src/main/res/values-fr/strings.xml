@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Notification channel -->
+    <string name="notification_channel_name">Alertes pluie</string>
+    <string name="notification_channel_description">Un avertissement peu avant que la pluie ne vous atteigne.</string>
+
+    <!-- Common -->
+    <string name="action_continue">Continuer</string>
+    <string name="action_not_now">Plus tard</string>
+    <string name="dismiss">OK</string>
+    <string name="change_in_settings">Modifier dans les paramètres</string>
+    <string name="title_settings">Paramètres</string>
+    <string name="version_label">Version : %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Bienvenue sur meteocool</string>
+    <string name="onboarding_feature_radar_title">Radar en direct</string>
+    <string name="onboarding_feature_radar_text">La pluie et les orages en temps réel, mis à jour toutes les quelques minutes.</string>
+    <string name="onboarding_feature_nowcast_title">Prévision immédiate</string>
+    <string name="onboarding_feature_nowcast_text">Suivez la trajectoire de la pluie. D\'expérience, les 45 premières minutes sont très fiables.</string>
+    <string name="rain_alerts">Alertes pluie</string>
+    <string name="onboarding_feature_alerts_text">Un avertissement avant que la pluie ne vous atteigne, qui disparaît dès qu\'elle s\'arrête.</string>
+    <string name="onboarding_feature_free_title">Gratuit et open source</string>
+    <string name="onboarding_feature_free_text">Développé et exploité par des bénévoles sur leur temps libre.</string>
+    <string name="location_access">Accès à la position</string>
+    <string name="onboarding_location_permission">Pour afficher votre position actuelle sur la carte, nous avons besoin de votre autorisation.\n\nNous ne partagerons ni ne conserverons jamais vos données de position.</string>
+    <string name="allow_location_access">Autoriser l\'accès à la position</string>
+    <string name="onboarding_notification_text">Soyez averti peu avant qu\'il ne commence à pleuvoir là où vous êtes, même quand meteocool est fermé.\n\nPour cela, votre appareil demandera aussi l\'accès à la position en arrière-plan. Pas d\'inquiétude, cela ne videra pas votre batterie.</string>
+    <string name="tell_me_before_it_rains">Prévenez-moi avant la pluie !</string>
+    <string name="onboarding_settings_footnote">Vous pouvez modifier cela à tout moment dans les paramètres.</string>
+    <string name="background_location_title">Alertes quand meteocool est fermé</string>
+    <string name="background_location_rationale">Les alertes pluie vérifient votre position quand meteocool est fermé, environ toutes les 15 minutes. Sur l\'écran suivant, choisissez « Toujours autoriser ».\n\nSans cela, les alertes ne vous suivent que lorsque l\'application est ouverte.</string>
+
+    <!-- Map -->
+    <string name="map_layers">Couches de la carte</string>
+    <string name="location_button">Position</string>
+    <string name="location_button_off">Désactivée</string>
+    <string name="location_button_active">Affiche votre position</string>
+    <string name="location_button_tracking">Suit votre position</string>
+    <string name="map_load_failed">La carte n\'a pas pu être chargée. Vérifiez votre connexion et réessayez.</string>
+    <string name="retry">Réessayer</string>
+    <string name="location_permission_required">Autorisation de position requise</string>
+    <string name="location_permission_general">Pour utiliser le bouton de position ou le zoom automatique, vous devez autoriser l\'accès à la position dans les paramètres de votre appareil. Nous ne conservons ni ne partageons aucune donnée de position.</string>
+
+    <!-- Demo mode -->
+    <string name="demo_notice_title">Ceci n\'est pas un vrai orage</string>
+    <string name="demo_notice_message">Le mode démo est activé : la carte rejoue un orage enregistré comme s\'il se produisait maintenant. Rien de ce qu\'elle montre n\'est la météo actuelle.</string>
+    <string name="demo_notice_disable">Désactiver le mode démo</string>
+    <string name="demo_notice_continue">Continuer la démo</string>
+
+    <!-- Settings: rain alerts -->
+    <string name="settings_notifications">Notifications push</string>
+    <string name="enable_notifications">Activer les notifications</string>
+    <string name="show_meteorological_details">Afficher les détails météorologiques</string>
+    <string name="intensity_threshold">Seuil d\'intensité</string>
+    <string name="notification_timeframe">Délai d\'avertissement</string>
+    <string name="level_drizzle">Bruine</string>
+    <string name="level_light">Pluie faible</string>
+    <string name="level_rain">Pluie</string>
+    <string name="level_heavy_rain">Pluie forte</string>
+    <string name="level_hail">Grêle</string>
+    <string name="notifications_explanation">Si vous le souhaitez, nous pouvons vous informer des précipitations à venir à votre position actuelle. Pour cela, votre position doit être envoyée à nos serveurs en arrière-plan.</string>
+    <string name="meteorological_details_help">Afficher les détails météorologiques :\nPour les utilisateurs avancés, ajoute des détails météorologiques au texte de la notification (comme les valeurs en dBZ).\n\nSeuil d\'intensité :\nN\'envoyer une notification que si les précipitations attendues sont au moins aussi intenses.\n\nDélai d\'avertissement :\nCombien de temps à l\'avance vous souhaitez être averti des précipitations.</string>
+    <string name="notification_permissions_title">Vérifier les autorisations</string>
+    <string name="notification_permissions_help">Les alertes pluie nécessitent les notifications et l\'accès à la position. Pour être alerté en déplacement quand l\'application est fermée, réglez l\'accès à la position sur « Toujours autoriser » dans les paramètres. Vous pouvez utiliser la carte sans ces autorisations.</string>
+    <string name="notification_sync_failed">Les modifications des notifications n\'ont pas pu être envoyées au serveur. Les alertes utilisent peut-être encore vos anciens réglages. Vérifiez votre connexion et rouvrez l\'application pour réessayer.</string>
+
+    <!-- Settings: map -->
+    <string name="settings_map_view">Carte</string>
+    <string name="two_finger_rotation">Rotation de la carte à deux doigts</string>
+    <string name="auto_zoom_after_start">Zoom automatique au démarrage</string>
+    <string name="base_map_layer">Fond de carte</string>
+    <string name="basemap_system">Suivre le système</string>
+    <string name="basemap_light">Clair</string>
+    <string name="basemap_dark">Sombre</string>
+    <string name="basemap_cyclosm">CyclOSM (vélo)</string>
+    <string name="system_detail">Actuellement %1$s</string>
+    <string name="radar_color_map">Palette de couleurs radar</string>
+    <string name="colormap_classic">Classique</string>
+    <string name="colormap_homeyer">Homeyer (daltonisme)</string>
+    <string name="colormap_lang">Lang</string>
+    <string name="colormap_explanation">Change les couleurs utilisées pour afficher les précipitations sur la carte.\n\n⚠️ « Classique » s\'affiche le plus rapidement.</string>
+
+    <!-- Settings: about -->
+    <string name="settings_about">À propos</string>
+    <string name="contribute_on_github">Contribuer sur GitHub</string>
+    <string name="feedback_and_support">Commentaires et assistance</string>
+    <string name="feedback_body">Décrivez votre problème ou votre suggestion ici :\n</string>
+    <string name="imprint_privacy">Mentions légales et confidentialité</string>
+    <string name="share_title">Partager meteocool</string>
+    <string name="experimental_features">Fonctions expérimentales</string>
+    <string name="experimental_features_require_restart">Ce réglage ne prend effet qu\'après le redémarrage de l\'application meteocool.\n\nCe réglage est destiné au développement et peut provoquer des comportements inattendus. 🐛</string>
+    <string name="demo_mode">Mode démo</string>
+    <string name="demo_mode_require_restart">Ce réglage ne prend effet qu\'après le redémarrage de l\'application meteocool.\n\nLe mode démo rejoue un orage enregistré comme s\'il se produisait maintenant, depuis l\'environnement de démo de meteocool. Il désactive les fonctions expérimentales.</string>
+
+    <!-- Settings: data sources -->
+    <string name="data_sources_header">Sources de données et licences</string>
+    <string name="data_sources_footer">Les fournisseurs ne cautionnent pas meteocool et n\'offrent aucune garantie. Touchez une source pour voir sa licence.</string>
+    <string name="source_dwd">Radar Allemagne, cellules orageuses, cartes météo · CC BY 4.0, modifié</string>
+    <string name="source_meteoswiss">Radar Suisse · CC BY 4.0, modifié</string>
+    <string name="source_meteofrance">Radar France · Licence Ouverte 2.0 (Etalab), modifié</string>
+    <string name="source_chmi">Radar Tchéquie · CC BY 4.0, modifié</string>
+    <string name="source_imgw">Radar Pologne · CC BY 4.0. Les données proviennent de l\'Institut de météorologie et de gestion de l\'eau – Institut national de recherche (IMGW-PIB). Elles ont été traitées par meteocool.</string>
+    <string name="source_noaa">Radar États-Unis · domaine public</string>
+    <string name="source_blitzortung">Foudre</string>
+    <string name="source_openmeteo">Comparaison des modèles · CC BY 4.0</string>
+    <string name="source_copernicus">Images satellite · contient des données Copernicus Sentinel modifiées</string>
+    <string name="source_osm">Données cartographiques · ODbL</string>
+    <string name="source_protomaps">Tuiles de la carte</string>
+
+</resources>

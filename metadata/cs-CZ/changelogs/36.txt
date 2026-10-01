@@ -1,0 +1,6 @@
+meteocool 4.0, od základu nový:
+• Nová mapa s radarem pro více zemí, bouřkovými buňkami ve 3D, blesky a předpověďmi modelů
+• Tlačítko polohy: ukáže, kde jsi, nebo tě sleduje, když se pohybuješ
+• Nové nastavení: podkladová mapa (i podle systému), barevné škály, zdroje dat a licence
+• Nové uvítání ve třech krocích, v šesti jazycích
+• Funguje na Androidu 16; verze z F-Droid neobsahuje žádný kód Googlu

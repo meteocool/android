@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Notification intensity Preference -->
+    <!-- dBZ thresholds; see Prefs.INTENSITIES -->
     <string-array name="notification_intensity_entries">
         <item>@string/level_drizzle</item>
         <item>@string/level_light</item>
@@ -8,7 +9,7 @@
         <item>@string/level_hail</item>
     </string-array>
 
-    <string-array name="notification_intensity_values">
+    <string-array name="notification_intensity_values" translatable="false">
         <item>14</item>
         <item>20</item>
         <item>26</item>
@@ -16,20 +17,19 @@
         <item>41</item>
     </string-array>
 
-    <!-- Reply Preference -->
-    <string-array name="notification_time_entries">
-        <item>5 Min</item>
-        <item>10 Min</item>
-        <item>15 Min</item>
-        <item>20 Min</item>
-        <item>25 Min</item>
-        <item>30 Min</item>
-        <item>35 Min</item>
-        <item>40 Min</item>
-        <item>45 Min</item>
+    <string-array name="notification_time_entries" translatable="false">
+        <item>5 min</item>
+        <item>10 min</item>
+        <item>15 min</item>
+        <item>20 min</item>
+        <item>25 min</item>
+        <item>30 min</item>
+        <item>35 min</item>
+        <item>40 min</item>
+        <item>45 min</item>
     </string-array>
 
-    <string-array name="notification_time_values">
+    <string-array name="notification_time_values" translatable="false">
         <item>5</item>
         <item>10</item>
         <item>15</item>
@@ -41,14 +41,36 @@
         <item>45</item>
     </string-array>
 
-    <!-- Drawer Menu -->
-    <string-array name="drawer_menu_entries">
-        <item>@string/map_header</item>
-        <item>@string/menu_documentation</item>
+    <!-- The web map resolves "system" itself. -->
+    <string-array name="base_layer_entries">
+        <item>@string/basemap_system</item>
+        <item>@string/basemap_light</item>
+        <item>@string/basemap_dark</item>
+        <item>@string/basemap_osm</item>
+        <item>@string/basemap_cyclosm</item>
     </string-array>
 
-    <string-array name="drawer_menu_values">
-        <item>menu_map</item>
-        <item>menu_documentation</item>
+    <string-array name="base_layer_values" translatable="false">
+        <item>system</item>
+        <item>light</item>
+        <item>dark</item>
+        <item>osm</item>
+        <item>cyclosm</item>
+    </string-array>
+
+    <string-array name="radar_color_mapping_entries">
+        <item>@string/colormap_classic</item>
+        <item>@string/colormap_nws</item>
+        <item>@string/colormap_pyart_stepseq</item>
+        <item>@string/colormap_homeyer</item>
+        <item>@string/colormap_lang</item>
+    </string-array>
+
+    <string-array name="radar_color_mapping_values" translatable="false">
+        <item>classic</item>
+        <item>nws</item>
+        <item>pyart_stepseq</item>
+        <item>homeyer</item>
+        <item>lang</item>
     </string-array>
 </resources>

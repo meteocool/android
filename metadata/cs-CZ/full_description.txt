@@ -1,0 +1,21 @@
+Nechceš zmoknout, nebo chceš sledovat bouřku? meteocool ukazuje déšť a bouřky v reálném čase a kam se posouvají dál.
+
+<b>Funkce</b>
+<ul>
+<li>Radar naživo, aktualizovaný každých pár minut: Německo, Švýcarsko, Francie, Česko, Polsko a USA</li>
+<li>Nowcasting: sleduj, kam se déšť posune během příštích 45 minut. Podle našich zkušeností je těchto 45 minut velmi přesných</li>
+<li>Blesky naživo, z Blitzortung.org</li>
+<li>Bouřkové buňky, každá s 3D radarovým pohledem</li>
+<li>Typy srážek, jak je vidí radar</li>
+<li>Předpověď srážek pro tvou polohu, ve srovnání několika modelů počasí</li>
+<li>Podkladové mapy: podle systému, světlá, tmavá, OpenStreetMap nebo CyclOSM pro cyklisty</li>
+<li>Barevné škály radaru, z toho dvě pro poruchy barvocitu</li>
+<li>Tvá poloha na mapě, sledovaná, když se pohybuješ</li>
+<li>Čeština, němčina, angličtina, francouzština, italština a polština</li>
+</ul>
+
+Upozornění na déšť, tedy varování předtím, než k tobě dorazí déšť, potřebují push službu Googlu a jsou jen ve verzi z Google Play.
+
+meteocool je open core, vyvíjí a provozují ho dobrovolníci ve svém volném čase. Tato aplikace je open source (AGPL-3.0), zdarma a bez reklam.
+
+Radarová data od DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB a NOAA; aplikace v nastavení uvádí každý zdroj i s licencí.
