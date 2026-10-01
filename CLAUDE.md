@@ -95,7 +95,9 @@ The page calls the `Android` JavaScript interface:
 
 - `requestSettings()` when it is ready;
 - `postMessage(msg)`, from core's `postToNative()`, with `layerSwitcherOpened`/`Closed`,
-  `detailSheetExpanded`/`Collapsed` and `impactLight`/`Medium`/`Heavy`.
+  `detailSheetExpanded`/`Collapsed`, `drawerOpened`/`Closed` and `impactLight`/`Medium`/`Heavy`.
+  The native buttons stay hidden while any of the three pairs is open: `drawerOpened` covers
+  every sheet and panel at any height, the other two are all that older frontends send.
 
 Messages are ignored unless the WebView's URL is on the current environment's web host.
 
