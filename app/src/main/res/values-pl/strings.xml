@@ -38,8 +38,7 @@
     <string name="location_button_off">Wyłączona</string>
     <string name="location_button_active">Pokazuje twoją lokalizację</string>
     <string name="location_button_tracking">Śledzi twoją lokalizację</string>
-    <string name="map_load_failed">Nie udało się wczytać mapy. Sprawdź połączenie i spróbuj ponownie.</string>
-    <string name="retry">Spróbuj ponownie</string>
+    <string name="map_load_failed">Nie udało się wczytać mapy. Ponawiam próbę…</string>
     <string name="location_permission_required">Wymagany dostęp do lokalizacji</string>
     <string name="location_permission_general">Aby korzystać z przycisku lokalizacji lub automatycznego przybliżenia, zezwól na dostęp do lokalizacji w ustawieniach urządzenia. Nie przechowujemy ani nie udostępniamy żadnych danych o lokalizacji.</string>
 

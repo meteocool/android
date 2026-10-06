@@ -38,8 +38,7 @@
     <string name="location_button_off">Vypnuto</string>
     <string name="location_button_active">Ukazuje tvou polohu</string>
     <string name="location_button_tracking">Sleduje tvou polohu</string>
-    <string name="map_load_failed">Mapu se nepodařilo načíst. Zkontroluj připojení a zkus to znovu.</string>
-    <string name="retry">Zkusit znovu</string>
+    <string name="map_load_failed">Mapu se nepodařilo načíst. Zkouším to znovu…</string>
     <string name="location_permission_required">Je potřeba oprávnění k poloze</string>
     <string name="location_permission_general">Chceš-li používat tlačítko polohy nebo automatické přiblížení, povol v nastavení zařízení přístup k poloze. Žádné údaje o poloze neukládáme ani nesdílíme.</string>
 

@@ -38,8 +38,7 @@
     <string name="location_button_off">Aus</string>
     <string name="location_button_active">Zeigt Deinen Standort</string>
     <string name="location_button_tracking">Folgt Deinem Standort</string>
-    <string name="map_load_failed">Die Karte konnte nicht geladen werden. Prüfe die Verbindung und versuche es erneut.</string>
-    <string name="retry">Erneut versuchen</string>
+    <string name="map_load_failed">Die Karte konnte nicht geladen werden. Neuer Versuch …</string>
     <string name="location_permission_required">Zugriff auf Deinen Standort benötigt</string>
     <string name="location_permission_general">Um die Ortungsfunktion oder den Automatischen Zoom zu verwenden, musst Du den Zugriff auf Deinen Standort erlauben. Wir werden Deinen Standort niemals speichern oder weitergeben.</string>
 

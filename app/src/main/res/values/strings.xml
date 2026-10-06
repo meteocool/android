@@ -41,8 +41,7 @@
     <string name="location_button_off">Off</string>
     <string name="location_button_active">Showing your location</string>
     <string name="location_button_tracking">Following your location</string>
-    <string name="map_load_failed">The map could not load. Check your connection and try again.</string>
-    <string name="retry">Retry</string>
+    <string name="map_load_failed">The map could not load. Trying again…</string>
     <string name="location_permission_required">Location Permission Required</string>
     <string name="location_permission_general">To use the location button or auto-zoom, you need to allow access to Location in your device\'s Settings. We won\'t store or share any location information.</string>
 

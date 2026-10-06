@@ -98,7 +98,8 @@ The page calls the `Android` JavaScript interface:
   `detailSheetExpanded`/`Collapsed`, `drawerOpened`/`Closed` and `impactLight`/`Medium`/`Heavy`.
   The native buttons stay hidden while any of the three pairs is open: `drawerOpened` covers
   every sheet and panel at any height, the other two are all that older frontends send.
-  `share:{json}` asks for the share sheet (see Sharing).
+  `share:{json}` asks for the share sheet (see Sharing), and `mapGraphicsLost` reports a lost
+  WebGL context (see Map loading).
 
 Messages are ignored unless the WebView's URL is on the current environment's web host.
 
@@ -110,10 +111,28 @@ The app calls into the page with:
 - `window.enterForeground()` and `window.leaveForeground()`;
 - `window.shareLink()` after a screenshot.
 
-Before the page's scripts run, a document-start script sets `window.nativeCapabilities.share`.
+Before the page's scripts run, a document-start script sets `window.nativeCapabilities.share` and
+installs the graphics watch.
 
 Geolocation requests from the page itself are granted only for the map's origin, and only
 when the app already holds location permission. WebView has no permission prompt of its own.
+
+## Map loading
+
+Nothing about the map page waits for the user; there is no Retry button.
+[`MapRecovery`](app/src/main/java/com/meteocool/ui/map/MapRecovery.kt) reloads it when:
+
+- the main frame fails to load, or the page does not call `requestSettings()` in time (20 s once
+  loading stops, 45 s at most);
+- the renderer dies (`onRenderProcessGone`, which also replaces the WebView);
+- a canvas in `#map` loses its WebGL context for good: the graphics watch posts `mapGraphicsLost`
+  after five seconds without it coming back;
+- the page no longer answers when the app returns to the foreground.
+
+Retries back off from 1 to 15 seconds, and happen at once when a network comes up or the app comes
+back. A status ("Trying again…") appears from the second failure; it takes no touches. A failed
+main frame also hides the WebView, so its error page never shows. The rules are the iOS app's, and
+`MapRecoveryTest` runs them on virtual time.
 
 ## Sharing
 
