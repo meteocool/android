@@ -93,6 +93,9 @@ are on and the app has "Allow all the time".
 ng delivers Android alerts through the FCM HTTP v1 API (`libs/meteocool-push` there), with a
 Firebase service account from the same project as `app/google-services.json`. Visible alerts go
 on the `rain_alerts` channel; the clear message is data-only, with `clear_all` set to `"true"`.
+An alert that arrives while one of the app's screens is in front is not shown, only acknowledged
+(`from: "foreground"`): the user is already looking at the weather, and the server sends the next
+alert only after this one counts as seen.
 
 ## Web bridge
 

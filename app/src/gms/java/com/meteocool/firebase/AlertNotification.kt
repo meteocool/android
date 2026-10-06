@@ -12,7 +12,11 @@ import com.meteocool.notifications.Notifications
 import com.meteocool.permissions.PermUtils
 import com.meteocool.ui.MeteocoolActivity
 
-/** A rain alert that arrived while the app was open, which FCM leaves to the app to show. */
+/**
+ * A rain alert that arrived while the app was running but not in front (a
+ * dialog of another app over it, split screen), which FCM leaves to the app
+ * to show.
+ */
 object AlertNotification {
 
     private const val ALERT_ID = 1
