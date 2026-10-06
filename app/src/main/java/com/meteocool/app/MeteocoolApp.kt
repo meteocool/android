@@ -18,6 +18,7 @@ import com.meteocool.sensors.PressureReader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -65,6 +66,7 @@ class MeteocoolApp : Application() {
             scope.launch { PushSupport.fetchToken(this@MeteocoolApp)?.let { registration.setToken(it) } }
         }
         registration.refreshAuthorization()
+        scope.launch { MeteocoolEnvironment.changes.drop(1).collect { registration.moveRegistration() } }
     }
 
     /** Warnings and errors only. */

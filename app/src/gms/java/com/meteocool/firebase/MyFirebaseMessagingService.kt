@@ -1,5 +1,7 @@
 package com.meteocool.firebase
 
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.meteocool.app.app
@@ -28,8 +30,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             return
         }
         val notification = message.notification ?: return
-        if (app.prefs.notification) {
-            AlertNotification.show(this, notification.title, notification.body)
+        if (!app.prefs.notification) return
+        if (appOnScreen()) {
+            // The user is already looking at the weather. The alert still
+            // counts as seen: the server sends the next one only after that.
+            app.registration.acknowledge("foreground")
+            return
         }
+        AlertNotification.show(this, notification.title, notification.body)
     }
+
+    /** One of the app's screens is in front, not merely visible behind something. */
+    private fun appOnScreen(): Boolean =
+        ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
 }

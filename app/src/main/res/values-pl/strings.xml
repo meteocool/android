@@ -38,8 +38,7 @@
     <string name="location_button_off">Wyłączona</string>
     <string name="location_button_active">Pokazuje twoją lokalizację</string>
     <string name="location_button_tracking">Śledzi twoją lokalizację</string>
-    <string name="map_load_failed">Nie udało się wczytać mapy. Sprawdź połączenie i spróbuj ponownie.</string>
-    <string name="retry">Spróbuj ponownie</string>
+    <string name="map_load_failed">Nie udało się wczytać mapy. Ponawiam próbę…</string>
     <string name="location_permission_required">Wymagany dostęp do lokalizacji</string>
     <string name="location_permission_general">Aby korzystać z przycisku lokalizacji lub automatycznego przybliżenia, zezwól na dostęp do lokalizacji w ustawieniach urządzenia. Nie przechowujemy ani nie udostępniamy żadnych danych o lokalizacji.</string>
 
@@ -80,7 +79,7 @@
     <string name="colormap_classic">Klasyczna</string>
     <string name="colormap_homeyer">Homeyer (deficyt widzenia barw)</string>
     <string name="colormap_lang">Lang</string>
-    <string name="colormap_explanation">Zmienia kolory, w jakich rysowane są opady na mapie.\n\n⚠️ „Klasyczna” renderuje się najszybciej.</string>
+    <string name="colormap_explanation">Zmienia kolory, w jakich rysowane są opady na mapie.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">O aplikacji</string>
@@ -90,9 +89,13 @@
     <string name="imprint_privacy">Nota prawna i prywatność</string>
     <string name="share_title">Udostępnij meteocool</string>
     <string name="experimental_features">Funkcje eksperymentalne</string>
-    <string name="experimental_features_require_restart">To ustawienie zacznie działać dopiero po ponownym uruchomieniu aplikacji meteocool.\n\nJest przeznaczone do prac rozwojowych i może powodować nieoczekiwane działanie. 🐛</string>
-    <string name="demo_mode">Tryb demo</string>
-    <string name="demo_mode_require_restart">To ustawienie zacznie działać dopiero po ponownym uruchomieniu aplikacji meteocool.\n\nTryb demo odtwarza nagraną burzę, jakby działa się teraz, ze środowiska demo meteocool. Wyłącza funkcje eksperymentalne.</string>
+    <string name="mode">Tryb</string>
+    <string name="mode_production">Produkcja</string>
+    <string name="mode_production_detail">Aktualna pogoda. Zalecane.</string>
+    <string name="mode_experimental_detail">Aktualna pogoda z funkcjami, które są jeszcze w fazie rozwoju. Może powodować nieoczekiwane działanie. 🐛</string>
+    <string name="mode_demo">Demo</string>
+    <string name="mode_demo_detail">Nagrana burza odtwarzana tak, jakby trwała teraz. To nie jest aktualna pogoda.</string>
+    <string name="mode_footer">Działa od razu: mapa wczyta się ponownie, a ostrzeżenia przed deszczem przyjdą z wybranego trybu.</string>
 
     <!-- Settings: data sources -->
     <string name="data_sources_header">Źródła danych i licencje</string>

@@ -38,8 +38,7 @@
     <string name="location_button_off">Vypnuto</string>
     <string name="location_button_active">Ukazuje tvou polohu</string>
     <string name="location_button_tracking">Sleduje tvou polohu</string>
-    <string name="map_load_failed">Mapu se nepodařilo načíst. Zkontroluj připojení a zkus to znovu.</string>
-    <string name="retry">Zkusit znovu</string>
+    <string name="map_load_failed">Mapu se nepodařilo načíst. Zkouším to znovu…</string>
     <string name="location_permission_required">Je potřeba oprávnění k poloze</string>
     <string name="location_permission_general">Chceš-li používat tlačítko polohy nebo automatické přiblížení, povol v nastavení zařízení přístup k poloze. Žádné údaje o poloze neukládáme ani nesdílíme.</string>
 
@@ -80,7 +79,7 @@
     <string name="colormap_classic">Klasická</string>
     <string name="colormap_homeyer">Homeyer (porucha barvocitu)</string>
     <string name="colormap_lang">Lang</string>
-    <string name="colormap_explanation">Mění barvy, kterými se srážky na mapě vykreslují.\n\n⚠️ „Klasická“ se vykresluje nejrychleji.</string>
+    <string name="colormap_explanation">Mění barvy, kterými se srážky na mapě vykreslují.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">O aplikaci</string>
@@ -90,9 +89,13 @@
     <string name="imprint_privacy">Tiráž a ochrana soukromí</string>
     <string name="share_title">Sdílet meteocool</string>
     <string name="experimental_features">Experimentální funkce</string>
-    <string name="experimental_features_require_restart">Toto nastavení začne platit až po restartu aplikace meteocool.\n\nJe určené pro vývoj a může způsobit nečekané chování. 🐛</string>
-    <string name="demo_mode">Demo režim</string>
-    <string name="demo_mode_require_restart">Toto nastavení začne platit až po restartu aplikace meteocool.\n\nDemo režim přehrává zaznamenanou bouřku, jako by probíhala právě teď, z demo prostředí meteocool. Vypne experimentální funkce.</string>
+    <string name="mode">Režim</string>
+    <string name="mode_production">Produkce</string>
+    <string name="mode_production_detail">Aktuální počasí. Doporučeno.</string>
+    <string name="mode_experimental_detail">Aktuální počasí s funkcemi, které jsou teprve ve vývoji. Může způsobit nečekané chování. 🐛</string>
+    <string name="mode_demo">Demo</string>
+    <string name="mode_demo_detail">Zaznamenaná bouřka přehrávaná, jako by probíhala právě teď. Není to aktuální počasí.</string>
+    <string name="mode_footer">Projeví se hned: mapa se znovu načte a upozornění na déšť přicházejí z vybraného režimu.</string>
 
     <!-- Settings: data sources -->
     <string name="data_sources_header">Zdroje dat a licence</string>

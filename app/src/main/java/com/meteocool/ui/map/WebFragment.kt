@@ -6,6 +6,10 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -29,6 +33,7 @@ import android.webkit.WebViewClient
 import androidx.activity.result.IntentSenderRequest
 import androidx.annotation.RequiresApi
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -72,7 +77,6 @@ import kotlin.math.abs
 class WebFragment : Fragment() {
 
     companion object {
-        private const val LOAD_TIMEOUT_MILLIS = 30_000L
         private const val WEB_CACHE_LIMIT_BYTES = 100L * 1024 * 1024
         private val gson = Gson()
     }
@@ -84,10 +88,10 @@ class WebFragment : Fragment() {
 
     private var webView: WebView? = null
     private val mainHandler = Handler(Looper.getMainLooper())
-    private val loadTimeout = Runnable { showLoadFailure() }
+    private var recovery: MapRecovery? = null
     private var lastFix: MeteocoolLocation? = null
     private var pendingGeolocation: Pair<String, GeolocationPermissions.Callback>? = null
-    private var capabilitiesScript: ScriptHandler? = null
+    private var pageScripts: ScriptHandler? = null
     private var locationAlert: Dialog? = null
 
     /** Android 14's screenshot callback while the map is resumed; `Any` so older versions never load its class. */
@@ -131,9 +135,21 @@ class WebFragment : Fragment() {
         binding.layers.setOnClickListener { openLayerSwitcher() }
         binding.settings.setOnClickListener { (activity as? MeteocoolActivity)?.openSettings() }
         binding.locateMe.setOnClickListener { onLocationButtonTapped() }
-        binding.retry.setOnClickListener { viewModel.reloadMap() }
 
         createWebView()
+        recovery = MapRecovery(
+            scope = viewLifecycleOwner.lifecycleScope,
+            reload = { viewModel.reloadMap() },
+            wentDown = { mapWentDown() },
+            showStatus = { _binding?.loadStatus?.isVisible = it },
+            isLoading = { (webView?.progress ?: 100) < 100 },
+            isForeground = { lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED) },
+            probe = { answer -> evaluate(MapRecovery.PROBE_SCRIPT) { answer(it == "true") } },
+        )
+        requireContext().getSystemService<ConnectivityManager>()?.registerNetworkCallback(
+            NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build(),
+            networkCallback,
+        )
 
         viewModel.mapUrl.observe(viewLifecycleOwner) { loadMap(it) }
         viewModel.buttonState.observe(viewLifecycleOwner) { renderLocationButton(it) }
@@ -187,55 +203,52 @@ class WebFragment : Fragment() {
         web.setOnTouchListener(MapGestureListener())
         binding.webContainer.addView(web, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         webView = web
-        capabilitiesScript = null
+        pageScripts = null
     }
 
     /**
-     * Tells the page what the app can do for it before its scripts run
-     * (`window.nativeCapabilities`): the share sheet, which makes it show its
-     * share buttons. Only for the origin of the page being loaded. A WebView
-     * without document-start scripts gets no buttons, as with an app from
-     * before sharing; the screenshot offer still works there.
+     * The scripts that run before the page's own, for the origin of the page
+     * being loaded only: what the app can do for it
+     * (`window.nativeCapabilities`, so it shows its share buttons) and the
+     * graphics watch. A WebView without document-start scripts gets neither:
+     * no share buttons, as with an app from before sharing, and a lost WebGL
+     * context is only noticed when the app returns to the foreground.
      */
-    private fun declareCapabilities(web: WebView, url: String) {
+    private fun installPageScripts(web: WebView, url: String) {
         if (!WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)) return
         val page = url.toUri()
         val origin = "${page.scheme}://${page.host}" + if (page.port == -1) "" else ":${page.port}"
-        capabilitiesScript?.remove()
-        capabilitiesScript = WebViewCompat.addDocumentStartJavaScript(web, MapShare.CAPABILITIES_SCRIPT, setOf(origin))
+        pageScripts?.remove()
+        pageScripts = WebViewCompat.addDocumentStartJavaScript(
+            web, MapShare.CAPABILITIES_SCRIPT + "\n" + MapRecovery.GRAPHICS_WATCH, setOf(origin),
+        )
     }
 
+    /** Loads the map page from scratch. MapRecovery calls it again until the page reports in. */
     private fun loadMap(url: String) {
         val web = webView ?: return
         viewModel.pageReady = false
         binding.layers.isEnabled = false
-        binding.loadError.isVisible = false
-        binding.webContainer.visibility = View.VISIBLE
-        mainHandler.removeCallbacks(loadTimeout)
-        mainHandler.postDelayed(loadTimeout, LOAD_TIMEOUT_MILLIS)
         web.stopLoading()
         clearCovers()
-        declareCapabilities(web, url)
+        installPageScripts(web, url)
         web.loadUrl(url)
+        recovery?.loadStarted()
     }
 
-    private fun showLoadFailure() {
-        val b = _binding ?: return
-        mainHandler.removeCallbacks(loadTimeout)
+    /** The page stopped working. The native buttons stay usable while MapRecovery brings it back. */
+    private fun mapWentDown() {
         viewModel.pageReady = false
-        b.layers.isEnabled = false
-        // WebView's own error page would show through behind the message.
-        b.webContainer.visibility = View.INVISIBLE
-        b.loadError.isVisible = true
+        _binding?.layers?.isEnabled = false
         clearCovers()
     }
 
     /** The page called requestSettings(): its window functions exist now. */
     private fun onPageReady() {
         val b = _binding ?: return
-        mainHandler.removeCallbacks(loadTimeout)
+        recovery?.loadSucceeded()
         viewModel.pageReady = true
-        b.loadError.isVisible = false
+        b.webContainer.visibility = View.VISIBLE
         b.layers.isEnabled = true
         injectSettings()
         activateLocationIfAuthorized()
@@ -256,6 +269,7 @@ class WebFragment : Fragment() {
             "detailSheetCollapsed" -> setCovered(Cover.EXPANDED_SHEET, false)
             "drawerOpened" -> setCovered(Cover.DRAWER, true)
             "drawerClosed" -> setCovered(Cover.DRAWER, false)
+            "mapGraphicsLost" -> recovery?.failed(MapRecovery.Failure.GRAPHICS)
             "impactLight" -> webView?.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
             "impactMedium" -> webView?.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
             "impactHeavy" -> webView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
@@ -325,6 +339,7 @@ class WebFragment : Fragment() {
             }
         }
         if (viewModel.buttonState.value != LocationButtonState.OFF) viewModel.locationService.start()
+        recovery?.becameActive()
     }
 
     override fun onResume() {
@@ -346,7 +361,8 @@ class WebFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mainHandler.removeCallbacks(loadTimeout)
+        requireContext().getSystemService<ConnectivityManager>()?.unregisterNetworkCallback(networkCallback)
+        recovery = null
         webView?.let {
             binding.webContainer.removeView(it)
             it.destroy()
@@ -563,6 +579,13 @@ class WebFragment : Fragment() {
         return uri.scheme == "https" && uri.host == MeteocoolEnvironment.current.webHostName
     }
 
+    /** A network came up, on a background thread. */
+    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            mainHandler.post { recovery?.networkAvailable() }
+        }
+    }
+
     /** JavaScript calls arrive on a background thread, from whatever page is loaded. */
     private inner class Bridge {
         @JavascriptInterface
@@ -597,14 +620,21 @@ class WebFragment : Fragment() {
          * drawer open on the old page never says it closed.
          */
         override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
-            if (view == webView) clearCovers()
+            if (view != webView) return
+            viewModel.pageReady = false
+            _binding?.layers?.isEnabled = false
+            clearCovers()
+            // Every new page has to report in, including one it loads itself.
+            recovery?.loadStarted()
         }
 
         override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
-            if (request.isForMainFrame) {
-                Timber.w("Map failed to load: ${error.errorCode}")
-                showLoadFailure()
-            }
+            // A page that reported in runs, whatever happened to the rest of its load.
+            if (view != webView || !request.isForMainFrame || viewModel.pageReady) return
+            Timber.w("Map failed to load: ${error.errorCode}")
+            // WebView's own error page would show until the retry works.
+            _binding?.webContainer?.visibility = View.INVISIBLE
+            recovery?.failed(MapRecovery.Failure.NAVIGATION)
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
@@ -616,7 +646,7 @@ class WebFragment : Fragment() {
                 view.destroy()
                 webView = null
                 createWebView()
-                showLoadFailure()
+                recovery?.failed(MapRecovery.Failure.CRASH)
             }
             return true
         }
