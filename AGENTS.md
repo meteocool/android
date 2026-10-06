@@ -98,6 +98,7 @@ The page calls the `Android` JavaScript interface:
   `detailSheetExpanded`/`Collapsed`, `drawerOpened`/`Closed` and `impactLight`/`Medium`/`Heavy`.
   The native buttons stay hidden while any of the three pairs is open: `drawerOpened` covers
   every sheet and panel at any height, the other two are all that older frontends send.
+  `share:{json}` asks for the share sheet (see Sharing).
 
 Messages are ignored unless the WebView's URL is on the current environment's web host.
 
@@ -106,10 +107,40 @@ The app calls into the page with:
 - `window.settings.injectSettings({mapRotation, radarColorMapping, mapBaseLayer, experimentalFeatures})`;
 - `window.lm.updateLocation(lat, lon, accuracy, zoom, focus)`, where `-1, -1, -1` hides the dot;
 - `window.openLayerswitcher()`;
-- `window.enterForeground()` and `window.leaveForeground()`.
+- `window.enterForeground()` and `window.leaveForeground()`;
+- `window.shareLink()` after a screenshot.
+
+Before the page's scripts run, a document-start script sets `window.nativeCapabilities.share`.
 
 Geolocation requests from the page itself are granted only for the map's origin, and only
 when the app already holds location permission. WebView has no permission prompt of its own.
+
+## Sharing
+
+The page owns what a shared link says; the app owns the share sheet. Core's `lib/share.ts`
+builds the link from what is on screen (map, view, storm, frame, point), on the site's root
+rather than `android.html`, stamped with when it was shared (`shared=20261006T1234Z`). Whoever
+opens a link older than 15 minutes is told how old it is (core's `lib/shareLink.ts`).
+
+- **Capability.** `declareCapabilities` adds a document-start script, for the loaded page's
+  origin only, that sets `window.nativeCapabilities.share = true`. Only then does the page show
+  its share buttons in an app: the long-press menu's Share, the disc beside a storm panel's
+  close disc (2D and 3D), and the player's share button. It needs the WebView's
+  `DOCUMENT_START_SCRIPT` feature; without it there are no buttons.
+- **`share:{json}`** on `Android.postMessage` carries `url`, `title` and the button's rect,
+  which only iOS uses. `MapShare` parses it and refuses any link that is not on the map's own
+  host (https, or http for a loopback test map), and caps the title at 200 characters.
+  `presentShare` opens the chooser with an `ACTION_SEND` of the URL, its title as
+  `EXTRA_TITLE` and `EXTRA_SUBJECT`.
+- **Screenshots.** Android 14 and later only, through `registerScreenCaptureCallback` while
+  the map fragment is resumed (`DETECT_SCREEN_CAPTURE`, a normal permission). The app asks the
+  page for `window.shareLink()` and offers the chooser with the link; the system's screenshot
+  preview already shares the picture. Not while settings, the demo notice or the location
+  alert is over the map. They are checked one by one because window focus cannot tell: the
+  screenshot preview takes it as the shot is taken. Older versions would need a MediaStore
+  observer and permission to read the reader's images, so they get no offer.
+
+`MapShareTest` covers the parsing.
 
 ## Testing on an emulator
 
@@ -118,7 +149,10 @@ Debug builds accept launch extras (see
 
 - `mc_test_api_url` and `mc_test_token` point the native API at the iOS repo's
   `tests/mobile-api-recorder.mjs`, which only accepts the token `"a" * 64`;
-- `mc_test_map_url` loads a local core build, e.g. from `vite preview`;
+- `mc_test_map_url` loads a local core build, e.g. from `vite preview`. Shared links from
+  a plain-http map are only accepted on the loopback, so serve it through
+  `adb reverse tcp:4173 tcp:4173` as `http://127.0.0.1:4173/android.html` rather than from
+  `10.0.2.2` (the debug network config allows cleartext to `127.0.0.1`, not `localhost`);
 - `mc_run_background_worker` runs the background worker once.
 
 ```bash

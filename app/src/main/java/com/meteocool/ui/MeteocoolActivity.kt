@@ -1,5 +1,6 @@
 package com.meteocool.ui
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
@@ -35,6 +36,12 @@ class MeteocoolActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMeteocoolBinding
 
     private val mapViewModel: MapViewModel by viewModels()
+
+    private var demoNotice: Dialog? = null
+
+    /** Settings, even part-way open, or the demo notice is over the map. */
+    val coversMap: Boolean
+        get() = binding.drawerLayout.isDrawerVisible(GravityCompat.START) || demoNotice?.isShowing == true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -114,7 +121,7 @@ class MeteocoolActivity : AppCompatActivity() {
     private fun presentDemoNoticeIfNeeded() {
         if (demoNoticeShown || MeteocoolEnvironment.current != MeteocoolEnvironment.DEMO || !app.prefs.onboardingDone) return
         demoNoticeShown = true
-        MaterialAlertDialogBuilder(this)
+        demoNotice = MaterialAlertDialogBuilder(this)
             .setTitle(R.string.demo_notice_title)
             .setMessage(R.string.demo_notice_message)
             .setNegativeButton(R.string.demo_notice_disable) { _, _ ->
