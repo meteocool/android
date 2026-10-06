@@ -106,10 +106,33 @@ The app calls into the page with:
 - `window.settings.injectSettings({mapRotation, radarColorMapping, mapBaseLayer, experimentalFeatures})`;
 - `window.lm.updateLocation(lat, lon, accuracy, zoom, focus)`, where `-1, -1, -1` hides the dot;
 - `window.openLayerswitcher()`;
-- `window.enterForeground()` and `window.leaveForeground()`.
+- `window.enterForeground()` and `window.leaveForeground()`;
+- a shared link's search, through `SharedLink.openScript` (see below).
 
 Geolocation requests from the page itself are granted only for the map's origin, and only
 when the app already holds location permission. WebView has no permission prompt of its own.
+
+## Shared links
+
+A map link someone shares (core's `src/lib/shareLink.ts`, such as
+`https://app.meteocool.com/?layer=cells3d&cell=…&shared=…`) opens in the app as an App Link:
+
+- **The intent filter** on `MeteocoolActivity` takes `https://app.meteocool.com/` only. Links on
+  next and demo stay in the browser, because the app's map may be on another deployment.
+- **Verification** reads `/.well-known/assetlinks.json` from core's Worker (`worker/appLinks.ts`).
+  Its certificate list is empty until the release fingerprints are added: the Play app signing
+  key from Play Console, and F-Droid's key for its builds. Until then Android asks which app
+  should open a link.
+- **Onboarding first.** A link reaches `MeteocoolActivity` directly, past `SplashActivity`, so the
+  activity sends it through onboarding when onboarding is not done.
+- **Flow.** `SharedLink.search` drops anything that is not the root of a map host.
+  `MapViewModel.openLink` holds the link until the page calls `requestSettings()`, and
+  `SharedLink.openScript` opens it without a reload, as iOS's `MapLink.openScript` does. That
+  calls `window.openLink` where core has it, and otherwise pushes the search and fires
+  `popstate`. Back steps out of a link as it steps out of any page state.
+- **A link wins over the user's position**, as on the web (core's `linkPlacesView`): the one-shot
+  centre on the next fix is cancelled, including the one `onStart` sets with Auto Zoom, and
+  following stops.
 
 ## Testing on an emulator
 

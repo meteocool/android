@@ -20,7 +20,9 @@ import com.meteocool.environment.MeteocoolEnvironment
 import com.meteocool.location.BackgroundLocationWorker
 import com.meteocool.notifications.Notifications
 import com.meteocool.ui.map.MapViewModel
+import com.meteocool.ui.map.SharedLink
 import com.meteocool.ui.map.WebFragment
+import com.meteocool.ui.onboarding.OnboardingActivity
 
 /**
  * The map, with the settings in a drawer.
@@ -39,6 +41,13 @@ class MeteocoolActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        // A shared link comes here directly, past SplashActivity's check;
+        // onboarding hands it back when it is done.
+        if (!app.prefs.onboardingDone) {
+            startActivity(Intent(this, OnboardingActivity::class.java).setAction(intent.action).setData(intent.data))
+            finish()
+            return
+        }
         binding = ActivityMeteocoolBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -72,16 +81,26 @@ class MeteocoolActivity : AppCompatActivity() {
             }
         })
 
-        if (savedInstanceState == null) handleNotificationTap(intent)
+        if (savedInstanceState == null) {
+            handleNotificationTap(intent)
+            handleSharedLink(intent)
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleNotificationTap(intent)
+        handleSharedLink(intent)
     }
 
     private fun handleNotificationTap(intent: Intent?) {
         if (Notifications.isFromNotification(intent)) app.registration.acknowledge("notification")
+    }
+
+    /** A shared map link (an App Link on app.meteocool.com); anything else is ignored. */
+    private fun handleSharedLink(intent: Intent?) {
+        if (intent?.action != Intent.ACTION_VIEW) return
+        SharedLink.search(intent.dataString)?.let { mapViewModel.openLink(it) }
     }
 
     private fun mapFragment(): WebFragment? = supportFragmentManager.findFragmentById(R.id.map) as? WebFragment

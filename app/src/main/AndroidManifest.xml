@@ -56,8 +56,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
+                <!-- Shared map links: the root with the map's state in the
+                     query (core's lib/shareLink.ts). Verified against
+                     /.well-known/assetlinks.json, which core's Worker serves.
+                     next and demo stay in the browser, which shows the
+                     deployment a link was made on. -->
                 <data android:scheme="https" />
                 <data android:host="app.meteocool.com" />
+                <data android:path="/" />
             </intent-filter>
         </activity>
         <activity
