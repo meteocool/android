@@ -79,7 +79,7 @@
     <string name="colormap_classic">Klassisch</string>
     <string name="colormap_homeyer">Homeyer (Achromasie)</string>
     <string name="colormap_lang">Lang (Achromasie)</string>
-    <string name="colormap_explanation">Wechsle das Farbschema, um die Farbgebung der Reflektivitätssvisualisierung (Niederschlag) zu verändern.\n\n⚠️ Die Darstellung von \'Klassisch\' ist am schnellsten.</string>
+    <string name="colormap_explanation">Wechsle das Farbschema, um die Farbgebung der Reflektivitätssvisualisierung (Niederschlag) zu verändern.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">Über</string>
