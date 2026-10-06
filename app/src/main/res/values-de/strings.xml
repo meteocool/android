@@ -38,8 +38,7 @@
     <string name="location_button_off">Aus</string>
     <string name="location_button_active">Zeigt Deinen Standort</string>
     <string name="location_button_tracking">Folgt Deinem Standort</string>
-    <string name="map_load_failed">Die Karte konnte nicht geladen werden. Prüfe die Verbindung und versuche es erneut.</string>
-    <string name="retry">Erneut versuchen</string>
+    <string name="map_load_failed">Die Karte konnte nicht geladen werden. Neuer Versuch …</string>
     <string name="location_permission_required">Zugriff auf Deinen Standort benötigt</string>
     <string name="location_permission_general">Um die Ortungsfunktion oder den Automatischen Zoom zu verwenden, musst Du den Zugriff auf Deinen Standort erlauben. Wir werden Deinen Standort niemals speichern oder weitergeben.</string>
 
@@ -80,7 +79,7 @@
     <string name="colormap_classic">Klassisch</string>
     <string name="colormap_homeyer">Homeyer (Achromasie)</string>
     <string name="colormap_lang">Lang (Achromasie)</string>
-    <string name="colormap_explanation">Wechsle das Farbschema, um die Farbgebung der Reflektivitätssvisualisierung (Niederschlag) zu verändern.\n\n⚠️ Die Darstellung von \'Klassisch\' ist am schnellsten.</string>
+    <string name="colormap_explanation">Wechsle das Farbschema, um die Farbgebung der Reflektivitätssvisualisierung (Niederschlag) zu verändern.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">Über</string>
@@ -90,9 +89,13 @@
     <string name="imprint_privacy">Impressum &amp; Datenschutz</string>
     <string name="share_title">meteocool teilen</string>
     <string name="experimental_features">Experimentelle Funktionen</string>
-    <string name="experimental_features_require_restart">Änderungen an dieser Einstellung werden erst nach einem Neustart der App aktiv.\n\nBitte beachte, dass diese Einstellung für Entwickler gedacht ist und Fehler enthalten kann. 🐛</string>
-    <string name="demo_mode">Demo-Modus</string>
-    <string name="demo_mode_require_restart">Änderungen an dieser Einstellung werden erst nach einem Neustart der App aktiv.\n\nDer Demo-Modus zeigt ein aufgezeichnetes Unwetter, abgespielt, als fände es gerade statt – aus meteocools Demo-Umgebung. Er schaltet die experimentellen Funktionen aus.</string>
+    <string name="mode">Modus</string>
+    <string name="mode_production">Produktion</string>
+    <string name="mode_production_detail">Aktuelles Wetter. Empfohlen.</string>
+    <string name="mode_experimental_detail">Aktuelles Wetter, mit Funktionen, die noch in Entwicklung sind. Kann Fehler enthalten. 🐛</string>
+    <string name="mode_demo">Demo</string>
+    <string name="mode_demo_detail">Ein aufgezeichnetes Unwetter, abgespielt, als fände es gerade statt. Nicht das aktuelle Wetter.</string>
+    <string name="mode_footer">Wirkt sofort: Die Karte lädt neu, und Regenwarnungen kommen ab dann aus dem gewählten Modus.</string>
 
     <!-- Settings: data sources -->
     <string name="data_sources_header">Datenquellen &amp; Lizenzen</string>

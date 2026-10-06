@@ -41,8 +41,7 @@
     <string name="location_button_off">Off</string>
     <string name="location_button_active">Showing your location</string>
     <string name="location_button_tracking">Following your location</string>
-    <string name="map_load_failed">The map could not load. Check your connection and try again.</string>
-    <string name="retry">Retry</string>
+    <string name="map_load_failed">The map could not load. Trying again…</string>
     <string name="location_permission_required">Location Permission Required</string>
     <string name="location_permission_general">To use the location button or auto-zoom, you need to allow access to Location in your device\'s Settings. We won\'t store or share any location information.</string>
 
@@ -86,7 +85,7 @@
     <string name="colormap_pyart_stepseq" translatable="false">PyArt StepSeq</string>
     <string name="colormap_homeyer">Homeyer (Color Vision Deficiency)</string>
     <string name="colormap_lang">Lang</string>
-    <string name="colormap_explanation">Change the colormap to change the color scheme of the precipitation visualization on the map.\n\n⚠️ \'Classic\' has the best rendering performance.</string>
+    <string name="colormap_explanation">Change the colormap to change the color scheme of the precipitation visualization on the map.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">About</string>
@@ -97,9 +96,13 @@
     <string name="imprint_privacy">Imprint &amp; Privacy Policy</string>
     <string name="share_title">Share meteocool</string>
     <string name="experimental_features">Experimental Features</string>
-    <string name="experimental_features_require_restart">Changes to this setting will only become active after restarting the meteocool App.\n\nPlease note that this setting is intended for development and might cause unexpected behaviour. 🐛</string>
-    <string name="demo_mode">Demo Mode</string>
-    <string name="demo_mode_require_restart">Changes to this setting will only become active after restarting the meteocool App.\n\nDemo mode shows a recorded storm replayed as if it were happening now, from meteocool\'s demo deployment. It turns Experimental Features off.</string>
+    <string name="mode">Mode</string>
+    <string name="mode_production">Production</string>
+    <string name="mode_production_detail">Current weather. Recommended.</string>
+    <string name="mode_experimental_detail">Current weather, with features still in development. Might cause unexpected behaviour. 🐛</string>
+    <string name="mode_demo">Demo</string>
+    <string name="mode_demo_detail">A recorded storm, replayed as if it were happening now. Not current weather.</string>
+    <string name="mode_footer">Takes effect right away: the map reloads, and rain alerts come from the selected mode.</string>
 
     <!-- Settings: data sources -->
     <string name="data_sources_header">Data Sources &amp; Licences</string>

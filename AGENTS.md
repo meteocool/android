@@ -45,16 +45,21 @@ The store listing comes from `metadata/<locale>/` in this repo: title, descripti
 [`environment/MeteocoolEnvironment.kt`](app/src/main/java/com/meteocool/environment/MeteocoolEnvironment.kt)
 holds every host. Never hardcode one at a call site.
 
-| | App (default) | Staging (Experimental Features) | Demo (Demo Mode) |
+| | App (Production, default) | Staging (Experimental Features) | Demo |
 | --- | --- | --- | --- |
 | Web map | `app.meteocool.com/android.html` | `next.meteocool.com/android.html` | `demo.meteocool.com/android.html` |
 | Native API | `app.meteocool.com` | `api-next.meteocool.com` | `api-demo.meteocool.com` |
 
-- **Selection rules.** The environment is picked once per process, so a switch only takes effect
-  after a restart. The two switches are mutually exclusive.
-- **The one runtime switch** is the demo launch alert's "Disable Demo Mode".
-- **Moving registrations.** `registration_origin` records where the push registration lives. When
-  it differs from the current API, the registration is removed there before registering again.
+- **Mode** (under About in Settings) picks one, stored as `environment`. It takes effect without a
+  restart: `MeteocoolEnvironment.select()` updates `changes`, the map reloads (`MapViewModel`) and
+  the push registration moves (`MeteocoolApp` calls `moveRegistration()`). The demo launch alert's
+  "Disable Demo Mode" selects Production the same way.
+- **Migration.** Mode replaced two switches. Demo Mode carries over once; Experimental Features
+  goes back to Production, as on iOS.
+- **Moving registrations.** `registration_origin` records where the push registration lives,
+  written before the request goes out. When it differs from the current API, the registration is
+  removed there before registering again. Requests are serialized, so one in flight during a
+  switch is removed from the API it reached.
 
 ## Backend contract (v4 legacy router)
 
@@ -88,6 +93,9 @@ are on and the app has "Allow all the time".
 ng delivers Android alerts through the FCM HTTP v1 API (`libs/meteocool-push` there), with a
 Firebase service account from the same project as `app/google-services.json`. Visible alerts go
 on the `rain_alerts` channel; the clear message is data-only, with `clear_all` set to `"true"`.
+An alert that arrives while one of the app's screens is in front is not shown, only acknowledged
+(`from: "foreground"`): the user is already looking at the weather, and the server sends the next
+alert only after this one counts as seen.
 
 ## Web bridge
 
@@ -98,7 +106,8 @@ The page calls the `Android` JavaScript interface:
   `detailSheetExpanded`/`Collapsed`, `drawerOpened`/`Closed` and `impactLight`/`Medium`/`Heavy`.
   The native buttons stay hidden while any of the three pairs is open: `drawerOpened` covers
   every sheet and panel at any height, the other two are all that older frontends send.
-  `share:{json}` asks for the share sheet (see Sharing).
+  `share:{json}` asks for the share sheet (see Sharing), and `mapGraphicsLost` reports a lost
+  WebGL context (see Map loading).
 
 Messages are ignored unless the WebView's URL is on the current environment's web host.
 
@@ -110,10 +119,28 @@ The app calls into the page with:
 - `window.enterForeground()` and `window.leaveForeground()`;
 - `window.shareLink()` after a screenshot.
 
-Before the page's scripts run, a document-start script sets `window.nativeCapabilities.share`.
+Before the page's scripts run, a document-start script sets `window.nativeCapabilities.share` and
+installs the graphics watch.
 
 Geolocation requests from the page itself are granted only for the map's origin, and only
 when the app already holds location permission. WebView has no permission prompt of its own.
+
+## Map loading
+
+Nothing about the map page waits for the user; there is no Retry button.
+[`MapRecovery`](app/src/main/java/com/meteocool/ui/map/MapRecovery.kt) reloads it when:
+
+- the main frame fails to load, or the page does not call `requestSettings()` in time (20 s once
+  loading stops, 45 s at most);
+- the renderer dies (`onRenderProcessGone`, which also replaces the WebView);
+- a canvas in `#map` loses its WebGL context for good: the graphics watch posts `mapGraphicsLost`
+  after five seconds without it coming back;
+- the page no longer answers when the app returns to the foreground.
+
+Retries back off from 1 to 15 seconds, and happen at once when a network comes up or the app comes
+back. A status ("Trying again…") appears from the second failure; it takes no touches. A failed
+main frame also hides the WebView, so its error page never shows. The rules are the iOS app's, and
+`MapRecoveryTest` runs them on virtual time.
 
 ## Sharing
 

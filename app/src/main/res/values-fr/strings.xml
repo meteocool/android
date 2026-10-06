@@ -38,8 +38,7 @@
     <string name="location_button_off">Désactivée</string>
     <string name="location_button_active">Affiche votre position</string>
     <string name="location_button_tracking">Suit votre position</string>
-    <string name="map_load_failed">La carte n\'a pas pu être chargée. Vérifiez votre connexion et réessayez.</string>
-    <string name="retry">Réessayer</string>
+    <string name="map_load_failed">La carte n\'a pas pu être chargée. Nouvelle tentative…</string>
     <string name="location_permission_required">Autorisation de position requise</string>
     <string name="location_permission_general">Pour utiliser le bouton de position ou le zoom automatique, vous devez autoriser l\'accès à la position dans les paramètres de votre appareil. Nous ne conservons ni ne partageons aucune donnée de position.</string>
 
@@ -80,7 +79,7 @@
     <string name="colormap_classic">Classique</string>
     <string name="colormap_homeyer">Homeyer (daltonisme)</string>
     <string name="colormap_lang">Lang</string>
-    <string name="colormap_explanation">Change les couleurs utilisées pour afficher les précipitations sur la carte.\n\n⚠️ « Classique » s\'affiche le plus rapidement.</string>
+    <string name="colormap_explanation">Change les couleurs utilisées pour afficher les précipitations sur la carte.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">À propos</string>
@@ -90,9 +89,13 @@
     <string name="imprint_privacy">Mentions légales et confidentialité</string>
     <string name="share_title">Partager meteocool</string>
     <string name="experimental_features">Fonctions expérimentales</string>
-    <string name="experimental_features_require_restart">Ce réglage ne prend effet qu\'après le redémarrage de l\'application meteocool.\n\nCe réglage est destiné au développement et peut provoquer des comportements inattendus. 🐛</string>
-    <string name="demo_mode">Mode démo</string>
-    <string name="demo_mode_require_restart">Ce réglage ne prend effet qu\'après le redémarrage de l\'application meteocool.\n\nLe mode démo rejoue un orage enregistré comme s\'il se produisait maintenant, depuis l\'environnement de démo de meteocool. Il désactive les fonctions expérimentales.</string>
+    <string name="mode">Mode</string>
+    <string name="mode_production">Production</string>
+    <string name="mode_production_detail">Météo actuelle. Recommandé.</string>
+    <string name="mode_experimental_detail">Météo actuelle, avec des fonctions encore en développement. Peut provoquer des comportements inattendus. 🐛</string>
+    <string name="mode_demo">Démo</string>
+    <string name="mode_demo_detail">Un orage enregistré, rejoué comme s\'il se produisait maintenant. Ce n\'est pas la météo actuelle.</string>
+    <string name="mode_footer">Prend effet immédiatement : la carte se recharge, et les alertes pluie viennent du mode choisi.</string>
 
     <!-- Settings: data sources -->
     <string name="data_sources_header">Sources de données et licences</string>

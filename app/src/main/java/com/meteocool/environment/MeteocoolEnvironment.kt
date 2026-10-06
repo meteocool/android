@@ -2,6 +2,8 @@ package com.meteocool.environment
 
 import com.meteocool.BuildConfig
 import com.meteocool.preferences.Prefs
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * The deployment the app talks to. The web map and the native API must come
@@ -12,10 +14,15 @@ import com.meteocool.preferences.Prefs
  * domain of one of core's Workers, which forwards the app's API calls to its
  * own backend, so moving production is a change in core, not an app release.
  */
-enum class MeteocoolEnvironment(val webHost: String, val apiBase: String) {
-    APP("https://app.meteocool.com", "https://app.meteocool.com/"),
-    STAGING("https://next.meteocool.com", "https://api-next.meteocool.com/"),
-    DEMO("https://demo.meteocool.com", "https://api-demo.meteocool.com/");
+enum class MeteocoolEnvironment(val key: String, val webHost: String, val apiBase: String) {
+    /** "Production" under Mode in Settings, the default. */
+    APP("app", "https://app.meteocool.com", "https://app.meteocool.com/"),
+
+    /** "Experimental Features": ng's v4 in the staging namespace, and core's staging build. */
+    STAGING("staging", "https://next.meteocool.com", "https://api-next.meteocool.com/"),
+
+    /** "Demo": the staging code replaying a recorded storm as if it were happening now. */
+    DEMO("demo", "https://demo.meteocool.com", "https://api-demo.meteocool.com/");
 
     /** The page the map view loads. The frontend reads `version` to decide which native calls it may make. */
     val mapUrl: String
@@ -26,13 +33,20 @@ enum class MeteocoolEnvironment(val webHost: String, val apiBase: String) {
         get() = webHost.removePrefix("https://")
 
     companion object {
+        private val selected = MutableStateFlow(APP)
+
         /**
-         * Picked once per process, so changing Experimental Features or Demo
-         * Mode cannot split the map and the API before a restart.
+         * The deployment chosen under Mode. Only [select] changes it, and
+         * everything that depends on it follows [changes], so the web map and
+         * the native API never end up on different deployments.
          */
-        @Volatile
-        var current: MeteocoolEnvironment = APP
-            private set
+        val current: MeteocoolEnvironment get() = selected.value
+
+        /**
+         * [current], for following it: the map reloads, and the push
+         * registration moves to the new API (removed from the old one first).
+         */
+        val changes: StateFlow<MeteocoolEnvironment> = selected
 
         /** Debug builds only: a local API recorder the UI tests point the app at. */
         @Volatile
@@ -50,20 +64,29 @@ enum class MeteocoolEnvironment(val webHost: String, val apiBase: String) {
         val currentApiBase: String
             get() = testApiOverride ?: current.apiBase
 
-        fun select(demoMode: Boolean, experimentalFeatures: Boolean): MeteocoolEnvironment = when {
-            demoMode -> DEMO
-            experimentalFeatures -> STAGING
-            else -> APP
-        }
-
         fun init(prefs: Prefs) {
-            current = select(prefs.demoMode, prefs.experimentalFeatures)
+            selected.value = stored(prefs)
         }
 
-        /** The one runtime switch: the launch alert's "Disable Demo Mode". */
-        fun leaveDemo(prefs: Prefs) {
-            prefs.demoMode = false
-            current = select(false, prefs.experimentalFeatures)
+        /** Switches the whole app to [environment], without a restart. */
+        fun select(environment: MeteocoolEnvironment, prefs: Prefs) {
+            if (environment == current) return
+            prefs.environment = environment.key
+            selected.value = environment
+        }
+
+        /**
+         * The stored deployment, migrating the two switches Mode replaced.
+         * Demo carries over, so the launch notice goes on reminding the user.
+         * Experimental Features does not: everyone who had it on goes back to
+         * production once, and picks it again under Mode if they want it.
+         */
+        fun stored(prefs: Prefs): MeteocoolEnvironment {
+            entries.firstOrNull { it.key == prefs.environment }?.let { return it }
+            val environment = if (prefs.legacyDemoMode) DEMO else APP
+            prefs.environment = environment.key
+            prefs.clearLegacyModeSwitches()
+            return environment
         }
 
         /**
