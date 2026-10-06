@@ -38,8 +38,7 @@
     <string name="location_button_off">Disattivata</string>
     <string name="location_button_active">Mostra la tua posizione</string>
     <string name="location_button_tracking">Segue la tua posizione</string>
-    <string name="map_load_failed">Impossibile caricare la mappa. Controlla la connessione e riprova.</string>
-    <string name="retry">Riprova</string>
+    <string name="map_load_failed">Impossibile caricare la mappa. Nuovo tentativo…</string>
     <string name="location_permission_required">Serve il permesso di posizione</string>
     <string name="location_permission_general">Per usare il pulsante della posizione o lo zoom automatico devi consentire l\'accesso alla posizione nelle impostazioni del dispositivo. Non conserviamo né condividiamo alcun dato di posizione.</string>
 

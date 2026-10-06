@@ -38,8 +38,7 @@
     <string name="location_button_off">Désactivée</string>
     <string name="location_button_active">Affiche votre position</string>
     <string name="location_button_tracking">Suit votre position</string>
-    <string name="map_load_failed">La carte n\'a pas pu être chargée. Vérifiez votre connexion et réessayez.</string>
-    <string name="retry">Réessayer</string>
+    <string name="map_load_failed">La carte n\'a pas pu être chargée. Nouvelle tentative…</string>
     <string name="location_permission_required">Autorisation de position requise</string>
     <string name="location_permission_general">Pour utiliser le bouton de position ou le zoom automatique, vous devez autoriser l\'accès à la position dans les paramètres de votre appareil. Nous ne conservons ni ne partageons aucune donnée de position.</string>
 
