@@ -177,7 +177,8 @@ class OnboardingActivity : AppCompatActivity() {
     private fun complete() {
         app.prefs.onboardingDone = true
         if (app.prefs.notification) app.registration.refreshRegistration()
-        startActivity(Intent(this, MeteocoolActivity::class.java))
+        // With the shared link that opened the app, if one did.
+        startActivity(Intent(this, MeteocoolActivity::class.java).setAction(intent.action).setData(intent.data))
         finish()
     }
 }
