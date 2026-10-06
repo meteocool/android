@@ -117,8 +117,15 @@ when the app already holds location permission. WebView has no permission prompt
 A map link someone shares (core's `src/lib/shareLink.ts`, such as
 `https://app.meteocool.com/?layer=cells3d&cell=…&shared=…`) opens in the app as an App Link:
 
-- **The intent filter** on `MeteocoolActivity` takes `https://app.meteocool.com/` only. Links on
-  next and demo stay in the browser, because the app's map may be on another deployment.
+- **The intent filters** take `https://app.meteocool.com/` only. Links on next and demo stay in the
+  browser, because the app's map may be on another deployment.
+- **A query is required on Android 15 and later**, as the iOS association file requires one. The
+  bare root is the website. Two activity aliases of `MeteocoolActivity` carry the filters, and
+  `@bool/match_queries` (`values-v35`) turns one or the other on. `SharedLink` puts the root and the
+  query in a `uri-relative-filter-group`. A path outside the group would be ORed with it, so it
+  would let in the bare root, and the group alone would let in any path with a query.
+  `SharedLinkByPath` is the filter for older versions, which ignore the group. It matches the root
+  with or without a query.
 - **Verification** reads `/.well-known/assetlinks.json` from core's Worker (`worker/appLinks.ts`).
   Its certificate list is empty until the release fingerprints are added: the Play app signing
   key from Play Console, and F-Droid's key for its builds. Until then Android asks which app
