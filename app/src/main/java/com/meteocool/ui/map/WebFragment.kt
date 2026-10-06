@@ -1,6 +1,8 @@
 package com.meteocool.ui.map
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
@@ -38,6 +40,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.webkit.ScriptHandler
+import androidx.webkit.WebViewCompat
+import androidx.webkit.WebViewFeature
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.meteocool.BuildConfig
@@ -61,7 +66,8 @@ import kotlin.math.abs
  *
  * The page talks back through the `Android` JavaScript interface:
  * requestSettings() when it is ready, and postMessage() with the same
- * messages iOS receives on its scriptHandler.
+ * messages iOS receives on its scriptHandler, including `share:` from its
+ * share buttons.
  */
 class WebFragment : Fragment() {
 
@@ -81,6 +87,11 @@ class WebFragment : Fragment() {
     private val loadTimeout = Runnable { showLoadFailure() }
     private var lastFix: MeteocoolLocation? = null
     private var pendingGeolocation: Pair<String, GeolocationPermissions.Callback>? = null
+    private var capabilitiesScript: ScriptHandler? = null
+    private var locationAlert: Dialog? = null
+
+    /** Android 14's screenshot callback while the map is resumed; `Any` so older versions never load its class. */
+    private var screenCaptureCallback: Any? = null
 
     private val locationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { grants ->
@@ -176,6 +187,22 @@ class WebFragment : Fragment() {
         web.setOnTouchListener(MapGestureListener())
         binding.webContainer.addView(web, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         webView = web
+        capabilitiesScript = null
+    }
+
+    /**
+     * Tells the page what the app can do for it before its scripts run
+     * (`window.nativeCapabilities`): the share sheet, which makes it show its
+     * share buttons. Only for the origin of the page being loaded. A WebView
+     * without document-start scripts gets no buttons, as with an app from
+     * before sharing; the screenshot offer still works there.
+     */
+    private fun declareCapabilities(web: WebView, url: String) {
+        if (!WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)) return
+        val page = url.toUri()
+        val origin = "${page.scheme}://${page.host}" + if (page.port == -1) "" else ":${page.port}"
+        capabilitiesScript?.remove()
+        capabilitiesScript = WebViewCompat.addDocumentStartJavaScript(web, MapShare.CAPABILITIES_SCRIPT, setOf(origin))
     }
 
     private fun loadMap(url: String) {
@@ -188,6 +215,7 @@ class WebFragment : Fragment() {
         mainHandler.postDelayed(loadTimeout, LOAD_TIMEOUT_MILLIS)
         web.stopLoading()
         clearCovers()
+        declareCapabilities(web, url)
         web.loadUrl(url)
     }
 
@@ -216,6 +244,10 @@ class WebFragment : Fragment() {
     }
 
     private fun handleMessage(message: String) {
+        if (message.startsWith(MapShare.MESSAGE_PREFIX)) {
+            MapShare.parse(message.removePrefix(MapShare.MESSAGE_PREFIX), mapHost())?.let { presentShare(it) }
+            return
+        }
         when (message) {
             "requestSettings" -> onPageReady()
             "layerSwitcherOpened" -> setCovered(Cover.LAYER_SWITCHER, true)
@@ -293,6 +325,16 @@ class WebFragment : Fragment() {
             }
         }
         if (viewModel.buttonState.value != LocationButtonState.OFF) viewModel.locationService.start()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) watchScreenshots(true)
+    }
+
+    override fun onPause() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) watchScreenshots(false)
+        super.onPause()
     }
 
     override fun onStop() {
@@ -419,7 +461,7 @@ class WebFragment : Fragment() {
     }
 
     private fun showLocationPermissionAlert() {
-        MaterialAlertDialogBuilder(requireContext())
+        locationAlert = MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.location_permission_required)
             .setMessage(R.string.location_permission_general)
             .setPositiveButton(R.string.change_in_settings) { _, _ ->
@@ -428,6 +470,70 @@ class WebFragment : Fragment() {
             .setNegativeButton(R.string.dismiss, null)
             .show()
     }
+
+    /* ---- sharing ------------------------------------------------------- */
+
+    /**
+     * The system share sheet for a link to the map, from one of the page's
+     * share buttons or from a screenshot (`screenshotTaken`).
+     */
+    private fun presentShare(share: MapShare) {
+        if (!isResumed) return
+        val send = Intent(Intent.ACTION_SEND)
+            .setType("text/plain")
+            .putExtra(Intent.EXTRA_TEXT, share.url)
+            .putExtra(Intent.EXTRA_TITLE, share.title)
+            .putExtra(Intent.EXTRA_SUBJECT, share.title)
+        try {
+            startActivity(Intent.createChooser(send, null))
+        } catch (e: ActivityNotFoundException) {
+            Timber.w("No share sheet")
+        }
+    }
+
+    /**
+     * Android 14 and later only. Older versions would need a MediaStore
+     * observer, which needs permission to read the reader's images.
+     */
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+    private fun watchScreenshots(watch: Boolean) {
+        val activity = requireActivity()
+        (screenCaptureCallback as? Activity.ScreenCaptureCallback)?.let { activity.unregisterScreenCaptureCallback(it) }
+        screenCaptureCallback = null
+        if (!watch) return
+        val callback = Activity.ScreenCaptureCallback { screenshotTaken() }
+        activity.registerScreenCaptureCallback(activity.mainExecutor, callback)
+        screenCaptureCallback = callback
+    }
+
+    /**
+     * The reader just took a screenshot of the map: most likely to send it
+     * to someone. Offer the share sheet with a link to the same view, so
+     * whoever gets the picture can open the map where it was. The system's
+     * screenshot preview already shares the picture itself.
+     *
+     * Only over the map, and only once the page can say what it shows: a
+     * page from before sharing has no `window.shareLink`.
+     */
+    private fun screenshotTaken() {
+        if (!viewModel.pageReady || !isResumed || mapCovered()) return
+        evaluate(MapShare.SHARE_LINK_SCRIPT) { result ->
+            MapShare.fromScriptResult(result, mapHost())?.let { presentShare(it) }
+        }
+    }
+
+    /**
+     * Whether the app has something over the map: the location alert, or
+     * the activity's settings drawer or demo notice. Other screens pause the
+     * fragment, which stops the screenshot watch. Window focus cannot tell:
+     * the screenshot preview takes it as the screenshot is taken.
+     */
+    private fun mapCovered(): Boolean =
+        locationAlert?.isShowing == true || (activity as? MeteocoolActivity)?.coversMap == true
+
+    /** The host links from the page must be on: the map's own. */
+    private fun mapHost(): String? =
+        MeteocoolEnvironment.testMapOverride?.toUri()?.host ?: MeteocoolEnvironment.current.webHostName
 
     /* ---- web cache ----------------------------------------------------- */
 

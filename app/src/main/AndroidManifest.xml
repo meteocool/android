@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Android 14+: offers a link to the map when the reader takes a screenshot of it. -->
+    <uses-permission android:name="android.permission.DETECT_SCREEN_CAPTURE" />
     <uses-feature android:name="android.hardware.location" android:required="false" />
 
     <queries>
