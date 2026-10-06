@@ -117,6 +117,7 @@ The app calls into the page with:
 - `window.lm.updateLocation(lat, lon, accuracy, zoom, focus)`, where `-1, -1, -1` hides the dot;
 - `window.openLayerswitcher()`;
 - `window.enterForeground()` and `window.leaveForeground()`;
+- a shared link's search, through `SharedLink.openScript` (see Shared links);
 - `window.shareLink()` after a screenshot.
 
 Before the page's scripts run, a document-start script sets `window.nativeCapabilities.share` and
@@ -168,6 +169,35 @@ opens a link older than 15 minutes is told how old it is (core's `lib/shareLink.
   observer and permission to read the reader's images, so they get no offer.
 
 `MapShareTest` covers the parsing.
+
+## Shared links
+
+A map link someone shares (core's `src/lib/shareLink.ts`, such as
+`https://app.meteocool.com/?layer=cells3d&cell=…&shared=…`) opens in the app as an App Link:
+
+- **The intent filters** take `https://app.meteocool.com/` only. Links on next and demo stay in the
+  browser, because the app's map may be on another deployment.
+- **A query is required on Android 15 and later**, as the iOS association file requires one. The
+  bare root is the website. Two activity aliases of `MeteocoolActivity` carry the filters, and
+  `@bool/match_queries` (`values-v35`) turns one or the other on. `SharedLink` puts the root and the
+  query in a `uri-relative-filter-group`. A path outside the group would be ORed with it, so it
+  would let in the bare root, and the group alone would let in any path with a query.
+  `SharedLinkByPath` is the filter for older versions, which ignore the group. It matches the root
+  with or without a query.
+- **Verification** reads `/.well-known/assetlinks.json` from core's Worker (`worker/appLinks.ts`).
+  Its certificate list is empty until the release fingerprints are added: the Play app signing
+  key from Play Console, and F-Droid's key for its builds. Until then Android asks which app
+  should open a link.
+- **Onboarding first.** A link reaches `MeteocoolActivity` directly, past `SplashActivity`, so the
+  activity sends it through onboarding when onboarding is not done.
+- **Flow.** `SharedLink.search` drops anything that is not the root of a map host.
+  `MapViewModel.openLink` holds the link until the page calls `requestSettings()`, and
+  `SharedLink.openScript` opens it without a reload, as iOS's `MapLink.openScript` does. That
+  calls `window.openLink` where core has it, and otherwise pushes the search and fires
+  `popstate`. Back steps out of a link as it steps out of any page state.
+- **A link wins over the user's position**, as on the web (core's `linkPlacesView`): the one-shot
+  centre on the next fix is cancelled, including the one `onStart` sets with Auto Zoom, and
+  following stops.
 
 ## Testing on an emulator
 

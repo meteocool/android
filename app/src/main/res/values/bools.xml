@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Which shared-link filter is on; see the aliases in AndroidManifest.xml. -->
+    <bool name="match_queries">false</bool>
+    <bool name="match_paths_only">true</bool>
+</resources>

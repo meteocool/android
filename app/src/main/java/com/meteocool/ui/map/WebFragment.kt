@@ -155,6 +155,7 @@ class WebFragment : Fragment() {
         viewModel.buttonState.observe(viewLifecycleOwner) { renderLocationButton(it) }
         viewModel.fixes.observe(viewLifecycleOwner) { onFix(it) }
         viewModel.webSettingsVersion.observe(viewLifecycleOwner) { injectSettings() }
+        viewModel.link.observe(viewLifecycleOwner) { openPendingLink() }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -254,6 +255,30 @@ class WebFragment : Fragment() {
         activateLocationIfAuthorized()
         // Not clearCovers(): a deep-linked storm can open its sheet first.
         refreshControls()
+        // After the location button, so the link wins over its centring.
+        openPendingLink()
+    }
+
+    /**
+     * Opens a shared link in the map without reloading it, once the page is
+     * ready.
+     *
+     * The link says where to look, so it wins over the user's position, as it
+     * does on the web (core's `linkPlacesView`): the next fix moves the dot
+     * without centring on it, and following stops as if the map had been
+     * dragged.
+     */
+    private fun openPendingLink() {
+        val search = viewModel.link.value ?: return
+        if (!viewModel.pageReady) return
+        viewModel.linkOpened()
+        evaluate(SharedLink.openScript(search))
+        viewModel.autoFocusOnce = false
+        viewModel.zoomOnce = false
+        if (viewModel.buttonState.value == LocationButtonState.TRACKING) {
+            viewModel.autoFocus = false
+            setLocationButton(LocationButtonState.ACTIVE)
+        }
     }
 
     private fun handleMessage(message: String) {
@@ -333,7 +358,7 @@ class WebFragment : Fragment() {
         }
         if (viewModel.pageReady) {
             evaluate("window.enterForeground && window.enterForeground();")
-            if (viewModel.prefs.mapZoom) {
+            if (viewModel.prefs.mapZoom && !viewModel.linkPlacedView) {
                 viewModel.zoomOnce = true
                 viewModel.autoFocusOnce = true
             }
@@ -354,6 +379,7 @@ class WebFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
+        viewModel.linkPlacedView = false
         viewModel.locationService.stop()
         if (viewModel.pageReady) evaluate("window.leaveForeground && window.leaveForeground();")
         trimWebCacheIfNeeded()

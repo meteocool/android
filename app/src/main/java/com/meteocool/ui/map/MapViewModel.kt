@@ -44,6 +44,18 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
     /** The page has called requestSettings(), so its window functions exist. */
     var pageReady = false
 
+    private val _link = MutableLiveData<String?>(null)
+
+    /** A shared link's search, held until the page is ready to open it. */
+    val link: LiveData<String?> = _link
+
+    /**
+     * A link opened since the app came to the foreground says where the map
+     * looks, so coming back does not centre on the user. Android may deliver
+     * the link before or after onStart.
+     */
+    var linkPlacedView = false
+
     private val _mapUrl = MutableLiveData(MeteocoolEnvironment.currentMapUrl)
     val mapUrl: LiveData<String> = _mapUrl
 
@@ -65,6 +77,16 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setButtonState(state: LocationButtonState) {
         _buttonState.value = state
+    }
+
+    /** Opens a shared link's search in the map, now or once the page is ready. */
+    fun openLink(search: String) {
+        linkPlacedView = true
+        _link.value = search
+    }
+
+    fun linkOpened() {
+        _link.value = null
     }
 
     /** Loads the map again: after a failure, and after the environment changed. */
