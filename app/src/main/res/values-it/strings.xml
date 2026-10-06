@@ -89,9 +89,13 @@
     <string name="imprint_privacy">Note legali e privacy</string>
     <string name="share_title">Condividi meteocool</string>
     <string name="experimental_features">Funzioni sperimentali</string>
-    <string name="experimental_features_require_restart">Questa impostazione ha effetto solo dopo il riavvio dell\'app meteocool.\n\nÈ pensata per lo sviluppo e può causare comportamenti imprevisti. 🐛</string>
-    <string name="demo_mode">Modalità demo</string>
-    <string name="demo_mode_require_restart">Questa impostazione ha effetto solo dopo il riavvio dell\'app meteocool.\n\nLa modalità demo riproduce un temporale registrato come se stesse accadendo ora, dall\'ambiente demo di meteocool. Disattiva le funzioni sperimentali.</string>
+    <string name="mode">Modalità</string>
+    <string name="mode_production">Produzione</string>
+    <string name="mode_production_detail">Meteo attuale. Consigliata.</string>
+    <string name="mode_experimental_detail">Meteo attuale, con funzioni ancora in sviluppo. Può causare comportamenti imprevisti. 🐛</string>
+    <string name="mode_demo">Demo</string>
+    <string name="mode_demo_detail">Un temporale registrato, riprodotto come se stesse accadendo ora. Non è il meteo attuale.</string>
+    <string name="mode_footer">Ha effetto subito: la mappa si ricarica e gli avvisi pioggia arrivano dalla modalità scelta.</string>
 
     <!-- Settings: data sources -->
     <string name="data_sources_header">Fonti dei dati e licenze</string>

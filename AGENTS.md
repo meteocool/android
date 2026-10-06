@@ -45,16 +45,21 @@ The store listing comes from `metadata/<locale>/` in this repo: title, descripti
 [`environment/MeteocoolEnvironment.kt`](app/src/main/java/com/meteocool/environment/MeteocoolEnvironment.kt)
 holds every host. Never hardcode one at a call site.
 
-| | App (default) | Staging (Experimental Features) | Demo (Demo Mode) |
+| | App (Production, default) | Staging (Experimental Features) | Demo |
 | --- | --- | --- | --- |
 | Web map | `app.meteocool.com/android.html` | `next.meteocool.com/android.html` | `demo.meteocool.com/android.html` |
 | Native API | `app.meteocool.com` | `api-next.meteocool.com` | `api-demo.meteocool.com` |
 
-- **Selection rules.** The environment is picked once per process, so a switch only takes effect
-  after a restart. The two switches are mutually exclusive.
-- **The one runtime switch** is the demo launch alert's "Disable Demo Mode".
-- **Moving registrations.** `registration_origin` records where the push registration lives. When
-  it differs from the current API, the registration is removed there before registering again.
+- **Mode** (under About in Settings) picks one, stored as `environment`. It takes effect without a
+  restart: `MeteocoolEnvironment.select()` updates `changes`, the map reloads (`MapViewModel`) and
+  the push registration moves (`MeteocoolApp` calls `moveRegistration()`). The demo launch alert's
+  "Disable Demo Mode" selects Production the same way.
+- **Migration.** Mode replaced two switches. Demo Mode carries over once; Experimental Features
+  goes back to Production, as on iOS.
+- **Moving registrations.** `registration_origin` records where the push registration lives,
+  written before the request goes out. When it differs from the current API, the registration is
+  removed there before registering again. Requests are serialized, so one in flight during a
+  switch is removed from the API it reached.
 
 ## Backend contract (v4 legacy router)
 

@@ -5,11 +5,14 @@ import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.meteocool.app.app
 import com.meteocool.environment.MeteocoolEnvironment
 import com.meteocool.location.MeteocoolLocation
 import com.meteocool.location.service.LocationProviders
 import com.meteocool.preferences.Prefs
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.launch
 
 /**
  * The map screen's state: the location button, the page's readiness and the
@@ -56,13 +59,15 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         prefs.sp.registerOnSharedPreferenceChangeListener(listener)
+        // Mode, or the demo notice's "Disable Demo Mode", switched deployment.
+        viewModelScope.launch { MeteocoolEnvironment.changes.drop(1).collect { reloadMap() } }
     }
 
     fun setButtonState(state: LocationButtonState) {
         _buttonState.value = state
     }
 
-    /** Reloads the map, for Retry and after the environment changed. */
+    /** Loads the map again: after a failure, and after the environment changed. */
     fun reloadMap() {
         _mapUrl.value = MeteocoolEnvironment.currentMapUrl
     }
@@ -72,7 +77,7 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
         "mapRotation" to prefs.mapRotate,
         "radarColorMapping" to prefs.radarColorMapping,
         "mapBaseLayer" to prefs.baseLayer,
-        "experimentalFeatures" to prefs.experimentalFeatures,
+        "experimentalFeatures" to (MeteocoolEnvironment.current == MeteocoolEnvironment.STAGING),
     )
 
     override fun onCleared() {
