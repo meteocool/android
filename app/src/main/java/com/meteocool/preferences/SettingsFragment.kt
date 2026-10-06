@@ -7,11 +7,19 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.core.os.ConfigurationCompat
 import androidx.core.net.toUri
+import androidx.core.text.inSpans
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -20,10 +28,12 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.meteocool.BuildConfig
 import com.meteocool.R
 import com.meteocool.app.app
+import com.meteocool.environment.MeteocoolEnvironment
 import com.meteocool.permissions.PermUtils
 import com.meteocool.push.PushSupport
 import kotlinx.coroutines.launch
@@ -105,6 +115,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 registration.syncFailed.collect { updateNotificationsFooter() }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                MeteocoolEnvironment.changes.collect {
+                    findPreference<Preference>("mode")?.summary = getString(modeTitle(it))
+                }
             }
         }
     }
@@ -255,27 +272,56 @@ class SettingsFragment : PreferenceFragmentCompat() {
             launch(Intent.createChooser(send, null))
         }
         findPreference<Preference>("version")?.title = getString(R.string.version_label, BuildConfig.VERSION_NAME)
-
-        // Each points the app at another deployment, so at most one is on.
-        val experimental = findPreference<SwitchPreferenceCompat>(Prefs.EXPERIMENTAL_FEATURES)
-        val demo = findPreference<SwitchPreferenceCompat>(Prefs.DEMO_MODE)
-        experimental?.setOnPreferenceChangeListener { _, newValue ->
-            if (newValue == true) demo?.isChecked = false
-            showRestartNotice(R.string.experimental_features, R.string.experimental_features_require_restart)
-            true
-        }
-        demo?.setOnPreferenceChangeListener { _, newValue ->
-            if (newValue == true) experimental?.isChecked = false
-            showRestartNotice(R.string.demo_mode, R.string.demo_mode_require_restart)
+        findPreference<Preference>("mode")?.setOnPreferenceClickListener {
+            showModePicker()
             true
         }
     }
 
-    private fun showRestartNotice(@StringRes title: Int, @StringRes message: Int) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton(R.string.dismiss, null)
+    @StringRes
+    private fun modeTitle(environment: MeteocoolEnvironment): Int = when (environment) {
+        MeteocoolEnvironment.APP -> R.string.mode_production
+        MeteocoolEnvironment.STAGING -> R.string.experimental_features
+        MeteocoolEnvironment.DEMO -> R.string.mode_demo
+    }
+
+    @StringRes
+    private fun modeDetail(environment: MeteocoolEnvironment): Int = when (environment) {
+        MeteocoolEnvironment.APP -> R.string.mode_production_detail
+        MeteocoolEnvironment.STAGING -> R.string.mode_experimental_detail
+        MeteocoolEnvironment.DEMO -> R.string.mode_demo_detail
+    }
+
+    /**
+     * Mode: the deployment the app talks to. A tap moves the selection, OK
+     * applies it at once, without a restart: the map reloads and a push
+     * registration moves to the new deployment.
+     */
+    private fun showModePicker() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        // The dialog's theme, for the padding and colours of the view below.
+        val context = builder.context
+        var selection = MeteocoolEnvironment.current
+        val secondary = MaterialColors.getColor(context, android.R.attr.textColorSecondary, 0)
+        val inflater = LayoutInflater.from(context)
+        val view = inflater.inflate(R.layout.dialog_choices, null)
+        val choices = view.findViewById<RadioGroup>(R.id.choices)
+        MeteocoolEnvironment.entries.forEach { environment ->
+            val choice = inflater.inflate(R.layout.dialog_choice, choices, false) as RadioButton
+            choice.id = View.generateViewId()
+            choice.text = SpannableStringBuilder(getString(modeTitle(environment))).append("\n").apply {
+                inSpans(ForegroundColorSpan(secondary), RelativeSizeSpan(0.875f)) { append(getString(modeDetail(environment))) }
+            }
+            choices.addView(choice)
+            if (environment == selection) choices.check(choice.id)
+            choice.setOnCheckedChangeListener { _, checked -> if (checked) selection = environment }
+        }
+        view.findViewById<TextView>(R.id.footer).setText(R.string.mode_footer)
+        builder
+            .setTitle(R.string.mode)
+            .setView(view)
+            .setNegativeButton(android.R.string.cancel, null)
+            .setPositiveButton(android.R.string.ok) { _, _ -> MeteocoolEnvironment.select(selection, prefs) }
             .show()
     }
 

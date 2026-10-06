@@ -123,6 +123,13 @@ class RegistrationManager(
 
     private var refreshJob: Job? = null
 
+    /**
+     * The deployment changed: removes the registration from the API it was
+     * made on, then registers with the new one. Not folded into a refresh
+     * already running, which may have read the old deployment.
+     */
+    fun moveRegistration(): Job = scope.launch { refreshAuthorizationNow() }
+
     private suspend fun refreshAuthorizationNow() {
         val origin = prefs.registrationOrigin
         if (origin != null && origin != currentApi) {

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
@@ -20,7 +19,6 @@ import com.meteocool.databinding.ActivityMeteocoolBinding
 import com.meteocool.environment.MeteocoolEnvironment
 import com.meteocool.location.BackgroundLocationWorker
 import com.meteocool.notifications.Notifications
-import com.meteocool.ui.map.MapViewModel
 import com.meteocool.ui.map.WebFragment
 
 /**
@@ -34,8 +32,6 @@ class MeteocoolActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityMeteocoolBinding
-
-    private val mapViewModel: MapViewModel by viewModels()
 
     private var demoNotice: Dialog? = null
 
@@ -125,9 +121,8 @@ class MeteocoolActivity : AppCompatActivity() {
             .setTitle(R.string.demo_notice_title)
             .setMessage(R.string.demo_notice_message)
             .setNegativeButton(R.string.demo_notice_disable) { _, _ ->
-                MeteocoolEnvironment.leaveDemo(app.prefs)
-                app.registration.refreshAuthorization()
-                mapViewModel.reloadMap()
+                // Reloads the map and moves the push registration (MeteocoolEnvironment.changes).
+                MeteocoolEnvironment.select(MeteocoolEnvironment.APP, app.prefs)
             }
             .setPositiveButton(R.string.demo_notice_continue, null)
             .show()

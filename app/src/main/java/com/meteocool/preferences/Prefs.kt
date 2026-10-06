@@ -24,8 +24,9 @@ class Prefs(val sp: SharedPreferences) {
         const val MAP_ZOOM = "map_zoom"
         const val BASE_LAYER = "base_layer"
         const val RADAR_COLOR_MAPPING = "radar_color_mapping"
-        const val EXPERIMENTAL_FEATURES = "experimental_features"
-        const val DEMO_MODE = "demo_mode"
+        const val ENVIRONMENT = "environment"
+        private const val LEGACY_EXPERIMENTAL_FEATURES = "experimental_features"
+        private const val LEGACY_DEMO_MODE = "demo_mode"
         const val REGISTRATION_ORIGIN = "registration_origin"
         const val PUSH_TOKEN = "push_token"
         const val ONBOARDING_DONE = "onboarding_done"
@@ -40,8 +41,8 @@ class Prefs(val sp: SharedPreferences) {
         val BASE_LAYERS = listOf("system", "light", "dark", "osm", "cyclosm")
         val COLOR_MAPPINGS = listOf("classic", "nws", "pyart_stepseq", "homeyer", "lang")
 
-        /** Keys the web map reads through injectSettings(). */
-        val WEB_SETTINGS = setOf(MAP_ROTATE, BASE_LAYER, RADAR_COLOR_MAPPING, EXPERIMENTAL_FEATURES)
+        /** Keys the web map reads through injectSettings(). A change of Mode reloads the map instead. */
+        val WEB_SETTINGS = setOf(MAP_ROTATE, BASE_LAYER, RADAR_COLOR_MAPPING)
 
         /** Keys the push registration carries. */
         val REGISTRATION_SETTINGS = setOf(NOTIFICATION_DETAILS, NOTIFICATION_INTENSITY, NOTIFICATION_TIME)
@@ -78,13 +79,18 @@ class Prefs(val sp: SharedPreferences) {
     val radarColorMapping: String
         get() = sp.getString(RADAR_COLOR_MAPPING, null)?.takeIf { it in COLOR_MAPPINGS } ?: "classic"
 
-    var experimentalFeatures: Boolean
-        get() = sp.getBoolean(EXPERIMENTAL_FEATURES, false)
-        set(value) = sp.edit { putBoolean(EXPERIMENTAL_FEATURES, value) }
+    /** The deployment chosen under Mode; read it through MeteocoolEnvironment.current. */
+    var environment: String?
+        get() = sp.getString(ENVIRONMENT, null)
+        set(value) = sp.edit { putString(ENVIRONMENT, value) }
 
-    var demoMode: Boolean
-        get() = sp.getBoolean(DEMO_MODE, false)
-        set(value) = sp.edit { putBoolean(DEMO_MODE, value) }
+    /** The Demo Mode switch Mode replaced. */
+    val legacyDemoMode: Boolean get() = sp.getBoolean(LEGACY_DEMO_MODE, false)
+
+    fun clearLegacyModeSwitches() = sp.edit {
+        remove(LEGACY_DEMO_MODE)
+        remove(LEGACY_EXPERIMENTAL_FEATURES)
+    }
 
     /** The API a registration was last posted to, removed once it is unregistered there. */
     var registrationOrigin: String?

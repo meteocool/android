@@ -111,17 +111,11 @@
                 app:key="share"
                 app:title="@string/share_title" />
 
-        <SwitchPreferenceCompat
-                app:defaultValue="false"
+        <Preference
                 app:iconSpaceReserved="false"
-                app:key="experimental_features"
-                app:title="@string/experimental_features" />
-
-        <SwitchPreferenceCompat
-                app:defaultValue="false"
-                app:iconSpaceReserved="false"
-                app:key="demo_mode"
-                app:title="@string/demo_mode" />
+                app:key="mode"
+                app:persistent="false"
+                app:title="@string/mode" />
 
         <Preference
                 app:iconSpaceReserved="false"
