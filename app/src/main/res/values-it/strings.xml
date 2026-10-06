@@ -79,7 +79,7 @@
     <string name="colormap_classic">Classica</string>
     <string name="colormap_homeyer">Homeyer (daltonismo)</string>
     <string name="colormap_lang">Lang</string>
-    <string name="colormap_explanation">Cambia i colori con cui le precipitazioni sono disegnate sulla mappa.\n\n⚠️ «Classica» è la più veloce da visualizzare.</string>
+    <string name="colormap_explanation">Cambia i colori con cui le precipitazioni sono disegnate sulla mappa.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">Informazioni</string>

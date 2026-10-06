@@ -85,7 +85,7 @@
     <string name="colormap_pyart_stepseq" translatable="false">PyArt StepSeq</string>
     <string name="colormap_homeyer">Homeyer (Color Vision Deficiency)</string>
     <string name="colormap_lang">Lang</string>
-    <string name="colormap_explanation">Change the colormap to change the color scheme of the precipitation visualization on the map.\n\n⚠️ \'Classic\' has the best rendering performance.</string>
+    <string name="colormap_explanation">Change the colormap to change the color scheme of the precipitation visualization on the map.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">About</string>

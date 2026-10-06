@@ -79,7 +79,7 @@
     <string name="colormap_classic">Klasická</string>
     <string name="colormap_homeyer">Homeyer (porucha barvocitu)</string>
     <string name="colormap_lang">Lang</string>
-    <string name="colormap_explanation">Mění barvy, kterými se srážky na mapě vykreslují.\n\n⚠️ „Klasická“ se vykresluje nejrychleji.</string>
+    <string name="colormap_explanation">Mění barvy, kterými se srážky na mapě vykreslují.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">O aplikaci</string>

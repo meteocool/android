@@ -79,7 +79,7 @@
     <string name="colormap_classic">Klasyczna</string>
     <string name="colormap_homeyer">Homeyer (deficyt widzenia barw)</string>
     <string name="colormap_lang">Lang</string>
-    <string name="colormap_explanation">Zmienia kolory, w jakich rysowane są opady na mapie.\n\n⚠️ „Klasyczna” renderuje się najszybciej.</string>
+    <string name="colormap_explanation">Zmienia kolory, w jakich rysowane są opady na mapie.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">O aplikacji</string>

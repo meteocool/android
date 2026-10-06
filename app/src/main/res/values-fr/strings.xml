@@ -79,7 +79,7 @@
     <string name="colormap_classic">Classique</string>
     <string name="colormap_homeyer">Homeyer (daltonisme)</string>
     <string name="colormap_lang">Lang</string>
-    <string name="colormap_explanation">Change les couleurs utilisées pour afficher les précipitations sur la carte.\n\n⚠️ « Classique » s\'affiche le plus rapidement.</string>
+    <string name="colormap_explanation">Change les couleurs utilisées pour afficher les précipitations sur la carte.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">À propos</string>
