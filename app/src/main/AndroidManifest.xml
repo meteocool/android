@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Retries a map that failed to load as soon as a network comes up. -->
@@ -52,8 +53,44 @@
                 android:name=".ui.MeteocoolActivity"
                 android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden"
                 android:launchMode="singleTop"
-                android:exported="true">
+                android:exported="true" />
 
+        <!-- Shared map links: the root with the map's state in the query
+             (core's lib/shareLink.ts), as the iOS association file claims
+             them. The bare root is the website and stays in the browser, as
+             do next and demo, which show the deployment a link was made on.
+             Verified against /.well-known/assetlinks.json from core's Worker.
+
+             Two aliases, because only Android 15 can ask for a query: it
+             matches a filter's own paths OR its uri-relative-filter-groups,
+             so the root has to go inside the group, and older versions ignore
+             the group, so there it would match every path. @bool/match_queries
+             switches between them. -->
+        <activity-alias
+                android:name=".ui.SharedLink"
+                android:targetActivity=".ui.MeteocoolActivity"
+                android:enabled="@bool/match_queries"
+                android:exported="true">
+            <intent-filter android:autoVerify="true" tools:targetApi="35">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="app.meteocool.com" />
+                <uri-relative-filter-group>
+                    <data android:path="/" />
+                    <data android:queryPattern="..*" />
+                </uri-relative-filter-group>
+            </intent-filter>
+        </activity-alias>
+        <!-- Before Android 15 the root opens the app with or without a query. -->
+        <activity-alias
+                android:name=".ui.SharedLinkByPath"
+                android:targetActivity=".ui.MeteocoolActivity"
+                android:enabled="@bool/match_paths_only"
+                android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -62,8 +99,9 @@
 
                 <data android:scheme="https" />
                 <data android:host="app.meteocool.com" />
+                <data android:path="/" />
             </intent-filter>
-        </activity>
+        </activity-alias>
         <activity
                 android:name=".ui.onboarding.OnboardingActivity"
                 android:theme="@style/Base.Theme.Meteocool"
