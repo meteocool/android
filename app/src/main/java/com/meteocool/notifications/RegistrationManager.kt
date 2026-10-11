@@ -192,9 +192,11 @@ class RegistrationManager(
     /**
      * Tells the backend a notification was seen, so it can send the next one.
      * A push can wake the app before FCM has handed over this launch's token,
-     * so a missing token is waited for once.
+     * so a missing token is waited for once. Nothing while alerts are off:
+     * there is no registration to acknowledge for.
      */
     fun acknowledge(from: String): Job = scope.launch {
+        if (!prefs.notification) return@launch
         val token = prefs.pushToken ?: run {
             delay(4_000)
             prefs.pushToken
