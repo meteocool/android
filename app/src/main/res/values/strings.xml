@@ -94,7 +94,6 @@
     <string name="feedback_subject" translatable="false">Android App Feedback (Version: %1$s)</string>
     <string name="feedback_body">Describe your issue or suggestion here:\n</string>
     <string name="imprint_privacy">Imprint &amp; Privacy Policy</string>
-    <string name="share_title">Share meteocool</string>
     <string name="experimental_features">Experimental Features</string>
     <string name="mode">Mode</string>
     <string name="mode_production">Production</string>

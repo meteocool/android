@@ -267,10 +267,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 .putExtra(Intent.EXTRA_TEXT, getString(R.string.feedback_body))
             launch(intent)
         }
-        findPreference<Preference>("share")?.setOnPreferenceClickListener {
-            val send = Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, BuildConfig.STORE_URL).setType("text/plain")
-            launch(Intent.createChooser(send, null))
-        }
         findPreference<Preference>("version")?.title = getString(R.string.version_label, BuildConfig.VERSION_NAME)
         findPreference<Preference>("mode")?.setOnPreferenceClickListener {
             showModePicker()

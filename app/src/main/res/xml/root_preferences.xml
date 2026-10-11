@@ -108,11 +108,6 @@
 
         <Preference
                 app:iconSpaceReserved="false"
-                app:key="share"
-                app:title="@string/share_title" />
-
-        <Preference
-                app:iconSpaceReserved="false"
                 app:key="mode"
                 app:persistent="false"
                 app:title="@string/mode" />
