@@ -52,7 +52,7 @@
             app:title="@string/settings_map_view">
 
         <SwitchPreferenceCompat
-                app:defaultValue="true"
+                app:defaultValue="false"
                 app:iconSpaceReserved="false"
                 app:key="map_rotate"
                 app:title="@string/two_finger_rotation" />

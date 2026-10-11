@@ -69,7 +69,7 @@ class Prefs(val sp: SharedPreferences) {
 
     val aheadMinutes: Int get() = clampAhead(sp.getString(NOTIFICATION_TIME, null)?.toIntOrNull())
 
-    val mapRotate: Boolean get() = sp.getBoolean(MAP_ROTATE, true)
+    val mapRotate: Boolean get() = sp.getBoolean(MAP_ROTATE, false)
 
     var mapZoom: Boolean
         get() = sp.getBoolean(MAP_ZOOM, false)
