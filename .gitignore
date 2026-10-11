@@ -75,3 +75,8 @@ lint/tmp/
 # lint/reports/
 
 app/schemas/
+
+# Local notes and tool settings
+AGENTS.md
+CLAUDE.md
+.claude/settings.json
