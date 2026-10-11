@@ -8,8 +8,8 @@ import com.meteocool.location.MeteocoolLocation
 
 /**
  * Every setting the app keeps, in the one preferences file the settings
- * screen writes to. Older versions also wrote to a file named "default";
- * [migrate] folds that into this one.
+ * screen writes to. Settings from before 4.0 are not carried over
+ * ([resetOldSettings]).
  */
 class Prefs(val sp: SharedPreferences) {
 
@@ -25,14 +25,16 @@ class Prefs(val sp: SharedPreferences) {
         const val BASE_LAYER = "base_layer"
         const val RADAR_COLOR_MAPPING = "radar_color_mapping"
         const val ENVIRONMENT = "environment"
-        private const val LEGACY_EXPERIMENTAL_FEATURES = "experimental_features"
-        private const val LEGACY_DEMO_MODE = "demo_mode"
         const val REGISTRATION_ORIGIN = "registration_origin"
         const val PUSH_TOKEN = "push_token"
         const val ONBOARDING_DONE = "onboarding_done"
         private const val LAST_LAT = "last_latitude"
         private const val LAST_LON = "last_longitude"
         private const val LAST_ACCURACY = "last_accuracy"
+        const val SETTINGS_VERSION = "settings_version"
+
+        /** Settings written by an older version than this are dropped, not migrated. */
+        const val CURRENT_SETTINGS_VERSION = 4
 
         /** dBZ thresholds, lowest first: drizzle, light rain, rain, intense rain, hail. */
         val INTENSITIES = listOf(14, 20, 26, 36, 41)
@@ -84,14 +86,6 @@ class Prefs(val sp: SharedPreferences) {
         get() = sp.getString(ENVIRONMENT, null)
         set(value) = sp.edit { putString(ENVIRONMENT, value) }
 
-    /** The Demo Mode switch Mode replaced. */
-    val legacyDemoMode: Boolean get() = sp.getBoolean(LEGACY_DEMO_MODE, false)
-
-    fun clearLegacyModeSwitches() = sp.edit {
-        remove(LEGACY_DEMO_MODE)
-        remove(LEGACY_EXPERIMENTAL_FEATURES)
-    }
-
     /** The API a registration was last posted to, removed once it is unregistered there. */
     var registrationOrigin: String?
         get() = sp.getString(REGISTRATION_ORIGIN, null)
@@ -112,34 +106,24 @@ class Prefs(val sp: SharedPreferences) {
     }
 
     /**
-     * Folds the old "default" file into this one and repairs stored values
-     * that are no longer offered. Safe to run on every launch.
+     * Drops every setting an older version wrote, and onboarding with them:
+     * 4.0 starts over as if freshly installed, then onboarding asks for
+     * location and alerts again. [legacy] is the file named "default" that
+     * 2.x also wrote to. A fresh install only gets the version stamped.
+     *
+     * The 2.x push registration is left alone: it lives on a backend that can
+     * no longer deliver to Android, and the token goes with the rest.
+     *
+     * Returns whether there was anything to drop.
      */
-    fun migrate(context: Context) {
-        val old = context.getSharedPreferences("default", Context.MODE_PRIVATE)
-        if (old.all.isNotEmpty()) {
-            sp.edit {
-                if (old.getBoolean("is_intro_completed", false)) putBoolean(ONBOARDING_DONE, true)
-                old.getString("fb_token", null)
-                    ?.takeIf { it != "no token" && it.isNotEmpty() && !sp.contains(PUSH_TOKEN) }
-                    ?.let { putString(PUSH_TOKEN, it) }
-            }
-            old.edit { clear() }
+    fun resetOldSettings(legacy: SharedPreferences): Boolean {
+        if (sp.getInt(SETTINGS_VERSION, 0) >= CURRENT_SETTINGS_VERSION) return false
+        val upgraded = sp.all.isNotEmpty() || legacy.all.isNotEmpty()
+        legacy.edit(commit = true) { clear() }
+        sp.edit(commit = true) {
+            clear()
+            putInt(SETTINGS_VERSION, CURRENT_SETTINGS_VERSION)
         }
-        sp.getString("fb_token", null)?.let { token ->
-            sp.edit {
-                if (token != "no token" && token.isNotEmpty() && !sp.contains(PUSH_TOKEN)) putString(PUSH_TOKEN, token)
-                remove("fb_token")
-            }
-        }
-        sp.edit {
-            // The satellite basemap is gone; its successor follows the system theme.
-            if (sp.getString(BASE_LAYER, null) == "satellite") putString(BASE_LAYER, "system")
-            sp.getString(NOTIFICATION_INTENSITY, null)?.toIntOrNull()?.let {
-                if (it !in INTENSITIES) putString(NOTIFICATION_INTENSITY, DEFAULT_INTENSITY.toString())
-            }
-            // Left behind by the removed location and version bookkeeping.
-            listOf("latitude", "longitude", "altitude", "accuracy", "elapsedNanos", "app_version").forEach { remove(it) }
-        }
+        return upgraded
     }
 }

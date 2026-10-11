@@ -75,19 +75,9 @@ enum class MeteocoolEnvironment(val key: String, val webHost: String, val apiBas
             selected.value = environment
         }
 
-        /**
-         * The stored deployment, migrating the two switches Mode replaced.
-         * Demo carries over, so the launch notice goes on reminding the user.
-         * Experimental Features does not: everyone who had it on goes back to
-         * production once, and picks it again under Mode if they want it.
-         */
-        fun stored(prefs: Prefs): MeteocoolEnvironment {
-            entries.firstOrNull { it.key == prefs.environment }?.let { return it }
-            val environment = if (prefs.legacyDemoMode) DEMO else APP
-            prefs.environment = environment.key
-            prefs.clearLegacyModeSwitches()
-            return environment
-        }
+        /** The stored deployment; production until one is picked under Mode. */
+        fun stored(prefs: Prefs): MeteocoolEnvironment =
+            entries.firstOrNull { it.key == prefs.environment } ?: APP
 
         /**
          * The API a stored registration origin belongs to, or null if it is

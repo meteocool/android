@@ -4,7 +4,6 @@ import com.meteocool.preferences.Prefs
 import com.meteocool.testing.FakeSharedPreferences
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Test
 
@@ -18,19 +17,6 @@ class MeteocoolEnvironmentTest {
         assertEquals(MeteocoolEnvironment.STAGING, MeteocoolEnvironment.stored(Prefs(FakeSharedPreferences("environment" to "staging"))))
         assertEquals(MeteocoolEnvironment.DEMO, MeteocoolEnvironment.stored(Prefs(FakeSharedPreferences("environment" to "demo"))))
         assertEquals(MeteocoolEnvironment.APP, MeteocoolEnvironment.stored(Prefs(FakeSharedPreferences())))
-    }
-
-    @Test
-    fun `demo mode carries over to mode, experimental features go back to production`() {
-        val demo = FakeSharedPreferences("demo_mode" to true, "experimental_features" to false)
-        assertEquals(MeteocoolEnvironment.DEMO, MeteocoolEnvironment.stored(Prefs(demo)))
-        assertEquals("demo", demo.getString("environment", null))
-        assertFalse(demo.contains("demo_mode") || demo.contains("experimental_features"))
-
-        val experimental = FakeSharedPreferences("experimental_features" to true)
-        assertEquals(MeteocoolEnvironment.APP, MeteocoolEnvironment.stored(Prefs(experimental)))
-        assertEquals("app", experimental.getString("environment", null))
-        assertFalse(experimental.contains("experimental_features"))
     }
 
     @Test

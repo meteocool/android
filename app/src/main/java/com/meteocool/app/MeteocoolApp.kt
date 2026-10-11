@@ -43,10 +43,11 @@ class MeteocoolApp : Application() {
         super.onCreate()
         Timber.plant(if (BuildConfig.DEBUG) DebugTree() else ReleaseTree())
 
-        // Written now, so the settings screen does not write them later and set off the listeners below.
-        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false)
         prefs = Prefs(this)
-        prefs.migrate(this)
+        val reset = prefs.resetOldSettings(getSharedPreferences("default", MODE_PRIVATE))
+        // Written now, so the settings screen does not write them later and set off the listeners below.
+        // Again after a reset: the flag that they were written lives in a file of its own.
+        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, reset)
         MeteocoolEnvironment.init(prefs)
         if (BuildConfig.DEBUG) DebugHooks.apply(prefs)
         // Only builds that can receive alerts get a channel to show them on.
