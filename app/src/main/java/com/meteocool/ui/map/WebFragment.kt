@@ -67,7 +67,8 @@ import kotlin.math.abs
 
 /**
  * The map: a WebView showing meteocool/core's android.html, with native
- * layer, settings and location buttons floating on top.
+ * layer, settings, location and share buttons floating on top, and the logo
+ * that leads back to the radar.
  *
  * The page talks back through the `Android` JavaScript interface:
  * requestSettings() when it is ready, and postMessage() with the same
@@ -78,6 +79,13 @@ class WebFragment : Fragment() {
 
     companion object {
         private const val WEB_CACHE_LIMIT_BYTES = 100L * 1024 * 1024
+
+        /** What the logo runs; written for WebViews too old for `?.`. */
+        private const val SHOW_RADAR_SCRIPT = """(() => {
+  window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+  const lm = window.lm;
+  if (lm && lm.currentCap !== "radar" && lm.getCapability && lm.getCapability("radar")) lm.setTarget("radar", "map");
+})();"""
         private val gson = Gson()
     }
 
@@ -135,16 +143,25 @@ class WebFragment : Fragment() {
         binding.layers.setOnClickListener { openLayerSwitcher() }
         binding.settings.setOnClickListener { (activity as? MeteocoolActivity)?.openSettings() }
         binding.locateMe.setOnClickListener { onLocationButtonTapped() }
+        binding.share.setOnClickListener { shareMap() }
+        binding.logo.setOnClickListener { showRadarMap() }
 
         createWebView()
         recovery = MapRecovery(
             scope = viewLifecycleOwner.lifecycleScope,
-            reload = { viewModel.reloadMap() },
+            reload = { view ->
+                viewModel.reloadMap()
+                // The view the page died with, unless a shared link waits to be opened.
+                if (view != null && viewModel.link.value == null) viewModel.openLink(view)
+            },
             wentDown = { mapWentDown() },
             showStatus = { _binding?.loadStatus?.isVisible = it },
             isLoading = { (webView?.progress ?: 100) < 100 },
             isForeground = { lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED) },
             probe = { answer -> evaluate(MapRecovery.PROBE_SCRIPT) { answer(it == "true") } },
+            currentView = { answer ->
+                evaluate(MapShare.SHARE_LINK_SCRIPT) { answer(MapShare.fromScriptResult(it, mapHost())?.viewSearch) }
+            },
         )
         requireContext().getSystemService<ConnectivityManager>()?.registerNetworkCallback(
             NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build(),
@@ -184,6 +201,10 @@ class WebFragment : Fragment() {
             binding.controls.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = bars.top + margin
                 marginEnd = bars.right + margin
+            }
+            binding.logo.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = bars.top + margin
+                marginStart = bars.left + margin
             }
             WindowInsetsCompat.CONSUMED
         }
@@ -229,7 +250,7 @@ class WebFragment : Fragment() {
     private fun loadMap(url: String) {
         val web = webView ?: return
         viewModel.pageReady = false
-        binding.layers.isEnabled = false
+        setPageControlsEnabled(false)
         web.stopLoading()
         clearCovers()
         installPageScripts(web, url)
@@ -240,7 +261,7 @@ class WebFragment : Fragment() {
     /** The page stopped working. The native buttons stay usable while MapRecovery brings it back. */
     private fun mapWentDown() {
         viewModel.pageReady = false
-        _binding?.layers?.isEnabled = false
+        setPageControlsEnabled(false)
         clearCovers()
     }
 
@@ -250,7 +271,7 @@ class WebFragment : Fragment() {
         recovery?.loadSucceeded()
         viewModel.pageReady = true
         b.webContainer.visibility = View.VISIBLE
-        b.layers.isEnabled = true
+        setPageControlsEnabled(true)
         injectSettings()
         activateLocationIfAuthorized()
         // Not clearCovers(): a deep-linked storm can open its sheet first.
@@ -324,8 +345,16 @@ class WebFragment : Fragment() {
         refreshControls()
     }
 
+    /** The controls and the logo stay hidden while the page has something over their corners. */
     private fun refreshControls() {
         _binding?.controls?.isVisible = covers.isEmpty()
+        _binding?.logo?.isVisible = covers.isEmpty()
+    }
+
+    /** The buttons that call into the page work only while it runs. */
+    private fun setPageControlsEnabled(enabled: Boolean) {
+        _binding?.layers?.isEnabled = enabled
+        _binding?.share?.isEnabled = enabled
     }
 
     private fun evaluate(script: String, callback: ((String?) -> Unit)? = null) {
@@ -513,11 +542,41 @@ class WebFragment : Fragment() {
             .show()
     }
 
+    /* ---- the logo ------------------------------------------------------ */
+
+    /**
+     * Leaves whatever the page shows for the radar map, as the iOS app's logo
+     * does: closes the panels on top (a storm's panel, the point menu) through
+     * their own Escape handling, and switches from any other map (3D,
+     * lightning) to the radar, as picking it in the layer switcher does. A
+     * page that is down is retried at once instead, and one that has
+     * navigated away is replaced by the map.
+     */
+    private fun showRadarMap() {
+        if (webView?.url?.toUri()?.let(::isMapOrigin) == false) {
+            viewModel.reloadMap()
+            return
+        }
+        if (!viewModel.pageReady) {
+            recovery?.hurry(restoringView = false)
+            return
+        }
+        evaluate(SHOW_RADAR_SCRIPT)
+    }
+
     /* ---- sharing ------------------------------------------------------- */
+
+    /** The share button: a link to what is on screen, whichever map it is and whatever frame it is on. */
+    private fun shareMap() {
+        if (!viewModel.pageReady) return
+        evaluate(MapShare.SHARE_LINK_SCRIPT) { result ->
+            MapShare.fromScriptResult(result, mapHost())?.let { presentShare(it) }
+        }
+    }
 
     /**
      * The system share sheet for a link to the map, from one of the page's
-     * share buttons or from a screenshot (`screenshotTaken`).
+     * share buttons, the share button or a screenshot (`screenshotTaken`).
      */
     private fun presentShare(share: MapShare) {
         if (!isResumed) return
@@ -648,7 +707,7 @@ class WebFragment : Fragment() {
         override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
             if (view != webView) return
             viewModel.pageReady = false
-            _binding?.layers?.isEnabled = false
+            setPageControlsEnabled(false)
             clearCovers()
             // Every new page has to report in, including one it loads itself.
             recovery?.loadStarted()

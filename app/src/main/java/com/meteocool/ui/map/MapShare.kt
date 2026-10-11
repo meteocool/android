@@ -20,6 +20,23 @@ import java.net.URISyntaxException
  */
 data class MapShare(val url: String, val title: String) {
 
+    /**
+     * The link's search without what makes it a shared link (the `shared`
+     * stamp and the sharer's `share_lang`): the view on screen, to open again
+     * after the page died. Without the stamp the page does not announce it as
+     * a link shared some time ago (core's `lib/shareLink.ts`).
+     */
+    val viewSearch: String?
+        get() {
+            val query = try {
+                URI(url).rawQuery
+            } catch (e: URISyntaxException) {
+                null
+            } ?: return null
+            val kept = query.split('&').filter { it.isNotEmpty() && it.substringBefore('=') !in SHARE_ONLY }
+            return if (kept.isEmpty()) null else "?" + kept.joinToString("&")
+        }
+
     companion object {
         /** The page's message: `share:` and the JSON of core's `NativeShare`. */
         const val MESSAGE_PREFIX = "share:"
@@ -45,6 +62,9 @@ data class MapShare(val url: String, val title: String) {
         const val SHARE_LINK_SCRIPT = "JSON.stringify(window.shareLink ? window.shareLink() : null)"
 
         private val LOOPBACK = setOf("127.0.0.1", "localhost")
+
+        /** Query parameters that only say the link was shared. */
+        private val SHARE_ONLY = setOf("shared", "share_lang")
 
         /**
          * Reads a share from the page's JSON. Null for anything that is not a

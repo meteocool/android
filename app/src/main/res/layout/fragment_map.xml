@@ -41,7 +41,27 @@
                 style="@style/MapControl"
                 android:contentDescription="@string/location_button"
                 app:srcCompat="@drawable/ic_location_off" />
+
+        <!-- A link to what is on screen; the page's player no longer has a share button in apps. -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/share"
+                style="@style/MapControl"
+                android:contentDescription="@string/map_share"
+                android:enabled="false"
+                app:srcCompat="@drawable/ic_share" />
     </LinearLayout>
+
+    <!-- The way home: a tap brings back the radar map. -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/logo"
+            style="@style/MapControl"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="@dimen/map_control_margin"
+            android:layout_marginTop="@dimen/map_control_margin"
+            android:contentDescription="@string/show_radar"
+            app:maxImageSize="26dp"
+            app:srcCompat="@drawable/rain"
+            app:tint="@null" />
 
     <!-- "Trying again" while the map keeps failing to load. Not a button and
          takes no touches: MapRecovery retries on its own. -->

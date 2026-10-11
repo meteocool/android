@@ -21,17 +21,22 @@ class MapRecoveryTest {
         /** What the page answers when asked whether it runs; null for a hung page. */
         var answer: Boolean? = true
         var reloads = 0
+        /** The view each reload opened. */
+        val reopened = mutableListOf<String?>()
+        /** What the page answers when asked for its view. */
+        var view: String? = null
         var downs = 0
         var status = false
 
         val recovery = MapRecovery(
             scope = test.backgroundScope,
-            reload = { reloads += 1 },
+            reload = { reloads += 1; reopened += it },
             wentDown = { downs += 1 },
             showStatus = { status = it },
             isLoading = { loading },
             isForeground = { foreground },
             probe = { reply -> answer?.let(reply) },
+            currentView = { reply -> reply(view) },
             now = { test.testScheduler.currentTime },
         )
     }
@@ -175,5 +180,36 @@ class MapRecoveryTest {
         page.recovery.loadSucceeded()
         wait(MapRecovery.PROBE_TIMEOUT_MS)
         assertEquals(0, page.downs)
+    }
+
+    @Test
+    fun `the first reload after a crash reopens the view, a second crash the plain map`() = runTest {
+        val page = Page(this)
+        page.view = "?layer=cells3d&cell=a"
+        page.recovery.loadStarted()
+        page.recovery.loadSucceeded()
+        wait(MapRecovery.STABLE_AFTER_MS + 1)
+        page.recovery.failed(Failure.CRASH)
+        wait(1_000)
+        assertEquals(listOf<String?>("?layer=cells3d&cell=a"), page.reopened)
+
+        page.recovery.loadStarted()
+        page.recovery.loadSucceeded()
+        wait(MapRecovery.VIEW_INTERVAL_MS)
+        page.recovery.failed(Failure.CRASH)
+        wait(2_000)
+        assertEquals("Died again within a minute: the view may be the cause", null, page.reopened.last())
+    }
+
+    @Test
+    fun `a retry asked for without the view loads the plain map`() = runTest {
+        val page = Page(this)
+        page.view = "?layer=lightning"
+        page.recovery.loadStarted()
+        page.recovery.loadSucceeded()
+        wait(MapRecovery.VIEW_INTERVAL_MS)
+        page.recovery.failed(Failure.CRASH)
+        page.recovery.hurry(restoringView = false)
+        assertEquals(listOf<String?>(null), page.reopened)
     }
 }

@@ -66,4 +66,12 @@ class MapShareTest {
         assertNull(MapShare.fromScriptResult("null", host))
         assertNull(MapShare.fromScriptResult(null, host))
     }
+
+    @Test
+    fun `the view is the link without its share stamp`() {
+        val share = MapShare("https://app.meteocool.com/?layer=cells3d&cell=x%2Fy&shared=20261006T1234Z&share_lang=de", "t")
+        assertEquals("?layer=cells3d&cell=x%2Fy", share.viewSearch)
+        assertEquals(null, MapShare("https://app.meteocool.com/?shared=20261006T1234Z", "t").viewSearch)
+        assertEquals(null, MapShare("https://app.meteocool.com/", "t").viewSearch)
+    }
 }

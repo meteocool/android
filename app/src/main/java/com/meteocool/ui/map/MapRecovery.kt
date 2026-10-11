@@ -23,13 +23,20 @@ import kotlin.math.min
  * Retries back off from one second to [MAX_DELAY_MS], and happen at once when
  * a network comes up or the app returns to the foreground.
  *
+ * While the page runs, the view on screen (`window.shareLink()`, the link the
+ * share sheet offers) is noted every [VIEW_INTERVAL_MS]. The first reload
+ * after a page that ran opens that view again, so a crash in the 3D map comes
+ * back to the same storm rather than the radar. Should the page die again
+ * before [STABLE_AFTER_MS], the view may be what kills it, and the next reload
+ * is the plain map.
+ *
  * No WebView here, only what the fragment hands in, so the rules run as unit
  * tests on virtual time.
  */
 class MapRecovery(
     private val scope: CoroutineScope,
-    /** Loads the map page again; the load calls [loadStarted]. */
-    private val reload: () -> Unit,
+    /** Loads the map page again, opening `view` (a link's search) if there is one; the load calls [loadStarted]. */
+    private val reload: (view: String?) -> Unit,
     /** The page stopped working, whatever the cause. */
     private val wentDown: () -> Unit,
     /** Shows or hides the "trying again" status. */
@@ -40,6 +47,8 @@ class MapRecovery(
     private val isForeground: () -> Boolean,
     /** Asks the page whether it still runs. A hung page never answers. */
     private val probe: (answer: (Boolean) -> Unit) -> Unit,
+    /** Asks the page for the search of a link to its view; null from a page that cannot say. */
+    private val currentView: (answer: (String?) -> Unit) -> Unit,
     private val now: () -> Long = SystemClock::elapsedRealtime,
 ) {
     enum class Failure { NAVIGATION, TIMEOUT, CRASH, GRAPHICS, UNRESPONSIVE }
@@ -59,6 +68,9 @@ class MapRecovery(
          * crash reloads at once while a page that keeps crashing backs off.
          */
         const val STABLE_AFTER_MS = 60_000L
+
+        /** How often the view on screen is noted. */
+        const val VIEW_INTERVAL_MS = 3_000L
 
         /** How long a page back in the foreground has to answer. */
         const val PROBE_TIMEOUT_MS = 10_000L
@@ -128,6 +140,12 @@ class MapRecovery(
     private var retry: Job? = null
     private var retryInForeground = false
 
+    /** Notes the view while the page runs. */
+    private var viewWatch: Job? = null
+
+    /** The search of the link to the view on screen, last time it was asked. */
+    private var lastView: String? = null
+
     /** A load of the map page started, by [reload] or by the page itself. */
     fun loadStarted() {
         retry?.cancel()
@@ -135,6 +153,7 @@ class MapRecovery(
         retryInForeground = false
         forgetOldFailures()
         readySince = null
+        stopWatchingView()
         watchdog?.cancel()
         // Counts ticks rather than reading the clock, so time the device
         // spends asleep does not count against the page.
@@ -158,6 +177,7 @@ class MapRecovery(
         readySince = now()
         page += 1
         showStatus(false)
+        watchView()
     }
 
     /**
@@ -170,6 +190,8 @@ class MapRecovery(
         watchdog = null
         forgetOldFailures()
         readySince = null
+        viewWatch?.cancel()
+        viewWatch = null
         failures += 1
         Timber.w("Map failed (${failure.name.lowercase()}), attempt $failures")
         wentDown()
@@ -186,8 +208,13 @@ class MapRecovery(
         }
     }
 
-    /** Retries a failed page now instead of after the backoff. A load in progress goes on. */
-    fun hurry() {
+    /**
+     * Retries a failed page now instead of after the backoff. A load in
+     * progress goes on. Without [restoringView], the page comes back with its
+     * own view instead of the one it died with.
+     */
+    fun hurry(restoringView: Boolean = true) {
+        if (!restoringView) lastView = null
         if (retryInForeground || retry != null) retryNow()
     }
 
@@ -226,7 +253,25 @@ class MapRecovery(
         retry?.cancel()
         retry = null
         retryInForeground = false
-        reload()
+        reload(if (failures == 1) lastView else null)
+    }
+
+    /** Asks the page for its view every [VIEW_INTERVAL_MS] while it runs. */
+    private fun watchView() {
+        viewWatch?.cancel()
+        viewWatch = scope.launch {
+            while (true) {
+                currentView { view -> if (view != null) lastView = view }
+                delay(VIEW_INTERVAL_MS)
+            }
+        }
+    }
+
+    /** A new page, other than a retry, starts from its own view. */
+    private fun stopWatchingView() {
+        viewWatch?.cancel()
+        viewWatch = null
+        lastView = null
     }
 
     private fun forgetOldFailures() {
