@@ -55,6 +55,12 @@ android {
             dimension "default"
         }
     }
+    // F-Droid asks that APKs not carry Google's encrypted list of dependencies.
+    // The bundle uploaded to Play keeps it, as Play Console expects.
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = true
+    }
     testOptions {
         unitTests.returnDefaultValues = true
     }
