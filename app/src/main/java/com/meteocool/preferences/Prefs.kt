@@ -32,11 +32,12 @@ class Prefs(val sp: SharedPreferences) {
         private const val LAST_LON = "last_longitude"
         private const val LAST_ACCURACY = "last_accuracy"
         const val SETTINGS_VERSION = "settings_version"
+        private const val ALWAYS_LOCATION_SEEN = "always_location_seen"
 
         /** Settings written by an older version than this are dropped, not migrated. */
         const val CURRENT_SETTINGS_VERSION = 4
 
-        /** dBZ thresholds, lowest first: drizzle, light rain, rain, intense rain, hail. */
+        /** dBZ thresholds, lowest first: drizzle, light rain, rain, intense rain, heavy rain. */
         val INTENSITIES = listOf(14, 20, 26, 36, 41)
         const val DEFAULT_INTENSITY = 20
         const val DEFAULT_AHEAD = 15
@@ -75,11 +76,13 @@ class Prefs(val sp: SharedPreferences) {
         get() = sp.getBoolean(MAP_ZOOM, false)
         set(value) = sp.edit { putBoolean(MAP_ZOOM, value) }
 
-    val baseLayer: String
+    var baseLayer: String
         get() = sp.getString(BASE_LAYER, null)?.takeIf { it in BASE_LAYERS } ?: "system"
+        set(value) = sp.edit { putString(BASE_LAYER, value) }
 
-    val radarColorMapping: String
+    var radarColorMapping: String
         get() = sp.getString(RADAR_COLOR_MAPPING, null)?.takeIf { it in COLOR_MAPPINGS } ?: "classic"
+        set(value) = sp.edit { putString(RADAR_COLOR_MAPPING, value) }
 
     /** The deployment chosen under Mode; read it through MeteocoolEnvironment.current. */
     var environment: String?
@@ -94,6 +97,11 @@ class Prefs(val sp: SharedPreferences) {
     var pushToken: String?
         get() = sp.getString(PUSH_TOKEN, null)?.takeIf { it.isNotEmpty() }
         set(value) = sp.edit { if (value == null) remove(PUSH_TOKEN) else putString(PUSH_TOKEN, value) }
+
+    /** "Allow all the time" was granted when last looked; see LocationPermissionWarning. */
+    var alwaysLocationSeen: Boolean
+        get() = sp.getBoolean(ALWAYS_LOCATION_SEEN, false)
+        set(value) = sp.edit { putBoolean(ALWAYS_LOCATION_SEEN, value) }
 
     var onboardingDone: Boolean
         get() = sp.getBoolean(ONBOARDING_DONE, false)

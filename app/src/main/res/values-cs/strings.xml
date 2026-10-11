@@ -58,9 +58,8 @@
     <string name="level_light">Slabý déšť</string>
     <string name="level_rain">Déšť</string>
     <string name="level_heavy_rain">Silný déšť</string>
-    <string name="level_hail">Kroupy</string>
-    <string name="notifications_explanation">Pokud chceš, upozorníme tě na blížící se srážky v místě, kde se právě nacházíš. Aby to fungovalo, musí se tvá poloha na pozadí odesílat na naše servery.</string>
-    <string name="meteorological_details_help">Zobrazit meteorologické detaily:\nPro pokročilé uživatele přidá do textu notifikace meteorologické detaily (například hodnoty dBZ).\n\nPráh intenzity:\nNotifikace přijde, jen pokud mají očekávané srážky alespoň tuto intenzitu.\n\nPředstih upozornění:\nJak dlouho předem chceš být na srážky upozorněn.</string>
+    <string name="notifications_explanation">Pokud chceš, upozorníme tě na srážky, které se blíží k místu, kde právě jsi. Aplikace k tomu na pozadí odesílá tvou polohu na naše servery.</string>
+    <string name="meteorological_details_help">Práh intenzity:\nUpozorní jen na srážky, které mají mít alespoň tuto intenzitu.\n\nPředstih upozornění:\nJak dlouho před srážkami chceš být upozorněn.</string>
     <string name="notification_permissions_title">Zkontrolovat oprávnění</string>
     <string name="notification_permissions_help">Upozornění na déšť potřebují notifikace a přístup k poloze. Pro upozornění na cestách při zavřené aplikaci nastav v nastavení přístup k poloze na „Povolit vždy“. Mapu můžeš používat i bez těchto oprávnění.</string>
     <string name="notification_sync_failed">Změny notifikací se nepodařilo odeslat na server. Upozornění možná stále používají tvé předchozí nastavení. Zkontroluj připojení a otevři aplikaci znovu.</string>
@@ -79,7 +78,7 @@
     <string name="colormap_classic">Klasická</string>
     <string name="colormap_homeyer">Homeyer (porucha barvocitu)</string>
     <string name="colormap_lang">Lang</string>
-    <string name="colormap_explanation">Mění barvy, kterými se srážky na mapě vykreslují.</string>
+    <string name="colormap_explanation">Mění barvy srážek na mapě. Každý pruh vede od mrholení vlevo po kroupy vpravo.\n\nKlasická:\nVlastní škála meteocool. Mrholení se postupně objevuje, pak modrá, zelená, žlutá a červená, a bílá až fialová pro kroupy.\n\nNWS Reflectivity:\nBarvy americké národní meteorologické služby. Podobná Klasické, ale mrholení je kreslené plně, ne postupně.\n\nPyArt StepSeq:\nZ radarové sady nástrojů Py-ART. Hnědé, zelené, modré a fialové pásy, každý od světlé po tmavou, takže vyniknou i malé rozdíly v intenzitě.\n\nHomeyer (porucha barvocitu):\nOd zelené přes žlutou a oranžovou po tmavě červenou, navržená tak, aby zůstala čitelná i při poruše barvocitu.\n\nLang:\nOd světle modré přes žlutou po hnědou, rovněž čitelná při poruše barvocitu.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">O aplikaci</string>
@@ -107,8 +106,24 @@
     <string name="source_noaa">Radar USA · volné dílo</string>
     <string name="source_blitzortung">Blesky</string>
     <string name="source_openmeteo">Srovnání modelů · CC BY 4.0</string>
-    <string name="source_copernicus">Satelitní snímky · obsahuje upravená data Copernicus Sentinel</string>
     <string name="source_osm">Mapová data · ODbL</string>
     <string name="source_protomaps">Mapové dlaždice</string>
+
+    <string name="level_intense_rain">Silnější déšť</string>
+    <string name="map_view_explanation">Otáčení mapy dvěma prsty:\nOtáčej mapou dvěma prsty. Když je vypnuté, sever zůstává vždy nahoře.\n\nAutomatické přiblížení po spuštění:\nPřiblíží mapu na tvou polohu pokaždé, když se aplikace otevře nebo vrátí do popředí. Vyžaduje přístup k poloze.</string>
+    <string name="basemap_system_explanation">Použije světlou nebo tmavou podle vzhledu zařízení. Vypni, chceš-li vybrat mapu sám.</string>
+    <string name="basemap_explanation">Všechny mapy jsou tlumené, aby radar zůstal čitelný.\n\nSvětlá a Tmavá:\nPevnina, voda, dálnice a hranice, málo dalšího.\n\nOpenStreetMap:\nJako klasická OpenStreetMap, s využitím území, všemi silnicemi, budovami a regionálními hranicemi.\n\nCyclOSM (cyklistika):\nNa ven: lesy a parky barevně, cesty a stezky zakreslené, dálnice upozaděné.</string>
+    <string name="source_eumetnet">Radar Švýcarsko, Francie, Česko a Polsko, získaný jeho prostřednictvím</string>
+    <string name="source_mapterhorn">Terén ve 3D mapě · otevřená výšková data, většinou CC BY 4.0. Klepnutím zobrazíš všechny zdroje.</string>
+    <string name="source_gorbachev">Ikony legendy</string>
+    <string name="location_permission_downgraded_title">Upozornění na déšť tě nesledují</string>
+    <string name="location_permission_downgraded_body">meteocool smí používat tvou polohu jen, když je otevřený, takže upozornění platí pro místo, kde jsi ho naposledy otevřel. Chceš-li upozornění všude, kde jsi, nastav v nastavení přístup k poloze na „Povolit vždy“.</string>
+    <string name="map_share">Sdílet</string>
+    <string name="show_radar">Zobrazit radarovou mapu</string>
+    <string name="open_source_header">Licence open source</string>
+    <string name="open_source_footer">Licence meteocool a softwaru, na kterém stojí. Klepnutím ji zobrazíš.</string>
+    <string name="licence_android_libraries">Knihovny Androidu</string>
+    <string name="licence_pyart">Barevné škály Py-ART</string>
+    <string name="licence_web_map">Knihovny webové mapy</string>
 
 </resources>

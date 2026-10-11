@@ -15,4 +15,9 @@
         <item name="tint">?attr/colorOnSurface</item>
     </style>
 
+    <!-- The settings sliders in the switches' turquoise rather than the black primary. -->
+    <style name="ThemeOverlay.Meteocool.Slider" parent="">
+        <item name="colorPrimary">@color/turquoise_cloud_0</item>
+    </style>
+
 </resources>

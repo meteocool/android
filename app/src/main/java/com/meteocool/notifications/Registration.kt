@@ -15,6 +15,8 @@ data class RegistrationSettings(
     val withDbz: Boolean,
     val experimental: Boolean,
     val lang: String,
+    /** "always", "whenInUse" or "denied", as iOS reports it. */
+    val locationPermission: String,
 )
 
 /**
@@ -80,5 +82,6 @@ object Registration {
         "withDBZ" to settings.withDbz,
         "experimental" to settings.experimental,
         "lang" to settings.lang,
+        "locationPermission" to settings.locationPermission,
     )
 }

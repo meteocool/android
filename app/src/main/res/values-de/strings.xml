@@ -58,9 +58,8 @@
     <string name="level_light">Leichter Regen</string>
     <string name="level_rain">Regen</string>
     <string name="level_heavy_rain">Starker Regen</string>
-    <string name="level_hail">Hagel</string>
-    <string name="notifications_explanation">Wenn Du möchtest, informieren wir Dich vorab über Niederschlag an dem Ort, an dem du dich aufhältst. Dafür muss die App im Hintergrund deinen Standort an unsere Server übermitteln. Standort-Daten werden nur zu diesem Zweck verwendet und nicht protokolliert oder weitergegeben. Mit der Benutzung dieser Funktion stimmst du unseren Datenschutzbestimmungen (s.u.) zu.</string>
-    <string name="meteorological_details_help">Meteorologische Details anzeigen:\nEs werden ausführlichere Informationen (z.B. dBZ-Werte) im Benachrichtigungstext angezeigt. Für Experten.\n\nSchwellenwert:\nBenachrichtigungen werden versandt, sobald die Regenintensität innerhalb des Vorabzeitraums mindestens diesem Schwellenwert entspricht.\n\nVorabzeitraum:\nGibt an, wie viele Minuten vor dem Eintreffen des Niederschlags frühestens benachrichtigt werden soll. Kürzere Zeiträume sind genauer.\n\nMit der Nutzung der Benachrichtigungen stimmst du unseren Datenschutzbestimmungen (s.u.) zu. Standort-Daten werden nicht protokolliert oder weitergegeben.</string>
+    <string name="notifications_explanation">Wenn du möchtest, warnen wir dich vor Niederschlag, der auf deinen aktuellen Standort zukommt. Dafür sendet die App deinen Standort im Hintergrund an unsere Server. Standort-Daten werden nur zu diesem Zweck verwendet und nicht protokolliert oder weitergegeben. Mit der Benutzung dieser Funktion stimmst du unseren Datenschutzbestimmungen (s.u.) zu.</string>
+    <string name="meteorological_details_help">Schwellenwert:\nBenachrichtigt nur bei Niederschlag, der voraussichtlich mindestens so stark ist.\n\nVorabzeitraum:\nWie lange vor dem Niederschlag du benachrichtigt werden möchtest. Kürzere Zeiträume sind genauer.\n\nMit der Nutzung der Benachrichtigungen stimmst du unseren Datenschutzbestimmungen (s.u.) zu. Standort-Daten werden nicht protokolliert oder weitergegeben.</string>
     <string name="notification_permissions_title">Berechtigungen prüfen</string>
     <string name="notification_permissions_help">Regenwarnungen benötigen Mitteilungen und Standortzugriff. Für Warnungen unterwegs bei geschlossener App stelle den Standortzugriff in den Einstellungen auf „Immer zulassen“. Die Karte kannst du auch ohne diese Berechtigungen nutzen.</string>
     <string name="notification_sync_failed">Die Mitteilungseinstellungen konnten nicht an den Server gesendet werden. Warnungen verwenden möglicherweise noch die bisherigen Einstellungen. Prüfe die Verbindung und öffne die App erneut.</string>
@@ -77,9 +76,9 @@
     <string name="system_detail">Derzeit %1$s</string>
     <string name="radar_color_map">Radar-Farbschema</string>
     <string name="colormap_classic">Klassisch</string>
-    <string name="colormap_homeyer">Homeyer (Achromasie)</string>
-    <string name="colormap_lang">Lang (Achromasie)</string>
-    <string name="colormap_explanation">Wechsle das Farbschema, um die Farbgebung der Reflektivitätssvisualisierung (Niederschlag) zu verändern.</string>
+    <string name="colormap_homeyer">Homeyer (Farbenfehlsichtigkeit)</string>
+    <string name="colormap_lang">Lang (Farbenfehlsichtigkeit)</string>
+    <string name="colormap_explanation">Ändert die Farbskala des Niederschlags auf der Karte. Jeder Balken reicht von Niesel links bis Hagel rechts.\n\nKlassisch:\nDie eigene von meteocool. Niesel wird eingeblendet, dann Blau, Grün, Gelb und Rot, und Weiß bis Lila für Hagel.\n\nNWS Reflectivity:\nDie Farben des US-Wetterdienstes. Ähnlich wie Klassisch, aber Niesel wird gleich deckend gezeichnet.\n\nPyArt StepSeq:\nAus dem Radar-Toolkit Py-ART. Braune, grüne, blaue und lila Bänder, jedes von hell nach dunkel, so fallen kleine Unterschiede in der Stärke auf.\n\nHomeyer (Farbenfehlsichtigkeit):\nVon Grün über Gelb und Orange zu Dunkelrot, gemacht, um auch bei Farbenfehlsichtigkeit lesbar zu bleiben.\n\nLang (Farbenfehlsichtigkeit):\nVon Hellblau über Gelb zu Braun, ebenfalls bei Farbenfehlsichtigkeit lesbar.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">Über</string>
@@ -107,8 +106,24 @@
     <string name="source_noaa">Radar USA · gemeinfrei</string>
     <string name="source_blitzortung">Blitze</string>
     <string name="source_openmeteo">Modellvergleich · CC BY 4.0</string>
-    <string name="source_copernicus">Satellitenbilder · enthält bearbeitete Copernicus-Sentinel-Daten</string>
     <string name="source_osm">Kartendaten · ODbL</string>
     <string name="source_protomaps">Kartenkacheln</string>
+
+    <string name="level_intense_rain">Stärkerer Regen</string>
+    <string name="map_view_explanation">Rotation der Karte:\nDreht die Karte mit zwei Fingern. Ausgeschaltet bleibt Norden immer oben.\n\nAuto-Zoom nach dem Start:\nZoomt auf deinen Standort, sobald die App startet oder wieder in den Vordergrund kommt. Benötigt Standortzugriff.</string>
+    <string name="basemap_system_explanation">Nimmt Hell oder Dunkel passend zum Erscheinungsbild deines Geräts. Ausschalten, um selbst eine Karte zu wählen.</string>
+    <string name="basemap_explanation">Alle Karten sind zurückhaltend gestaltet, damit das Radar lesbar bleibt.\n\nHell und Dunkel:\nLand, Wasser, Autobahnen und Grenzen, kaum mehr.\n\nOpenStreetMap:\nWie die klassische OpenStreetMap, mit Landnutzung, allen Straßen, Gebäuden und regionalen Grenzen.\n\nCyclOSM (Fahrrad):\nFür draußen: Wälder und Parks in Farbe, Feld- und Radwege eingezeichnet, Autobahnen zurückgenommen.</string>
+    <string name="source_eumetnet">Radar Schweiz, Frankreich, Tschechien und Polen, darüber bezogen</string>
+    <string name="source_mapterhorn">Gelände in der 3D-Karte · offene Höhendaten, meist CC BY 4.0. Tippe für alle Quellen.</string>
+    <string name="source_gorbachev">Legenden-Symbole</string>
+    <string name="location_permission_downgraded_title">Regenwarnungen folgen dir nicht</string>
+    <string name="location_permission_downgraded_body">meteocool darf deinen Standort nur verwenden, solange die App offen ist. Warnungen gelten deshalb für den Ort, an dem du sie zuletzt geöffnet hast. Für Warnungen überall stelle in den Einstellungen den Standortzugriff auf „Immer zulassen“.</string>
+    <string name="map_share">Teilen</string>
+    <string name="show_radar">Radarkarte zeigen</string>
+    <string name="open_source_header">Open-Source-Lizenzen</string>
+    <string name="open_source_footer">Die Lizenzen von meteocool und der Software, auf der es aufbaut. Tippe auf einen Eintrag, um sie zu lesen.</string>
+    <string name="licence_android_libraries">Android-Bibliotheken</string>
+    <string name="licence_pyart">Py-ART-Farbskalen</string>
+    <string name="licence_web_map">Bibliotheken der Webkarte</string>
 
 </resources>

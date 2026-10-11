@@ -58,9 +58,8 @@
     <string name="level_light">Pluie faible</string>
     <string name="level_rain">Pluie</string>
     <string name="level_heavy_rain">Pluie forte</string>
-    <string name="level_hail">Grêle</string>
-    <string name="notifications_explanation">Si vous le souhaitez, nous pouvons vous informer des précipitations à venir à votre position actuelle. Pour cela, votre position doit être envoyée à nos serveurs en arrière-plan.</string>
-    <string name="meteorological_details_help">Afficher les détails météorologiques :\nPour les utilisateurs avancés, ajoute des détails météorologiques au texte de la notification (comme les valeurs en dBZ).\n\nSeuil d\'intensité :\nN\'envoyer une notification que si les précipitations attendues sont au moins aussi intenses.\n\nDélai d\'avertissement :\nCombien de temps à l\'avance vous souhaitez être averti des précipitations.</string>
+    <string name="notifications_explanation">Si vous le souhaitez, nous pouvons vous avertir des précipitations qui arrivent sur votre position actuelle. Pour cela, l\'application envoie votre position à nos serveurs en arrière-plan.</string>
+    <string name="meteorological_details_help">Seuil d\'intensité :\nNe prévenir que des précipitations attendues au moins aussi intenses.\n\nDélai d\'avertissement :\nCombien de temps avant les précipitations vous souhaitez être averti.</string>
     <string name="notification_permissions_title">Vérifier les autorisations</string>
     <string name="notification_permissions_help">Les alertes pluie nécessitent les notifications et l\'accès à la position. Pour être alerté en déplacement quand l\'application est fermée, réglez l\'accès à la position sur « Toujours autoriser » dans les paramètres. Vous pouvez utiliser la carte sans ces autorisations.</string>
     <string name="notification_sync_failed">Les modifications des notifications n\'ont pas pu être envoyées au serveur. Les alertes utilisent peut-être encore vos anciens réglages. Vérifiez votre connexion et rouvrez l\'application pour réessayer.</string>
@@ -79,7 +78,7 @@
     <string name="colormap_classic">Classique</string>
     <string name="colormap_homeyer">Homeyer (daltonisme)</string>
     <string name="colormap_lang">Lang</string>
-    <string name="colormap_explanation">Change les couleurs utilisées pour afficher les précipitations sur la carte.</string>
+    <string name="colormap_explanation">Change les couleurs des précipitations sur la carte. Chaque barre va de la bruine à gauche à la grêle à droite.\n\nClassique :\nLa palette de meteocool. La bruine apparaît en fondu, puis bleu, vert, jaune et rouge, et du blanc au violet pour la grêle.\n\nNWS Reflectivity :\nLes couleurs du service météorologique national des États-Unis. Proche de Classique, mais la bruine est dessinée pleine au lieu d\'apparaître en fondu.\n\nPyArt StepSeq :\nIssue de la boîte à outils radar Py-ART. Des bandes brunes, vertes, bleues et violettes, chacune du clair au foncé, pour que les petites variations d\'intensité ressortent.\n\nHomeyer (daltonisme) :\nDu vert au rouge foncé en passant par le jaune et l\'orange, conçue pour rester lisible en cas de daltonisme.\n\nLang :\nDu bleu clair au brun en passant par le jaune, elle aussi lisible en cas de daltonisme.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">À propos</string>
@@ -107,8 +106,24 @@
     <string name="source_noaa">Radar États-Unis · domaine public</string>
     <string name="source_blitzortung">Foudre</string>
     <string name="source_openmeteo">Comparaison des modèles · CC BY 4.0</string>
-    <string name="source_copernicus">Images satellite · contient des données Copernicus Sentinel modifiées</string>
     <string name="source_osm">Données cartographiques · ODbL</string>
     <string name="source_protomaps">Tuiles de la carte</string>
+
+    <string name="level_intense_rain">Pluie assez forte</string>
+    <string name="map_view_explanation">Rotation de la carte à deux doigts :\nTournez la carte avec deux doigts. Désactivée, le nord reste toujours en haut.\n\nZoom automatique au démarrage :\nZoome sur votre position chaque fois que l\'application s\'ouvre ou revient au premier plan. Nécessite l\'accès à la position.</string>
+    <string name="basemap_system_explanation">Utilise Clair ou Sombre selon l\'apparence de votre appareil. Désactivez-le pour choisir une carte vous-même.</string>
+    <string name="basemap_explanation">Toutes les cartes restent discrètes pour que le radar reste lisible.\n\nClair et Sombre :\nTerres, eau, autoroutes et frontières, guère plus.\n\nOpenStreetMap :\nComme l\'OpenStreetMap classique, avec l\'occupation du sol, toutes les routes, les bâtiments et les limites régionales.\n\nCyclOSM (vélo) :\nPour le plein air : forêts et parcs en couleur, chemins et sentiers dessinés, autoroutes en retrait.</string>
+    <string name="source_eumetnet">Radar Suisse, France, Tchéquie et Pologne, fournis par ce biais</string>
+    <string name="source_mapterhorn">Relief de la carte 3D · données d\'altitude ouvertes, surtout CC BY 4.0. Touchez pour voir toutes les sources.</string>
+    <string name="source_gorbachev">Icônes de la légende</string>
+    <string name="location_permission_downgraded_title">Les alertes pluie ne vous suivent pas</string>
+    <string name="location_permission_downgraded_body">meteocool ne peut utiliser votre position que lorsqu\'il est ouvert : les alertes portent donc sur l\'endroit où vous l\'avez ouvert pour la dernière fois. Pour des alertes où que vous soyez, réglez l\'accès à la position sur « Toujours autoriser » dans les paramètres.</string>
+    <string name="map_share">Partager</string>
+    <string name="show_radar">Afficher la carte radar</string>
+    <string name="open_source_header">Licences open source</string>
+    <string name="open_source_footer">Les licences de meteocool et des logiciels sur lesquels il repose. Touchez-en une pour la lire.</string>
+    <string name="licence_android_libraries">Bibliothèques Android</string>
+    <string name="licence_pyart">Palettes de couleurs Py-ART</string>
+    <string name="licence_web_map">Bibliothèques de la carte web</string>
 
 </resources>

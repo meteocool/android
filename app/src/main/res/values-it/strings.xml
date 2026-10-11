@@ -58,9 +58,8 @@
     <string name="level_light">Pioggia debole</string>
     <string name="level_rain">Pioggia</string>
     <string name="level_heavy_rain">Pioggia forte</string>
-    <string name="level_hail">Grandine</string>
-    <string name="notifications_explanation">Se vuoi, possiamo avvisarti delle precipitazioni in arrivo nella tua posizione attuale. Per questo la tua posizione deve essere inviata ai nostri server in background.</string>
-    <string name="meteorological_details_help">Mostra dettagli meteorologici:\nPer utenti esperti, aggiunge dettagli meteorologici al testo della notifica (come i valori in dBZ).\n\nSoglia di intensità:\nInvia una notifica solo se le precipitazioni in arrivo dovrebbero essere almeno così intense.\n\nAnticipo dell\'avviso:\nQuanto tempo prima vuoi essere avvisato delle precipitazioni.</string>
+    <string name="notifications_explanation">Se vuoi, possiamo avvisarti delle precipitazioni in arrivo sulla tua posizione attuale. Per questo l\'app invia la tua posizione ai nostri server in background.</string>
+    <string name="meteorological_details_help">Soglia di intensità:\nAvvisa solo delle precipitazioni previste almeno così intense.\n\nAnticipo dell\'avviso:\nQuanto tempo prima delle precipitazioni vuoi essere avvisato.</string>
     <string name="notification_permissions_title">Controlla i permessi</string>
     <string name="notification_permissions_help">Gli avvisi pioggia richiedono le notifiche e l\'accesso alla posizione. Per ricevere avvisi in movimento con l\'app chiusa, imposta l\'accesso alla posizione su «Consenti sempre» nelle impostazioni. Puoi usare la mappa anche senza questi permessi.</string>
     <string name="notification_sync_failed">Le modifiche alle notifiche non sono arrivate al server. Gli avvisi potrebbero usare ancora le impostazioni precedenti. Controlla la connessione e riapri l\'app per riprovare.</string>
@@ -79,7 +78,7 @@
     <string name="colormap_classic">Classica</string>
     <string name="colormap_homeyer">Homeyer (daltonismo)</string>
     <string name="colormap_lang">Lang</string>
-    <string name="colormap_explanation">Cambia i colori con cui le precipitazioni sono disegnate sulla mappa.</string>
+    <string name="colormap_explanation">Cambia i colori delle precipitazioni sulla mappa. Ogni barra va dalla pioviggine a sinistra alla grandine a destra.\n\nClassica:\nLa scala di meteocool. La pioviggine compare in dissolvenza, poi blu, verde, giallo e rosso, e dal bianco al viola per la grandine.\n\nNWS Reflectivity:\nI colori del servizio meteorologico nazionale degli Stati Uniti. Simile a Classica, ma la pioviggine è disegnata piena invece che in dissolvenza.\n\nPyArt StepSeq:\nDal toolkit radar Py-ART. Fasce marroni, verdi, blu e viola, ciascuna dal chiaro allo scuro, così risaltano anche piccole differenze di intensità.\n\nHomeyer (daltonismo):\nDal verde al rosso scuro passando per giallo e arancione, pensata per restare leggibile con il daltonismo.\n\nLang:\nDall\'azzurro al marrone passando per il giallo, anch\'essa leggibile con il daltonismo.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">Informazioni</string>
@@ -107,8 +106,24 @@
     <string name="source_noaa">Radar Stati Uniti · pubblico dominio</string>
     <string name="source_blitzortung">Fulmini</string>
     <string name="source_openmeteo">Confronto dei modelli · CC BY 4.0</string>
-    <string name="source_copernicus">Immagini satellitari · contiene dati Copernicus Sentinel modificati</string>
     <string name="source_osm">Dati della mappa · ODbL</string>
     <string name="source_protomaps">Tasselli della mappa</string>
+
+    <string name="level_intense_rain">Pioggia sostenuta</string>
+    <string name="map_view_explanation">Rotazione della mappa con due dita:\nRuota la mappa con due dita. Se disattivata, il nord resta sempre in alto.\n\nZoom automatico all\'avvio:\nIngrandisce sulla tua posizione ogni volta che l\'app si apre o torna in primo piano. Richiede l\'accesso alla posizione.</string>
+    <string name="basemap_system_explanation">Usa Chiara o Scura in base all\'aspetto del dispositivo. Disattivalo per scegliere tu una mappa.</string>
+    <string name="basemap_explanation">Tutte le mappe sono sobrie, perché il radar resti leggibile.\n\nChiara e Scura:\nTerra, acqua, autostrade e confini, poco altro.\n\nOpenStreetMap:\nCome la classica OpenStreetMap, con uso del suolo, tutte le strade, gli edifici e i confini regionali.\n\nCyclOSM (bici):\nPer chi sta all\'aperto: boschi e parchi a colori, sentieri e piste disegnati, autostrade in secondo piano.</string>
+    <string name="source_eumetnet">Radar Svizzera, Francia, Cechia e Polonia, forniti tramite questo servizio</string>
+    <string name="source_mapterhorn">Rilievo della mappa 3D · dati altimetrici aperti, per lo più CC BY 4.0. Tocca per tutte le fonti.</string>
+    <string name="source_gorbachev">Icone della legenda</string>
+    <string name="location_permission_downgraded_title">Gli avvisi pioggia non ti seguono</string>
+    <string name="location_permission_downgraded_body">meteocool può usare la tua posizione solo mentre è aperto, quindi gli avvisi riguardano il luogo in cui l\'hai aperto l\'ultima volta. Per avvisi ovunque tu sia, imposta l\'accesso alla posizione su «Consenti sempre» nelle impostazioni.</string>
+    <string name="map_share">Condividi</string>
+    <string name="show_radar">Mostra la mappa radar</string>
+    <string name="open_source_header">Licenze open source</string>
+    <string name="open_source_footer">Le licenze di meteocool e del software su cui si basa. Toccane una per leggerla.</string>
+    <string name="licence_android_libraries">Librerie Android</string>
+    <string name="licence_pyart">Scale di colori Py-ART</string>
+    <string name="licence_web_map">Librerie della mappa web</string>
 
 </resources>

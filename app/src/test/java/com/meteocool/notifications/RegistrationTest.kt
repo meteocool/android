@@ -26,6 +26,7 @@ class RegistrationTest {
         withDbz = true,
         experimental = false,
         lang = "en",
+        locationPermission = "always",
     )
 
     @Test
@@ -39,6 +40,7 @@ class RegistrationTest {
         assertEquals(true, body["details"])
         assertEquals("android", body["source"])
         assertEquals("en", body["lang"])
+        assertEquals("always", body["locationPermission"])
         assertEquals("a".repeat(64), body["token"])
         assertEquals(false, body["experimental"])
         assertEquals(-1.0, body["speed"])

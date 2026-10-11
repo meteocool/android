@@ -3,6 +3,7 @@ package com.meteocool.notifications
 import android.content.Context
 import android.os.SystemClock
 import com.meteocool.environment.MeteocoolEnvironment
+import com.meteocool.location.LocationPermissionWarning
 import com.meteocool.location.MeteocoolLocation
 import com.meteocool.network.ApiClient
 import com.meteocool.network.ApiClient.Endpoint
@@ -74,6 +75,7 @@ class RegistrationManager(
         withDbz = prefs.withDbz,
         experimental = MeteocoolEnvironment.current == MeteocoolEnvironment.STAGING,
         lang = Registration.lang(Locale.getDefault().language),
+        locationPermission = LocationPermissionWarning.reported(context),
     )
 
     private fun isFresh(fix: MeteocoolLocation) = Registration.isFresh(fix, SystemClock.elapsedRealtimeNanos())

@@ -19,6 +19,7 @@ import com.meteocool.app.app
 import com.meteocool.databinding.ActivityMeteocoolBinding
 import com.meteocool.environment.MeteocoolEnvironment
 import com.meteocool.location.BackgroundLocationWorker
+import com.meteocool.location.LocationPermissionWarning
 import com.meteocool.notifications.Notifications
 import com.meteocool.ui.map.MapViewModel
 import com.meteocool.ui.map.SharedLink
@@ -40,10 +41,12 @@ class MeteocoolActivity : AppCompatActivity() {
     private val mapViewModel: MapViewModel by viewModels()
 
     private var demoNotice: Dialog? = null
+    private var locationWarning: Dialog? = null
 
-    /** Settings, even part-way open, or the demo notice is over the map. */
+    /** Settings, even part-way open, the demo notice or the location warning is over the map. */
     val coversMap: Boolean
-        get() = binding.drawerLayout.isDrawerVisible(GravityCompat.START) || demoNotice?.isShowing == true
+        get() = binding.drawerLayout.isDrawerVisible(GravityCompat.START) ||
+            demoNotice?.isShowing == true || locationWarning?.isShowing == true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -129,6 +132,10 @@ class MeteocoolActivity : AppCompatActivity() {
         Notifications.clearAll(this)
         if (app.prefs.pushToken != null) app.registration.acknowledge("foreground")
         presentDemoNoticeIfNeeded()
+        // One alert at a time; the warning waits for the next return.
+        if (demoNotice?.isShowing != true && locationWarning?.isShowing != true) {
+            locationWarning = LocationPermissionWarning.showIfNeeded(this)
+        }
     }
 
     override fun onStop() {

@@ -1,0 +1,23 @@
+AndroidX (Core, AppCompat, Activity, Fragment, ConstraintLayout, DrawerLayout,
+Preference, WebKit, Lifecycle, WorkManager)
+Copyright The Android Open Source Project
+
+Material Components for Android
+Copyright Google LLC
+
+Kotlin Standard Library
+Copyright JetBrains s.r.o. and Kotlin Programming Language contributors
+
+kotlinx.coroutines
+Copyright JetBrains s.r.o. and contributors
+
+Gson
+Copyright 2008 Google Inc.
+
+Timber
+Copyright 2013 Jake Wharton
+
+Firebase Cloud Messaging (Google Play builds only)
+Copyright Google LLC
+
+All of them are licensed under the Apache License, Version 2.0:

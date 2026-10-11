@@ -5,8 +5,8 @@
         <item>@string/level_drizzle</item>
         <item>@string/level_light</item>
         <item>@string/level_rain</item>
+        <item>@string/level_intense_rain</item>
         <item>@string/level_heavy_rain</item>
-        <item>@string/level_hail</item>
     </string-array>
 
     <string-array name="notification_intensity_values" translatable="false">

@@ -2,6 +2,7 @@ package com.meteocool.preferences
 
 import android.Manifest
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
@@ -23,13 +24,14 @@ import androidx.core.text.inSpans
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.gson.Gson
 import com.meteocool.BuildConfig
 import com.meteocool.R
 import com.meteocool.app.app
@@ -37,6 +39,7 @@ import com.meteocool.environment.MeteocoolEnvironment
 import com.meteocool.permissions.PermUtils
 import com.meteocool.push.PushSupport
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.Locale
 
 /**
@@ -46,6 +49,9 @@ import java.util.Locale
 class SettingsFragment : PreferenceFragmentCompat() {
 
     private class DataSource(val name: String, @param:StringRes val detail: Int, val url: String)
+
+    /** One entry of assets/licences.json: the notice a piece of software's licence asks to reproduce. */
+    private class Licence(val name: String, val licence: String, val text: String)
 
     companion object {
         private const val GITHUB_URL = "https://github.com/meteocool/android"
@@ -63,13 +69,22 @@ class SettingsFragment : PreferenceFragmentCompat() {
             DataSource("© Météo-France", R.string.source_meteofrance, "https://www.etalab.gouv.fr/licence-ouverte-open-licence/"),
             DataSource("© Český hydrometeorologický ústav (ČHMÚ)", R.string.source_chmi, "https://www.chmi.cz/o-chmu/caste-dotazy-faq/open-data"),
             DataSource("© IMGW-PIB", R.string.source_imgw, "https://danepubliczne.imgw.pl/regulations"),
+            DataSource("EUMETNET Open Radar Data", R.string.source_eumetnet, "https://eumetnet.github.io/openradardata-documentation/"),
             DataSource("NOAA / National Weather Service", R.string.source_noaa, "https://www.weather.gov/disclaimer"),
-            DataSource("© Blitzortung.org", R.string.source_blitzortung, "https://www.blitzortung.org/"),
+            DataSource("© Blitzortung.org and its contributors", R.string.source_blitzortung, "https://www.blitzortung.org/"),
             DataSource("© Open-Meteo.com", R.string.source_openmeteo, "https://open-meteo.com/en/licence"),
-            DataSource("Copernicus Sentinel · © OroraTech", R.string.source_copernicus, "https://sentinels.copernicus.eu/documents/247904/690755/Sentinel_Data_Legal_Notice"),
             DataSource("© OpenStreetMap contributors", R.string.source_osm, "https://www.openstreetmap.org/copyright"),
             DataSource("© Protomaps", R.string.source_protomaps, "https://protomaps.com"),
+            DataSource("© Mapterhorn", R.string.source_mapterhorn, "https://mapterhorn.com/attribution"),
             DataSource("Freepik · Flaticon", R.string.source_freepik, "https://www.flaticon.com"),
+            DataSource("Vitaly Gorbachev · Flaticon", R.string.source_gorbachev, "https://www.flaticon.com/authors/vitaly-gorbachev"),
+        )
+
+        /** The names in assets/licences.json (scripts/licences.py) that are translated. */
+        private val LICENCE_NAMES = mapOf(
+            "Android Libraries" to R.string.licence_android_libraries,
+            "Py-ART Colour Maps" to R.string.licence_pyart,
+            "Web Map Libraries" to R.string.licence_web_map,
         )
     }
 
@@ -108,6 +123,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setUpMap()
         setUpAbout()
         setUpDataSources()
+        setUpLicences()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -238,21 +254,128 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
         }
 
-        // "Match System" also says which of the two it currently is.
-        findPreference<ListPreference>(Prefs.BASE_LAYER)?.summaryProvider =
-            Preference.SummaryProvider<ListPreference> { preference ->
-                val entry = preference.entry ?: getString(R.string.basemap_system)
-                if (preference.value == "system" || preference.value == null) {
-                    val dark = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
-                        Configuration.UI_MODE_NIGHT_YES
-                    // Mid-sentence: "Currently light", "Derzeit dunkel".
-                    val current = getString(if (dark) R.string.basemap_dark else R.string.basemap_light)
-                        .lowercase(ConfigurationCompat.getLocales(resources.configuration)[0] ?: Locale.getDefault())
-                    "$entry · ${getString(R.string.system_detail, current)}"
-                } else {
-                    entry
-                }
+        findPreference<Preference>(Prefs.BASE_LAYER)?.setOnPreferenceClickListener {
+            showBaseMapPicker()
+            true
+        }
+        findPreference<Preference>(Prefs.RADAR_COLOR_MAPPING)?.setOnPreferenceClickListener {
+            showColorMapPicker()
+            true
+        }
+        updateMapSummaries()
+    }
+
+    private val systemLayer: String
+        get() = if ((resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) "dark" else "light"
+
+    private fun entryFor(values: Int, entries: Int, value: String): String {
+        val index = resources.getStringArray(values).indexOf(value).coerceAtLeast(0)
+        return resources.getStringArray(entries)[index]
+    }
+
+    /** "Currently light", "Derzeit dunkel": which of the two Match System picks now. */
+    private fun systemDetail(): String {
+        val current = getString(if (systemLayer == "dark") R.string.basemap_dark else R.string.basemap_light)
+            .lowercase(ConfigurationCompat.getLocales(resources.configuration)[0] ?: Locale.getDefault())
+        return getString(R.string.system_detail, current)
+    }
+
+    private fun updateMapSummaries() {
+        findPreference<Preference>(Prefs.BASE_LAYER)?.summary = prefs.baseLayer.let { layer ->
+            val entry = entryFor(R.array.base_layer_values, R.array.base_layer_entries, layer)
+            if (layer == "system") "$entry · ${systemDetail()}" else entry
+        }
+        findPreference<Preference>(Prefs.RADAR_COLOR_MAPPING)?.summary =
+            entryFor(R.array.radar_color_mapping_values, R.array.radar_color_mapping_entries, prefs.radarColorMapping)
+    }
+
+    /** A choice's title with a smaller grey line under it, as in the Mode picker. */
+    private fun twoLines(context: Context, title: String, detail: String): CharSequence {
+        val secondary = MaterialColors.getColor(context, android.R.attr.textColorSecondary, 0)
+        return SpannableStringBuilder(title).append("\n").apply {
+            inSpans(ForegroundColorSpan(secondary), RelativeSizeSpan(0.875f)) { append(detail) }
+        }
+    }
+
+    /**
+     * Base Map Layer: Match System is a switch above the four maps, and greys
+     * them out while on, as on iOS. Turning it off goes back to the map picked
+     * last, or to the one the system shows now.
+     */
+    private fun showBaseMapPicker() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val context = builder.context
+        val inflater = LayoutInflater.from(context)
+        val view = inflater.inflate(R.layout.dialog_base_map, null)
+        val matchSystem = view.findViewById<SwitchMaterial>(R.id.matchSystem)
+        val choices = view.findViewById<RadioGroup>(R.id.choices)
+        val values = resources.getStringArray(R.array.base_layer_values).drop(1)
+        val names = resources.getStringArray(R.array.base_layer_entries).drop(1)
+        var manual = prefs.baseLayer.takeIf { it in values } ?: systemLayer
+
+        matchSystem.text = twoLines(context, getString(R.string.basemap_system), systemDetail())
+        val buttons = values.mapIndexed { index, value ->
+            (inflater.inflate(R.layout.dialog_choice, choices, false) as RadioButton).apply {
+                id = View.generateViewId()
+                text = names[index]
+                choices.addView(this)
+                setOnCheckedChangeListener { _, checked -> if (checked) manual = value }
             }
+        }
+        fun render(following: Boolean) {
+            buttons.forEach { it.isEnabled = !following }
+            if (following) choices.clearCheck() else choices.check(buttons[values.indexOf(manual)].id)
+        }
+        matchSystem.isChecked = prefs.baseLayer == "system"
+        render(matchSystem.isChecked)
+        matchSystem.setOnCheckedChangeListener { _, checked -> render(checked) }
+
+        builder
+            .setTitle(R.string.base_map_layer)
+            .setView(view)
+            .setNegativeButton(android.R.string.cancel, null)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                prefs.baseLayer = if (matchSystem.isChecked) "system" else manual
+                updateMapSummaries()
+            }
+            .show()
+    }
+
+    /** Radar Color Map: each palette with its colour bar, drizzle to hail, and what it is for. */
+    private fun showColorMapPicker() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val context = builder.context
+        val inflater = LayoutInflater.from(context)
+        val view = inflater.inflate(R.layout.dialog_choices, null)
+        val choices = view.findViewById<RadioGroup>(R.id.choices)
+        val values = resources.getStringArray(R.array.radar_color_mapping_values)
+        val names = resources.getStringArray(R.array.radar_color_mapping_entries)
+        val density = resources.displayMetrics.density
+        val outline = MaterialColors.getColor(context, com.google.android.material.R.attr.colorOnSurface, 0) and 0x33FFFFFF
+        var selection = prefs.radarColorMapping
+
+        values.forEachIndexed { index, value ->
+            val choice = inflater.inflate(R.layout.dialog_choice, choices, false) as RadioButton
+            choice.id = View.generateViewId()
+            choice.text = names[index]
+            val bar = ColorBarDrawable(value, (88 * density).toInt(), (14 * density).toInt(), 4 * density, outline)
+            bar.setBounds(0, 0, bar.intrinsicWidth, bar.intrinsicHeight)
+            choice.setCompoundDrawablesRelative(bar, null, null, null)
+            choice.compoundDrawablePadding = (12 * density).toInt()
+            choices.addView(choice)
+            if (value == selection) choices.check(choice.id)
+            choice.setOnCheckedChangeListener { _, checked -> if (checked) selection = value }
+        }
+        view.findViewById<TextView>(R.id.footer).setText(R.string.colormap_explanation)
+        builder
+            .setTitle(R.string.radar_color_map)
+            .setView(view)
+            .setNegativeButton(android.R.string.cancel, null)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                prefs.radarColorMapping = selection
+                updateMapSummaries()
+            }
+            .show()
     }
 
     /* ---- about ---------------------------------------------------------- */
@@ -298,16 +421,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // The dialog's theme, for the padding and colours of the view below.
         val context = builder.context
         var selection = MeteocoolEnvironment.current
-        val secondary = MaterialColors.getColor(context, android.R.attr.textColorSecondary, 0)
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.dialog_choices, null)
         val choices = view.findViewById<RadioGroup>(R.id.choices)
         MeteocoolEnvironment.entries.forEach { environment ->
             val choice = inflater.inflate(R.layout.dialog_choice, choices, false) as RadioButton
             choice.id = View.generateViewId()
-            choice.text = SpannableStringBuilder(getString(modeTitle(environment))).append("\n").apply {
-                inSpans(ForegroundColorSpan(secondary), RelativeSizeSpan(0.875f)) { append(getString(modeDetail(environment))) }
-            }
+            choice.text = twoLines(context, getString(modeTitle(environment)), getString(modeDetail(environment)))
             choices.addView(choice)
             if (environment == selection) choices.check(choice.id)
             choice.setOnCheckedChangeListener { _, checked -> if (checked) selection = environment }
@@ -340,6 +460,46 @@ class SettingsFragment : PreferenceFragmentCompat() {
             setSummary(R.string.data_sources_footer)
             isSelectable = false
         })
+    }
+
+    /* ---- open-source licences ------------------------------------------- */
+
+    /** Settings ends with the licences, from assets/licences.json, which scripts/licences.py writes. */
+    private fun setUpLicences() {
+        val category = findPreference<PreferenceCategory>("licences") ?: return
+        val context = preferenceManager.context
+        val licences = try {
+            context.assets.open("licences.json").bufferedReader().use {
+                Gson().fromJson(it, Array<Licence>::class.java).toList()
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "licences.json missing or malformed")
+            emptyList()
+        }
+        licences.forEach { licence ->
+            category.addPreference(Preference(context).apply {
+                title = LICENCE_NAMES[licence.name]?.let { getString(it) } ?: licence.name
+                summary = licence.licence
+                isIconSpaceReserved = false
+                isSingleLineTitle = false
+                setOnPreferenceClickListener {
+                    showLicence(title.toString(), licence.text)
+                    true
+                }
+            })
+        }
+        category.addPreference(Preference(context).apply {
+            layoutResource = R.layout.preference_footer
+            setSummary(R.string.open_source_footer)
+            isSelectable = false
+        })
+    }
+
+    private fun showLicence(title: String, text: String) {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val view = LayoutInflater.from(builder.context).inflate(R.layout.dialog_licence, null)
+        view.findViewById<TextView>(R.id.text).text = text
+        builder.setTitle(title).setView(view).setPositiveButton(android.R.string.ok, null).show()
     }
 
     private fun open(url: String): Boolean = launch(Intent(Intent.ACTION_VIEW, url.toUri()))

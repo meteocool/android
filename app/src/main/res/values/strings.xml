@@ -60,10 +60,9 @@
     <string name="level_drizzle">Drizzle</string>
     <string name="level_light">Light rain</string>
     <string name="level_rain">Rain</string>
-    <string name="level_heavy_rain">Intense Rain</string>
-    <string name="level_hail">Hail</string>
-    <string name="notifications_explanation">If you want, we can inform you about upcoming precipitation at your current location. Your location needs to be sent to our servers in the background for this to work.</string>
-    <string name="meteorological_details_help">Show Meteorological Details:\nFor advanced users, include meteorological details in the notification text (like dBZ values).\n\nIntensity Threshold:\nOnly send a notification if incoming precipitation is expected to be at least this intense.\n\nNotification Timeframe:\nChange the amount of time before you want to be notified about precipitation.</string>
+    <string name="level_heavy_rain">Heavy rain</string>
+    <string name="notifications_explanation">If you like, we can warn you about precipitation coming to your current location. For this, the app sends your location to our servers in the background.</string>
+    <string name="meteorological_details_help">Intensity Threshold:\nNotify only about precipitation expected to be at least this intense.\n\nNotification Timeframe:\nHow far ahead of the precipitation you want to be notified.</string>
     <string name="notification_permissions_title">Check Permissions</string>
     <string name="notification_permissions_help">Rain alerts need notifications and location access. For alerts as you move while the app is closed, set location access to \"Allow all the time\" in Settings. You can still browse the map without these permissions.</string>
     <string name="notification_sync_failed">Notification changes could not reach the server. Alerts may still use your previous settings. Check your connection and reopen the app to retry.</string>
@@ -85,7 +84,7 @@
     <string name="colormap_pyart_stepseq" translatable="false">PyArt StepSeq</string>
     <string name="colormap_homeyer">Homeyer (Color Vision Deficiency)</string>
     <string name="colormap_lang">Lang</string>
-    <string name="colormap_explanation">Change the colormap to change the color scheme of the precipitation visualization on the map.</string>
+    <string name="colormap_explanation">Changes the colormap of the precipitation on the map. Each bar runs from drizzle on the left to hail on the right.\n\nClassic:\nmeteocool\'s own. Drizzle fades in, then blue, green, yellow and red, and white to purple for hail.\n\nNWS Reflectivity:\nThe US National Weather Service\'s colors. Close to Classic, but drizzle is drawn solid instead of fading in.\n\nPyArt StepSeq:\nFrom the Py-ART radar toolkit. Brown, green, blue and purple bands, each from light to dark, so small changes in intensity stand out.\n\nHomeyer (Color Vision Deficiency):\nGreen through yellow and orange to dark red, made to stay readable with color vision deficiency.\n\nLang:\nLight blue through yellow to brown, also readable with color vision deficiency.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">About</string>
@@ -114,9 +113,25 @@
     <string name="source_noaa">Radar United States · public domain</string>
     <string name="source_blitzortung">Lightning</string>
     <string name="source_openmeteo">Model comparison · CC BY 4.0</string>
-    <string name="source_copernicus">Satellite imagery · contains modified Copernicus Sentinel data</string>
     <string name="source_osm">Base map data · ODbL</string>
     <string name="source_protomaps">Base map tiles</string>
     <string name="source_freepik" translatable="false">Artwork designed by Freepik from Flaticon</string>
+
+    <string name="level_intense_rain">Intense rain</string>
+    <string name="map_view_explanation">Two-Finger Map Rotation:\nTurn the map with two fingers. When off, north always stays up.\n\nAuto-Zoom After Start:\nZoom to your location whenever the app opens or comes back to the foreground. Needs location access.</string>
+    <string name="basemap_system_explanation">Uses Light or Dark to match your phone\'s appearance. Turn it off to pick a map yourself.</string>
+    <string name="basemap_explanation">All maps are kept muted so the radar stays readable.\n\nLight and Dark:\nLand, water, motorways and borders, little else.\n\nOpenStreetMap:\nLike the classic OpenStreetMap, with land use, all roads, buildings and regional borders.\n\nCyclOSM (Biking):\nFor outdoors: forests and parks in color, tracks and paths drawn, motorways pushed back.</string>
+    <string name="source_eumetnet">Radar Switzerland, France, Czechia and Poland, delivered through it</string>
+    <string name="source_mapterhorn">Terrain in the 3D map · open elevation data, mostly CC BY 4.0. Tap for every source.</string>
+    <string name="source_gorbachev">Legend icons</string>
+    <string name="location_permission_downgraded_title">Rain Alerts Can\'t Follow You</string>
+    <string name="location_permission_downgraded_body">meteocool may only use your location while it is open, so rain alerts are for where you last opened it. For alerts wherever you are, set location access to \"Allow all the time\" in Settings.</string>
+    <string name="map_share">Share</string>
+    <string name="show_radar">Show the radar map</string>
+    <string name="open_source_header">Open Source Licenses</string>
+    <string name="open_source_footer">The licenses of meteocool and of the software it is built on. Tap one to read it.</string>
+    <string name="licence_android_libraries">Android Libraries</string>
+    <string name="licence_pyart">Py-ART Colour Maps</string>
+    <string name="licence_web_map">Web Map Libraries</string>
 
 </resources>

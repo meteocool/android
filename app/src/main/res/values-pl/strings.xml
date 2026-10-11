@@ -58,9 +58,8 @@
     <string name="level_light">Słaby deszcz</string>
     <string name="level_rain">Deszcz</string>
     <string name="level_heavy_rain">Silny deszcz</string>
-    <string name="level_hail">Grad</string>
-    <string name="notifications_explanation">Jeśli chcesz, możemy ostrzegać cię o nadchodzących opadach w miejscu, w którym jesteś. Aby to działało, twoja lokalizacja musi być wysyłana w tle na nasze serwery.</string>
-    <string name="meteorological_details_help">Pokaż szczegóły meteorologiczne:\nDla zaawansowanych: dodaje do treści powiadomienia szczegóły meteorologiczne (np. wartości dBZ).\n\nPróg intensywności:\nPowiadomienie przychodzi tylko wtedy, gdy nadchodzące opady mają być co najmniej tak intensywne.\n\nWyprzedzenie ostrzeżenia:\nIle czasu przed opadami chcesz dostać ostrzeżenie.</string>
+    <string name="notifications_explanation">Jeśli chcesz, możemy ostrzegać cię przed opadami zbliżającymi się do miejsca, w którym jesteś. W tym celu aplikacja wysyła w tle twoją lokalizację na nasze serwery.</string>
+    <string name="meteorological_details_help">Próg intensywności:\nOstrzega tylko przed opadami, które mają być co najmniej tak intensywne.\n\nWyprzedzenie ostrzeżenia:\nIle czasu przed opadami chcesz dostać ostrzeżenie.</string>
     <string name="notification_permissions_title">Sprawdź uprawnienia</string>
     <string name="notification_permissions_help">Ostrzeżenia przed deszczem wymagają powiadomień i dostępu do lokalizacji. Aby dostawać ostrzeżenia w drodze przy zamkniętej aplikacji, ustaw w ustawieniach dostęp do lokalizacji na „Zezwalaj zawsze”. Z mapy możesz korzystać także bez tych uprawnień.</string>
     <string name="notification_sync_failed">Nie udało się wysłać zmian powiadomień na serwer. Ostrzeżenia mogą nadal używać poprzednich ustawień. Sprawdź połączenie i otwórz aplikację ponownie.</string>
@@ -79,7 +78,7 @@
     <string name="colormap_classic">Klasyczna</string>
     <string name="colormap_homeyer">Homeyer (deficyt widzenia barw)</string>
     <string name="colormap_lang">Lang</string>
-    <string name="colormap_explanation">Zmienia kolory, w jakich rysowane są opady na mapie.</string>
+    <string name="colormap_explanation">Zmienia kolory opadów na mapie. Każdy pasek biegnie od mżawki po lewej do gradu po prawej.\n\nKlasyczna:\nWłasna paleta meteocool. Mżawka pojawia się stopniowo, potem niebieski, zielony, żółty i czerwony, a od białego do fioletowego dla gradu.\n\nNWS Reflectivity:\nKolory amerykańskiej narodowej służby meteorologicznej. Podobna do Klasycznej, ale mżawka jest rysowana pełnym kolorem zamiast stopniowo.\n\nPyArt StepSeq:\nZ zestawu narzędzi radarowych Py-ART. Brązowe, zielone, niebieskie i fioletowe pasma, każde od jasnego do ciemnego, więc widać nawet małe różnice w natężeniu.\n\nHomeyer (deficyt widzenia barw):\nOd zielonego przez żółty i pomarańczowy do ciemnoczerwonego, zaprojektowana tak, by była czytelna przy zaburzeniach widzenia barw.\n\nLang:\nOd jasnoniebieskiego przez żółty do brązowego, również czytelna przy zaburzeniach widzenia barw.</string>
 
     <!-- Settings: about -->
     <string name="settings_about">O aplikacji</string>
@@ -107,8 +106,24 @@
     <string name="source_noaa">Radar USA · domena publiczna</string>
     <string name="source_blitzortung">Wyładowania</string>
     <string name="source_openmeteo">Porównanie modeli · CC BY 4.0</string>
-    <string name="source_copernicus">Zdjęcia satelitarne · zawiera zmodyfikowane dane Copernicus Sentinel</string>
     <string name="source_osm">Dane mapy · ODbL</string>
     <string name="source_protomaps">Kafelki mapy</string>
+
+    <string name="level_intense_rain">Mocniejszy deszcz</string>
+    <string name="map_view_explanation">Obracanie mapy dwoma palcami:\nObracaj mapę dwoma palcami. Gdy wyłączone, północ jest zawsze u góry.\n\nAutomatyczne przybliżenie po uruchomieniu:\nPrzybliża mapę do twojej lokalizacji za każdym razem, gdy aplikacja się otwiera lub wraca na pierwszy plan. Wymaga dostępu do lokalizacji.</string>
+    <string name="basemap_system_explanation">Używa jasnej lub ciemnej zgodnie z wyglądem urządzenia. Wyłącz, aby samodzielnie wybrać mapę.</string>
+    <string name="basemap_explanation">Wszystkie mapy są stonowane, aby radar pozostał czytelny.\n\nJasna i Ciemna:\nLąd, woda, autostrady i granice, niewiele więcej.\n\nOpenStreetMap:\nJak klasyczna OpenStreetMap, z użytkowaniem terenu, wszystkimi drogami, budynkami i granicami regionów.\n\nCyclOSM (rowerowa):\nNa zewnątrz: lasy i parki w kolorze, dróżki i ścieżki zaznaczone, autostrady w tle.</string>
+    <string name="source_eumetnet">Radar Szwajcaria, Francja, Czechy i Polska, dostarczany za jego pośrednictwem</string>
+    <string name="source_mapterhorn">Ukształtowanie terenu w mapie 3D · otwarte dane wysokościowe, głównie CC BY 4.0. Dotknij, aby zobaczyć wszystkie źródła.</string>
+    <string name="source_gorbachev">Ikony legendy</string>
+    <string name="location_permission_downgraded_title">Ostrzeżenia przed deszczem nie podążają za tobą</string>
+    <string name="location_permission_downgraded_body">meteocool może używać twojej lokalizacji tylko wtedy, gdy jest otwarte, więc ostrzeżenia dotyczą miejsca, w którym ostatnio je otwarto. Aby dostawać ostrzeżenia tam, gdzie jesteś, ustaw w ustawieniach dostęp do lokalizacji na „Zezwalaj zawsze”.</string>
+    <string name="map_share">Udostępnij</string>
+    <string name="show_radar">Pokaż mapę radarową</string>
+    <string name="open_source_header">Licencje open source</string>
+    <string name="open_source_footer">Licencje meteocool i oprogramowania, na którym się opiera. Dotknij jednej, aby ją przeczytać.</string>
+    <string name="licence_android_libraries">Biblioteki Androida</string>
+    <string name="licence_pyart">Palety kolorów Py-ART</string>
+    <string name="licence_web_map">Biblioteki mapy internetowej</string>
 
 </resources>

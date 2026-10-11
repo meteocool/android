@@ -19,25 +19,23 @@
                 app:key="notification_details"
                 app:title="@string/show_meteorological_details" />
 
-        <ListPreference
+        <com.meteocool.preferences.StepSliderPreference
                 app:defaultValue="20"
                 app:dependency="notification"
                 app:entries="@array/notification_intensity_entries"
                 app:entryValues="@array/notification_intensity_values"
                 app:iconSpaceReserved="false"
                 app:key="notification_intensity"
-                app:title="@string/intensity_threshold"
-                app:useSimpleSummaryProvider="true" />
+                app:title="@string/intensity_threshold" />
 
-        <ListPreference
+        <com.meteocool.preferences.StepSliderPreference
                 app:defaultValue="15"
                 app:dependency="notification"
                 app:entries="@array/notification_time_entries"
                 app:entryValues="@array/notification_time_values"
                 app:iconSpaceReserved="false"
                 app:key="notification_time"
-                app:title="@string/notification_timeframe"
-                app:useSimpleSummaryProvider="true" />
+                app:title="@string/notification_timeframe" />
 
         <Preference
                 app:iconSpaceReserved="false"
@@ -63,28 +61,24 @@
                 app:key="map_zoom"
                 app:title="@string/auto_zoom_after_start" />
 
-        <ListPreference
-                app:defaultValue="system"
-                app:entries="@array/base_layer_entries"
-                app:entryValues="@array/base_layer_values"
+        <!-- Pickers of their own (SettingsFragment); the values are Prefs.baseLayer and Prefs.radarColorMapping. -->
+        <Preference
                 app:iconSpaceReserved="false"
                 app:key="base_layer"
+                app:persistent="false"
                 app:title="@string/base_map_layer" />
 
-        <ListPreference
-                app:defaultValue="classic"
-                app:entries="@array/radar_color_mapping_entries"
-                app:entryValues="@array/radar_color_mapping_values"
+        <Preference
                 app:iconSpaceReserved="false"
                 app:key="radar_color_mapping"
-                app:title="@string/radar_color_map"
-                app:useSimpleSummaryProvider="true" />
+                app:persistent="false"
+                app:title="@string/radar_color_map" />
 
         <Preference
                 app:iconSpaceReserved="false"
                 app:layout="@layout/preference_footer"
                 app:selectable="false"
-                app:summary="@string/colormap_explanation" />
+                app:summary="@string/map_view_explanation" />
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -122,4 +116,9 @@
             app:iconSpaceReserved="false"
             app:key="data_sources"
             app:title="@string/data_sources_header" />
+
+    <PreferenceCategory
+            app:iconSpaceReserved="false"
+            app:key="licences"
+            app:title="@string/open_source_header" />
 </androidx.preference.PreferenceScreen>

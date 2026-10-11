@@ -21,9 +21,12 @@ class BackgroundLocationWorker(context: Context, params: WorkerParameters) : Cor
 
     override suspend fun doWork(): Result {
         val app = applicationContext.app
-        if (!PermUtils.isBackgroundLocationPermissionGranted(applicationContext) || !app.registration.canRegister()) {
+        if (!PermUtils.isBackgroundLocationPermissionGranted(applicationContext)) {
+            // Taken back since the worker was scheduled; say so once.
+            LocationPermissionWarning.notifyIfNeeded(applicationContext)
             return Result.success()
         }
+        if (!app.registration.canRegister()) return Result.success()
         val fix = LocationProviders.currentLocation(applicationContext) ?: return Result.retry()
         app.prefs.saveLastLocation(fix)
         val ok = app.registration.submit(fix, background = true)
