@@ -7,6 +7,7 @@ import android.graphics.Path
 import android.graphics.PixelFormat
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
+import androidx.core.graphics.withClip
 import kotlin.math.roundToInt
 
 /** The radar map's colours, from [ColormapTables]. */
@@ -54,17 +55,16 @@ class ColorBarDrawable(
         val outlineBox = RectF(box.left + inset, box.top + inset, box.right - inset, box.bottom - inset)
         clip.reset()
         clip.addRoundRect(outlineBox, cornerPx, cornerPx, Path.Direction.CW)
-        canvas.save()
-        canvas.clipPath(clip)
-        val steps = bounds.width().coerceAtLeast(1)
-        for (step in 0 until steps) {
-            val fraction = (step + 0.5) / steps
-            val dbz = RadarPalette.BAR_FROM_DBZ + fraction * (RadarPalette.BAR_TO_DBZ - RadarPalette.BAR_FROM_DBZ)
-            val rgb = RadarPalette.colour(dbz, palette) ?: continue
-            fill.color = 0xFF000000.toInt() or rgb
-            canvas.drawRect(box.left + step, box.top, box.left + step + 1, box.bottom, fill)
+        canvas.withClip(clip) {
+            val steps = bounds.width().coerceAtLeast(1)
+            for (step in 0 until steps) {
+                val fraction = (step + 0.5) / steps
+                val dbz = RadarPalette.BAR_FROM_DBZ + fraction * (RadarPalette.BAR_TO_DBZ - RadarPalette.BAR_FROM_DBZ)
+                val rgb = RadarPalette.colour(dbz, palette) ?: continue
+                fill.color = 0xFF000000.toInt() or rgb
+                drawRect(box.left + step, box.top, box.left + step + 1, box.bottom, fill)
+            }
         }
-        canvas.restore()
         canvas.drawRoundRect(outlineBox, cornerPx, cornerPx, stroke)
     }
 
