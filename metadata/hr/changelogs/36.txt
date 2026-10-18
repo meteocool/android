@@ -1,0 +1,6 @@
+meteocool 4.0, izgrađen iznova od temelja:
+• Nova karta s radarom za više zemalja, olujnim ćelijama u 3D-u, munjama i prognozama modela
+• Gumb lokacije: prikaži svoj položaj ili ga prati dok se krećeš
+• Nove postavke: podloga karte (uklj. prema sustavu), palete boja, izvori podataka i licence
+• Novi uvod u tri stranice; sada i na francuskom, talijanskom, poljskom i češkom
+• Radi na Androidu 16; F-Droid verzija ne sadrži Googleov kod

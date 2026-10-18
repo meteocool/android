@@ -1,0 +1,6 @@
+meteocool 4.0, sukurta iš naujo:
+• Naujas žemėlapis su daugiau šalių radarais, 3D audrų celėmis, žaibais ir modelių prognozėmis
+• Vietos mygtukas: parodo tavo vietą arba seka ją tau judant
+• Nauji nustatymai: fono žemėlapis (taip pat ir kaip sistemoje), spalvų skalės, duomenų šaltiniai ir licencijos
+• Naujas trijų puslapių pasisveikinimas; dabar ir prancūzų, italų, lenkų bei čekų kalbomis
+• Veikia su Android 16; F-Droid versijoje nėra jokio Google kodo

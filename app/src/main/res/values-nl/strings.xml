@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Notification channel -->
+    <string name="notification_channel_name">Regenmeldingen</string>
+    <string name="notification_channel_description">Een seintje kort voordat de regen bij je is.</string>
+
+    <!-- Common -->
+    <string name="action_continue">Doorgaan</string>
+    <string name="action_not_now">Niet nu</string>
+    <string name="dismiss">Begrepen</string>
+    <string name="change_in_settings">Wijzigen in Instellingen</string>
+    <string name="title_settings">Instellingen</string>
+    <string name="version_label">Versie: %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Welkom bij meteocool</string>
+    <string name="onboarding_feature_radar_title">Live radar</string>
+    <string name="onboarding_feature_radar_text">Regen en onweer terwijl het gebeurt, om de paar minuten bijgewerkt.</string>
+    <string name="onboarding_feature_nowcast_title">Nowcast</string>
+    <string name="onboarding_feature_nowcast_text">Zie waar de regen heen trekt. In onze ervaring kloppen de eerste 45 minuten opvallend goed.</string>
+    <string name="rain_alerts">Regenmeldingen</string>
+    <string name="onboarding_feature_alerts_text">Een seintje voordat de regen bij je is, dat weer verdwijnt zodra het droog wordt.</string>
+    <string name="onboarding_feature_free_title">Gratis en open source</string>
+    <string name="onboarding_feature_free_text">Gemaakt en draaiende gehouden door vrijwilligers in hun vrije tijd.</string>
+    <string name="location_access">Locatietoegang</string>
+    <string name="onboarding_location_permission">Om je huidige locatie op de kaart te tonen, hebben we je toestemming nodig.\n\nWe delen of bewaren je locatiegegevens nooit.</string>
+    <string name="allow_location_access">Locatietoegang toestaan</string>
+    <string name="onboarding_notification_text">Krijg een melding kort voordat het gaat regenen waar je bent, ook als meteocool gesloten is.\n\nDaarvoor vraagt je apparaat ook om locatietoegang op de achtergrond. Geen zorgen, dat kost je batterij nauwelijks iets.</string>
+    <string name="tell_me_before_it_rains">Waarschuw me voor regen!</string>
+    <string name="onboarding_settings_footnote">Je kunt dit altijd wijzigen in Instellingen.</string>
+    <string name="background_location_title">Meldingen als meteocool gesloten is</string>
+    <string name="background_location_rationale">Voor regenmeldingen controleert meteocool je locatie ook als de app gesloten is, ongeveer elke 15 minuten. Kies op het volgende scherm \"Altijd toestaan\".\n\nZonder deze toestemming volgen meldingen je alleen zolang de app open is.</string>
+
+    <!-- Map -->
+    <string name="map_layers">Kaartlagen</string>
+    <string name="location_button">Locatie</string>
+    <string name="location_button_off">Uit</string>
+    <string name="location_button_active">Toont je locatie</string>
+    <string name="location_button_tracking">Volgt je locatie</string>
+    <string name="map_load_failed">De kaart kon niet worden geladen. Opnieuw proberen…</string>
+    <string name="location_permission_required">Locatietoegang vereist</string>
+    <string name="location_permission_general">Om de locatieknop of automatisch zoomen te gebruiken, moet je toegang tot je locatie toestaan in de instellingen van je apparaat. We bewaren of delen geen locatiegegevens.</string>
+
+    <!-- Demo mode -->
+    <string name="demo_notice_title">Dit is geen echt onweer</string>
+    <string name="demo_notice_message">De demomodus staat aan: de kaart speelt een opgenomen onweer af alsof het nu gebeurt. Niets van wat je ziet is actueel weer.</string>
+    <string name="demo_notice_disable">Demomodus uitschakelen</string>
+    <string name="demo_notice_continue">Door naar de demo</string>
+
+    <!-- Settings: rain alerts -->
+    <string name="settings_notifications">Pushmeldingen</string>
+    <string name="enable_notifications">Meldingen inschakelen</string>
+    <string name="show_meteorological_details">Meteorologische details tonen</string>
+    <string name="intensity_threshold">Drempelwaarde</string>
+    <string name="notification_timeframe">Tijd vooraf</string>
+    <string name="level_drizzle">Motregen</string>
+    <string name="level_light">Lichte regen</string>
+    <string name="level_rain">Regen</string>
+    <string name="level_heavy_rain">Zware regen</string>
+    <string name="notifications_explanation">Als je wilt, waarschuwen we je voor neerslag die op je huidige locatie afkomt. Daarvoor stuurt de app je locatie op de achtergrond naar onze servers.</string>
+    <string name="meteorological_details_help">Drempelwaarde:\nAlleen een melding bij neerslag die naar verwachting minstens zo hevig is.\n\nTijd vooraf:\nHoe lang voor de neerslag je een melding wilt krijgen.</string>
+    <string name="notification_permissions_title">Toestemmingen controleren</string>
+    <string name="notification_permissions_help">Regenmeldingen hebben meldingen en locatietoegang nodig. Wil je onderweg meldingen terwijl de app gesloten is, zet locatietoegang dan in Instellingen op \"Altijd toestaan\". De kaart kun je ook zonder deze toestemmingen gebruiken.</string>
+    <string name="notification_sync_failed">De wijzigingen in je meldingen konden de server niet bereiken. Meldingen gebruiken mogelijk nog je vorige instellingen. Controleer je verbinding en open de app opnieuw om het nog eens te proberen.</string>
+
+    <!-- Settings: map -->
+    <string name="settings_map_view">Kaart</string>
+    <string name="two_finger_rotation">Kaart draaien met twee vingers</string>
+    <string name="auto_zoom_after_start">Automatisch zoomen na start</string>
+    <string name="base_map_layer">Basiskaartlaag</string>
+    <string name="basemap_system">Systeeminstelling volgen</string>
+    <string name="basemap_light">Licht</string>
+    <string name="basemap_dark">Donker</string>
+    <string name="basemap_cyclosm">CyclOSM (fietsen)</string>
+    <string name="system_detail">Nu %1$s</string>
+    <string name="radar_color_map">Radar-kleurenschema</string>
+    <string name="colormap_classic">Klassiek</string>
+    <string name="colormap_homeyer">Homeyer (kleurenblindheid)</string>
+    <string name="colormap_lang">Lang</string>
+    <string name="colormap_explanation">Wijzigt de kleuren waarin de neerslag op de kaart wordt getekend. Elke balk loopt van motregen links tot hagel rechts.\n\nKlassiek:\nHet eigen schema van meteocool. Motregen begint doorschijnend, dan blauw, groen, geel en rood, en wit tot paars voor hagel.\n\nNWS Reflectivity:\nDe kleuren van de Amerikaanse weerdienst (National Weather Service). Lijkt op Klassiek, maar motregen wordt meteen dekkend getekend.\n\nPyArt StepSeq:\nUit de radartoolkit Py-ART. Bruine, groene, blauwe en paarse banden, elk van licht naar donker, zodat kleine verschillen in intensiteit opvallen.\n\nHomeyer (kleurenblindheid):\nVan groen via geel en oranje naar donkerrood, gemaakt om ook bij kleurenblindheid leesbaar te blijven.\n\nLang:\nVan lichtblauw via geel naar bruin, ook leesbaar bij kleurenblindheid.</string>
+
+    <!-- Settings: about -->
+    <string name="settings_about">Over</string>
+    <string name="contribute_on_github">Meedoen op GitHub</string>
+    <string name="feedback_and_support">Feedback en ondersteuning</string>
+    <string name="feedback_body">Beschrijf hier je probleem of suggestie:\n</string>
+    <string name="imprint_privacy">Colofon &amp; privacybeleid</string>
+    <string name="experimental_features">Experimentele functies</string>
+    <string name="mode">Modus</string>
+    <string name="mode_production">Productie</string>
+    <string name="mode_production_detail">Actueel weer. Aanbevolen.</string>
+    <string name="mode_experimental_detail">Actueel weer, met functies die nog in ontwikkeling zijn. Kan zich onverwacht gedragen. 🐛</string>
+    <string name="mode_demo">Demo</string>
+    <string name="mode_demo_detail">Een opgenomen onweer, afgespeeld alsof het nu gebeurt. Geen actueel weer.</string>
+    <string name="mode_footer">Werkt meteen: de kaart laadt opnieuw en regenmeldingen komen voortaan uit de gekozen modus.</string>
+
+    <!-- Settings: data sources -->
+    <string name="data_sources_header">Gegevensbronnen &amp; licenties</string>
+    <string name="data_sources_footer">De aanbieders steunen meteocool niet uitdrukkelijk en geven geen garantie. Tik op een bron voor de licentie.</string>
+    <string name="source_dwd">Radar Duitsland, onweerscellen, weerkaarten · CC BY 4.0, bewerkt</string>
+    <string name="source_meteoswiss">Radar Zwitserland · CC BY 4.0, bewerkt</string>
+    <string name="source_meteofrance">Radar Frankrijk · Licence Ouverte 2.0 (Etalab), bewerkt</string>
+    <string name="source_chmi">Radar Tsjechië · CC BY 4.0, bewerkt</string>
+    <string name="source_imgw">Radar Polen · CC BY 4.0. De gegevens zijn afkomstig van het Instituut voor Meteorologie en Waterbeheer – Nationaal Onderzoeksinstituut (IMGW-PIB). De gegevens van IMGW-PIB zijn door meteocool verwerkt.</string>
+    <string name="source_noaa">Radar Verenigde Staten · publiek domein</string>
+    <string name="source_blitzortung">Bliksem</string>
+    <string name="source_openmeteo">Modelvergelijking · CC BY 4.0</string>
+    <string name="source_osm">Basiskaartgegevens · ODbL</string>
+    <string name="source_protomaps">Basiskaarttegels</string>
+
+    <string name="level_intense_rain">Flinke regen</string>
+    <string name="map_view_explanation">Kaart draaien met twee vingers:\nDraai de kaart met twee vingers. Staat dit uit, dan blijft het noorden altijd boven.\n\nAutomatisch zoomen na start:\nZoomt in op je locatie zodra de app opent of weer op de voorgrond komt. Vereist locatietoegang.</string>
+    <string name="basemap_system_explanation">Gebruikt Licht of Donker, net als de weergave van je telefoon. Zet dit uit om zelf een kaart te kiezen.</string>
+    <string name="basemap_explanation">Alle kaarten zijn ingetogen gehouden, zodat de radar leesbaar blijft.\n\nLicht en Donker:\nLand, water, snelwegen en grenzen, verder weinig.\n\nOpenStreetMap:\nZoals de klassieke OpenStreetMap, met grondgebruik, alle wegen, gebouwen en regionale grenzen.\n\nCyclOSM (fietsen):\nVoor buiten: bossen en parken in kleur, onverharde wegen en paden ingetekend, snelwegen naar de achtergrond.</string>
+    <string name="source_eumetnet">Radar Zwitserland, Frankrijk, Tsjechië en Polen, via deze bron geleverd</string>
+    <string name="source_mapterhorn">Terrein in de 3D-kaart · open hoogtegegevens, meest CC BY 4.0. Tik voor alle bronnen.</string>
+    <string name="source_gorbachev">Legendapictogrammen</string>
+    <string name="location_permission_downgraded_title">Regenmeldingen kunnen je niet volgen</string>
+    <string name="location_permission_downgraded_body">meteocool mag je locatie alleen gebruiken terwijl de app open is, dus regenmeldingen gelden voor de plek waar je de app het laatst opende. Wil je overal meldingen, zet locatietoegang dan in Instellingen op \"Altijd toestaan\".</string>
+    <string name="map_share">Delen</string>
+    <string name="show_radar">Radarkaart tonen</string>
+    <string name="open_source_header">Opensourcelicenties</string>
+    <string name="open_source_footer">De licenties van meteocool en van de software waarop het is gebouwd. Tik op een licentie om die te lezen.</string>
+    <string name="licence_android_libraries">Android-bibliotheken</string>
+    <string name="licence_pyart">Py-ART-kleurenschalen</string>
+    <string name="licence_web_map">Bibliotheken van de webkaart</string>
+
+</resources>

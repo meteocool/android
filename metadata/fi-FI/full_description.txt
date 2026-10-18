@@ -1,0 +1,21 @@
+Etkö halua kastua, vai haluatko seurata ukkosta? meteocool näyttää sateet ja ukkoset sitä mukaa kuin ne tapahtuvat ja kertoo, minne ne ovat menossa seuraavaksi.
+
+<b>Ominaisuudet</b>
+<ul>
+<li>Reaaliaikainen tutka, päivittyy muutaman minuutin välein: Saksa, Sveitsi, Ranska, Tšekki, Puola, Belgia, Slovakia, Liettua, Viro, Irlanti, Kroatia, Tanska, Alankomaat, Suomi, Ruotsi, Norja ja Yhdysvallat</li>
+<li>Lähiennuste: katso, minne sade liikkuu seuraavien 45 minuutin aikana. Kokemuksemme mukaan ensimmäiset 45 minuuttia osuvat aika hyvin kohdalleen</li>
+<li>Salamat reaaliaikaisesti Blitzortung.orgista</li>
+<li>Ukkossolut, ja jokaisesta 3D-tutkanäkymä</li>
+<li>Sateen olomuoto sellaisena kuin tutka sen näkee</li>
+<li>Sijaintisi sade-ennuste useiden säämallien vertailuna</li>
+<li>Taustakartat: järjestelmän mukaan, vaalea, tumma, OpenStreetMap tai pyöräilyyn CyclOSM</li>
+<li>Tutkan väriasteikot, joista kaksi värinäön poikkeamia varten</li>
+<li>Sijaintisi kartalla, seuraa liikkuessasi</li>
+<li>Suomi, englanti, saksa, ranska, italia, puola, tšekki, hollanti, tanska, ruotsi, norja, viro, liettua ja kroatia</li>
+</ul>
+
+Sadehälytykset eli ilmoitukset ennen kuin sade ehtii luoksesi tarvitsevat Googlen push-palvelun, ja ne ovat vain Google Play -versiossa.
+
+meteocool on open core -projekti, jota vapaaehtoiset tekevät ja ylläpitävät vapaa-ajallaan. Tämä sovellus on avointa lähdekoodia (AGPL-3.0), maksuton ja mainokseton.
+
+Tutkatiedot: DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB, RMI, SHMÚ, LHMT, Keskkonnaagentuur, Met Éireann, DHMZ, DMI, KNMI, FMI, SMHI, MET Norway ja NOAA; sovellus listaa kaikki lähteet ja niiden lisenssit kohdassa Asetukset.

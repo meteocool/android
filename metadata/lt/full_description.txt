@@ -1,0 +1,21 @@
+Nenori sušlapti ar nori sekti perkūniją? meteocool rodo lietų ir audras realiu laiku ir tai, kur jie judės toliau.
+
+<b>Funkcijos</b>
+<ul>
+<li>Tiesioginis radaras, atnaujinamas kas kelias minutes: Vokietija, Šveicarija, Prancūzija, Čekija, Lenkija, Belgija, Slovakija, Lietuva, Estija, Airija, Kroatija, Danija, Nyderlandai, Suomija, Švedija, Norvegija ir Jungtinės Valstijos</li>
+<li>Trumpalaikė prognozė: stebėk, kur lietus judės per artimiausias 45 minutes. Mūsų patirtimi, pirmosios 45 minutės būna gana tikslios</li>
+<li>Tiesioginės žaibo iškrovos iš Blitzortung.org</li>
+<li>Audrų celės su kiekvienos jų 3D radaro vaizdu</li>
+<li>Kritulių tipai, kaip juos mato radaras</li>
+<li>Lietaus prognozė tavo vietai, palyginant kelis orų modelius</li>
+<li>Fono žemėlapiai: kaip sistemoje, šviesus, tamsus, OpenStreetMap arba CyclOSM dviračiams</li>
+<li>Radaro spalvų skalės, tarp jų dvi sutrikusiam spalvų matymui</li>
+<li>Tavo vieta žemėlapyje, sekama tau judant</li>
+<li>Lietuvių, anglų, vokiečių, prancūzų, italų, lenkų, čekų, nyderlandų, danų, švedų, norvegų, suomių, estų ir kroatų kalbos</li>
+</ul>
+
+Įspėjimams apie lietų, t. y. pranešimui prieš lietui pasiekiant tave, reikia Google tiesioginių pranešimų paslaugos, todėl jie yra tik Google Play versijoje.
+
+meteocool yra open core projektas, kurį savo laisvalaikiu kuria ir palaiko savanoriai. Ši programėlė yra atvirojo kodo (AGPL-3.0), nemokama ir be reklamų.
+
+Radarų duomenys iš DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB, RMI, SHMÚ, LHMT, Keskkonnaagentuur, Met Éireann, DHMZ, DMI, KNMI, FMI, SMHI, MET Norway ir NOAA; programėlės nustatymuose išvardyti visi šaltiniai ir jų licencijos.

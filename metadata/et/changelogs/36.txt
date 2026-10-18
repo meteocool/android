@@ -1,0 +1,6 @@
+meteocool 4.0, täiesti uuesti üles ehitatud:
+• Uus kaart: radar rohkemate riikide kohta, äikeserakud 3D-s, välk ja mudeliprognoosid
+• Asukohanupp: näita oma asukohta või järgi seda liikudes
+• Uued seaded: aluskaart (ka nagu süsteemis), värviskaalad, andmeallikad ja litsentsid
+• Uus kolmesammuline tervitus; nüüd ka prantsuse, itaalia, poola ja tšehhi keeles
+• Töötab Android 16-ga; F-Droidi versioon ei sisalda Google'i koodi

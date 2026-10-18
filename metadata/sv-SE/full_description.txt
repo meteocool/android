@@ -1,0 +1,21 @@
+Vill du slippa bli blöt, eller vill du följa ett åskväder? meteocool visar regn och oväder i realtid och vart de är på väg härnäst.
+
+<b>Funktioner</b>
+<ul>
+<li>Liveradar, uppdaterad med några minuters mellanrum: Tyskland, Schweiz, Frankrike, Tjeckien, Polen, Belgien, Slovakien, Litauen, Estland, Irland, Kroatien, Danmark, Nederländerna, Finland, Sverige, Norge och USA</li>
+<li>Korttidsprognos: se vart regnet rör sig de kommande 45 minuterna. Enligt vår erfarenhet stämmer de första 45 minuterna riktigt bra</li>
+<li>Blixtnedslag live, från Blitzortung.org</li>
+<li>Åskceller, med en 3D-radarvy av var och en</li>
+<li>Nederbördstyper, så som radarn ser dem</li>
+<li>Regnprognos för din plats, där flera vädermodeller jämförs</li>
+<li>Bakgrundskartor: följ systemet, ljus, mörk, OpenStreetMap eller CyclOSM för cykling</li>
+<li>Färgskalor för radarn, varav två för nedsatt färgseende</li>
+<li>Din plats på kartan, som följs medan du rör dig</li>
+<li>Svenska, engelska, tyska, franska, italienska, polska, tjeckiska, nederländska, danska, norska, finska, estniska, litauiska och kroatiska</li>
+</ul>
+
+Regnvarningar, aviseringen innan regnet når dig, kräver Googles pushtjänst och finns bara i versionen från Google Play.
+
+meteocool är open core, byggt och drivet av frivilliga på deras fritid. Den här appen är öppen källkod (AGPL-3.0), gratis och utan reklam.
+
+Radardata från DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB, RMI, SHMÚ, LHMT, Keskkonnaagentuur, Met Éireann, DHMZ, DMI, KNMI, FMI, SMHI, MET Norway och NOAA; appen listar varje källa och dess licens under Inställningar.

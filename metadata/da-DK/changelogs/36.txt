@@ -1,0 +1,6 @@
+meteocool 4.0, bygget op fra bunden:
+• Nyt kort med radar for flere lande, uvejrsceller i 3D, lyn og modelprognoser
+• Placeringsknap: vis din position, eller følg den, mens du bevæger dig
+• Nye indstillinger: baggrundskort (inkl. følg systemet), farveskalaer, datakilder og licenser
+• Ny velkomst på tre sider; nu også på fransk, italiensk, polsk og tjekkisk
+• Virker på Android 16; F-Droid-versionen indeholder ingen kode fra Google

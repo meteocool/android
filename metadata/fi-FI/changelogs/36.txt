@@ -1,0 +1,6 @@
+meteocool 4.0, rakennettu kokonaan uudelleen:
+• Uusi kartta: tutka useammasta maasta, ukkossolut 3D:nä, salamat ja malliennusteet
+• Sijaintipainike: näytä sijaintisi tai seuraa sitä liikkuessasi
+• Uudet asetukset: taustakartta (myös järjestelmän mukaan), väriasteikot, tietolähteet ja lisenssit
+• Uusi kolmisivuinen tervetulonäkymä; nyt myös ranskaksi, italiaksi, puolaksi ja tšekiksi
+• Toimii Android 16:ssa; F-Droid-versio ei sisällä Googlen koodia

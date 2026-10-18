@@ -1,0 +1,6 @@
+meteocool 4.0, bygget opp på nytt fra grunnen av:
+• Nytt kart med radar for flere land, tordenceller i 3D, lyn og modellvarsler
+• Posisjonsknapp: vis hvor du er, eller følg posisjonen mens du beveger deg
+• Nye innstillinger: bakgrunnskart (også som systemet), fargeskalaer, datakilder og lisenser
+• Ny velkomst på tre sider; nå også på fransk, italiensk, polsk og tsjekkisk
+• Fungerer på Android 16; F-Droid-versjonen inneholder ingen kode fra Google

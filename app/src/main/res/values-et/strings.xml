@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Notification channel -->
+    <string name="notification_channel_name">Vihmahoiatused</string>
+    <string name="notification_channel_description">Hoiatus veidi enne, kui vihm sinuni jõuab.</string>
+
+    <!-- Common -->
+    <string name="action_continue">Jätka</string>
+    <string name="action_not_now">Mitte praegu</string>
+    <string name="dismiss">Selge</string>
+    <string name="change_in_settings">Muuda seadetes</string>
+    <string name="title_settings">Seaded</string>
+    <string name="version_label">Versioon: %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Tere tulemast meteocooli</string>
+    <string name="onboarding_feature_radar_title">Reaalajas radar</string>
+    <string name="onboarding_feature_radar_text">Vihm ja äike just praegu, uueneb iga paari minuti järel.</string>
+    <string name="onboarding_feature_nowcast_title">Lühiprognoos</string>
+    <string name="onboarding_feature_nowcast_text">Vaata, kuhu vihm liigub. Meie kogemuse põhjal on esimesed 45 minutit päris täpsed.</string>
+    <string name="rain_alerts">Vihmahoiatused</string>
+    <string name="onboarding_feature_alerts_text">Hoiatus enne, kui vihm sinuni jõuab. See kaob kohe, kui vihm lakkab.</string>
+    <string name="onboarding_feature_free_title">Tasuta ja avatud lähtekoodiga</string>
+    <string name="onboarding_feature_free_text">Vabatahtlikud teevad ja haldavad seda oma vabast ajast.</string>
+    <string name="location_access">Juurdepääs asukohale</string>
+    <string name="onboarding_location_permission">Et näidata kaardil sinu praegust asukohta, vajame sinu luba.\n\nMe ei jaga ega salvesta kunagi sinu asukohaandmeid.</string>
+    <string name="allow_location_access">Luba juurdepääs asukohale</string>
+    <string name="onboarding_notification_text">Saad teavituse veidi enne, kui sinu asukohas vihma hakkab sadama, isegi kui meteocool on suletud.\n\nSelleks küsib sinu seade ka luba asukohale taustal juurde pääseda. Ära muretse, see ei tühjenda akut.</string>
+    <string name="tell_me_before_it_rains">Anna teada enne vihma!</string>
+    <string name="onboarding_settings_footnote">Seda saad igal ajal seadetes muuta.</string>
+    <string name="background_location_title">Hoiatused, kui meteocool on suletud</string>
+    <string name="background_location_rationale">Kui meteocool on suletud, kontrollivad vihmahoiatused sinu asukohta umbes iga 15 minuti järel. Vali järgmisel ekraanil „Luba kogu aeg”.\n\nIlma selleta järgivad hoiatused sind ainult siis, kui rakendus on avatud.</string>
+
+    <!-- Map -->
+    <string name="map_layers">Kaardikihid</string>
+    <string name="location_button">Asukoht</string>
+    <string name="location_button_off">Väljas</string>
+    <string name="location_button_active">Näitan sinu asukohta</string>
+    <string name="location_button_tracking">Järgin sinu asukohta</string>
+    <string name="map_load_failed">Kaarti ei õnnestunud laadida. Proovin uuesti…</string>
+    <string name="location_permission_required">Vaja on asukohaluba</string>
+    <string name="location_permission_general">Asukohanupu või automaatse suumi kasutamiseks pead seadme seadetes lubama juurdepääsu asukohale. Me ei salvesta ega jaga asukohateavet.</string>
+
+    <!-- Demo mode -->
+    <string name="demo_notice_title">See ei ole päris äike</string>
+    <string name="demo_notice_message">Demorežiim on sees: kaart esitab salvestatud äikest nii, nagu toimuks see praegu. Miski, mida see näitab, ei ole praegune ilm.</string>
+    <string name="demo_notice_disable">Lülita demorežiim välja</string>
+    <string name="demo_notice_continue">Jätka demoga</string>
+
+    <!-- Settings: rain alerts -->
+    <string name="settings_notifications">Teavitused</string>
+    <string name="enable_notifications">Luba teavitused</string>
+    <string name="show_meteorological_details">Näita meteoroloogilisi üksikasju</string>
+    <string name="intensity_threshold">Tugevuse lävi</string>
+    <string name="notification_timeframe">Etteteatamisaeg</string>
+    <string name="level_drizzle">Uduvihm</string>
+    <string name="level_light">Nõrk vihm</string>
+    <string name="level_rain">Vihm</string>
+    <string name="level_heavy_rain">Tugev vihm</string>
+    <string name="notifications_explanation">Soovi korral hoiatame sind sademete eest, mis sinu praeguse asukoha poole liiguvad. Selleks saadab rakendus taustal sinu asukoha meie serveritesse.</string>
+    <string name="meteorological_details_help">Tugevuse lävi:\nTeavita ainult sademetest, mis on eeldatavasti vähemalt nii tugevad.\n\nEtteteatamisaeg:\nKui palju aega enne sademeid soovid teavitust saada.</string>
+    <string name="notification_permissions_title">Kontrolli lubasid</string>
+    <string name="notification_permissions_help">Vihmahoiatused vajavad teavituste ja asukoha luba. Et saada hoiatusi liikumise ajal ka siis, kui rakendus on suletud, määra seadetes asukoha loaks „Luba kogu aeg”. Kaarti saad sirvida ka ilma nende lubadeta.</string>
+    <string name="notification_sync_failed">Teavituste muudatused ei jõudnud serverisse. Hoiatused võivad veel kasutada sinu varasemaid seadeid. Kontrolli ühendust ja ava rakendus uuesti, et uuesti proovida.</string>
+
+    <!-- Settings: map -->
+    <string name="settings_map_view">Kaart</string>
+    <string name="two_finger_rotation">Kaardi pööramine kahe sõrmega</string>
+    <string name="auto_zoom_after_start">Automaatne suum käivitamisel</string>
+    <string name="base_map_layer">Aluskaart</string>
+    <string name="basemap_system">Nagu süsteemis</string>
+    <string name="basemap_light">Hele</string>
+    <string name="basemap_dark">Tume</string>
+    <string name="basemap_cyclosm">CyclOSM (rattasõit)</string>
+    <string name="system_detail">Praegu %1$s</string>
+    <string name="radar_color_map">Radari värviskaala</string>
+    <string name="colormap_classic">Klassikaline</string>
+    <string name="colormap_homeyer">Homeyer (värvinägemise häire)</string>
+    <string name="colormap_lang">Lang</string>
+    <string name="colormap_explanation">Muudab sademete värviskaalat kaardil. Iga riba ulatub vasakul olevast uduvihmast paremal oleva raheni.\n\nKlassikaline:\nmeteocooli oma. Uduvihm ilmub sujuvalt, siis tulevad sinine, roheline, kollane ja punane ning rahe puhul valgest lillani.\n\nNWS Reflectivity:\nUSA riikliku ilmateenistuse (NWS) värvid. Sarnane klassikalisele, kuid uduvihm on kohe täisvärvis, mitte sujuvalt ilmuv.\n\nPyArt StepSeq:\nRadaritööriistade komplektist Py-ART. Pruunid, rohelised, sinised ja lillad vöödid, igaüks heledast tumedani, nii et väikesed tugevuse muutused torkavad silma.\n\nHomeyer (värvinägemise häire):\nRohelisest üle kollase ja oranži tumepunaseni, loodud nii, et see jääks värvinägemise häire korral loetavaks.\n\nLang:\nHelesinisest üle kollase pruunini, samuti värvinägemise häire korral loetav.</string>
+
+    <!-- Settings: about -->
+    <string name="settings_about">Teave</string>
+    <string name="contribute_on_github">Osale GitHubis</string>
+    <string name="feedback_and_support">Tagasiside ja tugi</string>
+    <string name="feedback_body">Kirjelda siin oma probleemi või ettepanekut:\n</string>
+    <string name="imprint_privacy">Õiguslik teave ja privaatsuspoliitika</string>
+    <string name="experimental_features">Katselised funktsioonid</string>
+    <string name="mode">Režiim</string>
+    <string name="mode_production">Tavaline</string>
+    <string name="mode_production_detail">Praegune ilm. Soovitatav.</string>
+    <string name="mode_experimental_detail">Praegune ilm koos veel arendatavate funktsioonidega. Võib käituda ootamatult. 🐛</string>
+    <string name="mode_demo">Demo</string>
+    <string name="mode_demo_detail">Salvestatud äike, mida esitatakse nii, nagu toimuks see praegu. Mitte praegune ilm.</string>
+    <string name="mode_footer">Rakendub kohe: kaart laaditakse uuesti ja vihmahoiatused tulevad valitud režiimist.</string>
+
+    <!-- Settings: data sources -->
+    <string name="data_sources_header">Andmeallikad ja litsentsid</string>
+    <string name="data_sources_footer">Andmepakkujad ei toeta meteocooli ega anna mingit garantiid. Puuduta allikat, et näha selle litsentsi.</string>
+    <string name="source_dwd">Radar Saksamaa, äikeserakud, ilmakaardid · CC BY 4.0, muudetud</string>
+    <string name="source_meteoswiss">Radar Šveits · CC BY 4.0, muudetud</string>
+    <string name="source_meteofrance">Radar Prantsusmaa · Licence Ouverte 2.0 (Etalab), muudetud</string>
+    <string name="source_chmi">Radar Tšehhi · CC BY 4.0, muudetud</string>
+    <string name="source_imgw">Radar Poola · CC BY 4.0. Andmete allikas on Meteoroloogia ja Veemajanduse Instituut – Riiklik Teadusinstituut. IMGW-PIB andmeid on töödelnud meteocool.</string>
+    <string name="source_noaa">Radar Ameerika Ühendriigid · avalik omand</string>
+    <string name="source_blitzortung">Välk</string>
+    <string name="source_openmeteo">Mudelite võrdlus · CC BY 4.0</string>
+    <string name="source_osm">Aluskaardi andmed · ODbL</string>
+    <string name="source_protomaps">Aluskaardi paanid</string>
+
+    <string name="level_intense_rain">Üsna tugev vihm</string>
+    <string name="map_view_explanation">Kaardi pööramine kahe sõrmega:\nPööra kaarti kahe sõrmega. Kui see on väljas, jääb põhi alati üles.\n\nAutomaatne suum käivitamisel:\nSuumib sinu asukohale alati, kui rakendus avaneb või uuesti esiplaanile tuleb. Vajab juurdepääsu asukohale.</string>
+    <string name="basemap_system_explanation">Kasutab valikut Hele või Tume vastavalt sinu telefoni välimusele. Lülita see välja, et kaart ise valida.</string>
+    <string name="basemap_explanation">Kõik kaardid on hoitud tagasihoidlikud, et radar jääks loetavaks.\n\nHele ja Tume:\nMaa, vesi, kiirteed ja piirid, peaaegu mitte midagi muud.\n\nOpenStreetMap:\nNagu klassikaline OpenStreetMap, maakasutuse, kõigi teede, hoonete ja piirkondlike piiridega.\n\nCyclOSM (rattasõit):\nVäljas liikumiseks: metsad ja pargid värviliselt, rajad ja teerajad joonistatud, kiirteed tagaplaanil.</string>
+    <string name="source_eumetnet">Radar Šveits, Prantsusmaa, Tšehhi ja Poola, edastatud selle kaudu</string>
+    <string name="source_mapterhorn">Maastik 3D-kaardil · avatud kõrgusandmed, enamasti CC BY 4.0. Puuduta, et näha kõiki allikaid.</string>
+    <string name="source_gorbachev">Legendi ikoonid</string>
+    <string name="location_permission_downgraded_title">Vihmahoiatused ei saa sind järgida</string>
+    <string name="location_permission_downgraded_body">meteocool tohib sinu asukohta kasutada ainult siis, kui rakendus on avatud, seega kehtivad vihmahoiatused kohas, kus sa selle viimati avasid. Et saada hoiatusi kõikjal, kus oled, määra seadetes asukoha loaks „Luba kogu aeg”.</string>
+    <string name="map_share">Jaga</string>
+    <string name="show_radar">Näita radarikaarti</string>
+    <string name="open_source_header">Avatud lähtekoodiga litsentsid</string>
+    <string name="open_source_footer">meteocooli ja selle aluseks oleva tarkvara litsentsid. Puuduta litsentsi, et seda lugeda.</string>
+    <string name="licence_android_libraries">Androidi teegid</string>
+    <string name="licence_pyart">Py-ART värviskaalad</string>
+    <string name="licence_web_map">Veebikaardi teegid</string>
+
+</resources>

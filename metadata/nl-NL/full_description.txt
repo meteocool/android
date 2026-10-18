@@ -1,0 +1,21 @@
+Wil je droog blijven, of juist een onweersbui volgen? meteocool toont regen en onweer terwijl het gebeurt, en waar het daarna heen trekt.
+
+<b>Functies</b>
+<ul>
+<li>Live radar, om de paar minuten bijgewerkt: Duitsland, Zwitserland, Frankrijk, Tsjechië, Polen, België, Slowakije, Litouwen, Estland, Ierland, Kroatië, Denemarken, Nederland, Finland, Zweden, Noorwegen en de Verenigde Staten</li>
+<li>Nowcast: zie waar de regen de komende 45 minuten heen trekt. In onze ervaring kloppen de eerste 45 minuten opvallend goed</li>
+<li>Blikseminslagen live, van Blitzortung.org</li>
+<li>Onweerscellen, elk met een 3D-radaraanzicht</li>
+<li>Neerslagtypen, zoals de radar ze ziet</li>
+<li>Regenverwachting voor jouw locatie, met een vergelijking van meerdere weermodellen</li>
+<li>Basiskaarten: systeeminstelling volgen, licht, donker, OpenStreetMap of CyclOSM voor fietsers</li>
+<li>Radar-kleurenschema's, waaronder twee voor kleurenblindheid</li>
+<li>Je locatie op de kaart, die meebeweegt als jij beweegt</li>
+<li>Nederlands, Engels, Duits, Frans, Italiaans, Pools, Tsjechisch, Deens, Zweeds, Noors, Fins, Estisch, Litouws en Kroatisch</li>
+</ul>
+
+Regenmeldingen, het seintje voordat de regen bij je is, hebben de pushdienst van Google nodig en zitten alleen in de versie uit Google Play.
+
+meteocool is open core, gemaakt en draaiende gehouden door vrijwilligers in hun vrije tijd. Deze app is open source (AGPL-3.0), gratis en zonder reclame.
+
+Radargegevens van DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB, KMI, SHMÚ, LHMT, Keskkonnaagentuur, Met Éireann, DHMZ, DMI, KNMI, FMI, SMHI, MET Norway en NOAA; de app noemt elke bron en de licentie ervan onder Instellingen.

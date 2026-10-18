@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Notification channel -->
+    <string name="notification_channel_name">Upozorenja na kišu</string>
+    <string name="notification_channel_description">Upozorenje malo prije nego što kiša stigne do tebe.</string>
+
+    <!-- Common -->
+    <string name="action_continue">Nastavi</string>
+    <string name="action_not_now">Ne sada</string>
+    <string name="dismiss">U redu</string>
+    <string name="change_in_settings">Promijeni u Postavkama</string>
+    <string name="title_settings">Postavke</string>
+    <string name="version_label">Verzija: %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Dobro došli u meteocool</string>
+    <string name="onboarding_feature_radar_title">Radar uživo</string>
+    <string name="onboarding_feature_radar_text">Kiša i grmljavina u stvarnom vremenu, osvježeno svakih nekoliko minuta.</string>
+    <string name="onboarding_feature_nowcast_title">Kratkoročna prognoza</string>
+    <string name="onboarding_feature_nowcast_text">Prati kamo se kiša kreće. Prema našem iskustvu, prvih 45 minuta prilično je točno.</string>
+    <string name="rain_alerts">Upozorenja na kišu</string>
+    <string name="onboarding_feature_alerts_text">Upozorenje prije nego što kiša stigne do tebe, koje nestaje čim kiša prestane.</string>
+    <string name="onboarding_feature_free_title">Besplatno i otvorenog koda</string>
+    <string name="onboarding_feature_free_text">Razvijaju ga i održavaju volonteri u slobodno vrijeme.</string>
+    <string name="location_access">Pristup lokaciji</string>
+    <string name="onboarding_location_permission">Da bismo prikazali tvoju trenutačnu lokaciju na karti, trebamo tvoje dopuštenje.\n\nTvoje podatke o lokaciji nikada nećemo dijeliti ni pohranjivati.</string>
+    <string name="allow_location_access">Dopusti pristup lokaciji</string>
+    <string name="onboarding_notification_text">Primi obavijest malo prije nego što počne kišiti ondje gdje jesi, čak i kad je meteocool zatvoren.\n\nZa to će tvoj uređaj zatražiti i pristup lokaciji u pozadini. Bez brige, to ti neće isprazniti bateriju.</string>
+    <string name="tell_me_before_it_rains">Javi mi prije kiše!</string>
+    <string name="onboarding_settings_footnote">To uvijek možeš promijeniti u Postavkama.</string>
+    <string name="background_location_title">Upozorenja dok je meteocool zatvoren</string>
+    <string name="background_location_rationale">Upozorenja na kišu provjeravaju tvoju lokaciju i dok je meteocool zatvoren, otprilike svakih 15 minuta. Na sljedećem zaslonu odaberi „Dopusti cijelo vrijeme”.\n\nBez toga te upozorenja prate samo dok je aplikacija otvorena.</string>
+
+    <!-- Map -->
+    <string name="map_layers">Slojevi karte</string>
+    <string name="location_button">Lokacija</string>
+    <string name="location_button_off">Isključeno</string>
+    <string name="location_button_active">Prikazuje tvoju lokaciju</string>
+    <string name="location_button_tracking">Prati tvoju lokaciju</string>
+    <string name="map_load_failed">Karta se nije mogla učitati. Pokušavam ponovno…</string>
+    <string name="location_permission_required">Potreban je pristup lokaciji</string>
+    <string name="location_permission_general">Za gumb lokacije ili automatsko zumiranje moraš dopustiti pristup lokaciji u Postavkama uređaja. Nikakve podatke o lokaciji nećemo pohranjivati ni dijeliti.</string>
+
+    <!-- Demo mode -->
+    <string name="demo_notice_title">Ovo nije stvarna oluja</string>
+    <string name="demo_notice_message">Uključen je demo način: karta reproducira snimljenu oluju kao da se događa sada. Ništa od prikazanog nije trenutačno vrijeme.</string>
+    <string name="demo_notice_disable">Isključi demo način</string>
+    <string name="demo_notice_continue">Nastavi na demo</string>
+
+    <!-- Settings: rain alerts -->
+    <string name="settings_notifications">Obavijesti</string>
+    <string name="enable_notifications">Uključi obavijesti</string>
+    <string name="show_meteorological_details">Prikaži meteorološke detalje</string>
+    <string name="intensity_threshold">Prag jačine</string>
+    <string name="notification_timeframe">Obavijest unaprijed</string>
+    <string name="level_drizzle">Rosulja</string>
+    <string name="level_light">Slaba kiša</string>
+    <string name="level_rain">Kiša</string>
+    <string name="level_heavy_rain">Jaka kiša</string>
+    <string name="notifications_explanation">Ako želiš, možemo te upozoriti na oborinu koja se približava tvojoj trenutačnoj lokaciji. Za to aplikacija u pozadini šalje tvoju lokaciju našim poslužiteljima.</string>
+    <string name="meteorological_details_help">Prag jačine:\nObavijesti samo o oborini za koju se očekuje da će biti barem ovoliko jaka.\n\nObavijest unaprijed:\nKoliko prije oborine želiš dobiti obavijest.</string>
+    <string name="notification_permissions_title">Provjeri dopuštenja</string>
+    <string name="notification_permissions_help">Upozorenja na kišu trebaju obavijesti i pristup lokaciji. Za upozorenja dok se krećeš, a aplikacija je zatvorena, u Postavkama postavi pristup lokaciji na „Dopusti cijelo vrijeme”. Kartu možeš pregledavati i bez tih dopuštenja.</string>
+    <string name="notification_sync_failed">Promjene obavijesti nisu stigle do poslužitelja. Upozorenja možda još koriste tvoje prethodne postavke. Provjeri vezu i ponovno otvori aplikaciju da pokušaš opet.</string>
+
+    <!-- Settings: map -->
+    <string name="settings_map_view">Karta</string>
+    <string name="two_finger_rotation">Okretanje karte s dva prsta</string>
+    <string name="auto_zoom_after_start">Automatsko zumiranje pri pokretanju</string>
+    <string name="base_map_layer">Podloga karte</string>
+    <string name="basemap_system">Prema sustavu</string>
+    <string name="basemap_light">Svijetla</string>
+    <string name="basemap_dark">Tamna</string>
+    <string name="basemap_cyclosm">CyclOSM (biciklizam)</string>
+    <string name="system_detail">Trenutačno %1$s</string>
+    <string name="radar_color_map">Paleta boja radara</string>
+    <string name="colormap_classic">Klasična</string>
+    <string name="colormap_homeyer">Homeyer (za poremećaj raspoznavanja boja)</string>
+    <string name="colormap_lang">Lang</string>
+    <string name="colormap_explanation">Mijenja paletu boja oborine na karti. Svaka traka ide od rosulje lijevo do tuče desno.\n\nKlasična:\nmeteocoolova vlastita. Rosulja se postupno pojavljuje, zatim plava, zelena, žuta i crvena te bijela do ljubičaste za tuču.\n\nNWS Reflectivity:\nBoje američke Nacionalne meteorološke službe (NWS). Slična Klasičnoj, ali rosulja je odmah puno obojena umjesto da se postupno pojavljuje.\n\nPyArt StepSeq:\nIz radarskog alata Py-ART. Smeđi, zeleni, plavi i ljubičasti pojasevi, svaki od svijetlog prema tamnom, pa se male promjene jačine ističu.\n\nHomeyer (za poremećaj raspoznavanja boja):\nOd zelene preko žute i narančaste do tamnocrvene, izrađena tako da ostane čitljiva i uz poremećaj raspoznavanja boja.\n\nLang:\nOd svijetloplave preko žute do smeđe, također čitljiva uz poremećaj raspoznavanja boja.</string>
+
+    <!-- Settings: about -->
+    <string name="settings_about">O aplikaciji</string>
+    <string name="contribute_on_github">Doprinesi na GitHubu</string>
+    <string name="feedback_and_support">Povratne informacije i podrška</string>
+    <string name="feedback_body">Ovdje opiši svoj problem ili prijedlog:\n</string>
+    <string name="imprint_privacy">Impresum i pravila privatnosti</string>
+    <string name="experimental_features">Eksperimentalne značajke</string>
+    <string name="mode">Način rada</string>
+    <string name="mode_production">Standardni</string>
+    <string name="mode_production_detail">Trenutačno vrijeme. Preporučeno.</string>
+    <string name="mode_experimental_detail">Trenutačno vrijeme, sa značajkama koje su još u razvoju. Moguće je neočekivano ponašanje. 🐛</string>
+    <string name="mode_demo">Demo</string>
+    <string name="mode_demo_detail">Snimljena oluja, reproducirana kao da se događa sada. Nije trenutačno vrijeme.</string>
+    <string name="mode_footer">Primjenjuje se odmah: karta se ponovno učitava, a upozorenja na kišu dolaze iz odabranog načina rada.</string>
+
+    <!-- Settings: data sources -->
+    <string name="data_sources_header">Izvori podataka i licence</string>
+    <string name="data_sources_footer">Pružatelji podataka ne podržavaju službeno meteocool i ne daju nikakva jamstva. Dodirni izvor za njegovu licencu.</string>
+    <string name="source_dwd">Radar Njemačka, olujne ćelije, vremenske karte · CC BY 4.0, izmijenjeno</string>
+    <string name="source_meteoswiss">Radar Švicarska · CC BY 4.0, izmijenjeno</string>
+    <string name="source_meteofrance">Radar Francuska · Licence Ouverte 2.0 (Etalab), izmijenjeno</string>
+    <string name="source_chmi">Radar Češka · CC BY 4.0, izmijenjeno</string>
+    <string name="source_imgw">Radar Poljska · CC BY 4.0. Izvor podataka je Institut za meteorologiju i vodno gospodarstvo – Nacionalni istraživački institut (IMGW-PIB). Podatke IMGW-PIB-a obradio je meteocool.</string>
+    <string name="source_noaa">Radar SAD · javno dobro</string>
+    <string name="source_blitzortung">Munje</string>
+    <string name="source_openmeteo">Usporedba modela · CC BY 4.0</string>
+    <string name="source_osm">Podaci podloge karte · ODbL</string>
+    <string name="source_protomaps">Pločice podloge karte</string>
+
+    <string name="level_intense_rain">Jača kiša</string>
+    <string name="map_view_explanation">Okretanje karte s dva prsta:\nOkreći kartu s dva prsta. Kad je isključeno, sjever je uvijek gore.\n\nAutomatsko zumiranje pri pokretanju:\nZumira na tvoju lokaciju svaki put kad se aplikacija otvori ili vrati u prvi plan. Potreban je pristup lokaciji.</string>
+    <string name="basemap_system_explanation">Koristi Svijetlu ili Tamnu kartu, ovisno o izgledu tvog mobitela. Isključi ovo ako kartu želiš odabrati ručno.</string>
+    <string name="basemap_explanation">Sve su karte prigušene kako bi radar ostao čitljiv.\n\nSvijetla i Tamna:\nKopno, voda, autoceste i granice, i gotovo ništa drugo.\n\nOpenStreetMap:\nKao klasični OpenStreetMap, s namjenom zemljišta, svim cestama, zgradama i regionalnim granicama.\n\nCyclOSM (biciklizam):\nZa boravak u prirodi: šume i parkovi u boji, ucrtani putovi i staze, autoceste u pozadini.</string>
+    <string name="source_eumetnet">Radar Švicarska, Francuska, Češka i Poljska, dostavljeno putem ove usluge</string>
+    <string name="source_mapterhorn">Teren na 3D karti · otvoreni visinski podaci, uglavnom CC BY 4.0. Dodirni za sve izvore.</string>
+    <string name="source_gorbachev">Ikone legende</string>
+    <string name="location_permission_downgraded_title">Upozorenja na kišu ne mogu te pratiti</string>
+    <string name="location_permission_downgraded_body">meteocool smije koristiti tvoju lokaciju samo dok je otvoren, pa upozorenja na kišu vrijede za mjesto na kojem je zadnji put bio otvoren. Za upozorenja na bilo kojem mjestu u Postavkama postavi pristup lokaciji na „Dopusti cijelo vrijeme”.</string>
+    <string name="map_share">Podijeli</string>
+    <string name="show_radar">Prikaži radarsku kartu</string>
+    <string name="open_source_header">Licence otvorenog koda</string>
+    <string name="open_source_footer">Licence meteocoola i softvera na kojem je izgrađen. Dodirni jednu da je pročitaš.</string>
+    <string name="licence_android_libraries">Android biblioteke</string>
+    <string name="licence_pyart">Py-ART palete boja</string>
+    <string name="licence_web_map">Biblioteke web karte</string>
+
+</resources>

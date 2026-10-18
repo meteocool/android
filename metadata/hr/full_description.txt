@@ -1,0 +1,21 @@
+Ne želiš pokisnuti ili želiš pratiti grmljavinsko nevrijeme? meteocool prikazuje kišu i oluje dok se događaju i kamo se kreću.
+
+<b>Značajke</b>
+<ul>
+<li>Radar uživo, osvježava se svakih nekoliko minuta: Njemačka, Švicarska, Francuska, Češka, Poljska, Belgija, Slovačka, Litva, Estonija, Irska, Hrvatska, Danska, Nizozemska, Finska, Švedska, Norveška i Sjedinjene Američke Države</li>
+<li>Kratkoročna prognoza: prati kamo se kiša kreće u sljedećih 45 minuta. Prema našem iskustvu, prvih 45 minuta prilično je točno</li>
+<li>Udari munja uživo, s Blitzortung.org</li>
+<li>Olujne ćelije, svaka s 3D radarskim prikazom</li>
+<li>Vrste oborine, onako kako ih vidi radar</li>
+<li>Prognoza kiše za tvoju lokaciju, uz usporedbu više meteoroloških modela</li>
+<li>Podloge karte: prema sustavu, svijetla, tamna, OpenStreetMap ili CyclOSM za biciklizam</li>
+<li>Palete boja radara, uključujući dvije za poremećaj raspoznavanja boja</li>
+<li>Tvoja lokacija na karti, praćena dok se krećeš</li>
+<li>Hrvatski, engleski, njemački, francuski, talijanski, poljski, češki, nizozemski, danski, švedski, norveški, finski, estonski i litavski</li>
+</ul>
+
+Upozorenja na kišu, odnosno obavijest prije nego što kiša stigne do tebe, trebaju Googleovu uslugu push obavijesti i dostupna su samo u verziji s Google Playa.
+
+meteocool je open-core projekt koji u slobodno vrijeme razvijaju i održavaju volonteri. Ova je aplikacija otvorenog koda (AGPL-3.0), besplatna i bez oglasa.
+
+Radarski podaci: DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB, RMI, SHMÚ, LHMT, Keskkonnaagentuur, Met Éireann, DHMZ, DMI, KNMI, FMI, SMHI, MET Norway i NOAA; aplikacija u Postavkama navodi svaki izvor i njegovu licencu.

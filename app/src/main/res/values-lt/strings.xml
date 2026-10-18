@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Notification channel -->
+    <string name="notification_channel_name">Įspėjimai apie lietų</string>
+    <string name="notification_channel_description">Įspėjimas prieš pat lietui pasiekiant tave.</string>
+
+    <!-- Common -->
+    <string name="action_continue">Tęsti</string>
+    <string name="action_not_now">Ne dabar</string>
+    <string name="dismiss">Gerai</string>
+    <string name="change_in_settings">Keisti nustatymuose</string>
+    <string name="title_settings">Nustatymai</string>
+    <string name="version_label">Versija: %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Sveiki atvykę į meteocool</string>
+    <string name="onboarding_feature_radar_title">Tiesioginis radaras</string>
+    <string name="onboarding_feature_radar_text">Lietus ir perkūnija realiu laiku, atnaujinama kas kelias minutes.</string>
+    <string name="onboarding_feature_nowcast_title">Trumpalaikė prognozė</string>
+    <string name="onboarding_feature_nowcast_text">Stebėk, kur juda lietus. Mūsų patirtimi, pirmosios 45 minutės būna gana tikslios.</string>
+    <string name="rain_alerts">Įspėjimai apie lietų</string>
+    <string name="onboarding_feature_alerts_text">Įspėjimas prieš lietui pasiekiant tave, kuris dingsta, kai tik lietus liaujasi.</string>
+    <string name="onboarding_feature_free_title">Nemokama ir atvirojo kodo</string>
+    <string name="onboarding_feature_free_text">Kuriama ir palaikoma savanorių jų laisvalaikiu.</string>
+    <string name="location_access">Vietovės prieiga</string>
+    <string name="onboarding_location_permission">Kad galėtume parodyti tavo dabartinę vietą žemėlapyje, mums reikia tavo leidimo.\n\nNiekada nebendrinsime ir nesaugosime tavo vietovės duomenų.</string>
+    <string name="allow_location_access">Leisti vietovės prieigą</string>
+    <string name="onboarding_notification_text">Gauk pranešimą prieš pat pradedant lyti ten, kur esi, net kai meteocool uždaryta.\n\nTam tavo įrenginys dar paprašys leidimo naudoti vietovę fone. Nesijaudink, baterijos tai neiškraus.</string>
+    <string name="tell_me_before_it_rains">Pranešk prieš lietų!</string>
+    <string name="onboarding_settings_footnote">Tai bet kada gali pakeisti nustatymuose.</string>
+    <string name="background_location_title">Įspėjimai, kai meteocool uždaryta</string>
+    <string name="background_location_rationale">Kai meteocool uždaryta, įspėjimai apie lietų tikrina tavo vietą maždaug kas 15 minučių. Kitame ekrane pasirink „Leisti visą laiką“.\n\nBe to įspėjimai seka tave tik tada, kai programėlė atidaryta.</string>
+
+    <!-- Map -->
+    <string name="map_layers">Žemėlapio sluoksniai</string>
+    <string name="location_button">Vieta</string>
+    <string name="location_button_off">Išjungta</string>
+    <string name="location_button_active">Rodoma tavo vieta</string>
+    <string name="location_button_tracking">Sekama tavo vieta</string>
+    <string name="map_load_failed">Nepavyko įkelti žemėlapio. Bandoma dar kartą…</string>
+    <string name="location_permission_required">Reikia vietovės leidimo</string>
+    <string name="location_permission_general">Kad galėtum naudoti vietos mygtuką ar automatinį priartinimą, įrenginio nustatymuose turi leisti prieigą prie vietovės. Jokios vietos informacijos nesaugosime ir nebendrinsime.</string>
+
+    <!-- Demo mode -->
+    <string name="demo_notice_title">Tai ne tikra audra</string>
+    <string name="demo_notice_message">Įjungtas demo režimas: žemėlapis atkuria įrašytą audrą taip, lyg ji vyktų dabar. Niekas, ką jis rodo, nėra dabartiniai orai.</string>
+    <string name="demo_notice_disable">Išjungti demo režimą</string>
+    <string name="demo_notice_continue">Tęsti demo</string>
+
+    <!-- Settings: rain alerts -->
+    <string name="settings_notifications">Pranešimai</string>
+    <string name="enable_notifications">Įjungti pranešimus</string>
+    <string name="show_meteorological_details">Rodyti meteorologinę informaciją</string>
+    <string name="intensity_threshold">Intensyvumo riba</string>
+    <string name="notification_timeframe">Įspėjimo laikas</string>
+    <string name="level_drizzle">Dulksna</string>
+    <string name="level_light">Nedidelis lietus</string>
+    <string name="level_rain">Lietus</string>
+    <string name="level_heavy_rain">Smarkus lietus</string>
+    <string name="notifications_explanation">Jei nori, galime įspėti tave apie kritulius, artėjančius prie tavo dabartinės vietos. Tam programėlė fone siunčia tavo vietą į mūsų serverius.</string>
+    <string name="meteorological_details_help">Intensyvumo riba:\nPranešti tik apie kritulius, kurie turėtų būti bent tokio intensyvumo.\n\nĮspėjimo laikas:\nKiek laiko prieš kritulius nori gauti pranešimą.</string>
+    <string name="notification_permissions_title">Patikrink leidimus</string>
+    <string name="notification_permissions_help">Įspėjimams apie lietų reikia pranešimų ir vietovės prieigos. Kad gautum įspėjimus judėdamas, kai programėlė uždaryta, nustatymuose vietovės prieigą pakeisk į „Leisti visą laiką“. Žemėlapį gali naršyti ir be šių leidimų.</string>
+    <string name="notification_sync_failed">Pranešimų pakeitimų nepavyko perduoti serveriui. Įspėjimai gali vis dar naudoti ankstesnius nustatymus. Patikrink ryšį ir iš naujo atidaryk programėlę, kad bandytum dar kartą.</string>
+
+    <!-- Settings: map -->
+    <string name="settings_map_view">Žemėlapis</string>
+    <string name="two_finger_rotation">Žemėlapio sukimas dviem pirštais</string>
+    <string name="auto_zoom_after_start">Automatinis priartinimas paleidus</string>
+    <string name="base_map_layer">Fono žemėlapis</string>
+    <string name="basemap_system">Kaip sistemoje</string>
+    <string name="basemap_light">Šviesus</string>
+    <string name="basemap_dark">Tamsus</string>
+    <string name="basemap_cyclosm">CyclOSM (dviračiams)</string>
+    <string name="system_detail">Dabar: %1$s</string>
+    <string name="radar_color_map">Radaro spalvų skalė</string>
+    <string name="colormap_classic">Klasikinė</string>
+    <string name="colormap_homeyer">Homeyer (sutrikusiam spalvų matymui)</string>
+    <string name="colormap_lang">Lang</string>
+    <string name="colormap_explanation">Pakeičia kritulių spalvų skalę žemėlapyje. Kiekviena juosta eina nuo dulksnos kairėje iki krušos dešinėje.\n\nKlasikinė:\nPaties meteocool skalė. Dulksna palaipsniui išryškėja, toliau mėlyna, žalia, geltona ir raudona, o krušai – nuo baltos iki violetinės.\n\nNWS Reflectivity:\nJAV nacionalinės orų tarnybos (NWS) spalvos. Panaši į klasikinę, bet dulksna piešiama vientisa, o ne palaipsniui išryškėjanti.\n\nPyArt StepSeq:\nIš radarų įrankių rinkinio Py-ART. Rudos, žalios, mėlynos ir violetinės juostos, kiekviena nuo šviesios iki tamsios, todėl išsiskiria net nedideli intensyvumo pokyčiai.\n\nHomeyer (sutrikusiam spalvų matymui):\nNuo žalios per geltoną ir oranžinę iki tamsiai raudonos; sukurta taip, kad liktų įskaitoma sutrikus spalvų matymui.\n\nLang:\nNuo šviesiai mėlynos per geltoną iki rudos; taip pat įskaitoma sutrikus spalvų matymui.</string>
+
+    <!-- Settings: about -->
+    <string name="settings_about">Apie</string>
+    <string name="contribute_on_github">Prisidėk per GitHub</string>
+    <string name="feedback_and_support">Atsiliepimai ir pagalba</string>
+    <string name="feedback_body">Čia aprašyk savo problemą ar pasiūlymą:\n</string>
+    <string name="imprint_privacy">Rekvizitai ir privatumo politika</string>
+    <string name="experimental_features">Eksperimentinės funkcijos</string>
+    <string name="mode">Režimas</string>
+    <string name="mode_production">Įprastas</string>
+    <string name="mode_production_detail">Dabartiniai orai. Rekomenduojama.</string>
+    <string name="mode_experimental_detail">Dabartiniai orai su dar kuriamomis funkcijomis. Gali veikti netikėtai. 🐛</string>
+    <string name="mode_demo">Demo</string>
+    <string name="mode_demo_detail">Įrašyta audra, atkuriama taip, lyg vyktų dabar. Tai ne dabartiniai orai.</string>
+    <string name="mode_footer">Įsigalioja iškart: žemėlapis persikrauna, o įspėjimai apie lietų ateina iš pasirinkto režimo.</string>
+
+    <!-- Settings: data sources -->
+    <string name="data_sources_header">Duomenų šaltiniai ir licencijos</string>
+    <string name="data_sources_footer">Duomenų teikėjai neremia meteocool ir neteikia jokių garantijų. Bakstelėk šaltinį, kad pamatytum jo licenciją.</string>
+    <string name="source_dwd">Vokietijos radaras, audrų celės, orų žemėlapiai · CC BY 4.0, su pakeitimais</string>
+    <string name="source_meteoswiss">Šveicarijos radaras · CC BY 4.0, su pakeitimais</string>
+    <string name="source_meteofrance">Prancūzijos radaras · Licence Ouverte 2.0 (Etalab), su pakeitimais</string>
+    <string name="source_chmi">Čekijos radaras · CC BY 4.0, su pakeitimais</string>
+    <string name="source_imgw">Lenkijos radaras · CC BY 4.0. Duomenų šaltinis – Meteorologijos ir vandentvarkos institutas – Nacionalinis mokslinių tyrimų institutas (IMGW-PIB). IMGW-PIB duomenis apdorojo meteocool.</string>
+    <string name="source_noaa">JAV radaras · viešasis domenas</string>
+    <string name="source_blitzortung">Žaibai</string>
+    <string name="source_openmeteo">Modelių palyginimas · CC BY 4.0</string>
+    <string name="source_osm">Fono žemėlapio duomenys · ODbL</string>
+    <string name="source_protomaps">Fono žemėlapio plytelės</string>
+
+    <string name="level_intense_rain">Stiprus lietus</string>
+    <string name="map_view_explanation">Žemėlapio sukimas dviem pirštais:\nSuk žemėlapį dviem pirštais. Kai išjungta, šiaurė visada lieka viršuje.\n\nAutomatinis priartinimas paleidus:\nPriartina prie tavo vietos kaskart, kai programėlė atidaroma ar vėl grįžta į pirmą planą. Reikia vietovės prieigos.</string>
+    <string name="basemap_system_explanation">Naudoja šviesų arba tamsų žemėlapį pagal tavo telefono išvaizdą. Išjunk, jei nori žemėlapį pasirinkti pats.</string>
+    <string name="basemap_explanation">Visi žemėlapiai yra prislopintų spalvų, kad radaras liktų įskaitomas.\n\nŠviesus ir tamsus:\nSausuma, vanduo, greitkeliai ir sienos, beveik nieko daugiau.\n\nOpenStreetMap:\nKaip klasikinis OpenStreetMap: su žemėnauda, visais keliais, pastatais ir regionų ribomis.\n\nCyclOSM (dviračiams):\nKeliaujantiems lauke: miškai ir parkai spalvoti, pažymėti keliukai ir takai, greitkeliai mažiau ryškūs.</string>
+    <string name="source_eumetnet">Šveicarijos, Prancūzijos, Čekijos ir Lenkijos radarai, gaunami per jį</string>
+    <string name="source_mapterhorn">Reljefas 3D žemėlapyje · atvirieji aukščių duomenys, daugiausia CC BY 4.0. Bakstelėk, kad pamatytum visus šaltinius.</string>
+    <string name="source_gorbachev">Legendos piktogramos</string>
+    <string name="location_permission_downgraded_title">Įspėjimai apie lietų negali tavęs sekti</string>
+    <string name="location_permission_downgraded_body">meteocool gali naudoti tavo vietą tik tada, kai programėlė atidaryta, todėl įspėjimai apie lietų galioja vietai, kurioje ją paskutinį kartą atidarei. Kad gautum įspėjimus visur, kur esi, nustatymuose vietovės prieigą pakeisk į „Leisti visą laiką“.</string>
+    <string name="map_share">Bendrinti</string>
+    <string name="show_radar">Rodyti radaro žemėlapį</string>
+    <string name="open_source_header">Atvirojo kodo licencijos</string>
+    <string name="open_source_footer">meteocool ir programinės įrangos, kuria jis paremtas, licencijos. Bakstelėk, kad perskaitytum.</string>
+    <string name="licence_android_libraries">Android bibliotekos</string>
+    <string name="licence_pyart">Py-ART spalvų skalės</string>
+    <string name="licence_web_map">Internetinio žemėlapio bibliotekos</string>
+
+</resources>

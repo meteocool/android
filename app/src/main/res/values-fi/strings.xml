@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Notification channel -->
+    <string name="notification_channel_name">Sadehälytykset</string>
+    <string name="notification_channel_description">Ennakkovaroitus vähän ennen kuin sade ehtii luoksesi.</string>
+
+    <!-- Common -->
+    <string name="action_continue">Jatka</string>
+    <string name="action_not_now">Ei nyt</string>
+    <string name="dismiss">Selvä</string>
+    <string name="change_in_settings">Muuta asetuksissa</string>
+    <string name="title_settings">Asetukset</string>
+    <string name="version_label">Versio: %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Tervetuloa meteocooliin</string>
+    <string name="onboarding_feature_radar_title">Reaaliaikainen tutka</string>
+    <string name="onboarding_feature_radar_text">Sade ja ukkoset sitä mukaa kuin ne tapahtuvat, päivittyy muutaman minuutin välein.</string>
+    <string name="onboarding_feature_nowcast_title">Lähiennuste</string>
+    <string name="onboarding_feature_nowcast_text">Seuraa, minne sade on menossa. Kokemuksemme mukaan ensimmäiset 45 minuuttia osuvat aika hyvin kohdalleen.</string>
+    <string name="rain_alerts">Sadehälytykset</string>
+    <string name="onboarding_feature_alerts_text">Ennakkovaroitus ennen kuin sade ehtii luoksesi. Se katoaa heti, kun sade lakkaa.</string>
+    <string name="onboarding_feature_free_title">Ilmainen ja avointa lähdekoodia</string>
+    <string name="onboarding_feature_free_text">Vapaaehtoisten vapaa-ajallaan tekemä ja ylläpitämä.</string>
+    <string name="location_access">Sijainnin käyttö</string>
+    <string name="onboarding_location_permission">Tarvitsemme lupasi, jotta voimme näyttää nykyisen sijaintisi kartalla.\n\nEmme koskaan jaa tai tallenna sijaintitietojasi.</string>
+    <string name="allow_location_access">Salli sijainnin käyttö</string>
+    <string name="onboarding_notification_text">Saat ilmoituksen vähän ennen kuin sijainnissasi alkaa sataa, myös silloin kun meteocool on suljettu.\n\nTätä varten laitteesi pyytää lisäksi lupaa käyttää sijaintia taustalla. Älä huoli, se ei kuluta akkua.</string>
+    <string name="tell_me_before_it_rains">Kerro ennen kuin sataa!</string>
+    <string name="onboarding_settings_footnote">Voit muuttaa tätä milloin tahansa asetuksissa.</string>
+    <string name="background_location_title">Hälytykset, kun meteocool on suljettu</string>
+    <string name="background_location_rationale">Sadehälytykset tarkistavat sijaintisi noin 15 minuutin välein myös silloin, kun meteocool on suljettu. Valitse seuraavalla näytöllä \"Salli aina\".\n\nIlman sitä hälytykset seuraavat sinua vain, kun sovellus on auki.</string>
+
+    <!-- Map -->
+    <string name="map_layers">Karttatasot</string>
+    <string name="location_button">Sijainti</string>
+    <string name="location_button_off">Pois</string>
+    <string name="location_button_active">Näyttää sijaintisi</string>
+    <string name="location_button_tracking">Seuraa sijaintiasi</string>
+    <string name="map_load_failed">Karttaa ei voitu ladata. Yritetään uudelleen…</string>
+    <string name="location_permission_required">Sijaintilupa tarvitaan</string>
+    <string name="location_permission_general">Jos haluat käyttää sijaintipainiketta tai automaattista zoomausta, salli sijainnin käyttö laitteesi asetuksissa. Emme tallenna tai jaa sijaintitietoja.</string>
+
+    <!-- Demo mode -->
+    <string name="demo_notice_title">Tämä ei ole oikea ukkonen</string>
+    <string name="demo_notice_message">Demotila on päällä: kartta toistaa tallennettua ukkosta ikään kuin se tapahtuisi juuri nyt. Mikään näkyvä ei ole nykyistä säätä.</string>
+    <string name="demo_notice_disable">Poista demotila käytöstä</string>
+    <string name="demo_notice_continue">Jatka demoon</string>
+
+    <!-- Settings: rain alerts -->
+    <string name="settings_notifications">Ilmoitukset</string>
+    <string name="enable_notifications">Ota ilmoitukset käyttöön</string>
+    <string name="show_meteorological_details">Näytä meteorologiset tiedot</string>
+    <string name="intensity_threshold">Voimakkuuden kynnys</string>
+    <string name="notification_timeframe">Ennakkoaika</string>
+    <string name="level_drizzle">Tihku</string>
+    <string name="level_light">Heikko sade</string>
+    <string name="level_rain">Sade</string>
+    <string name="level_heavy_rain">Rankkasade</string>
+    <string name="notifications_explanation">Halutessasi voimme varoittaa sinua sateesta, joka on tulossa nykyiseen sijaintiisi. Tätä varten sovellus lähettää sijaintisi taustalla palvelimillemme.</string>
+    <string name="meteorological_details_help">Voimakkuuden kynnys:\nIlmoita vain sateesta, jonka odotetaan olevan vähintään näin voimakasta.\n\nEnnakkoaika:\nKuinka paljon ennen sadetta haluat ilmoituksen.</string>
+    <string name="notification_permissions_title">Tarkista luvat</string>
+    <string name="notification_permissions_help">Sadehälytykset tarvitsevat ilmoitukset ja sijainnin käyttöoikeuden. Jos haluat hälytykset liikkuessasi myös sovelluksen ollessa suljettuna, aseta sijainnin käyttöoikeudeksi asetuksissa \"Salli aina\". Karttaa voit selata ilman näitäkin lupia.</string>
+    <string name="notification_sync_failed">Ilmoitusasetusten muutokset eivät menneet perille palvelimelle. Hälytykset saattavat yhä käyttää aiempia asetuksiasi. Tarkista yhteys ja yritä uudelleen avaamalla sovellus uudestaan.</string>
+
+    <!-- Settings: map -->
+    <string name="settings_map_view">Kartta</string>
+    <string name="two_finger_rotation">Kartan kierto kahdella sormella</string>
+    <string name="auto_zoom_after_start">Automaattinen zoomaus käynnistettäessä</string>
+    <string name="base_map_layer">Taustakartta</string>
+    <string name="basemap_system">Järjestelmän mukaan</string>
+    <string name="basemap_light">Vaalea</string>
+    <string name="basemap_dark">Tumma</string>
+    <string name="basemap_cyclosm">CyclOSM (pyöräily)</string>
+    <string name="system_detail">Nyt: %1$s</string>
+    <string name="radar_color_map">Tutkan väriasteikko</string>
+    <string name="colormap_classic">Klassinen</string>
+    <string name="colormap_homeyer">Homeyer (värinäön poikkeamat)</string>
+    <string name="colormap_lang">Lang</string>
+    <string name="colormap_explanation">Vaihtaa sateen väriasteikon kartalla. Jokainen palkki kulkee vasemman reunan tihkusta oikean reunan rakeisiin.\n\nKlassinen:\nmeteocoolin oma. Tihku häivytetään esiin, sitten sininen, vihreä, keltainen ja punainen, ja rakeille valkoisesta violettiin.\n\nNWS Reflectivity:\nYhdysvaltain kansallisen sääpalvelun (NWS) värit. Lähellä klassista, mutta tihku piirretään peittävänä eikä häivytettynä.\n\nPyArt StepSeq:\nPy-ART-tutkatyökalupakista. Ruskeat, vihreät, siniset ja violetit vyöhykkeet, kukin vaaleasta tummaan, joten pienetkin voimakkuuden muutokset erottuvat.\n\nHomeyer (värinäön poikkeamat):\nVihreästä keltaisen ja oranssin kautta tummanpunaiseen, suunniteltu pysymään luettavana myös värinäön poikkeamien kanssa.\n\nLang:\nVaaleansinisestä keltaisen kautta ruskeaan, sekin luettava värinäön poikkeamien kanssa.</string>
+
+    <!-- Settings: about -->
+    <string name="settings_about">Tietoja</string>
+    <string name="contribute_on_github">Osallistu GitHubissa</string>
+    <string name="feedback_and_support">Palaute ja tuki</string>
+    <string name="feedback_body">Kuvaile ongelmasi tai ehdotuksesi tähän:\n</string>
+    <string name="imprint_privacy">Julkaisutiedot ja tietosuojaseloste</string>
+    <string name="experimental_features">Kokeelliset ominaisuudet</string>
+    <string name="mode">Tila</string>
+    <string name="mode_production">Tuotanto</string>
+    <string name="mode_production_detail">Nykyinen sää. Suositeltu.</string>
+    <string name="mode_experimental_detail">Nykyinen sää sekä ominaisuuksia, jotka ovat vielä kehitteillä. Saattaa toimia odottamattomasti. 🐛</string>
+    <string name="mode_demo">Demo</string>
+    <string name="mode_demo_detail">Tallennettu ukkonen, toistettuna ikään kuin se tapahtuisi juuri nyt. Ei nykyinen sää.</string>
+    <string name="mode_footer">Tulee voimaan heti: kartta latautuu uudelleen, ja sadehälytykset tulevat valitusta tilasta.</string>
+
+    <!-- Settings: data sources -->
+    <string name="data_sources_header">Tietolähteet ja lisenssit</string>
+    <string name="data_sources_footer">Palveluntarjoajat eivät ole suosittaneet meteocoolia eivätkä anna mitään takuuta. Napauta lähdettä nähdäksesi sen lisenssin.</string>
+    <string name="source_dwd">Tutka Saksa, ukkossolut, sääkartat · CC BY 4.0, muokattu</string>
+    <string name="source_meteoswiss">Tutka Sveitsi · CC BY 4.0, muokattu</string>
+    <string name="source_meteofrance">Tutka Ranska · Licence Ouverte 2.0 (Etalab), muokattu</string>
+    <string name="source_chmi">Tutka Tšekki · CC BY 4.0, muokattu</string>
+    <string name="source_imgw">Tutka Puola · CC BY 4.0. Tietojen lähde on Puolan meteorologian ja vesitalouden instituutti – kansallinen tutkimuslaitos (IMGW-PIB). meteocool on käsitellyt IMGW-PIB:n tietoja.</string>
+    <string name="source_noaa">Tutka Yhdysvallat · public domain</string>
+    <string name="source_blitzortung">Salamat</string>
+    <string name="source_openmeteo">Mallivertailu · CC BY 4.0</string>
+    <string name="source_osm">Taustakartan tiedot · ODbL</string>
+    <string name="source_protomaps">Taustakartan tiilet</string>
+
+    <string name="level_intense_rain">Voimakas sade</string>
+    <string name="map_view_explanation">Kartan kierto kahdella sormella:\nKäännä karttaa kahdella sormella. Kun asetus on pois päältä, pohjoinen pysyy aina ylhäällä.\n\nAutomaattinen zoomaus käynnistettäessä:\nZoomaa sijaintiisi aina, kun sovellus avataan tai palaa etualalle. Vaatii sijainnin käyttöoikeuden.</string>
+    <string name="basemap_system_explanation">Käyttää vaaleaa tai tummaa karttaa puhelimesi ulkoasun mukaan. Laita pois päältä, jos haluat valita kartan itse.</string>
+    <string name="basemap_explanation">Kaikki kartat ovat hillittyjä, jotta tutkakuva pysyy luettavana.\n\nVaalea ja Tumma:\nMaa, vesi, moottoritiet ja rajat, vähän muuta.\n\nOpenStreetMap:\nKuten klassinen OpenStreetMap, jossa on maankäyttö, kaikki tiet, rakennukset ja alueelliset rajat.\n\nCyclOSM (pyöräily):\nUlkoiluun: metsät ja puistot värillisinä, polut ja ulkoilureitit piirrettyinä, moottoritiet taka-alalla.</string>
+    <string name="source_eumetnet">Tutka Sveitsi, Ranska, Tšekki ja Puola, toimitettu sen kautta</string>
+    <string name="source_mapterhorn">Maasto 3D-kartalla · avoimet korkeustiedot, enimmäkseen CC BY 4.0. Napauta nähdäksesi kaikki lähteet.</string>
+    <string name="source_gorbachev">Selitteen kuvakkeet</string>
+    <string name="location_permission_downgraded_title">Sadehälytykset eivät voi seurata sinua</string>
+    <string name="location_permission_downgraded_body">meteocool saa käyttää sijaintiasi vain silloin, kun se on auki, joten sadehälytykset koskevat paikkaa, jossa viimeksi avasit sen. Jos haluat hälytykset missä ikinä oletkin, aseta sijainnin käyttöoikeudeksi asetuksissa \"Salli aina\".</string>
+    <string name="map_share">Jaa</string>
+    <string name="show_radar">Näytä tutkakartta</string>
+    <string name="open_source_header">Avoimen lähdekoodin lisenssit</string>
+    <string name="open_source_footer">meteocoolin ja sen pohjana olevien ohjelmistojen lisenssit. Lue lisenssi napauttamalla.</string>
+    <string name="licence_android_libraries">Android-kirjastot</string>
+    <string name="licence_pyart">Py-ART-väriasteikot</string>
+    <string name="licence_web_map">Verkkokartan kirjastot</string>
+
+</resources>

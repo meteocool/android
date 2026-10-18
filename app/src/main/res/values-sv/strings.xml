@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Notification channel -->
+    <string name="notification_channel_name">Regnvarningar</string>
+    <string name="notification_channel_description">En förvarning strax innan regnet når dig.</string>
+
+    <!-- Common -->
+    <string name="action_continue">Fortsätt</string>
+    <string name="action_not_now">Inte nu</string>
+    <string name="dismiss">Okej</string>
+    <string name="change_in_settings">Ändra i Inställningar</string>
+    <string name="title_settings">Inställningar</string>
+    <string name="version_label">Version: %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Välkommen till meteocool</string>
+    <string name="onboarding_feature_radar_title">Liveradar</string>
+    <string name="onboarding_feature_radar_text">Regn och åska i realtid, uppdaterat med några minuters mellanrum.</string>
+    <string name="onboarding_feature_nowcast_title">Korttidsprognos</string>
+    <string name="onboarding_feature_nowcast_text">Se vart regnet är på väg. Enligt vår erfarenhet stämmer de första 45 minuterna riktigt bra.</string>
+    <string name="rain_alerts">Regnvarningar</string>
+    <string name="onboarding_feature_alerts_text">En förvarning innan regnet når dig, som försvinner så fort det slutar.</string>
+    <string name="onboarding_feature_free_title">Gratis och öppen källkod</string>
+    <string name="onboarding_feature_free_text">Byggd och driven av frivilliga på deras fritid.</string>
+    <string name="location_access">Platsåtkomst</string>
+    <string name="onboarding_location_permission">För att kunna visa var du är på kartan behöver vi ditt tillstånd.\n\nVi kommer aldrig att dela eller spara dina platsdata.</string>
+    <string name="allow_location_access">Tillåt platsåtkomst</string>
+    <string name="onboarding_notification_text">Få en avisering strax innan det börjar regna där du är, även när meteocool är stängd.\n\nDärför ber din enhet också om platsåtkomst i bakgrunden. Ingen fara, det tömmer inte batteriet.</string>
+    <string name="tell_me_before_it_rains">Varna mig innan det regnar!</string>
+    <string name="onboarding_settings_footnote">Du kan ändra detta när som helst i Inställningar.</string>
+    <string name="background_location_title">Varningar när meteocool är stängd</string>
+    <string name="background_location_rationale">Regnvarningarna kollar din plats även när meteocool är stängd, ungefär var 15:e minut. Välj ”Tillåt alltid” på nästa skärm.\n\nUtan det följer varningarna bara med dig medan appen är öppen.</string>
+
+    <!-- Map -->
+    <string name="map_layers">Kartlager</string>
+    <string name="location_button">Plats</string>
+    <string name="location_button_off">Av</string>
+    <string name="location_button_active">Visar din plats</string>
+    <string name="location_button_tracking">Följer din plats</string>
+    <string name="map_load_failed">Kartan kunde inte laddas. Försöker igen…</string>
+    <string name="location_permission_required">Platsåtkomst krävs</string>
+    <string name="location_permission_general">För att använda platsknappen eller autozoom måste du tillåta åtkomst till Plats i enhetens inställningar. Vi sparar eller delar aldrig någon platsinformation.</string>
+
+    <!-- Demo mode -->
+    <string name="demo_notice_title">Det här är inget riktigt oväder</string>
+    <string name="demo_notice_message">Demoläget är på: kartan spelar upp ett inspelat oväder som om det pågick nu. Inget av det som visas är aktuellt väder.</string>
+    <string name="demo_notice_disable">Stäng av demoläget</string>
+    <string name="demo_notice_continue">Fortsätt till demon</string>
+
+    <!-- Settings: rain alerts -->
+    <string name="settings_notifications">Pushaviseringar</string>
+    <string name="enable_notifications">Slå på aviseringar</string>
+    <string name="show_meteorological_details">Visa meteorologiska detaljer</string>
+    <string name="intensity_threshold">Intensitetströskel</string>
+    <string name="notification_timeframe">Förvarningstid</string>
+    <string name="level_drizzle">Duggregn</string>
+    <string name="level_light">Lätt regn</string>
+    <string name="level_rain">Regn</string>
+    <string name="level_heavy_rain">Kraftigt regn</string>
+    <string name="notifications_explanation">Om du vill kan vi varna dig för nederbörd som är på väg mot din nuvarande plats. Då skickar appen din plats till våra servrar i bakgrunden.</string>
+    <string name="meteorological_details_help">Intensitetströskel:\nAvisera bara om nederbörd som väntas bli minst så här intensiv.\n\nFörvarningstid:\nHur lång tid före nederbörden du vill få en avisering.</string>
+    <string name="notification_permissions_title">Kontrollera behörigheter</string>
+    <string name="notification_permissions_help">Regnvarningar kräver aviseringar och platsåtkomst. Om du vill få varningar när du rör dig medan appen är stängd, ställ in platsåtkomsten på ”Tillåt alltid” i Inställningar. Du kan fortfarande titta på kartan utan dessa behörigheter.</string>
+    <string name="notification_sync_failed">Ändringarna av aviseringarna kunde inte nå servern. Varningarna kan fortfarande använda dina tidigare inställningar. Kontrollera anslutningen och öppna appen igen för att försöka på nytt.</string>
+
+    <!-- Settings: map -->
+    <string name="settings_map_view">Karta</string>
+    <string name="two_finger_rotation">Rotera kartan med två fingrar</string>
+    <string name="auto_zoom_after_start">Autozoom vid start</string>
+    <string name="base_map_layer">Bakgrundskarta</string>
+    <string name="basemap_system">Följ systemet</string>
+    <string name="basemap_light">Ljus</string>
+    <string name="basemap_dark">Mörk</string>
+    <string name="basemap_cyclosm">CyclOSM (cykel)</string>
+    <string name="system_detail">Just nu %1$s</string>
+    <string name="radar_color_map">Radarns färgskala</string>
+    <string name="colormap_classic">Klassisk</string>
+    <string name="colormap_homeyer">Homeyer (nedsatt färgseende)</string>
+    <string name="colormap_lang">Lang</string>
+    <string name="colormap_explanation">Ändrar färgskalan för nederbörden på kartan. Varje stapel går från duggregn till vänster till hagel till höger.\n\nKlassisk:\nmeteocools egen. Duggregn tonas in, sedan blått, grönt, gult och rött, och vitt till lila för hagel.\n\nNWS Reflectivity:\nFärgerna från USA:s nationella vädertjänst (NWS). Nära Klassisk, men duggregn ritas heltäckande i stället för att tonas in.\n\nPyArt StepSeq:\nFrån radarverktygslådan Py-ART. Bruna, gröna, blå och lila band, vart och ett från ljust till mörkt, så att små skillnader i intensitet syns tydligt.\n\nHomeyer (nedsatt färgseende):\nFrån grönt via gult och orange till mörkrött, gjord för att vara läsbar även med nedsatt färgseende.\n\nLang:\nFrån ljusblått via gult till brunt, också läsbar med nedsatt färgseende.</string>
+
+    <!-- Settings: about -->
+    <string name="settings_about">Om</string>
+    <string name="contribute_on_github">Bidra på GitHub</string>
+    <string name="feedback_and_support">Feedback och support</string>
+    <string name="feedback_body">Beskriv ditt problem eller förslag här:\n</string>
+    <string name="imprint_privacy">Juridisk information och integritetspolicy</string>
+    <string name="experimental_features">Experimentella funktioner</string>
+    <string name="mode">Läge</string>
+    <string name="mode_production">Produktion</string>
+    <string name="mode_production_detail">Aktuellt väder. Rekommenderas.</string>
+    <string name="mode_experimental_detail">Aktuellt väder, med funktioner som fortfarande utvecklas. Kan bete sig oväntat. 🐛</string>
+    <string name="mode_demo">Demo</string>
+    <string name="mode_demo_detail">Ett inspelat oväder, uppspelat som om det pågick nu. Inte aktuellt väder.</string>
+    <string name="mode_footer">Gäller direkt: kartan laddas om och regnvarningarna kommer från det valda läget.</string>
+
+    <!-- Settings: data sources -->
+    <string name="data_sources_header">Datakällor och licenser</string>
+    <string name="data_sources_footer">Leverantörerna står inte bakom meteocool och lämnar inga garantier. Tryck på en källa för att se dess licens.</string>
+    <string name="source_dwd">Radar Tyskland, åskceller, väderkartor · CC BY 4.0, bearbetad</string>
+    <string name="source_meteoswiss">Radar Schweiz · CC BY 4.0, bearbetad</string>
+    <string name="source_meteofrance">Radar Frankrike · Licence Ouverte 2.0 (Etalab), bearbetad</string>
+    <string name="source_chmi">Radar Tjeckien · CC BY 4.0, bearbetad</string>
+    <string name="source_imgw">Radar Polen · CC BY 4.0. Datakällan är Institutet för meteorologi och vattenförvaltning – Nationellt forskningsinstitut (IMGW-PIB). Data från IMGW-PIB har bearbetats av meteocool.</string>
+    <string name="source_noaa">Radar USA · allmän egendom</string>
+    <string name="source_blitzortung">Blixtar</string>
+    <string name="source_openmeteo">Modelljämförelse · CC BY 4.0</string>
+    <string name="source_osm">Kartdata för bakgrundskartan · ODbL</string>
+    <string name="source_protomaps">Kartplattor för bakgrundskartan</string>
+
+    <string name="level_intense_rain">Intensivt regn</string>
+    <string name="map_view_explanation">Rotera kartan med två fingrar:\nVrid kartan med två fingrar. När det är avstängt är norr alltid uppåt.\n\nAutozoom vid start:\nZoomar till din plats varje gång appen öppnas eller kommer tillbaka till förgrunden. Kräver platsåtkomst.</string>
+    <string name="basemap_system_explanation">Använder Ljus eller Mörk efter telefonens utseende. Stäng av för att välja karta själv.</string>
+    <string name="basemap_explanation">Alla kartor hålls dämpade så att radarn förblir läsbar.\n\nLjus och Mörk:\nLand, vatten, motorvägar och gränser, inte mycket mer.\n\nOpenStreetMap:\nSom den klassiska OpenStreetMap, med markanvändning, alla vägar, byggnader och regionala gränser.\n\nCyclOSM (cykel):\nFör friluftsliv: skog och parker i färg, stigar och leder inritade, motorvägar nedtonade.</string>
+    <string name="source_eumetnet">Radar Schweiz, Frankrike, Tjeckien och Polen, levererad via EUMETNET</string>
+    <string name="source_mapterhorn">Terräng i 3D-kartan · öppna höjddata, mestadels CC BY 4.0. Tryck för att se alla källor.</string>
+    <string name="source_gorbachev">Symboler i teckenförklaringen</string>
+    <string name="location_permission_downgraded_title">Regnvarningarna kan inte följa dig</string>
+    <string name="location_permission_downgraded_body">meteocool får bara använda din plats medan appen är öppen, så regnvarningarna gäller platsen där du senast öppnade den. Om du vill ha varningar var du än är, ställ in platsåtkomsten på ”Tillåt alltid” i Inställningar.</string>
+    <string name="map_share">Dela</string>
+    <string name="show_radar">Visa radarkartan</string>
+    <string name="open_source_header">Licenser för öppen källkod</string>
+    <string name="open_source_footer">Licenserna för meteocool och för programvaran den bygger på. Tryck på en för att läsa den.</string>
+    <string name="licence_android_libraries">Android-bibliotek</string>
+    <string name="licence_pyart">Färgskalor från Py-ART</string>
+    <string name="licence_web_map">Bibliotek för webbkartan</string>
+
+</resources>

@@ -31,7 +31,7 @@ android {
         generateLocaleConfig true
         // The languages of the countries with radar coverage. Libraries bring
         // dozens more, which would leave a half-translated app in those.
-        localeFilters += ["en", "de", "fr", "it", "cs", "pl"]
+        localeFilters += ["en", "de", "fr", "it", "cs", "pl", "nl", "lt", "et", "hr", "da", "fi", "sv", "nb"]
     }
 
     buildFeatures {

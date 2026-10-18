@@ -1,0 +1,21 @@
+Ei taha märjaks saada või tahad hoopis äikest jälitada? meteocool näitab vihma ja äikest reaalajas ning seda, kuhu need edasi liiguvad.
+
+<b>Funktsioonid</b>
+<ul>
+<li>Reaalajas radar, uueneb iga paari minuti järel: Saksamaa, Šveits, Prantsusmaa, Tšehhi, Poola, Belgia, Slovakkia, Leedu, Eesti, Iirimaa, Horvaatia, Taani, Madalmaad, Soome, Rootsi, Norra ja Ameerika Ühendriigid</li>
+<li>Lühiprognoos: vaata, kuhu vihm järgmise 45 minuti jooksul liigub. Meie kogemuse põhjal on esimesed 45 minutit päris täpsed</li>
+<li>Välgulöögid reaalajas, Blitzortung.org-ist</li>
+<li>Äikeserakud, igaühel oma 3D-radarivaade</li>
+<li>Sademete liigid nii, nagu radar neid näeb</li>
+<li>Vihmaprognoos sinu asukohas, mitme ilmamudeli võrdluses</li>
+<li>Aluskaardid: nagu süsteemis, hele, tume, OpenStreetMap või rattasõiduks CyclOSM</li>
+<li>Radari värviskaalad, sealhulgas kaks värvinägemise häirega inimestele</li>
+<li>Sinu asukoht kaardil, mida liikudes järgitakse</li>
+<li>Eesti, inglise, saksa, prantsuse, itaalia, poola, tšehhi, hollandi, taani, rootsi, norra, soome, leedu ja horvaadi keeles</li>
+</ul>
+
+Vihmahoiatused ehk teavitus enne, kui vihm sinuni jõuab, vajavad Google'i tõuketeenust ja on olemas ainult Google Play versioonis.
+
+meteocool on open-core projekt, mida vabatahtlikud oma vabast ajast arendavad ja haldavad. See rakendus on avatud lähtekoodiga (AGPL-3.0), tasuta ja reklaamideta.
+
+Radariandmed: DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB, RMI, SHMÚ, LHMT, Keskkonnaagentuur, Met Éireann, DHMZ, DMI, KNMI, FMI, SMHI, MET Norway ja NOAA; rakendus loetleb iga allika ja selle litsentsi seadetes.

@@ -1,0 +1,21 @@
+Vil du holde deg tørr, eller vil du følge et tordenvær? meteocool viser regn og tordenvær mens det skjer, og hvor det er på vei.
+
+<b>Funksjoner</b>
+<ul>
+<li>Direkteradar, oppdatert med noen minutters mellomrom: Tyskland, Sveits, Frankrike, Tsjekkia, Polen, Belgia, Slovakia, Litauen, Estland, Irland, Kroatia, Danmark, Nederland, Finland, Sverige, Norge og USA</li>
+<li>Korttidsvarsel: se hvor regnet beveger seg de neste 45 minuttene. Vår erfaring er at de første 45 minuttene treffer ganske godt</li>
+<li>Lynnedslag direkte, fra Blitzortung.org</li>
+<li>Tordenceller, med en 3D-radarvisning av hver enkelt</li>
+<li>Nedbørtyper, slik radaren ser dem</li>
+<li>Nedbørvarsel for der du er, med flere værmodeller sammenlignet</li>
+<li>Bakgrunnskart: som systemet, lyst, mørkt, OpenStreetMap eller CyclOSM for sykling</li>
+<li>Fargeskalaer for radaren, blant dem to for fargesvaksyn</li>
+<li>Posisjonen din på kartet, som følger deg når du beveger deg</li>
+<li>Norsk, engelsk, tysk, fransk, italiensk, polsk, tsjekkisk, nederlandsk, dansk, svensk, finsk, estisk, litauisk og kroatisk</li>
+</ul>
+
+Regnvarsling, varselet før regnet når deg, krever Googles push-tjeneste og finnes bare i Google Play-versjonen.
+
+meteocool er open core, utviklet og drevet av frivillige på fritiden. Denne appen er åpen kildekode (AGPL-3.0), gratis og uten reklame.
+
+Radardata fra DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB, RMI, SHMÚ, LHMT, Keskkonnaagentuur, Met Éireann, DHMZ, DMI, KNMI, FMI, SMHI, MET Norway og NOAA; appen viser alle kildene og lisensene deres under Innstillinger.
