@@ -2,7 +2,7 @@ Du willst nicht nass werden oder ein Gewitter verfolgen? meteocool zeigt Regen u
 
 <b>Funktionen</b>
 <ul>
-<li>Live-Radar, alle paar Minuten aktualisiert: Deutschland, Schweiz, Frankreich, Tschechien, Polen und die USA</li>
+<li>Live-Radar, alle paar Minuten aktualisiert: Deutschland, Schweiz, Frankreich, Tschechien, Polen, Belgien, Slowakei, Litauen, Estland, Irland, Kroatien, Dänemark, Niederlande, Finnland, Schweden, Norwegen und die USA</li>
 <li>Kurzzeitvorhersage: Sieh, wohin der Regen in den nächsten 45 Minuten zieht. Die ersten 45 Minuten sind erfahrungsgemäß sehr genau</li>
 <li>Blitze live, von Blitzortung.org</li>
 <li>Gewitterzellen, mit 3D-Radaransicht für jede einzelne</li>
@@ -11,11 +11,11 @@ Du willst nicht nass werden oder ein Gewitter verfolgen? meteocool zeigt Regen u
 <li>Basiskarten: wie System, hell, dunkel, OpenStreetMap oder CyclOSM zum Radfahren</li>
 <li>Radar-Farbschemata, darunter zwei für Farbsehschwäche</li>
 <li>Dein Standort auf der Karte, auf Wunsch mitverfolgt</li>
-<li>Deutsch, Englisch, Französisch, Italienisch, Polnisch und Tschechisch</li>
+<li>Deutsch, Englisch, Französisch, Italienisch, Polnisch, Tschechisch, Niederländisch, Dänisch, Schwedisch, Norwegisch, Finnisch, Estnisch, Litauisch und Kroatisch</li>
 </ul>
 
 Regenwarnungen, der Hinweis bevor der Regen bei Dir ankommt, brauchen Googles Push-Dienst und gibt es nur in der Google-Play-Version.
 
 meteocool ist Open Core und wird von Freiwilligen in ihrer Freizeit entwickelt und betrieben. Diese App ist quelloffen (AGPL-3.0), kostenlos und werbefrei.
 
-Radardaten von DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB und NOAA; die App nennt jede Quelle mit Lizenz in den Einstellungen.
+Radardaten von DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB, RMI, SHMÚ, LHMT, Keskkonnaagentuur, Met Éireann, DHMZ, DMI, KNMI, FMI, SMHI, MET Norway und NOAA; die App nennt jede Quelle mit Lizenz in den Einstellungen.

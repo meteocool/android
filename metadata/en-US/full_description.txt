@@ -2,7 +2,7 @@ Don't want to get wet, or want to follow a thunderstorm? meteocool shows rain an
 
 <b>Features</b>
 <ul>
-<li>Live radar, updated every few minutes: Germany, Switzerland, France, Czechia, Poland and the United States</li>
+<li>Live radar, updated every few minutes: Germany, Switzerland, France, Czechia, Poland, Belgium, Slovakia, Lithuania, Estonia, Ireland, Croatia, Denmark, the Netherlands, Finland, Sweden, Norway and the United States</li>
 <li>Nowcast: watch where the rain moves over the next 45 minutes. In our experience the first 45 minutes are pretty spot-on</li>
 <li>Lightning strikes live, from Blitzortung.org</li>
 <li>Storm cells, with a 3D radar view of each one</li>
@@ -11,11 +11,11 @@ Don't want to get wet, or want to follow a thunderstorm? meteocool shows rain an
 <li>Base maps: match system, light, dark, OpenStreetMap or CyclOSM for biking</li>
 <li>Radar colour maps, including two for colour vision deficiency</li>
 <li>Your location on the map, followed as you move</li>
-<li>English, German, French, Italian, Polish and Czech</li>
+<li>English, German, French, Italian, Polish, Czech, Dutch, Danish, Swedish, Norwegian, Finnish, Estonian, Lithuanian and Croatian</li>
 </ul>
 
 Rain alerts, the notification before rain reaches you, need Google's push service and are only in the Google Play version.
 
 meteocool is open-core, built and run by volunteers in their spare time. This app is open source (AGPL-3.0), free of charge and has no ads.
 
-Radar data from DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB and NOAA; the app lists every source and its licence under Settings.
+Radar data from DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB, RMI, SHMÚ, LHMT, Keskkonnaagentuur, Met Éireann, DHMZ, DMI, KNMI, FMI, SMHI, MET Norway and NOAA; the app lists every source and its licence under Settings.

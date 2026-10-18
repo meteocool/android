@@ -2,7 +2,7 @@ Nechceš zmoknout, nebo chceš sledovat bouřku? meteocool ukazuje déšť a bou
 
 <b>Funkce</b>
 <ul>
-<li>Radar naživo, aktualizovaný každých pár minut: Německo, Švýcarsko, Francie, Česko, Polsko a USA</li>
+<li>Radar naživo, aktualizovaný každých pár minut: Německo, Švýcarsko, Francie, Česko, Polsko, Belgie, Slovensko, Litva, Estonsko, Irsko, Chorvatsko, Dánsko, Nizozemsko, Finsko, Švédsko, Norsko a USA</li>
 <li>Nowcasting: sleduj, kam se déšť posune během příštích 45 minut. Podle našich zkušeností je těchto 45 minut velmi přesných</li>
 <li>Blesky naživo, z Blitzortung.org</li>
 <li>Bouřkové buňky, každá s 3D radarovým pohledem</li>
@@ -11,11 +11,11 @@ Nechceš zmoknout, nebo chceš sledovat bouřku? meteocool ukazuje déšť a bou
 <li>Podkladové mapy: podle systému, světlá, tmavá, OpenStreetMap nebo CyclOSM pro cyklisty</li>
 <li>Barevné škály radaru, z toho dvě pro poruchy barvocitu</li>
 <li>Tvá poloha na mapě, sledovaná, když se pohybuješ</li>
-<li>Čeština, němčina, angličtina, francouzština, italština a polština</li>
+<li>Čeština, němčina, angličtina, francouzština, italština, polština, nizozemština, dánština, švédština, norština, finština, estonština, litevština a chorvatština</li>
 </ul>
 
 Upozornění na déšť, tedy varování předtím, než k tobě dorazí déšť, potřebují push službu Googlu a jsou jen ve verzi z Google Play.
 
 meteocool je open core, vyvíjí a provozují ho dobrovolníci ve svém volném čase. Tato aplikace je open source (AGPL-3.0), zdarma a bez reklam.
 
-Radarová data od DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB a NOAA; aplikace v nastavení uvádí každý zdroj i s licencí.
+Radarová data od DWD, MeteoSwiss, Météo-France, ČHMÚ, IMGW-PIB, RMI, SHMÚ, LHMT, Keskkonnaagentuur, Met Éireann, DHMZ, DMI, KNMI, FMI, SMHI, MET Norway a NOAA; aplikace v nastavení uvádí každý zdroj i s licencí.
