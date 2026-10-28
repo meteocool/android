@@ -16,7 +16,10 @@ import java.net.URL
  * rather than a 4xx, so a request only succeeded if the body says so. Logs
  * carry the status only, never the payload, which holds the location.
  */
-class ApiClient(private val timeoutMillis: Int = 20_000) {
+class ApiClient(
+    private val timeoutMillis: Int = 20_000,
+    private val userAgent: () -> String = { UserAgent.value },
+) {
 
     enum class Endpoint(val path: String) {
         POST_LOCATION("post_location"),
@@ -76,6 +79,7 @@ class ApiClient(private val timeoutMillis: Int = 20_000) {
                 doOutput = true
                 setRequestProperty("Content-Type", "application/json; charset=utf-8")
                 setRequestProperty("Accept", "application/json")
+                setRequestProperty("User-Agent", userAgent())
             }
             val bytes = json.toByteArray(Charsets.UTF_8)
             connection.setFixedLengthStreamingMode(bytes.size)

@@ -51,6 +51,7 @@ import androidx.webkit.WebViewFeature
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.meteocool.BuildConfig
+import com.meteocool.network.UserAgent
 import com.meteocool.R
 import com.meteocool.databinding.FragmentMapBinding
 import com.meteocool.environment.MeteocoolEnvironment
@@ -218,6 +219,7 @@ class WebFragment : Fragment() {
             javaScriptEnabled = true
             domStorageEnabled = true
             setGeolocationEnabled(true)
+            userAgentString = "$userAgentString ${UserAgent.value}"
         }
         web.webViewClient = MapWebViewClient()
         web.webChromeClient = MapChromeClient()

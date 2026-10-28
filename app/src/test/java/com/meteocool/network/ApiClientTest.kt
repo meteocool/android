@@ -68,6 +68,14 @@ class ApiClientTest {
     }
 
     @Test
+    fun `says which version and which android it is`() = runTest {
+        server.enqueue(MockResponse().setBody("""{"success":true}"""))
+        val agent = UserAgent.format("4.0.0", 36, "15")
+        ApiClient(userAgent = { agent }).post(base, Endpoint.POST_LOCATION, mapOf("token" to "t"))
+        assertEquals("meteocool/4.0.0 (36; Android 15)", server.takeRequest().getHeader("User-Agent"))
+    }
+
+    @Test
     fun `a rejected payload is a failure`() = runTest {
         server.enqueue(MockResponse().setBody("""{"success":false}"""))
         assertFalse(ApiClient().post(base, Endpoint.POST_LOCATION, mapOf("token" to "t")))
