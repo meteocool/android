@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="widget_radar">Mapa radarowa</string>
+    <string name="widget_forecast">Prognoza deszczu</string>
+    <string name="widget_clock">Zegar deszczu</string>
+    <string name="widget_places">Miejsca</string>
+    <string name="widget_current_location">Obecna lokalizacja</string>
+    <string name="widget_range">Zakres czasu</string>
+    <string name="widget_area">Obszar mapy</string>
+    <string name="widget_overlay">Prognoza</string>
+    <string name="widget_dial">Tarcza</string>
+    <string name="widget_intensity">Intensywność</string>
+    <string name="widget_show_map">Pokaż mapę radarową</string>
+    <string name="widget_refresh">Odśwież</string>
+    <string name="widget_configure">Skonfiguruj widżet</string>
+    <string name="widget_location_help">Wybierz miejsce lub obecną lokalizację. Potrzebne są uprawnienie i aktualna lokalizacja. Jeśli jej brakuje, otwórz meteocool. Wysoki widżet pokazuje sześć miejsc, mniejsze pokazują mniej.</string>
+    <string name="widget_search_hint">Miasto lub miejsce</string>
+    <string name="widget_search">Szukaj</string>
+    <string name="widget_search_failed">Wyszukiwanie miejsc jest niedostępne. Sprawdź połączenie lub użyj obecnej lokalizacji.</string>
+    <string name="widget_search_empty">Nie znaleziono miejsc. Spróbuj podać miasto i kraj.</string>
+    <string name="widget_choose_place">Wybierz miejsce</string>
+    <string name="widget_remove">Usuń</string>
+    <string name="widget_save">Zapisz widżet</string>
+    <string name="widget_rain_until">Deszcz do %1$s</string>
+    <string name="widget_rain_continues">Deszcz będzie trwał przez okres prognozy</string>
+    <string name="widget_rain_at">Deszcz od %1$s</string>
+    <string name="widget_dry_through">Do %1$s nie przewiduje się deszczu</string>
+    <string name="widget_unavailable">Dane pogodowe są niedostępne lub nieaktualne</string>
+    <string name="widget_no_location">Lokalizacja niedostępna. Otwórz meteocool.</string>
+    <string name="widget_as_of">Prognoza z %1$s · Odśwież, aby sprawdzić pogodę teraz</string>
+    <string name="widget_refresh_help">Dotknij Odśwież, aby spróbować ponownie</string>
+    <string name="widget_map_description">Radar opadów wokół %1$s</string>
+    <string name="car_rain_status">Deszcz w twojej lokalizacji</string>
+    <string name="car_observation">Ostatni pomiar radarowy</string>
+    <string name="car_loading">Ładowanie…</string>
+    <string name="car_location_help">Po zaparkowaniu otwórz meteocool w telefonie i zezwól na dostęp do lokalizacji.</string>
+    <string name="widget_clock_hours">%1$d h</string>
+    <string name="car_retry">@string/widget_refresh_help</string>
+    <string-array name="widget_ranges">
+        <item>Następna godzina</item>
+        <item>Następne 2 godziny</item>
+        <item>Ostatnie pół godziny i następne 90 minut</item>
+        <item>Ostatnie 2 godziny i następne 2 godziny</item>
+    </string-array>
+    <string-array name="widget_areas">
+        <item>Lokalny · 40 km</item>
+        <item>Regionalny · 150 km</item>
+        <item>Szeroki · 400 km</item>
+        <item>Kraj · 1,200 km</item>
+    </string-array>
+    <string-array name="widget_overlays">
+        <item>Tylko mapa</item>
+        <item>Następny deszcz</item>
+        <item>Następny deszcz i wykres</item>
+    </string-array>
+    <string-array name="widget_dials">
+        <item>Jedna godzina</item>
+        <item>Dwie godziny</item>
+    </string-array>
+    <string-array name="widget_intensities">
+        <item>Jak w aplikacji</item>
+        <item>Mżawka</item>
+        <item>Lekki deszcz</item>
+        <item>Deszcz</item>
+        <item>Intensywny deszcz</item>
+        <item>Silny deszcz</item>
+    </string-array>
+    <string name="widget_background_location_help">Aby aktualizować lokalizację przy zamkniętym meteocool, wybierz Lokalizacja → Zawsze zezwalaj w ustawieniach aplikacji Androida. Alerty deszczu nie muszą być włączone.</string>
+</resources>

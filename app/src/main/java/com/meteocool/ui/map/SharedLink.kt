@@ -25,7 +25,12 @@ object SharedLink {
         } catch (e: URISyntaxException) {
             return null
         }
-        if (uri.scheme != "https" || uri.port != -1) return null
+        if (uri.port != -1 || uri.rawUserInfo != null) return null
+        if (uri.scheme == "meteocool") {
+            if (uri.host != "map" || (!uri.rawPath.isNullOrEmpty() && uri.rawPath != "/")) return null
+            return uri.rawQuery?.takeIf { it.isNotEmpty() }?.let { "?$it" }
+        }
+        if (uri.scheme != "https") return null
         val host = uri.host?.lowercase() ?: return null
         if (MeteocoolEnvironment.entries.none { it.webHostName == host }) return null
         if (!uri.rawPath.isNullOrEmpty() && uri.rawPath != "/") return null

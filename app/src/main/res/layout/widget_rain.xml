@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_content" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="10dp" android:background="#182330">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:gravity="center_vertical">
+        <TextView android:id="@+id/widget_title" android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:text="@string/app_name" android:textColor="#FFFFFF" android:textSize="14sp"
+            android:textStyle="bold" android:maxLines="1" android:ellipsize="end" />
+        <Button android:id="@+id/widget_edit" android:layout_width="48dp" android:layout_height="48dp"
+            android:minWidth="0dp" android:minHeight="0dp" android:padding="0dp" android:text="⚙"
+            android:contentDescription="@string/widget_configure" android:background="@android:color/transparent" android:textColor="#FFFFFF" />
+        <Button android:id="@+id/widget_refresh" android:layout_width="48dp" android:layout_height="48dp"
+            android:minWidth="0dp" android:minHeight="0dp" android:padding="0dp" android:text="↻" android:textSize="24sp"
+            android:contentDescription="@string/widget_refresh" android:background="@android:color/transparent" android:textColor="#FFFFFF" />
+    </LinearLayout>
+    <ImageView android:id="@+id/widget_map" android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:scaleType="centerCrop" android:visibility="gone" android:contentDescription="@string/widget_radar" />
+    <LinearLayout android:id="@+id/widget_rows" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" />
+    <TextView android:id="@+id/widget_updated" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:paddingTop="4dp" android:text="@string/widget_configure" android:textColor="#BEC8D4" android:textSize="11sp"
+        android:maxLines="2" android:ellipsize="end" />
+</LinearLayout>

@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.meteocool"
-        minSdkVersion 23
+        minSdkVersion 36
         targetSdkVersion 36
         versionCode 36
         versionName "4.0.0"
@@ -85,6 +85,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-process:2.9.4'
 
     implementation 'androidx.work:work-runtime-ktx:2.10.5'
+    implementation 'androidx.car.app:app:1.7.0'
+    implementation 'androidx.car.app:app-projected:1.7.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2'
 
     // JSON

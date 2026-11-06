@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_place_row" android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:paddingTop="4dp" android:paddingBottom="4dp">
+    <TextView android:id="@+id/widget_place_name" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textColor="#FFFFFF" android:textStyle="bold" android:textSize="14sp" android:maxLines="1" android:ellipsize="end" />
+    <TextView android:id="@+id/widget_place_summary" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textColor="#E0E5EC" android:textSize="12sp" android:maxLines="2" android:ellipsize="end" />
+    <ImageView android:id="@+id/widget_chart" android:layout_width="match_parent" android:layout_height="80dp"
+        android:scaleType="fitCenter" android:visibility="gone" android:importantForAccessibility="no" />
+</LinearLayout>

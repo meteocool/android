@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="widget_radar">Radar map</string>
+    <string name="widget_forecast">Rain forecast</string>
+    <string name="widget_clock">Rain clock</string>
+    <string name="widget_places">Places</string>
+    <string name="widget_configure">Configure widget</string>
+    <string name="widget_current_location">Current location</string>
+    <string name="widget_location_help">Choose a place or use your current location. Current location needs location permission and a recent fix; open meteocool if it is unavailable. Up to six places fit a tall Places widget; smaller sizes show fewer.</string>
+    <string name="widget_search_hint">City or place</string>
+    <string name="widget_search">Search</string>
+    <string name="widget_search_failed">Place search is unavailable. Check your connection or use your current location.</string>
+    <string name="widget_search_empty">No places found. Try a city and country.</string>
+    <string name="widget_choose_place">Choose a place</string>
+    <string name="widget_remove">Remove</string>
+    <string name="widget_range">Time range</string>
+    <string name="widget_area">Map area</string>
+    <string name="widget_overlay">Forecast overlay</string>
+    <string name="widget_dial">Dial</string>
+    <string name="widget_intensity">Intensity</string>
+    <string name="widget_show_map">Show radar map</string>
+    <string name="widget_save">Save widget</string>
+    <string name="widget_refresh">Refresh</string>
+    <string name="widget_rain_until">Rain until %1$s</string>
+    <string name="widget_rain_continues">Rain continues through the forecast</string>
+    <string name="widget_rain_at">Rain from %1$s</string>
+    <string name="widget_dry_through">No rain expected through %1$s</string>
+    <string name="widget_unavailable">Weather data unavailable or outdated</string>
+    <string name="widget_no_location">Location unavailable. Open meteocool.</string>
+    <string name="widget_as_of">Forecast as of %1$s · Refresh for current weather</string>
+    <string name="widget_refresh_help">Tap refresh to try again</string>
+    <string name="widget_map_description">Rain radar around %1$s</string>
+    <string name="widget_clock_hours">%1$d h</string>
+    <string name="car_rain_status">Rain at your location</string>
+    <string name="car_observation">Latest radar observation</string>
+    <string name="car_loading">Loading…</string>
+    <string name="car_location_help">When parked, open meteocool on your phone and allow location access.</string>
+    <string name="car_retry">Use Refresh to try again.</string>
+    <string-array name="widget_ranges">
+        <item>Next hour</item>
+        <item>Next 2 hours</item>
+        <item>Last half hour and next 90 minutes</item>
+        <item>Last 2 hours and next 2 hours</item>
+    </string-array>
+    <string-array name="widget_areas">
+        <item>Local · about 40 km</item>
+        <item>Regional · about 150 km</item>
+        <item>Wide · about 400 km</item>
+        <item>Country · about 1,200 km</item>
+    </string-array>
+    <string-array name="widget_overlays">
+        <item>Map only</item>
+        <item>Next rain</item>
+        <item>Next rain and chart</item>
+    </string-array>
+    <string-array name="widget_dials">
+        <item>One hour</item>
+        <item>Two hours</item>
+    </string-array>
+    <string-array name="widget_intensities">
+        <item>As in the app</item>
+        <item>Drizzle</item>
+        <item>Light rain</item>
+        <item>Rain</item>
+        <item>Intense rain</item>
+        <item>Heavy rain</item>
+    </string-array>
+    <string name="widget_background_location_help">For current-location updates while meteocool is closed, choose Location → Allow all the time in Android app settings. Rain alerts do not need to be enabled.</string>
+</resources>

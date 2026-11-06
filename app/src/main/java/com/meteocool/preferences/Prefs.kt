@@ -31,6 +31,9 @@ class Prefs(val sp: SharedPreferences) {
         private const val LAST_LAT = "last_latitude"
         private const val LAST_LON = "last_longitude"
         private const val LAST_ACCURACY = "last_accuracy"
+        private const val LAST_TIME = "last_location_time"
+        const val ALERT_MUTE = "alert_mute"
+        const val STORM_LOG = "storm_log_enabled"
         const val SETTINGS_VERSION = "settings_version"
         private const val ALWAYS_LOCATION_SEEN = "always_location_seen"
 
@@ -48,7 +51,8 @@ class Prefs(val sp: SharedPreferences) {
         val WEB_SETTINGS = setOf(MAP_ROTATE, BASE_LAYER, RADAR_COLOR_MAPPING)
 
         /** Keys the push registration carries. */
-        val REGISTRATION_SETTINGS = setOf(NOTIFICATION_DETAILS, NOTIFICATION_INTENSITY, NOTIFICATION_TIME)
+        val REGISTRATION_SETTINGS = setOf(NOTIFICATION_DETAILS, NOTIFICATION_INTENSITY, NOTIFICATION_TIME,
+            ALERT_MUTE, STORM_LOG, "storm_log_wipe_pending", "storm_log_context")
 
         /** The backend accepts only 0 < ahead <= 60; the settings offer 5..45 in steps of 5. */
         fun clampAhead(minutes: Int?): Int {
@@ -111,6 +115,17 @@ class Prefs(val sp: SharedPreferences) {
         putFloat(LAST_LAT, fix.latitude.toFloat())
         putFloat(LAST_LON, fix.longitude.toFloat())
         putFloat(LAST_ACCURACY, fix.accuracy)
+        putLong(LAST_TIME, fix.timeMillis)
+    }
+
+    fun lastLocation(maxAgeMillis: Long): MeteocoolLocation? {
+        val time = sp.getLong(LAST_TIME, 0)
+        val lat = sp.getFloat(LAST_LAT, Float.NaN).toDouble()
+        val lon = sp.getFloat(LAST_LON, Float.NaN).toDouble()
+        val accuracy = sp.getFloat(LAST_ACCURACY, -1f)
+        if (System.currentTimeMillis() - time !in 0..maxAgeMillis || lat !in -90.0..90.0 ||
+            lon !in -180.0..180.0 || !accuracy.isFinite() || accuracy < 0) return null
+        return MeteocoolLocation(lat, lon, -1.0, accuracy, -1f, -1f, -1f, time, 0)
     }
 
     /**

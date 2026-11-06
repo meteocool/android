@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="widget_radar">Carte radar</string>
+    <string name="widget_forecast">Prévision de pluie</string>
+    <string name="widget_clock">Horloge de pluie</string>
+    <string name="widget_places">Lieux</string>
+    <string name="widget_current_location">Position actuelle</string>
+    <string name="widget_range">Période</string>
+    <string name="widget_area">Zone de la carte</string>
+    <string name="widget_overlay">Prévision</string>
+    <string name="widget_dial">Cadran</string>
+    <string name="widget_intensity">Intensité</string>
+    <string name="widget_show_map">Afficher la carte radar</string>
+    <string name="widget_refresh">Actualiser</string>
+    <string name="widget_configure">Configurer le widget</string>
+    <string name="widget_location_help">Choisissez un lieu ou votre position actuelle. Une autorisation et une position récente sont nécessaires. Ouvrez meteocool si elle manque. Un widget haut affiche six lieux, les plus petits en affichent moins.</string>
+    <string name="widget_search_hint">Ville ou lieu</string>
+    <string name="widget_search">Rechercher</string>
+    <string name="widget_search_failed">La recherche de lieux est indisponible. Vérifiez la connexion ou utilisez votre position actuelle.</string>
+    <string name="widget_search_empty">Aucun lieu trouvé. Essayez une ville et un pays.</string>
+    <string name="widget_choose_place">Choisir un lieu</string>
+    <string name="widget_remove">Supprimer</string>
+    <string name="widget_save">Enregistrer le widget</string>
+    <string name="widget_rain_until">Pluie jusqu’à %1$s</string>
+    <string name="widget_rain_continues">La pluie continue sur la période de prévision</string>
+    <string name="widget_rain_at">Pluie à partir de %1$s</string>
+    <string name="widget_dry_through">Pas de pluie prévue jusqu’à %1$s</string>
+    <string name="widget_unavailable">Données météo indisponibles ou périmées</string>
+    <string name="widget_no_location">Position indisponible. Ouvrez meteocool.</string>
+    <string name="widget_as_of">Prévision de %1$s · Actualisez pour la météo actuelle</string>
+    <string name="widget_refresh_help">Touchez Actualiser pour réessayer</string>
+    <string name="widget_map_description">Radar de pluie autour de %1$s</string>
+    <string name="car_rain_status">Pluie à votre position</string>
+    <string name="car_observation">Dernière observation radar</string>
+    <string name="car_loading">Chargement…</string>
+    <string name="car_location_help">À l’arrêt, ouvrez meteocool sur votre téléphone et autorisez la position.</string>
+    <string name="widget_clock_hours">%1$d h</string>
+    <string name="car_retry">@string/widget_refresh_help</string>
+    <string-array name="widget_ranges">
+        <item>Prochaine heure</item>
+        <item>2 prochaines heures</item>
+        <item>Dernière demi-heure et 90 prochaines minutes</item>
+        <item>2 dernières heures et 2 prochaines heures</item>
+    </string-array>
+    <string-array name="widget_areas">
+        <item>Local · 40 km</item>
+        <item>Régional · 150 km</item>
+        <item>Large · 400 km</item>
+        <item>Pays · 1,200 km</item>
+    </string-array>
+    <string-array name="widget_overlays">
+        <item>Carte seule</item>
+        <item>Prochaine pluie</item>
+        <item>Prochaine pluie et graphique</item>
+    </string-array>
+    <string-array name="widget_dials">
+        <item>Une heure</item>
+        <item>Deux heures</item>
+    </string-array>
+    <string-array name="widget_intensities">
+        <item>Comme dans l’application</item>
+        <item>Bruine</item>
+        <item>Pluie faible</item>
+        <item>Pluie</item>
+        <item>Pluie intense</item>
+        <item>Pluie forte</item>
+    </string-array>
+    <string name="widget_background_location_help">Pour actualiser votre position quand meteocool est fermé, choisissez Position → Toujours autoriser dans les paramètres Android de l’application. Les alertes pluie ne sont pas nécessaires.</string>
+</resources>

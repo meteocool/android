@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mute_alerts">Warnungen stummschalten</string>
+    <string name="mute_day">Für 1 Tag</string>
+    <string name="mute_week">Für 1 Woche</string>
+    <string name="mute_rain">Bis der Regen vorbei ist</string>
+    <string name="mute_unmute">Stummschaltung aufheben</string>
+    <string name="mute_until">Stumm bis %1$s</string>
+    <string name="mute_no_rain">Die Vorhersage zeigt hier keinen Regen, es gibt also nichts stummzuschalten.</string>
+    <string name="mute_no_forecast">Die Vorhersage für deinen Standort konnte nicht geladen werden. Versuche es später noch einmal.</string>
+    <string name="past_alerts">Vergangene Warnungen</string>
+    <string name="past_alerts_empty">Noch keine Warnungen</string>
+    <string name="past_alerts_clear">Vergangene Warnungen löschen</string>
+    <string name="past_alerts_clear_confirm">Vergangene Warnungen löschen</string>
+    <string name="notifications_outside">meteocool-Benachrichtigungen funktionieren an deinem Standort nicht, weil er außerhalb des Gebiets liegt, das unsere Radardaten abdecken. Die Benachrichtigungen bleiben an und starten, sobald du in einem abgedeckten Gebiet bist.</string>
+    <string name="notifications_outside_title">Hier keine Benachrichtigungen</string>
+    <string name="rain_unavailable">Regenvorhersage nicht verfügbar</string>
+    <string name="rain_checking">Regen wird geprüft…</string>
+    <string name="rain_refresh">Aktualisieren</string>
+    <string name="rain_starts">Beginnt um %1$s</string>
+    <string name="rain_until">Regen bis %1$s</string>
+    <string name="rain_continues">Hält im Vorhersagezeitraum an</string>
+    <string name="rain_dry_through">Kein Regen erwartet bis %1$s</string>
+    <string name="data_licences">Datenlizenzen</string>
+    <string name="source_rmi">Radar Belgien (Jabbeke, Wideumont) · CC BY 4.0, bearbeitet</string>
+    <string name="source_vmm">Radar Belgien (Helchteren) · CC BY 4.0 / Modellicentie Gratis Hergebruik v1.0, bearbeitet</string>
+    <string name="source_shmu">Radar Slowakei · CC BY 4.0, bearbeitet</string>
+    <string name="source_lhmt">Radar Litauen · CC BY 4.0 / CC BY-SA 4.0, bearbeitet</string>
+    <string name="source_kaur">Radar Estland · CC BY 4.0, bearbeitet</string>
+    <string name="source_met_eireann">Radar Irland · Copyright Met Éireann. Quelle: www.met.ie. Veröffentlicht unter der Lizenz Creative Commons Namensnennung 4.0 International (CC BY 4.0). Die Daten wurden bearbeitet: von meteocool zusammengesetzt, umprojiziert, von Bodenechos und Rauschen bereinigt und eingefärbt.</string>
+    <string name="source_dhmz">Radar Kroatien · Izvor: DHMZ. CC BY 4.0 / Otvorena dozvola, bearbeitet, zuletzt zur Scanzeit auf der Karte</string>
+    <string name="source_dmi">Radar Dänemark · CC BY 4.0, bearbeitet</string>
+    <string name="source_knmi">Radar Niederlande (Den Helder, Herwijnen) · CC BY 4.0, bearbeitet</string>
+    <string name="source_fmi">Radar Finnland · CC BY 4.0, bearbeitet</string>
+    <string name="source_smhi">Radar Schweden · CC BY 4.0, bearbeitet</string>
+    <string name="source_met_norway">Radar Norwegen · Basierend auf Daten von MET Norway. NLOD 2.0 / CC BY 4.0, bearbeitet</string>
+    <string name="weather_tools">Wetterwerkzeuge</string>
+    <string name="rain_monitor">Regenstatus</string>
+    <string name="rain_track">Diesen Regen verfolgen</string>
+    <string name="rain_stop">Verfolgung beenden</string>
+    <string name="rain_tracking">Regen wird bis zu zwei Stunden verfolgt.</string>
+    <string name="rain_monitor_help">Prüft beim Verfolgen jede Minute den Regen an deinem aktuellen Standort. Endet nach dem Regen oder nach zwei Stunden. Du kannst jederzeit beenden.</string>
+    <string name="rain_continues_until">Regen erwartet bis %1$s</string>
+</resources>

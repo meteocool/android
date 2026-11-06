@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mute_alerts">Keskeytä hälytykset</string>
+    <string name="mute_day">1 päiväksi</string>
+    <string name="mute_week">1 viikoksi</string>
+    <string name="mute_rain">Kunnes sade on ohi</string>
+    <string name="mute_unmute">Jatka hälytyksiä</string>
+    <string name="mute_until">Keskeytetty %1$s asti</string>
+    <string name="mute_no_rain">Ennuste ei näytä täällä sadetta, joten keskeytettävää ei ole.</string>
+    <string name="mute_no_forecast">Sijaintisi ennustetta ei voitu ladata. Yritä myöhemmin uudelleen.</string>
+    <string name="past_alerts">Past Alerts</string>
+    <string name="past_alerts_empty">No Alerts Yet</string>
+    <string name="past_alerts_clear">Clear Past Alerts</string>
+    <string name="past_alerts_clear_confirm">Clear Past Alerts</string>
+    <string name="notifications_outside">meteocoolin ilmoitukset eivät toimi sijainnissasi, koska se on tutkadatamme kattaman alueen ulkopuolella. Ilmoitukset pysyvät päällä ja alkavat toimia, kun olet katetulla alueella.</string>
+    <string name="notifications_outside_title">Ei ilmoituksia täällä</string>
+    <string name="rain_unavailable">Rain forecast unavailable</string>
+    <string name="rain_checking">Checking rain…</string>
+    <string name="rain_refresh">Refresh</string>
+    <string name="rain_starts">Starts at %1$s</string>
+    <string name="rain_until">Sadetta klo %1$s asti</string>
+    <string name="rain_continues">Continues through the forecast</string>
+    <string name="rain_dry_through">Ei sadetta klo %1$s asti</string>
+    <string name="data_licences">Tietolisenssit</string>
+    <string name="source_rmi">Tutka Belgia (Jabbeke, Wideumont) · CC BY 4.0, muokattu</string>
+    <string name="source_vmm">Tutka Belgia (Helchteren) · CC BY 4.0 / Modellicentie Gratis Hergebruik v1.0, muokattu</string>
+    <string name="source_shmu">Tutka Slovakia · CC BY 4.0, muokattu</string>
+    <string name="source_lhmt">Tutka Liettua · CC BY 4.0 / CC BY-SA 4.0, muokattu</string>
+    <string name="source_kaur">Tutka Viro · CC BY 4.0, muokattu</string>
+    <string name="source_met_eireann">Tutka Irlanti · Copyright Met Éireann. Lähde: www.met.ie. Julkaistu Creative Commons Nimeä 4.0 Kansainvälinen -lisenssillä (CC BY 4.0). Tietoja on muokattu: meteocool on yhdistänyt ja uudelleenprojisoinut ne, poistanut maakaiut ja kohinan sekä värittänyt ne.</string>
+    <string name="source_dhmz">Tutka Kroatia · Izvor: DHMZ. CC BY 4.0 / Otvorena dozvola, muokattu, viimeksi kartalla näkyvänä keilausaikana</string>
+    <string name="source_dmi">Tutka Tanska · CC BY 4.0, muokattu</string>
+    <string name="source_knmi">Tutka Alankomaat (Den Helder, Herwijnen) · CC BY 4.0, muokattu</string>
+    <string name="source_fmi">Tutka Suomi · CC BY 4.0, muokattu</string>
+    <string name="source_smhi">Tutka Ruotsi · CC BY 4.0, muokattu</string>
+    <string name="source_met_norway">Tutka Norja · Perustuu MET Norwayn tietoihin. NLOD 2.0 / CC BY 4.0, muokattu</string>
+    <string name="weather_tools">Säätyökalut</string>
+    <string name="rain_monitor">Sateen tila</string>
+    <string name="rain_track">Seuraa tätä sadetta</string>
+    <string name="rain_stop">Lopeta seuranta</string>
+    <string name="rain_tracking">Sadetta seurataan enintään kaksi tuntia.</string>
+    <string name="rain_monitor_help">Tarkistaa seurannan aikana sateen nykyisessä sijainnissasi minuutin välein. Loppuu sateen päätyttyä tai kahden tunnin kuluttua. Voit lopettaa milloin tahansa.</string>
+    <string name="rain_continues_until">Sadetta odotetaan klo %1$s asti</string>
+</resources>

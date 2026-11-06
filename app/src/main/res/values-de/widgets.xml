@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="widget_radar">Regenradar</string>
+    <string name="widget_forecast">Regenvorhersage</string>
+    <string name="widget_clock">Regenuhr</string>
+    <string name="widget_places">Orte</string>
+    <string name="widget_configure">Widget einrichten</string>
+    <string name="widget_current_location">Aktueller Standort</string>
+    <string name="widget_location_help">Wähle einen Ort oder deinen aktuellen Standort. Dafür sind die Standortberechtigung und ein aktueller Standort nötig. Öffne meteocool, falls er fehlt. Ein hohes Orte-Widget zeigt bis zu sechs Orte, kleinere Größen zeigen weniger.</string>
+    <string name="widget_search_hint">Stadt oder Ort</string>
+    <string name="widget_search">Suchen</string>
+    <string name="widget_search_failed">Die Ortssuche ist nicht verfügbar. Prüfe deine Verbindung oder nutze deinen aktuellen Standort.</string>
+    <string name="widget_search_empty">Keine Orte gefunden. Versuche es mit Stadt und Land.</string>
+    <string name="widget_choose_place">Ort auswählen</string>
+    <string name="widget_remove">Entfernen</string>
+    <string name="widget_range">Zeitraum</string>
+    <string name="widget_area">Kartenausschnitt</string>
+    <string name="widget_overlay">Vorhersage auf der Karte</string>
+    <string name="widget_dial">Zifferblatt</string>
+    <string name="widget_intensity">Intensität</string>
+    <string name="widget_show_map">Regenradar anzeigen</string>
+    <string name="widget_save">Widget speichern</string>
+    <string name="widget_refresh">Aktualisieren</string>
+    <string name="widget_rain_until">Regen bis %1$s</string>
+    <string name="widget_rain_continues">Regen hält im Vorhersagezeitraum an</string>
+    <string name="widget_rain_at">Regen ab %1$s</string>
+    <string name="widget_dry_through">Kein Regen bis %1$s erwartet</string>
+    <string name="widget_unavailable">Wetterdaten fehlen oder sind veraltet</string>
+    <string name="widget_no_location">Standort fehlt. Öffne meteocool.</string>
+    <string name="widget_as_of">Vorhersage von %1$s · Für aktuelles Wetter aktualisieren</string>
+    <string name="widget_refresh_help">Zum erneuten Laden auf Aktualisieren tippen</string>
+    <string name="widget_map_description">Regenradar um %1$s</string>
+    <string name="widget_clock_hours">%1$d h</string>
+    <string name="car_rain_status">Regen an deinem Standort</string>
+    <string name="car_observation">Letzte Radarmessung</string>
+    <string name="car_loading">Wird geladen…</string>
+    <string name="car_location_help">Öffne im geparkten Fahrzeug meteocool auf deinem Smartphone und erlaube den Standortzugriff.</string>
+    <string name="car_retry">Mit Aktualisieren erneut versuchen.</string>
+    <string-array name="widget_ranges">
+        <item>Nächste Stunde</item>
+        <item>Nächste 2 Stunden</item>
+        <item>Letzte halbe Stunde und nächste 90 Minuten</item>
+        <item>Letzte 2 Stunden und nächste 2 Stunden</item>
+    </string-array>
+    <string-array name="widget_areas">
+        <item>Lokal · etwa 40 km</item>
+        <item>Regional · etwa 150 km</item>
+        <item>Weit · etwa 400 km</item>
+        <item>Land · etwa 1.200 km</item>
+    </string-array>
+    <string-array name="widget_overlays">
+        <item>Nur Karte</item>
+        <item>Nächster Regen</item>
+        <item>Nächster Regen und Diagramm</item>
+    </string-array>
+    <string-array name="widget_dials">
+        <item>Eine Stunde</item>
+        <item>Zwei Stunden</item>
+    </string-array>
+    <string-array name="widget_intensities">
+        <item>Wie in der App</item>
+        <item>Nieselregen</item>
+        <item>Leichter Regen</item>
+        <item>Regen</item>
+        <item>Intensiver Regen</item>
+        <item>Starker Regen</item>
+    </string-array>
+    <string name="widget_background_location_help">Für Standortaktualisierungen bei geschlossener App wähle in den Android-App-Einstellungen Standort → Immer zulassen. Regenwarnungen müssen dafür nicht aktiviert sein.</string>
+</resources>

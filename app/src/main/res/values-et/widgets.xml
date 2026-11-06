@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="widget_radar">Vihmaradar</string>
+    <string name="widget_forecast">Vihmaprognoos</string>
+    <string name="widget_clock">Vihmakell</string>
+    <string name="widget_places">Kohad</string>
+    <string name="widget_current_location">Praegune asukoht</string>
+    <string name="widget_range">Ajavahemik</string>
+    <string name="widget_area">Kaardiala</string>
+    <string name="widget_overlay">Prognoos</string>
+    <string name="widget_dial">Sihverplaat</string>
+    <string name="widget_intensity">Tugevus</string>
+    <string name="widget_show_map">Näita radarikaarti</string>
+    <string name="widget_refresh">Värskenda vihmaandmeid</string>
+    <string name="widget_configure">Seadista vidin</string>
+    <string name="widget_location_help">Vali koht või oma praegune asukoht. Selleks on vaja asukoha luba ja värsket asukohta. Kui see puudub, ava meteocool. Kõrge vidin näitab kuut kohta, väiksemad vähem.</string>
+    <string name="widget_search_hint">Linn või koht</string>
+    <string name="widget_search">Otsi</string>
+    <string name="widget_search_failed">Kohaotsing pole saadaval. Kontrolli ühendust või kasuta praegust asukohta.</string>
+    <string name="widget_search_empty">Kohti ei leitud. Proovi linna ja riiki.</string>
+    <string name="widget_choose_place">Vali koht</string>
+    <string name="widget_remove">Eemalda</string>
+    <string name="widget_save">Salvesta vidin</string>
+    <string name="widget_rain_until">Vihm kuni %1$s</string>
+    <string name="widget_rain_continues">Vihm jätkub kogu prognoosiperioodi</string>
+    <string name="widget_rain_at">Vihm alates %1$s</string>
+    <string name="widget_dry_through">Vihma pole oodata kuni %1$s</string>
+    <string name="widget_unavailable">Ilmaandmed puuduvad või on aegunud</string>
+    <string name="widget_no_location">Asukoht puudub. Ava meteocool.</string>
+    <string name="widget_as_of">Prognoos kell %1$s · Värske ilma jaoks uuenda</string>
+    <string name="widget_refresh_help">Uuesti proovimiseks puuduta värskendamist</string>
+    <string name="widget_map_description">Vihmaradar koha %1$s ümbruses</string>
+    <string name="car_rain_status">Vihm sinu asukohas</string>
+    <string name="car_observation">Viimane radarivaatlus</string>
+    <string name="car_loading">Laadimine…</string>
+    <string name="car_location_help">Kui oled parkinud, ava meteocool telefonis ja luba asukoha kasutamine.</string>
+    <string name="widget_clock_hours">%1$d h</string>
+    <string name="car_retry">@string/widget_refresh_help</string>
+    <string-array name="widget_ranges">
+        <item>Järgmine tund</item>
+        <item>Järgmised 2 tundi</item>
+        <item>Viimane pool tundi ja järgmised 90 minutit</item>
+        <item>Viimased 2 ja järgmised 2 tundi</item>
+    </string-array>
+    <string-array name="widget_areas">
+        <item>Kohalik · 40 km</item>
+        <item>Piirkondlik · 150 km</item>
+        <item>Lai · 400 km</item>
+        <item>Riik · 1,200 km</item>
+    </string-array>
+    <string-array name="widget_overlays">
+        <item>Ainult kaart</item>
+        <item>Järgmine vihm</item>
+        <item>Järgmine vihm ja graafik</item>
+    </string-array>
+    <string-array name="widget_dials">
+        <item>Üks tund</item>
+        <item>Kaks tundi</item>
+    </string-array>
+    <string-array name="widget_intensities">
+        <item>Nagu rakenduses</item>
+        <item>Uduvihm</item>
+        <item>Nõrk vihm</item>
+        <item>Vihm</item>
+        <item>Üsna tugev vihm</item>
+        <item>Tugev vihm</item>
+    </string-array>
+    <string name="widget_background_location_help">Asukoha uuendamiseks suletud meteocooli korral vali Androidi rakenduse seadetes Asukoht → Luba alati. Vihmateavitused ei pea olema sisse lülitatud.</string>
+</resources>

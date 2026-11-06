@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="widget_radar">Radarová mapa</string>
+    <string name="widget_forecast">Předpověď deště</string>
+    <string name="widget_clock">Dešťové hodiny</string>
+    <string name="widget_places">Místa</string>
+    <string name="widget_current_location">Aktuální poloha</string>
+    <string name="widget_range">Časový rozsah</string>
+    <string name="widget_area">Oblast mapy</string>
+    <string name="widget_overlay">Předpověď</string>
+    <string name="widget_dial">Ciferník</string>
+    <string name="widget_intensity">Intenzita</string>
+    <string name="widget_show_map">Zobrazit radarovou mapu</string>
+    <string name="widget_refresh">Obnovit</string>
+    <string name="widget_configure">Nastavit widget</string>
+    <string name="widget_location_help">Vyberte místo nebo aktuální polohu. Je potřeba oprávnění a čerstvá poloha. Pokud chybí, otevřete meteocool. Vysoký widget zobrazí šest míst, menší jich zobrazí méně.</string>
+    <string name="widget_search_hint">Město nebo místo</string>
+    <string name="widget_search">Hledat</string>
+    <string name="widget_search_failed">Vyhledávání míst není dostupné. Zkontrolujte připojení nebo použijte aktuální polohu.</string>
+    <string name="widget_search_empty">Žádná místa nenalezena. Zkuste město a zemi.</string>
+    <string name="widget_choose_place">Vybrat místo</string>
+    <string name="widget_remove">Odebrat</string>
+    <string name="widget_save">Uložit widget</string>
+    <string name="widget_rain_until">Déšť do %1$s</string>
+    <string name="widget_rain_continues">Déšť pokračuje po dobu předpovědi</string>
+    <string name="widget_rain_at">Déšť od %1$s</string>
+    <string name="widget_dry_through">Do %1$s se déšť neočekává</string>
+    <string name="widget_unavailable">Údaje o počasí chybí nebo jsou zastaralé</string>
+    <string name="widget_no_location">Poloha není dostupná. Otevřete meteocool.</string>
+    <string name="widget_as_of">Předpověď z %1$s · Pro aktuální počasí obnovte</string>
+    <string name="widget_refresh_help">Klepnutím na Obnovit to zkuste znovu</string>
+    <string name="widget_map_description">Srážkový radar kolem %1$s</string>
+    <string name="car_rain_status">Déšť ve vaší poloze</string>
+    <string name="car_observation">Poslední radarové měření</string>
+    <string name="car_loading">Načítání…</string>
+    <string name="car_location_help">Po zaparkování otevřete meteocool v telefonu a povolte přístup k poloze.</string>
+    <string name="widget_clock_hours">%1$d h</string>
+    <string name="car_retry">@string/widget_refresh_help</string>
+    <string-array name="widget_ranges">
+        <item>Příští hodina</item>
+        <item>Příští 2 hodiny</item>
+        <item>Poslední půlhodina a příštích 90 minut</item>
+        <item>Poslední 2 hodiny a příští 2 hodiny</item>
+    </string-array>
+    <string-array name="widget_areas">
+        <item>Místní · 40 km</item>
+        <item>Regionální · 150 km</item>
+        <item>Široká · 400 km</item>
+        <item>Celá země · 1,200 km</item>
+    </string-array>
+    <string-array name="widget_overlays">
+        <item>Pouze mapa</item>
+        <item>Příští déšť</item>
+        <item>Příští déšť a graf</item>
+    </string-array>
+    <string-array name="widget_dials">
+        <item>Jedna hodina</item>
+        <item>Dvě hodiny</item>
+    </string-array>
+    <string-array name="widget_intensities">
+        <item>Podle aplikace</item>
+        <item>Mrholení</item>
+        <item>Slabý déšť</item>
+        <item>Déšť</item>
+        <item>Intenzivní déšť</item>
+        <item>Silný déšť</item>
+    </string-array>
+    <string name="widget_background_location_help">Pro aktualizace polohy při zavřené aplikaci vyberte v nastavení aplikace v Androidu Poloha → Povolit vždy. Upozornění na déšť nemusí být zapnutá.</string>
+</resources>

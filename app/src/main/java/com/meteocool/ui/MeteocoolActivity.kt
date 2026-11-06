@@ -120,6 +120,12 @@ class MeteocoolActivity : AppCompatActivity() {
         binding.drawerLayout.openDrawer(GravityCompat.START)
     }
 
+    fun openDataLicences() {
+        openSettings()
+        (supportFragmentManager.findFragmentById(R.id.settingsContainer) as? com.meteocool.preferences.SettingsFragment)
+            ?.scrollToPreference("data_sources")
+    }
+
     override fun onStart() {
         super.onStart()
         BackgroundLocationWorker.cancel(this)

@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="widget_radar">Radarkart</string>
+    <string name="widget_forecast">Nedbørvarsel</string>
+    <string name="widget_clock">Regnklokke</string>
+    <string name="widget_places">Steder</string>
+    <string name="widget_current_location">Nåværende posisjon</string>
+    <string name="widget_range">Tidsrom</string>
+    <string name="widget_area">Kartutsnitt</string>
+    <string name="widget_overlay">Varsel</string>
+    <string name="widget_dial">Urskive</string>
+    <string name="widget_intensity">Intensitet</string>
+    <string name="widget_show_map">Vis radarkart</string>
+    <string name="widget_refresh">Oppdater regn</string>
+    <string name="widget_configure">Konfigurer widget</string>
+    <string name="widget_location_help">Velg et sted eller din nåværende posisjon. Dette krever posisjonstillatelse og en fersk posisjon. Åpne meteocool hvis den mangler. En høy widget viser seks steder, mindre viser færre.</string>
+    <string name="widget_search_hint">By eller sted</string>
+    <string name="widget_search">Søk</string>
+    <string name="widget_search_failed">Stedsøk er utilgjengelig. Sjekk forbindelsen eller bruk din nåværende posisjon.</string>
+    <string name="widget_search_empty">Ingen steder funnet. Prøv en by og et land.</string>
+    <string name="widget_choose_place">Velg et sted</string>
+    <string name="widget_remove">Fjern</string>
+    <string name="widget_save">Lagre widget</string>
+    <string name="widget_rain_until">Regn til %1$s</string>
+    <string name="widget_rain_continues">Regnet fortsetter gjennom prognosen</string>
+    <string name="widget_rain_at">Regn fra %1$s</string>
+    <string name="widget_dry_through">Ingen regn forventet frem til %1$s</string>
+    <string name="widget_unavailable">Værdata mangler eller er utdaterte</string>
+    <string name="widget_no_location">Posisjon mangler. Åpne meteocool.</string>
+    <string name="widget_as_of">Prognose fra %1$s · Oppdater for været nå</string>
+    <string name="widget_refresh_help">Trykk på oppdater for å prøve igjen</string>
+    <string name="widget_map_description">Regnradar rundt %1$s</string>
+    <string name="car_rain_status">Regn der du er</string>
+    <string name="car_observation">Siste radarmåling</string>
+    <string name="car_loading">Laster…</string>
+    <string name="car_location_help">Når du har parkert, åpne meteocool på telefonen og tillat posisjonstilgang.</string>
+    <string name="widget_clock_hours">%1$d h</string>
+    <string name="car_retry">@string/widget_refresh_help</string>
+    <string-array name="widget_ranges">
+        <item>Neste time</item>
+        <item>Neste 2 timer</item>
+        <item>Siste halvtime og neste 90 minutter</item>
+        <item>Siste 2 og neste 2 timer</item>
+    </string-array>
+    <string-array name="widget_areas">
+        <item>Lokalt · 40 km</item>
+        <item>Regionalt · 150 km</item>
+        <item>Stort · 400 km</item>
+        <item>Land · 1,200 km</item>
+    </string-array>
+    <string-array name="widget_overlays">
+        <item>Bare kart</item>
+        <item>Neste regn</item>
+        <item>Neste regn og diagram</item>
+    </string-array>
+    <string-array name="widget_dials">
+        <item>Én time</item>
+        <item>To timer</item>
+    </string-array>
+    <string-array name="widget_intensities">
+        <item>Som i appen</item>
+        <item>Yr</item>
+        <item>Lett regn</item>
+        <item>Regn</item>
+        <item>Mye regn</item>
+        <item>Kraftig regn</item>
+    </string-array>
+    <string name="widget_background_location_help">For å oppdatere posisjonen når meteocool er lukket, velg Posisjon → Tillat hele tiden i Android-appinnstillingene. Regnvarsler trenger ikke å være slått på.</string>
+</resources>

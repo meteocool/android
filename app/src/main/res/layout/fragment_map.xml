@@ -49,6 +49,11 @@
                 android:contentDescription="@string/map_share"
                 android:enabled="false"
                 app:srcCompat="@drawable/ic_share" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/weatherTools"
+                style="@style/MapControl"
+                android:contentDescription="@string/weather_tools"
+                app:srcCompat="@drawable/ic_feature_bell" />
     </LinearLayout>
 
     <!-- The way home: a tap brings back the radar map. -->

@@ -1,7 +1,6 @@
 package com.meteocool.location
 
 import android.location.Location
-import android.os.Build
 
 /**
  * One location fix. Values the device did not report are -1, which is what
@@ -26,7 +25,7 @@ data class MeteocoolLocation(
             longitude = location.longitude,
             altitude = if (location.hasAltitude()) location.altitude else -1.0,
             accuracy = if (location.hasAccuracy()) location.accuracy else -1f,
-            verticalAccuracy = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && location.hasVerticalAccuracy()) {
+            verticalAccuracy = if (location.hasVerticalAccuracy()) {
                 location.verticalAccuracyMeters
             } else {
                 -1f

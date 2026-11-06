@@ -2,6 +2,7 @@ package com.meteocool.firebase
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
+import android.os.Bundle
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
@@ -13,16 +14,15 @@ import com.meteocool.permissions.PermUtils
 import com.meteocool.ui.MeteocoolActivity
 
 /**
- * A rain alert that arrived while the app was running but not in front (a
- * dialog of another app over it, split screen), which FCM leaves to the app
- * to show.
+ * Native rendering for data alerts, including receipt while the app is closed.
  */
 object AlertNotification {
 
-    private const val ALERT_ID = 1
+    const val ALERT_ID = 1
+    const val INSTANCE = "com.meteocool.alert_instance"
 
     @SuppressLint("MissingPermission") // areNotificationsEnabled() covers POST_NOTIFICATIONS
-    fun show(context: Context, title: String?, body: String?) {
+    fun show(context: Context, title: String?, body: String?, instance: String) {
         if (!PermUtils.areNotificationsEnabled(context)) return
         val intent = Intent(context, MeteocoolActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
@@ -35,6 +35,7 @@ object AlertNotification {
             .setColor(ContextCompat.getColor(context, R.color.turquoise_cloud_0))
             .setContentTitle(title)
             .setContentText(body)
+            .addExtras(Bundle().apply { putString(INSTANCE, instance) })
             .setStyle(NotificationCompat.BigTextStyle().bigText(body))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)

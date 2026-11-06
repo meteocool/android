@@ -4,8 +4,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import androidx.core.app.NotificationManagerCompat
 import com.meteocool.R
 
 /**
@@ -22,7 +20,6 @@ object Notifications {
     const val EXTRA_FCM_MESSAGE_ID = "google.message_id"
 
     fun createChannel(context: Context) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val channel = NotificationChannel(
             context.getString(R.string.notification_channel_id),
             context.getString(R.string.notification_channel_name),
@@ -31,7 +28,13 @@ object Notifications {
         context.getSystemService(NotificationManager::class.java)?.createNotificationChannel(channel)
     }
 
-    fun clearAll(context: Context) = NotificationManagerCompat.from(context).cancelAll()
+    fun clearAll(context: Context) {
+        AlertHistory.captureDelivered(context)
+        val manager = context.getSystemService(NotificationManager::class.java) ?: return
+        manager.activeNotifications.forEach { item ->
+            if (item.notification.flags and android.app.Notification.FLAG_FOREGROUND_SERVICE == 0) manager.cancel(item.tag, item.id)
+        }
+    }
 
     /** Whether [intent] was opened by tapping an alert. */
     fun isFromNotification(intent: Intent?): Boolean =

@@ -21,6 +21,14 @@ class SharedLinkTest {
     }
 
     @Test
+    fun `native tools open map links without routing to an external host`() {
+        assertEquals("?point=48.1,11.5", SharedLink.search("meteocool://map?point=48.1,11.5"))
+        listOf("meteocool://map", "meteocool://evil?point=1,2", "meteocool://user@map?point=1,2",
+            "meteocool://map:1234?point=1,2", "meteocool://map/evil?point=1,2")
+            .forEach { assertNull(it, SharedLink.search(it)) }
+    }
+
+    @Test
     fun `anything else is not`() {
         listOf(
             null,

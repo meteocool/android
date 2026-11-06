@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="widget_radar">Mappa radar</string>
+    <string name="widget_forecast">Previsione pioggia</string>
+    <string name="widget_clock">Orologio della pioggia</string>
+    <string name="widget_places">Luoghi</string>
+    <string name="widget_current_location">Posizione attuale</string>
+    <string name="widget_range">Intervallo</string>
+    <string name="widget_area">Area della mappa</string>
+    <string name="widget_overlay">Previsione</string>
+    <string name="widget_dial">Quadrante</string>
+    <string name="widget_intensity">Intensità</string>
+    <string name="widget_show_map">Mostra mappa radar</string>
+    <string name="widget_refresh">Aggiorna</string>
+    <string name="widget_configure">Configura widget</string>
+    <string name="widget_location_help">Scegli un luogo o la posizione attuale. Servono il permesso e una posizione recente. Apri meteocool se manca. Un widget alto mostra sei luoghi, quelli più piccoli ne mostrano meno.</string>
+    <string name="widget_search_hint">Città o luogo</string>
+    <string name="widget_search">Cerca</string>
+    <string name="widget_search_failed">Ricerca dei luoghi non disponibile. Controlla la connessione o usa la posizione attuale.</string>
+    <string name="widget_search_empty">Nessun luogo trovato. Prova una città e un paese.</string>
+    <string name="widget_choose_place">Scegli un luogo</string>
+    <string name="widget_remove">Rimuovi</string>
+    <string name="widget_save">Salva widget</string>
+    <string name="widget_rain_until">Pioggia fino alle %1$s</string>
+    <string name="widget_rain_continues">La pioggia continua nel periodo di previsione</string>
+    <string name="widget_rain_at">Pioggia dalle %1$s</string>
+    <string name="widget_dry_through">Nessuna pioggia prevista fino alle %1$s</string>
+    <string name="widget_unavailable">Dati meteo non disponibili o obsoleti</string>
+    <string name="widget_no_location">Posizione non disponibile. Apri meteocool.</string>
+    <string name="widget_as_of">Previsione delle %1$s · Aggiorna per il meteo attuale</string>
+    <string name="widget_refresh_help">Tocca Aggiorna per riprovare</string>
+    <string name="widget_map_description">Radar pioggia intorno a %1$s</string>
+    <string name="car_rain_status">Pioggia nella tua posizione</string>
+    <string name="car_observation">Ultima osservazione radar</string>
+    <string name="car_loading">Caricamento…</string>
+    <string name="car_location_help">A veicolo parcheggiato, apri meteocool sul telefono e consenti la posizione.</string>
+    <string name="widget_clock_hours">%1$d h</string>
+    <string name="car_retry">@string/widget_refresh_help</string>
+    <string-array name="widget_ranges">
+        <item>Prossima ora</item>
+        <item>Prossime 2 ore</item>
+        <item>Ultima mezz’ora e prossimi 90 minuti</item>
+        <item>Ultime 2 ore e prossime 2 ore</item>
+    </string-array>
+    <string-array name="widget_areas">
+        <item>Locale · 40 km</item>
+        <item>Regionale · 150 km</item>
+        <item>Ampia · 400 km</item>
+        <item>Paese · 1,200 km</item>
+    </string-array>
+    <string-array name="widget_overlays">
+        <item>Solo mappa</item>
+        <item>Prossima pioggia</item>
+        <item>Prossima pioggia e grafico</item>
+    </string-array>
+    <string-array name="widget_dials">
+        <item>Un’ora</item>
+        <item>Due ore</item>
+    </string-array>
+    <string-array name="widget_intensities">
+        <item>Come nell’app</item>
+        <item>Pioviggine</item>
+        <item>Pioggia leggera</item>
+        <item>Pioggia</item>
+        <item>Pioggia intensa</item>
+        <item>Pioggia forte</item>
+    </string-array>
+    <string name="widget_background_location_help">Per aggiornare la posizione quando meteocool è chiuso, scegli Posizione → Consenti sempre nelle impostazioni Android dell’app. Non occorre attivare gli avvisi di pioggia.</string>
+</resources>

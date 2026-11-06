@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mute_alerts">Pauziraj upozorenja</string>
+    <string name="mute_day">Na 1 dan</string>
+    <string name="mute_week">Na 1 tjedan</string>
+    <string name="mute_rain">Dok kiša ne prestane</string>
+    <string name="mute_unmute">Nastavi upozorenja</string>
+    <string name="mute_until">Pauzirano do %1$s</string>
+    <string name="mute_no_rain">Prognoza ovdje ne pokazuje kišu, pa nema što pauzirati.</string>
+    <string name="mute_no_forecast">Prognozu za tvoju lokaciju nije moguće učitati. Pokušaj ponovno kasnije.</string>
+    <string name="past_alerts">Past Alerts</string>
+    <string name="past_alerts_empty">No Alerts Yet</string>
+    <string name="past_alerts_clear">Clear Past Alerts</string>
+    <string name="past_alerts_clear_confirm">Clear Past Alerts</string>
+    <string name="notifications_outside">meteocool obavijesti ne rade na tvojoj lokaciji jer je izvan područja koje pokrivaju naši radarski podaci. Obavijesti ostaju uključene i počinju raditi čim budeš u pokrivenom području.</string>
+    <string name="notifications_outside_title">Ovdje nema obavijesti</string>
+    <string name="rain_unavailable">Rain forecast unavailable</string>
+    <string name="rain_checking">Checking rain…</string>
+    <string name="rain_refresh">Refresh</string>
+    <string name="rain_starts">Starts at %1$s</string>
+    <string name="rain_until">Kiša do %1$s</string>
+    <string name="rain_continues">Continues through the forecast</string>
+    <string name="rain_dry_through">Kiša se ne očekuje do %1$s</string>
+    <string name="data_licences">Licence podataka</string>
+    <string name="source_rmi">Radar Belgija (Jabbeke, Wideumont) · CC BY 4.0, izmijenjeno</string>
+    <string name="source_vmm">Radar Belgija (Helchteren) · CC BY 4.0 / Modellicentie Gratis Hergebruik v1.0, izmijenjeno</string>
+    <string name="source_shmu">Radar Slovačka · CC BY 4.0, izmijenjeno</string>
+    <string name="source_lhmt">Radar Litva · CC BY 4.0 / CC BY-SA 4.0, izmijenjeno</string>
+    <string name="source_kaur">Radar Estonija · CC BY 4.0, izmijenjeno</string>
+    <string name="source_met_eireann">Radar Irska · Copyright Met Éireann. Izvor: www.met.ie. Objavljeno pod licencom Creative Commons Imenovanje 4.0 međunarodna (CC BY 4.0). Podaci su izmijenjeni: meteocool ih je spojio, ponovno projicirao, očistio od odraza tla i šuma te obojio.</string>
+    <string name="source_dhmz">Radar Hrvatska · Izvor: DHMZ. CC BY 4.0 / Otvorena dozvola, izmijenjeno, posljednje u vrijeme snimanja prikazano na karti</string>
+    <string name="source_dmi">Radar Danska · CC BY 4.0, izmijenjeno</string>
+    <string name="source_knmi">Radar Nizozemska (Den Helder, Herwijnen) · CC BY 4.0, izmijenjeno</string>
+    <string name="source_fmi">Radar Finska · CC BY 4.0, izmijenjeno</string>
+    <string name="source_smhi">Radar Švedska · CC BY 4.0, izmijenjeno</string>
+    <string name="source_met_norway">Radar Norveška · Na temelju podataka MET Norwaya. NLOD 2.0 / CC BY 4.0, izmijenjeno</string>
+    <string name="weather_tools">Vremenski alati</string>
+    <string name="rain_monitor">Stanje kiše</string>
+    <string name="rain_track">Prati ovu kišu</string>
+    <string name="rain_stop">Zaustavi praćenje</string>
+    <string name="rain_tracking">Praćenje kiše do dva sata.</string>
+    <string name="rain_monitor_help">Tijekom praćenja svake minute provjerava kišu na trenutačnoj lokaciji. Završava nakon kiše ili nakon dva sata. Možete zaustaviti bilo kada.</string>
+    <string name="rain_continues_until">Kiša se očekuje do %1$s</string>
+</resources>

@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="widget_radar">Lietaus radaras</string>
+    <string name="widget_forecast">Lietaus prognozė</string>
+    <string name="widget_clock">Lietaus laikrodis</string>
+    <string name="widget_places">Vietos</string>
+    <string name="widget_current_location">Dabartinė vieta</string>
+    <string name="widget_range">Laikotarpis</string>
+    <string name="widget_area">Žemėlapio sritis</string>
+    <string name="widget_overlay">Prognozė</string>
+    <string name="widget_dial">Ciferblatas</string>
+    <string name="widget_intensity">Intensyvumas</string>
+    <string name="widget_show_map">Rodyti radaro žemėlapį</string>
+    <string name="widget_refresh">Atnaujinti lietų</string>
+    <string name="widget_configure">Nustatyti valdiklį</string>
+    <string name="widget_location_help">Pasirinkite vietą arba dabartinę savo vietą. Reikia leidimo ir naujo vietos nustatymo. Jei vietos nėra, atverkite meteocool. Aukštas valdiklis rodo šešias vietas, mažesni – mažiau.</string>
+    <string name="widget_search_hint">Miestas arba vieta</string>
+    <string name="widget_search">Ieškoti</string>
+    <string name="widget_search_failed">Vietų paieška nepasiekiama. Patikrinkite ryšį arba naudokite dabartinę vietą.</string>
+    <string name="widget_search_empty">Vietų nerasta. Bandykite miestą ir šalį.</string>
+    <string name="widget_choose_place">Pasirinkti vietą</string>
+    <string name="widget_remove">Pašalinti</string>
+    <string name="widget_save">Išsaugoti valdiklį</string>
+    <string name="widget_rain_until">Lietus iki %1$s</string>
+    <string name="widget_rain_continues">Lietus tęsis visą prognozės laikotarpį</string>
+    <string name="widget_rain_at">Lietus nuo %1$s</string>
+    <string name="widget_dry_through">Iki %1$s lietaus nenumatoma</string>
+    <string name="widget_unavailable">Orų duomenų nėra arba jie pasenę</string>
+    <string name="widget_no_location">Vieta nepasiekiama. Atverkite meteocool.</string>
+    <string name="widget_as_of">Prognozė nuo %1$s · Atnaujinkite dabartinius orus</string>
+    <string name="widget_refresh_help">Norėdami bandyti dar kartą, atnaujinkite</string>
+    <string name="widget_map_description">Lietaus radaras aplink %1$s</string>
+    <string name="car_rain_status">Lietus jūsų vietoje</string>
+    <string name="car_observation">Paskutinis radaro stebėjimas</string>
+    <string name="car_loading">Įkeliama…</string>
+    <string name="car_location_help">Pastatę automobilį atverkite meteocool telefone ir suteikite prieigą prie vietos.</string>
+    <string name="widget_clock_hours">%1$d h</string>
+    <string name="car_retry">@string/widget_refresh_help</string>
+    <string-array name="widget_ranges">
+        <item>Artimiausia valanda</item>
+        <item>Artimiausios 2 valandos</item>
+        <item>Paskutinis pusvalandis ir artimiausios 90 minučių</item>
+        <item>Paskutinės 2 ir artimiausios 2 valandos</item>
+    </string-array>
+    <string-array name="widget_areas">
+        <item>Vietinis · 40 km</item>
+        <item>Regioninis · 150 km</item>
+        <item>Platus · 400 km</item>
+        <item>Šalis · 1,200 km</item>
+    </string-array>
+    <string-array name="widget_overlays">
+        <item>Tik žemėlapis</item>
+        <item>Kitas lietus</item>
+        <item>Kitas lietus ir diagrama</item>
+    </string-array>
+    <string-array name="widget_dials">
+        <item>Viena valanda</item>
+        <item>Dvi valandos</item>
+    </string-array>
+    <string-array name="widget_intensities">
+        <item>Kaip programėlėje</item>
+        <item>Dulksna</item>
+        <item>Nedidelis lietus</item>
+        <item>Lietus</item>
+        <item>Stiprus lietus</item>
+        <item>Smarkus lietus</item>
+    </string-array>
+    <string name="widget_background_location_help">Kad vieta būtų atnaujinama uždarius meteocool, Android programėlės nustatymuose pasirinkite Vieta → Leisti visą laiką. Lietaus pranešimų įjungti nereikia.</string>
+</resources>

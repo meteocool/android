@@ -17,6 +17,8 @@ data class RegistrationSettings(
     val lang: String,
     /** "always", "whenInUse" or "denied", as iOS reports it. */
     val locationPermission: String,
+    val pausedUntil: Long? = null,
+    val stormLog: Boolean = false,
 )
 
 /**
@@ -28,8 +30,12 @@ object Registration {
     /** A fix older than this is not sent: the backend would alert for where the phone was. */
     const val MAX_FIX_AGE_NANOS = 300L * 1_000_000_000L
 
-    /** The backend's `Language` enum only has de and en; anything else drops the registration. */
-    fun lang(localeLanguage: String): String = if (localeLanguage.lowercase().startsWith("de")) "de" else "en"
+    /** The backend's Language enum; follow Android's per-app language. */
+    fun lang(localeLanguage: String): String {
+        val language = localeLanguage.substringBefore('-').substringBefore('_').lowercase(java.util.Locale.ROOT)
+        if (language == "no" || language == "nn") return "nb"
+        return language.takeIf { it in setOf("de", "en", "nl", "lt", "et", "hr", "da", "fi", "sv", "nb", "fr", "it", "pl", "cs", "sk") } ?: "en"
+    }
 
     /** The backend rejects tokens outside 32..192 characters. */
     fun isValidToken(token: String?): Boolean = token != null && token.length in 32..192
@@ -64,7 +70,7 @@ object Registration {
      * The `post_location` body. `details` is what the old backend reads and
      * `withDBZ` what the v4 backend reads; each ignores the other.
      */
-    fun payload(fix: MeteocoolLocation, pressureHpa: Float, settings: RegistrationSettings): Map<String, Any> = mapOf(
+    fun payload(fix: MeteocoolLocation, pressureHpa: Float, settings: RegistrationSettings): Map<String, Any?> = mapOf(
         "lat" to fix.latitude,
         "lon" to fix.longitude,
         "altitude" to fix.altitude,
@@ -83,5 +89,8 @@ object Registration {
         "experimental" to settings.experimental,
         "lang" to settings.lang,
         "locationPermission" to settings.locationPermission,
+        "pausedUntil" to settings.pausedUntil,
+        "stormLog" to settings.stormLog,
+        "androidDataAlerts" to true,
     )
 }

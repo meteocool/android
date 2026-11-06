@@ -1,9 +1,12 @@
 package com.meteocool.network
 
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ensureActive
+import java.io.ByteArrayOutputStream
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.HttpURLConnection
@@ -28,7 +31,7 @@ class ApiClient(
     }
 
     companion object {
-        private val gson = Gson()
+        private val gson = GsonBuilder().serializeNulls().create()
 
         /** The JSON body, or null if a number in it is NaN or infinite. */
         fun encode(body: Map<String, Any?>): String? {
@@ -63,6 +66,55 @@ class ApiClient(
         }
     }
 
+    data class Response(val status: Int, val body: String)
+
+    /** Tokens stay in headers; redirects cannot forward them to another host. */
+    suspend fun request(
+        apiBase: String,
+        path: String,
+        method: String = "GET",
+        headers: Map<String, String> = emptyMap(),
+    ): Response? = withContext(Dispatchers.IO) {
+        require(method == "GET" || method == "DELETE")
+        val base = URL(apiBase)
+        val url = URL(base, path)
+        require(url.protocol == base.protocol && url.host == base.host && url.port == base.port)
+        var connection: HttpURLConnection? = null
+        try {
+            connection = (url.openConnection() as HttpURLConnection).apply {
+                requestMethod = method
+                instanceFollowRedirects = false
+                connectTimeout = timeoutMillis
+                readTimeout = timeoutMillis
+                useCaches = false
+                setRequestProperty("Accept", "application/json")
+                setRequestProperty("User-Agent", userAgent())
+                headers.forEach { (key, value) -> setRequestProperty(key, value) }
+            }
+            val status = connection.responseCode
+            val stream = if (status in 200..299) connection.inputStream else connection.errorStream
+            val output = ByteArrayOutputStream()
+            stream?.use {
+                val buffer = ByteArray(8192)
+                while (true) {
+                    coroutineContext.ensureActive()
+                    val count = it.read(buffer)
+                    if (count < 0) break
+                    if (output.size() + count > 4 * 1024 * 1024) return@withContext null
+                    output.write(buffer, 0, count)
+                }
+            }
+            Response(status, output.toString("UTF-8"))
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Timber.w("Weather request: ${e.javaClass.simpleName}")
+            null
+        } finally {
+            connection?.disconnect()
+        }
+    }
+
     /** Sends [body] to [endpoint] below [apiBase], returning whether it succeeded. */
     suspend fun post(apiBase: String, endpoint: Endpoint, body: Map<String, Any?>): Boolean = withContext(Dispatchers.IO) {
         val json = encode(body) ?: run {
@@ -74,6 +126,7 @@ class ApiClient(
         try {
             connection = (url.openConnection() as HttpURLConnection).apply {
                 requestMethod = "POST"
+                instanceFollowRedirects = false
                 connectTimeout = timeoutMillis
                 readTimeout = timeoutMillis
                 doOutput = true
@@ -90,6 +143,8 @@ class ApiClient(
             val ok = isSuccess(endpoint, status, response)
             Timber.i("${endpoint.path}: HTTP $status${if (ok) "" else ", not accepted"}")
             ok
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             Timber.w("${endpoint.path}: ${e.javaClass.simpleName}")
             false

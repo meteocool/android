@@ -15,6 +15,7 @@ import com.meteocool.notifications.RegistrationManager
 import com.meteocool.preferences.Prefs
 import com.meteocool.push.PushSupport
 import com.meteocool.sensors.PressureReader
+import com.meteocool.widgets.RainWidgetProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -37,6 +38,7 @@ class MeteocoolApp : Application() {
     // Held here: SharedPreferences keeps its listeners only weakly.
     private val registrationSettingsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
         if (key in Prefs.REGISTRATION_SETTINGS) registration.refreshRegistration()
+        if (key in setOf(Prefs.NOTIFICATION_INTENSITY, Prefs.BASE_LAYER, Prefs.RADAR_COLOR_MAPPING)) RainWidgetProvider.refresh(this)
     }
 
     override fun onCreate() {
@@ -67,7 +69,12 @@ class MeteocoolApp : Application() {
             scope.launch { PushSupport.fetchToken(this@MeteocoolApp)?.let { registration.setToken(it) } }
         }
         registration.refreshAuthorization()
-        scope.launch { MeteocoolEnvironment.changes.drop(1).collect { registration.moveRegistration() } }
+        RainWidgetProvider.schedule(this)
+        scope.launch { MeteocoolEnvironment.changes.drop(1).collect {
+            stopService(android.content.Intent(this@MeteocoolApp, com.meteocool.weather.RainMonitorService::class.java))
+            registration.moveRegistration()
+            RainWidgetProvider.refresh(this@MeteocoolApp)
+        } }
     }
 
     /** Warnings and errors only. */

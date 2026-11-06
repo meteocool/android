@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import android.location.LocationManager
-import android.os.Build
 import android.os.CancellationSignal
 import androidx.core.content.ContextCompat
 import androidx.core.util.Consumer
@@ -62,7 +61,7 @@ class PlatformLocationService(context: Context) : ForegroundLocationService(cont
         fun bestProvider(context: Context, locationManager: LocationManager): String? {
             val enabled = locationManager.getProviders(true)
             return when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && LocationManager.FUSED_PROVIDER in enabled ->
+                LocationManager.FUSED_PROVIDER in enabled ->
                     LocationManager.FUSED_PROVIDER
                 PermUtils.isFineLocationPermissionGranted(context) && LocationManager.GPS_PROVIDER in enabled ->
                     LocationManager.GPS_PROVIDER

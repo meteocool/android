@@ -2,6 +2,7 @@ package com.meteocool.notifications
 
 import android.content.Context
 import android.os.SystemClock
+import androidx.core.os.ConfigurationCompat
 import com.meteocool.environment.MeteocoolEnvironment
 import com.meteocool.location.LocationPermissionWarning
 import com.meteocool.location.MeteocoolLocation
@@ -10,6 +11,8 @@ import com.meteocool.network.ApiClient.Endpoint
 import com.meteocool.permissions.PermUtils
 import com.meteocool.preferences.Prefs
 import com.meteocool.sensors.PressureReader
+import com.meteocool.weather.WeatherData
+import com.meteocool.stormlog.StormLogRules
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -44,6 +47,12 @@ class RegistrationManager(
 
     /** A registration change did not reach the server; the settings screen says so. */
     val syncFailed: StateFlow<Boolean> = _syncFailed
+    private val _outsideCoverage = MutableStateFlow(false)
+    val outsideCoverage: StateFlow<Boolean> = _outsideCoverage
+    private var checkCoverage = false
+    private var followedMuteAt = 0L
+
+    fun checkCoverageAfterRegistration() { checkCoverage = true }
 
     @Volatile
     private var lastFix: MeteocoolLocation? = null
@@ -52,7 +61,7 @@ class RegistrationManager(
     private var lastPosted: MeteocoolLocation? = null
 
     /** What the last successful post carried, so an identical refresh is not sent twice. */
-    private var lastPostedBody: Map<String, Any>? = null
+    private var lastPostedBody: Map<String, Any?>? = null
 
     private val currentApi: String get() = MeteocoolEnvironment.currentApiBase
 
@@ -74,8 +83,11 @@ class RegistrationManager(
         intensityDbz = prefs.intensityDbz,
         withDbz = prefs.withDbz,
         experimental = MeteocoolEnvironment.current == MeteocoolEnvironment.STAGING,
-        lang = Registration.lang(Locale.getDefault().language),
+        lang = Registration.lang(ConfigurationCompat.getLocales(context.resources.configuration)[0]?.language ?: "en"),
         locationPermission = LocationPermissionWarning.reported(context),
+        pausedUntil = AlertMute.active(prefs)?.until,
+        stormLog = MeteocoolEnvironment.current == MeteocoolEnvironment.STAGING &&
+            StormLogRules.collectionEnabled(prefs.sp, currentApi, token),
     )
 
     private fun isFresh(fix: MeteocoolLocation) = Registration.isFresh(fix, SystemClock.elapsedRealtimeNanos())
@@ -109,7 +121,10 @@ class RegistrationManager(
 
     private suspend fun refreshRegistrationNow(): Boolean {
         if (!canRegister()) return false
-        val fix = lastFix?.takeIf { isFresh(it) } ?: currentLocation()?.also { lastFix = it } ?: return false
+        val fix = lastFix?.takeIf { isFresh(it) } ?: currentLocation()?.also { lastFix = it } ?: run {
+            _syncFailed.value = true
+            return false
+        }
         return mutex.withLock { postLocked(fix, readPressure = false) }
     }
 
@@ -161,20 +176,42 @@ class RegistrationManager(
         // The reading can take two seconds; alerts may have gone off meanwhile.
         if (!canRegister() || prefs.pushToken != token || !isFresh(fix)) return false
         val base = currentApi
+        val mute = AlertMute.active(prefs)
+        if (mute?.length == "rain" && System.currentTimeMillis() - followedMuteAt > 600_000) {
+            val forecast = WeatherData.forecast(context, fix.latitude, fix.longitude)
+            if (forecast != null && base == currentApi && AlertMute.active(prefs) == mute) {
+                followedMuteAt = System.currentTimeMillis()
+                val next = mute.following(forecast, System.currentTimeMillis() / 1000)
+                if (next != mute) AlertMute.save(prefs, next)
+            }
+        }
+        if (!canRegister() || prefs.pushToken != token || base != currentApi || !isFresh(fix)) return false
         val body = Registration.payload(fix, hpa, settings(token))
         // Launch, onboarding and a settings screen writing its defaults all ask at once.
-        if (!readPressure && body == lastPostedBody && prefs.registrationOrigin == base) return true
+        if (!readPressure && !checkCoverage && body == lastPostedBody && prefs.registrationOrigin == base) return true
         prefs.registrationOrigin = base
         val ok = api.post(base, Endpoint.POST_LOCATION, body)
         lastPosted = if (ok) fix else null
         lastPostedBody = if (ok) body else null
         _syncFailed.value = !ok
+        if (ok && checkCoverage && base == currentApi && prefs.notification && prefs.pushToken == token) {
+            val response = api.request(base, String.format(Locale.ROOT,
+                "v3/mobile/forecast?lat=%.4f&lon=%.4f", fix.latitude, fix.longitude),
+                headers = mapOf("X-Push-Token" to token))
+            if (base == currentApi && prefs.notification && prefs.pushToken == token && response?.status == 200) {
+                NotificationCoverage.outside(response.body)?.let {
+                    checkCoverage = false
+                    _outsideCoverage.value = it
+                }
+            }
+        }
         // Alerts were turned off while the request was out.
         if (!prefs.notification || !PermUtils.areNotificationsEnabled(context)) unregisterLocked()
         return ok
     }
 
     private suspend fun unregisterLocked(): Boolean {
+        _outsideCoverage.value = false
         lastPosted = null
         lastPostedBody = null
         val origin = prefs.registrationOrigin

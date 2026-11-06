@@ -11,7 +11,6 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -31,7 +30,6 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.result.IntentSenderRequest
-import androidx.annotation.RequiresApi
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
@@ -145,7 +143,12 @@ class WebFragment : Fragment() {
         binding.settings.setOnClickListener { (activity as? MeteocoolActivity)?.openSettings() }
         binding.locateMe.setOnClickListener { onLocationButtonTapped() }
         binding.share.setOnClickListener { shareMap() }
-        binding.logo.setOnClickListener { showRadarMap() }
+        val logoTaps = TapRun()
+        binding.logo.setOnClickListener {
+            showRadarMap()
+            if (logoTaps.tap(android.os.SystemClock.elapsedRealtime())) LogoConfetti.burst(binding.mapRoot, binding.logo)
+        }
+        binding.weatherTools.setOnClickListener { showWeatherTools() }
 
         createWebView()
         recovery = MapRecovery(
@@ -244,7 +247,9 @@ class WebFragment : Fragment() {
         val origin = "${page.scheme}://${page.host}" + if (page.port == -1) "" else ":${page.port}"
         pageScripts?.remove()
         pageScripts = WebViewCompat.addDocumentStartJavaScript(
-            web, MapShare.CAPABILITIES_SCRIPT + "\n" + MapRecovery.GRAPHICS_WATCH, setOf(origin),
+            web, MapShare.CAPABILITIES_SCRIPT +
+                ";window.nativeCapabilities.ar = ${MeteocoolEnvironment.current == MeteocoolEnvironment.STAGING};\n" +
+                MapRecovery.GRAPHICS_WATCH, setOf(origin),
         )
     }
 
@@ -305,6 +310,11 @@ class WebFragment : Fragment() {
     }
 
     private fun handleMessage(message: String) {
+        if (message.startsWith("openAR:") && MeteocoolEnvironment.current == MeteocoolEnvironment.STAGING) {
+            val target = message.substringAfter(':')
+            openAR(target.takeIf { com.meteocool.experimental.StormData.validTarget(it) })
+            return
+        }
         if (message.startsWith(MapShare.MESSAGE_PREFIX)) {
             MapShare.parse(message.removePrefix(MapShare.MESSAGE_PREFIX), mapHost())?.let { presentShare(it) }
             return
@@ -323,6 +333,44 @@ class WebFragment : Fragment() {
             "impactHeavy" -> webView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             else -> Timber.d("Unknown message from the page: $message")
         }
+    }
+
+    private fun openAR(target: String? = null) {
+        if (MeteocoolEnvironment.current != MeteocoolEnvironment.STAGING) return
+        fun show(value: String?, point: String? = null) {
+            if (!isResumed || MeteocoolEnvironment.current != MeteocoolEnvironment.STAGING) return
+            val intent = Intent(requireContext(), com.meteocool.experimental.ARStormActivity::class.java)
+                .putExtra(com.meteocool.experimental.ARStormActivity.EXTRA_TARGET,
+                    value?.takeIf { com.meteocool.experimental.StormData.validTarget(it) })
+            val coordinates = point?.split(',')?.takeIf { it.size == 2 }?.mapNotNull(String::toDoubleOrNull)
+            if (coordinates?.size == 2 && coordinates[0] in -90.0..90.0 && coordinates[1] in -180.0..180.0) {
+                intent.putExtra(com.meteocool.experimental.ARStormActivity.EXTRA_LATITUDE, coordinates[0])
+                    .putExtra(com.meteocool.experimental.ARStormActivity.EXTRA_LONGITUDE, coordinates[1])
+            }
+            startActivity(intent)
+        }
+        if (target != null || !viewModel.pageReady) { show(target); return }
+        evaluate(MapShare.SHARE_LINK_SCRIPT) { result ->
+            val uri = MapShare.fromScriptResult(result, mapHost())?.url?.toUri()
+            val selected = uri?.getQueryParameter("cell") ?: uri?.getQueryParameter("cloud")?.let { "meteoradar/volumes/$it.mcvx" }
+            show(selected, uri?.getQueryParameter("point"))
+        }
+    }
+
+    private fun showWeatherTools() {
+        val popup = androidx.appcompat.widget.PopupMenu(requireContext(), binding.weatherTools)
+        fun item(label: Int, action: () -> Unit) { popup.menu.add(label).setOnMenuItemClickListener { action(); true } }
+        item(R.string.rain_monitor) { startActivity(Intent(requireContext(), com.meteocool.weather.RainStatusActivity::class.java)) }
+        item(R.string.past_alerts) { startActivity(Intent(requireContext(), com.meteocool.notifications.PastAlertsActivity::class.java)) }
+        if (MeteocoolEnvironment.current == MeteocoolEnvironment.STAGING) {
+            if (com.meteocool.push.PushSupport.available) item(R.string.storm_log_title) {
+                startActivity(Intent(requireContext(), com.meteocool.stormlog.StormLogActivity::class.java))
+            }
+            item(R.string.experimental_flash_bang) { startActivity(Intent(requireContext(), com.meteocool.experimental.FlashToBangActivity::class.java)) }
+            item(R.string.experimental_point_menu_ar) { openAR() }
+        }
+        item(R.string.data_licences) { (activity as? MeteocoolActivity)?.openDataLicences() }
+        popup.show()
     }
 
     /**
@@ -400,11 +448,11 @@ class WebFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) watchScreenshots(true)
+        watchScreenshots(true)
     }
 
     override fun onPause() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) watchScreenshots(false)
+        watchScreenshots(false)
         super.onPause()
     }
 
@@ -594,11 +642,7 @@ class WebFragment : Fragment() {
         }
     }
 
-    /**
-     * Android 14 and later only. Older versions would need a MediaStore
-     * observer, which needs permission to read the reader's images.
-     */
-    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+    /** The platform screenshot callback needs no access to the reader's images. */
     private fun watchScreenshots(watch: Boolean) {
         val activity = requireActivity()
         (screenCaptureCallback as? Activity.ScreenCaptureCallback)?.let { activity.unregisterScreenCaptureCallback(it) }
@@ -724,7 +768,6 @@ class WebFragment : Fragment() {
             recovery?.failed(MapRecovery.Failure.NAVIGATION)
         }
 
-        @RequiresApi(Build.VERSION_CODES.O)
         override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean {
             Timber.w("WebView renderer gone, crashed: ${detail.didCrash()}")
             val b = _binding

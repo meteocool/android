@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
@@ -38,6 +37,15 @@ import com.meteocool.app.app
 import com.meteocool.environment.MeteocoolEnvironment
 import com.meteocool.permissions.PermUtils
 import com.meteocool.push.PushSupport
+import com.meteocool.notifications.AlertMute
+import com.meteocool.notifications.PastAlertsActivity
+import com.meteocool.location.service.LocationProviders
+import com.meteocool.weather.WeatherData
+import com.meteocool.weather.RainForecast
+import com.meteocool.weather.RainStatusActivity
+import com.meteocool.stormlog.StormLogActivity
+import com.meteocool.experimental.FlashToBangActivity
+import com.meteocool.experimental.ARStormActivity
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.Locale
@@ -69,6 +77,18 @@ class SettingsFragment : PreferenceFragmentCompat() {
             DataSource("© Météo-France", R.string.source_meteofrance, "https://www.etalab.gouv.fr/licence-ouverte-open-licence/"),
             DataSource("© Český hydrometeorologický ústav (ČHMÚ)", R.string.source_chmi, "https://www.chmi.cz/o-chmu/caste-dotazy-faq/open-data"),
             DataSource("© IMGW-PIB", R.string.source_imgw, "https://danepubliczne.imgw.pl/regulations"),
+            DataSource("© RMI", R.string.source_rmi, "https://opendata.meteo.be/termsandconditions"),
+            DataSource("© VMM", R.string.source_vmm, "https://creativecommons.org/licenses/by/4.0/"),
+            DataSource("© SHMÚ", R.string.source_shmu, "https://opendata.shmu.sk/README.txt"),
+            DataSource("© LHMT", R.string.source_lhmt, "https://api.meteo.lt/"),
+            DataSource("© Keskkonnaagentuur", R.string.source_kaur, "https://keskkonnaportaal.ee/et/avaandmed/meteoroloogiliste-radarite-andmestik"),
+            DataSource("© Met Éireann", R.string.source_met_eireann, "https://www.met.ie/about-us/specialised-services/open-data"),
+            DataSource("© DHMZ", R.string.source_dhmz, "https://klima.hr/razno/katalog_i_cjenikDHMZ.pdf"),
+            DataSource("© DMI", R.string.source_dmi, "https://www.dmi.dk/friedata/dokumentation/terms-of-use"),
+            DataSource("© KNMI", R.string.source_knmi, "https://creativecommons.org/licenses/by/4.0/"),
+            DataSource("© FMI", R.string.source_fmi, "https://en.ilmatieteenlaitos.fi/open-data-licence"),
+            DataSource("© SMHI", R.string.source_smhi, "https://www.smhi.se/data/om-smhis-data/villkor-for-anvandning"),
+            DataSource("© MET Norway", R.string.source_met_norway, "https://www.met.no/en/free-meteorological-data/Licensing-and-crediting"),
             DataSource("EUMETNET Open Radar Data", R.string.source_eumetnet, "https://eumetnet.github.io/openradardata-documentation/"),
             DataSource("NOAA / National Weather Service", R.string.source_noaa, "https://www.weather.gov/disclaimer"),
             DataSource("© Blitzortung.org and its contributors", R.string.source_blitzortung, "https://www.blitzortung.org/"),
@@ -124,6 +144,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setUpAbout()
         setUpDataSources()
         setUpLicences()
+        findPreference<Preference>("past_alerts")?.setOnPreferenceClickListener { startActivity(Intent(requireContext(), PastAlertsActivity::class.java)); true }
+        findPreference<Preference>("rain_status")?.setOnPreferenceClickListener { startActivity(Intent(requireContext(), RainStatusActivity::class.java)); true }
+        findPreference<Preference>("storm_log")?.setOnPreferenceClickListener { startActivity(Intent(requireContext(), StormLogActivity::class.java)); true }
+        findPreference<Preference>("flash_bang")?.setOnPreferenceClickListener { startActivity(Intent(requireContext(), FlashToBangActivity::class.java)); true }
+        findPreference<Preference>("ar_storm")?.setOnPreferenceClickListener { startActivity(Intent(requireContext(), ARStormActivity::class.java)); true }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -137,7 +162,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 MeteocoolEnvironment.changes.collect {
                     findPreference<Preference>("mode")?.summary = getString(modeTitle(it))
+                    listOf("storm_log", "flash_bang", "ar_storm").forEach { key ->
+                        findPreference<Preference>(key)?.isVisible = it == MeteocoolEnvironment.STAGING && (key != "storm_log" || PushSupport.available)
+                    }
                 }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                registration.outsideCoverage.collect { updateNotificationsFooter() }
             }
         }
     }
@@ -148,11 +181,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
         findPreference<SwitchPreferenceCompat>(Prefs.NOTIFICATION)?.isChecked = prefs.notification
         findPreference<SwitchPreferenceCompat>(Prefs.MAP_ZOOM)?.isChecked = prefs.mapZoom
         updateNotificationsFooter()
+        updateMuteSummary()
     }
 
     /* ---- rain alerts --------------------------------------------------- */
 
     private fun setUpNotifications() {
+        findPreference<Preference>(Prefs.ALERT_MUTE)?.setOnPreferenceClickListener { showMuteChoices(); true }
         findPreference<SwitchPreferenceCompat>(Prefs.NOTIFICATION)?.setOnPreferenceChangeListener { _, newValue ->
             if (newValue == true) {
                 enableAlerts()
@@ -167,7 +202,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     /** Notifications first, then location, then location while the app is closed. */
     private fun enableAlerts() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && PermUtils.needsNotificationPermission(requireContext())) {
+        if (PermUtils.needsNotificationPermission(requireContext())) {
             notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         } else if (!PermUtils.areNotificationsEnabled(requireContext())) {
             showPermissionHelp()
@@ -177,6 +212,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun enableAlertsWithLocation() {
+        registration.checkCoverageAfterRegistration()
         findPreference<SwitchPreferenceCompat>(Prefs.NOTIFICATION)?.isChecked = true
         updateNotificationsFooter()
         if (PermUtils.isLocationPermissionGranted(requireContext())) {
@@ -187,7 +223,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun requestBackgroundLocation() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q || !PermUtils.needsBackgroundLocationPermission(requireContext())) {
+        if (!PermUtils.needsBackgroundLocationPermission(requireContext())) {
             registration.refreshRegistration()
             updateNotificationsFooter()
             return
@@ -216,10 +252,53 @@ class SettingsFragment : PreferenceFragmentCompat() {
             when {
                 registration.syncFailed.value -> R.string.notification_sync_failed
                 enabled && permissionsMissing -> R.string.notification_permissions_help
+                enabled && registration.outsideCoverage.value -> R.string.notifications_outside
                 enabled -> R.string.meteorological_details_help
                 else -> R.string.notifications_explanation
             }
         )
+    }
+
+    private fun updateMuteSummary() {
+        findPreference<Preference>(Prefs.ALERT_MUTE)?.summary = AlertMute.active(prefs)?.let {
+            getString(R.string.mute_until, java.text.DateFormat.getDateTimeInstance(java.text.DateFormat.SHORT, java.text.DateFormat.SHORT)
+                .format(java.util.Date(it.until * 1000)))
+        }
+    }
+
+    private fun showMuteChoices() {
+        val choices = intArrayOf(R.string.mute_day, R.string.mute_week, R.string.mute_rain, R.string.mute_unmute)
+        MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.mute_alerts)
+            .setItems(choices.map { getString(it) }.toTypedArray()) { _, index ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val row = findPreference<Preference>(Prefs.ALERT_MUTE)
+                    row?.isEnabled = false
+                    try {
+                        val mute = when (index) {
+                            0 -> AlertMute.timed(1)
+                            1 -> AlertMute.timed(7)
+                            2 -> {
+                                val origin = MeteocoolEnvironment.currentApiBase
+                                val fix = LocationProviders.currentLocation(requireContext()) ?: prefs.lastLocation(300_000)
+                                val forecast = fix?.let { WeatherData.forecast(requireContext(), it.latitude, it.longitude) }
+                                if (forecast == null || forecast.phase() == RainForecast.Phase.Unavailable || origin != MeteocoolEnvironment.currentApiBase) {
+                                    MaterialAlertDialogBuilder(requireContext()).setMessage(R.string.mute_no_forecast).setPositiveButton(R.string.dismiss, null).show()
+                                    return@launch
+                                }
+                                AlertMute.rain(forecast, System.currentTimeMillis() / 1000) ?: run {
+                                    MaterialAlertDialogBuilder(requireContext()).setMessage(R.string.mute_no_rain).setPositiveButton(R.string.dismiss, null).show()
+                                    return@launch
+                                }
+                            }
+                            else -> null
+                        }
+                        AlertMute.save(prefs, mute)
+                        registration.refreshRegistration().join()
+                        updateMuteSummary()
+                        updateNotificationsFooter()
+                    } finally { row?.isEnabled = prefs.notification }
+                }
+            }.show()
     }
 
     private fun showPermissionHelp() {

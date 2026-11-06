@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -33,20 +32,17 @@ object PermUtils {
 
     /** "Allow all the time": needed for alerts while the app is closed. */
     fun isBackgroundLocationPermissionGranted(context: Context): Boolean =
-        isLocationPermissionGranted(context) &&
-            (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q ||
-                granted(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION))
+        isLocationPermissionGranted(context) && granted(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
 
     /** Covers both the runtime permission (API 33+) and the app's notification switch in system settings. */
     fun areNotificationsEnabled(context: Context): Boolean =
         NotificationManagerCompat.from(context).areNotificationsEnabled()
 
     fun needsNotificationPermission(context: Context): Boolean =
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            !granted(context, Manifest.permission.POST_NOTIFICATIONS)
+        !granted(context, Manifest.permission.POST_NOTIFICATIONS)
 
     fun needsBackgroundLocationPermission(context: Context): Boolean =
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && !isBackgroundLocationPermissionGranted(context)
+        !isBackgroundLocationPermissionGranted(context)
 
     fun appSettingsIntent(context: Context): Intent =
         Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", context.packageName, null))

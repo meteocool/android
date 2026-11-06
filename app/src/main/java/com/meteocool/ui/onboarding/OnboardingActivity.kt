@@ -2,7 +2,6 @@ package com.meteocool.ui.onboarding
 
 import android.Manifest
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -58,6 +57,7 @@ class OnboardingActivity : AppCompatActivity() {
     private val notificationLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             app.prefs.notification = granted && PermUtils.areNotificationsEnabled(this)
+            if (app.prefs.notification) app.registration.checkCoverageAfterRegistration()
             advance()
         }
 
@@ -141,7 +141,7 @@ class OnboardingActivity : AppCompatActivity() {
                 if (PermUtils.isLocationPermissionGranted(this)) advance()
                 else locationLauncher.launch(PermUtils.LOCATION_PERMISSIONS)
             Page.ALERTS ->
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && PermUtils.needsNotificationPermission(this)) {
+                if (PermUtils.needsNotificationPermission(this)) {
                     notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 } else {
                     app.prefs.notification = PermUtils.areNotificationsEnabled(this)
@@ -159,7 +159,7 @@ class OnboardingActivity : AppCompatActivity() {
         val needsBackground = app.prefs.notification &&
             PermUtils.isLocationPermissionGranted(this) &&
             PermUtils.needsBackgroundLocationPermission(this)
-        if (!needsBackground || Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+        if (!needsBackground) {
             complete()
             return
         }

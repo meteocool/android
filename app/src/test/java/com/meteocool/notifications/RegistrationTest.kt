@@ -54,12 +54,25 @@ class RegistrationTest {
     }
 
     @Test
-    fun `language is clamped to de or en`() {
+    fun `language follows all backend translations and falls back to English`() {
         assertEquals("de", Registration.lang("de"))
         assertEquals("de", Registration.lang("DE"))
         assertEquals("en", Registration.lang("en"))
-        assertEquals("en", Registration.lang("fr"))
+        assertEquals("fr", Registration.lang("fr-FR"))
+        assertEquals("nl", Registration.lang("nl_NL"))
+        assertEquals("nb", Registration.lang("no"))
+        assertEquals("nb", Registration.lang("nn-NO"))
+        assertEquals("en", Registration.lang("pt"))
         assertEquals("en", Registration.lang(""))
+    }
+
+    @Test fun `mute null is sent explicitly to clear server state`() {
+        val body = Registration.payload(fix(), -1f, settings)
+        assertTrue(body.containsKey("pausedUntil"))
+        assertEquals(null, body["pausedUntil"])
+        assertTrue(com.meteocool.network.ApiClient.encode(body)!!.contains("\"pausedUntil\":null"))
+        assertEquals(false, body["stormLog"])
+        assertEquals(1_900_000_000L, Registration.payload(fix(), -1f, settings.copy(pausedUntil = 1_900_000_000L))["pausedUntil"])
     }
 
     @Test

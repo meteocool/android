@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mute_alerts">Sett varsler på pause</string>
+    <string name="mute_day">I 1 dag</string>
+    <string name="mute_week">I 1 uke</string>
+    <string name="mute_rain">Til regnet er over</string>
+    <string name="mute_unmute">Gjenoppta varsler</string>
+    <string name="mute_until">På pause til %1$s</string>
+    <string name="mute_no_rain">Prognosen viser ikke regn her, så det er ingenting å sette på pause.</string>
+    <string name="mute_no_forecast">Prognosen for posisjonen din kunne ikke lastes inn. Prøv igjen senere.</string>
+    <string name="past_alerts">Past Alerts</string>
+    <string name="past_alerts_empty">No Alerts Yet</string>
+    <string name="past_alerts_clear">Clear Past Alerts</string>
+    <string name="past_alerts_clear_confirm">Clear Past Alerts</string>
+    <string name="notifications_outside">meteocool-varslinger fungerer ikke der du er, fordi stedet ligger utenfor området radardataene våre dekker. Varslingene forblir på og starter så snart du er i et dekket område.</string>
+    <string name="notifications_outside_title">Ingen varslinger her</string>
+    <string name="rain_unavailable">Rain forecast unavailable</string>
+    <string name="rain_checking">Checking rain…</string>
+    <string name="rain_refresh">Refresh</string>
+    <string name="rain_starts">Starts at %1$s</string>
+    <string name="rain_until">Regn til %1$s</string>
+    <string name="rain_continues">Continues through the forecast</string>
+    <string name="rain_dry_through">Ikke regn før %1$s</string>
+    <string name="data_licences">Datalisenser</string>
+    <string name="source_rmi">Radar Belgia (Jabbeke, Wideumont) · CC BY 4.0, bearbeidet</string>
+    <string name="source_vmm">Radar Belgia (Helchteren) · CC BY 4.0 / Modellicentie Gratis Hergebruik v1.0, bearbeidet</string>
+    <string name="source_shmu">Radar Slovakia · CC BY 4.0, bearbeidet</string>
+    <string name="source_lhmt">Radar Litauen · CC BY 4.0 / CC BY-SA 4.0, bearbeidet</string>
+    <string name="source_kaur">Radar Estland · CC BY 4.0, bearbeidet</string>
+    <string name="source_met_eireann">Radar Irland · Copyright Met Éireann. Kilde: www.met.ie. Publisert under lisensen Creative Commons Navngivelse 4.0 Internasjonal (CC BY 4.0). Dataene er bearbeidet: satt sammen, projisert på nytt, renset for bakkeekko og støy og fargelagt av meteocool.</string>
+    <string name="source_dhmz">Radar Kroatia · Izvor: DHMZ. CC BY 4.0 / Otvorena dozvola, bearbeidet, sist ved skannetidspunktet kartet viser</string>
+    <string name="source_dmi">Radar Danmark · CC BY 4.0, bearbeidet</string>
+    <string name="source_knmi">Radar Nederland (Den Helder, Herwijnen) · CC BY 4.0, bearbeidet</string>
+    <string name="source_fmi">Radar Finland · CC BY 4.0, bearbeidet</string>
+    <string name="source_smhi">Radar Sverige · CC BY 4.0, bearbeidet</string>
+    <string name="source_met_norway">Radar Norge · Basert på data fra MET Norge. NLOD 2.0 / CC BY 4.0, bearbeidet</string>
+    <string name="weather_tools">Værverktøy</string>
+    <string name="rain_monitor">Regnstatus</string>
+    <string name="rain_track">Følg dette regnet</string>
+    <string name="rain_stop">Stopp sporing</string>
+    <string name="rain_tracking">Følger regnet i opptil to timer.</string>
+    <string name="rain_monitor_help">Sjekker regnet på din nåværende posisjon hvert minutt under sporing. Stopper etter regnet eller etter to timer. Du kan stoppe når som helst.</string>
+    <string name="rain_continues_until">Regn ventes til %1$s</string>
+</resources>

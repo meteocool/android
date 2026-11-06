@@ -12,6 +12,15 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- Android 14+: offers a link to the map when the reader takes a screenshot of it. -->
     <uses-permission android:name="android.permission.DETECT_SCREEN_CAPTURE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.POST_PROMOTED_NOTIFICATIONS" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.sensor.compass" android:required="false" />
+    <uses-feature android:name="android.hardware.sensor.gyroscope" android:required="false" />
     <uses-feature android:name="android.hardware.location" android:required="false" />
 
     <queries>
@@ -28,6 +37,8 @@
     <application
             android:name=".app.MeteocoolApp"
             android:allowBackup="true"
+            android:fullBackupContent="@xml/backup_rules"
+            android:dataExtractionRules="@xml/data_extraction_rules"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
@@ -53,7 +64,47 @@
                 android:name=".ui.MeteocoolActivity"
                 android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden"
                 android:launchMode="singleTop"
-                android:exported="true" />
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="meteocool" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".notifications.PastAlertsActivity" android:exported="false" />
+        <activity android:name=".stormlog.StormLogActivity" android:exported="false" />
+        <activity android:name=".weather.RainStatusActivity" android:exported="false" />
+        <activity android:name=".experimental.FlashToBangActivity" android:exported="false" />
+        <activity android:name=".experimental.ARStormActivity" android:exported="false" />
+        <service android:name="com.meteocool.weather.RainMonitorService" android:exported="false" android:foregroundServiceType="location|dataSync" />
+        <activity android:name=".widgets.WidgetConfigActivity" android:exported="true">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" /></intent-filter>
+        </activity>
+        <receiver android:name=".widgets.RadarWidgetProvider" android:exported="false" android:label="@string/widget_radar">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_radar" />
+        </receiver>
+        <receiver android:name=".widgets.ForecastWidgetProvider" android:exported="false" android:label="@string/widget_forecast">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_forecast" />
+        </receiver>
+        <receiver android:name=".widgets.ClockWidgetProvider" android:exported="false" android:label="@string/widget_clock">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_clock" />
+        </receiver>
+        <receiver android:name=".widgets.PlacesWidgetProvider" android:exported="false" android:label="@string/widget_places">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_places" />
+        </receiver>
+        <service android:name="com.meteocool.car.RainCarAppService" android:exported="true" android:foregroundServiceType="location">
+            <intent-filter>
+                <action android:name="androidx.car.app.CarAppService" />
+                <category android:name="androidx.car.app.category.WEATHER" />
+            </intent-filter>
+        </service>
+        <meta-data android:name="com.google.android.gms.car.application" android:resource="@xml/automotive_app_desc" />
+        <meta-data android:name="androidx.car.app.minCarApiLevel" android:value="6" />
 
         <!-- Shared map links: the root with the map's state in the query
              (core's lib/shareLink.ts), as the iOS association file claims
@@ -61,17 +112,12 @@
              do next and demo, which show the deployment a link was made on.
              Verified against /.well-known/assetlinks.json from core's Worker.
 
-             Two aliases, because only Android 15 can ask for a query: it
-             matches a filter's own paths OR its uri-relative-filter-groups,
-             so the root has to go inside the group, and older versions ignore
-             the group, so there it would match every path. @bool/match_queries
-             switches between them. -->
+             Both the root path and query belong inside the relative group. -->
         <activity-alias
                 android:name=".ui.SharedLink"
                 android:targetActivity=".ui.MeteocoolActivity"
-                android:enabled="@bool/match_queries"
                 android:exported="true">
-            <intent-filter android:autoVerify="true" tools:targetApi="35">
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -83,23 +129,6 @@
                     <data android:path="/" />
                     <data android:queryPattern="..*" />
                 </uri-relative-filter-group>
-            </intent-filter>
-        </activity-alias>
-        <!-- Before Android 15 the root opens the app with or without a query. -->
-        <activity-alias
-                android:name=".ui.SharedLinkByPath"
-                android:targetActivity=".ui.MeteocoolActivity"
-                android:enabled="@bool/match_paths_only"
-                android:exported="true">
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="https" />
-                <data android:host="app.meteocool.com" />
-                <data android:path="/" />
             </intent-filter>
         </activity-alias>
         <activity

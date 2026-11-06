@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="widget_radar">Sadetutka</string>
+    <string name="widget_forecast">Sade-ennuste</string>
+    <string name="widget_clock">Sadekello</string>
+    <string name="widget_places">Paikat</string>
+    <string name="widget_current_location">Nykyinen sijainti</string>
+    <string name="widget_range">Aikaväli</string>
+    <string name="widget_area">Kartta-alue</string>
+    <string name="widget_overlay">Ennuste</string>
+    <string name="widget_dial">Kellotaulu</string>
+    <string name="widget_intensity">Voimakkuus</string>
+    <string name="widget_show_map">Näytä tutkakartta</string>
+    <string name="widget_refresh">Päivitä sade</string>
+    <string name="widget_configure">Määritä widget</string>
+    <string name="widget_location_help">Valitse paikka tai nykyinen sijaintisi. Se vaatii sijaintiluvan ja tuoreen sijainnin. Avaa meteocool, jos sijainti puuttuu. Korkea widget näyttää kuusi paikkaa, pienemmät vähemmän.</string>
+    <string name="widget_search_hint">Kaupunki tai paikka</string>
+    <string name="widget_search">Hae</string>
+    <string name="widget_search_failed">Paikkahaku ei ole käytettävissä. Tarkista yhteys tai käytä nykyistä sijaintiasi.</string>
+    <string name="widget_search_empty">Paikkoja ei löytynyt. Kokeile kaupunkia ja maata.</string>
+    <string name="widget_choose_place">Valitse paikka</string>
+    <string name="widget_remove">Poista</string>
+    <string name="widget_save">Tallenna widget</string>
+    <string name="widget_rain_until">Sadetta klo %1$s asti</string>
+    <string name="widget_rain_continues">Sade jatkuu ennustejakson ajan</string>
+    <string name="widget_rain_at">Sadetta alkaen klo %1$s</string>
+    <string name="widget_dry_through">Sadetta ei odoteta ennen klo %1$s</string>
+    <string name="widget_unavailable">Säätiedot puuttuvat tai ovat vanhentuneet</string>
+    <string name="widget_no_location">Sijainti puuttuu. Avaa meteocool.</string>
+    <string name="widget_as_of">Ennuste klo %1$s · Päivitä nykyinen sää</string>
+    <string name="widget_refresh_help">Yritä uudelleen napauttamalla päivitä</string>
+    <string name="widget_map_description">Sadetutka paikan %1$s ympärillä</string>
+    <string name="car_rain_status">Sade sijainnissasi</string>
+    <string name="car_observation">Viimeisin tutkahavainto</string>
+    <string name="car_loading">Ladataan…</string>
+    <string name="car_location_help">Kun olet pysäköinyt, avaa meteocool puhelimessa ja salli sijainnin käyttö.</string>
+    <string name="widget_clock_hours">%1$d h</string>
+    <string name="car_retry">@string/widget_refresh_help</string>
+    <string-array name="widget_ranges">
+        <item>Seuraava tunti</item>
+        <item>Seuraavat 2 tuntia</item>
+        <item>Edellinen puoli tuntia ja seuraavat 90 minuuttia</item>
+        <item>Edelliset 2 tuntia ja seuraavat 2 tuntia</item>
+    </string-array>
+    <string-array name="widget_areas">
+        <item>Paikallinen · 40 km</item>
+        <item>Alueellinen · 150 km</item>
+        <item>Laaja · 400 km</item>
+        <item>Maa · 1,200 km</item>
+    </string-array>
+    <string-array name="widget_overlays">
+        <item>Vain kartta</item>
+        <item>Seuraava sade</item>
+        <item>Seuraava sade ja kaavio</item>
+    </string-array>
+    <string-array name="widget_dials">
+        <item>Yksi tunti</item>
+        <item>Kaksi tuntia</item>
+    </string-array>
+    <string-array name="widget_intensities">
+        <item>Kuten apissa</item>
+        <item>Tihku</item>
+        <item>Heikko sade</item>
+        <item>Sade</item>
+        <item>Voimakas sade</item>
+        <item>Rankkasade</item>
+    </string-array>
+    <string name="widget_background_location_help">Päivitä sijainti myös meteocoolin ollessa suljettuna valitsemalla Androidin sovellusasetuksista Sijainti → Salli aina. Sadehälytysten ei tarvitse olla käytössä.</string>
+</resources>

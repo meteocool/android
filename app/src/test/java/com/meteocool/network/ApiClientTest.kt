@@ -92,4 +92,14 @@ class ApiClientTest {
         assertFalse(ApiClient().post(base, Endpoint.POST_LOCATION, mapOf("lat" to Double.NaN)))
         assertEquals(0, server.requestCount)
     }
+
+    @Test fun `private reads keep tokens out of URLs and do not follow redirects`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(302).addHeader("Location", server.url("/elsewhere")))
+        val response = ApiClient().request(base, "v4/storm-log", headers = mapOf("X-Push-Token" to "private"))
+        assertEquals(302, response!!.status)
+        val request = server.takeRequest()
+        assertEquals("/v4/storm-log", request.path)
+        assertEquals("private", request.getHeader("X-Push-Token"))
+        assertEquals(1, server.requestCount)
+    }
 }

@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="widget_radar">Radarska karta</string>
+    <string name="widget_forecast">Prognoza kiše</string>
+    <string name="widget_clock">Kišni sat</string>
+    <string name="widget_places">Mjesta</string>
+    <string name="widget_current_location">Trenutačna lokacija</string>
+    <string name="widget_range">Vremenski raspon</string>
+    <string name="widget_area">Područje karte</string>
+    <string name="widget_overlay">Prognoza</string>
+    <string name="widget_dial">Brojčanik</string>
+    <string name="widget_intensity">Jačina</string>
+    <string name="widget_show_map">Prikaži radarsku kartu</string>
+    <string name="widget_refresh">Osvježi kišu</string>
+    <string name="widget_configure">Postavi widget</string>
+    <string name="widget_location_help">Odaberi mjesto ili trenutačnu lokaciju. Potrebni su dozvola i nedavna lokacija. Otvori meteocool ako lokacija nedostaje. Visoki widget prikazuje šest mjesta, manji manje.</string>
+    <string name="widget_search_hint">Grad ili mjesto</string>
+    <string name="widget_search">Traži</string>
+    <string name="widget_search_failed">Pretraživanje mjesta nije dostupno. Provjeri vezu ili upotrijebi trenutačnu lokaciju.</string>
+    <string name="widget_search_empty">Nema pronađenih mjesta. Pokušaj s gradom i državom.</string>
+    <string name="widget_choose_place">Odaberi mjesto</string>
+    <string name="widget_remove">Ukloni</string>
+    <string name="widget_save">Spremi widget</string>
+    <string name="widget_rain_until">Kiša do %1$s</string>
+    <string name="widget_rain_continues">Kiša se nastavlja tijekom prognoze</string>
+    <string name="widget_rain_at">Kiša od %1$s</string>
+    <string name="widget_dry_through">Kiša se ne očekuje do %1$s</string>
+    <string name="widget_unavailable">Vremenski podaci nedostaju ili su zastarjeli</string>
+    <string name="widget_no_location">Lokacija nije dostupna. Otvori meteocool.</string>
+    <string name="widget_as_of">Prognoza od %1$s · Osvježi za trenutačno vrijeme</string>
+    <string name="widget_refresh_help">Dodirni osvježi za ponovni pokušaj</string>
+    <string name="widget_map_description">Kišni radar oko mjesta %1$s</string>
+    <string name="car_rain_status">Kiša na tvojoj lokaciji</string>
+    <string name="car_observation">Posljednje radarsko mjerenje</string>
+    <string name="car_loading">Učitavanje…</string>
+    <string name="car_location_help">Kada parkiraš, otvori meteocool na telefonu i dopusti pristup lokaciji.</string>
+    <string name="widget_clock_hours">%1$d h</string>
+    <string name="car_retry">@string/widget_refresh_help</string>
+    <string-array name="widget_ranges">
+        <item>Sljedeći sat</item>
+        <item>Sljedeća 2 sata</item>
+        <item>Zadnjih pola sata i sljedećih 90 minuta</item>
+        <item>Zadnja 2 sata i sljedeća 2 sata</item>
+    </string-array>
+    <string-array name="widget_areas">
+        <item>Lokalno · 40 km</item>
+        <item>Regionalno · 150 km</item>
+        <item>Široko · 400 km</item>
+        <item>Zemlja · 1,200 km</item>
+    </string-array>
+    <string-array name="widget_overlays">
+        <item>Samo karta</item>
+        <item>Sljedeća kiša</item>
+        <item>Sljedeća kiša i grafikon</item>
+    </string-array>
+    <string-array name="widget_dials">
+        <item>Jedan sat</item>
+        <item>Dva sata</item>
+    </string-array>
+    <string-array name="widget_intensities">
+        <item>Kao u aplikaciji</item>
+        <item>Rosulja</item>
+        <item>Slaba kiša</item>
+        <item>Kiša</item>
+        <item>Jača kiša</item>
+        <item>Jaka kiša</item>
+    </string-array>
+    <string name="widget_background_location_help">Za ažuriranje lokacije dok je meteocool zatvoren odaberi Lokacija → Dopusti cijelo vrijeme u Androidovim postavkama aplikacije. Upozorenja na kišu ne moraju biti uključena.</string>
+</resources>

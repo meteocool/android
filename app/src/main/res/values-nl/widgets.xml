@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="widget_radar">Radarkaart</string>
+    <string name="widget_forecast">Regenverwachting</string>
+    <string name="widget_clock">Regenklok</string>
+    <string name="widget_places">Plekken</string>
+    <string name="widget_current_location">Huidige locatie</string>
+    <string name="widget_range">Tijdsbereik</string>
+    <string name="widget_area">Kaartuitsnede</string>
+    <string name="widget_overlay">Verwachting</string>
+    <string name="widget_dial">Wijzerplaat</string>
+    <string name="widget_intensity">Intensiteit</string>
+    <string name="widget_show_map">Radarkaart tonen</string>
+    <string name="widget_refresh">Regen vernieuwen</string>
+    <string name="widget_configure">Widget instellen</string>
+    <string name="widget_location_help">Kies een plek of je huidige locatie. Hiervoor zijn locatietoegang en een recente locatie nodig. Open meteocool als de locatie ontbreekt. Een hoge widget toont zes plekken, kleinere tonen er minder.</string>
+    <string name="widget_search_hint">Stad of plek</string>
+    <string name="widget_search">Zoeken</string>
+    <string name="widget_search_failed">Zoeken is niet beschikbaar. Controleer je verbinding of gebruik je huidige locatie.</string>
+    <string name="widget_search_empty">Geen plekken gevonden. Probeer een stad en land.</string>
+    <string name="widget_choose_place">Kies een plek</string>
+    <string name="widget_remove">Verwijderen</string>
+    <string name="widget_save">Widget opslaan</string>
+    <string name="widget_rain_until">Regen tot %1$s</string>
+    <string name="widget_rain_continues">Regen houdt aan tijdens de verwachting</string>
+    <string name="widget_rain_at">Regen vanaf %1$s</string>
+    <string name="widget_dry_through">Geen regen verwacht tot %1$s</string>
+    <string name="widget_unavailable">Weergegevens ontbreken of zijn verouderd</string>
+    <string name="widget_no_location">Locatie ontbreekt. Open meteocool.</string>
+    <string name="widget_as_of">Verwachting van %1$s · Vernieuw voor actueel weer</string>
+    <string name="widget_refresh_help">Tik op vernieuwen om opnieuw te proberen</string>
+    <string name="widget_map_description">Regenradar rond %1$s</string>
+    <string name="car_rain_status">Regen op jouw locatie</string>
+    <string name="car_observation">Laatste radarmeting</string>
+    <string name="car_loading">Laden…</string>
+    <string name="car_location_help">Open meteocool op je telefoon wanneer je geparkeerd staat en sta locatietoegang toe.</string>
+    <string name="widget_clock_hours">%1$d h</string>
+    <string name="car_retry">@string/widget_refresh_help</string>
+    <string-array name="widget_ranges">
+        <item>Komend uur</item>
+        <item>Komende 2 uur</item>
+        <item>Afgelopen halfuur en komende 90 minuten</item>
+        <item>Afgelopen 2 uur en komende 2 uur</item>
+    </string-array>
+    <string-array name="widget_areas">
+        <item>Lokaal · 40 km</item>
+        <item>Regionaal · 150 km</item>
+        <item>Breed · 400 km</item>
+        <item>Land · 1,200 km</item>
+    </string-array>
+    <string-array name="widget_overlays">
+        <item>Alleen kaart</item>
+        <item>Eerstvolgende regen</item>
+        <item>Eerstvolgende regen en grafiek</item>
+    </string-array>
+    <string-array name="widget_dials">
+        <item>Eén uur</item>
+        <item>Twee uur</item>
+    </string-array>
+    <string-array name="widget_intensities">
+        <item>Zoals in de app</item>
+        <item>Motregen</item>
+        <item>Lichte regen</item>
+        <item>Regen</item>
+        <item>Flinke regen</item>
+        <item>Zware regen</item>
+    </string-array>
+    <string name="widget_background_location_help">Kies Locatie → Altijd toestaan in de Android-appinstellingen om je locatie bij te werken wanneer meteocool gesloten is. Regenmeldingen hoeven niet aan te staan.</string>
+</resources>

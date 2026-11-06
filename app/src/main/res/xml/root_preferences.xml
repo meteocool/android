@@ -37,12 +37,22 @@
                 app:key="notification_time"
                 app:title="@string/notification_timeframe" />
 
+        <Preference app:key="alert_mute" app:iconSpaceReserved="false" app:dependency="notification" app:title="@string/mute_alerts" />
+        <Preference app:key="past_alerts" app:iconSpaceReserved="false" app:title="@string/past_alerts" />
+
         <Preference
                 app:iconSpaceReserved="false"
                 app:key="notifications_footer"
                 app:layout="@layout/preference_footer"
                 app:selectable="false"
                 app:singleLineTitle="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/weather_tools" app:iconSpaceReserved="false">
+        <Preference app:key="rain_status" app:title="@string/rain_monitor" app:iconSpaceReserved="false" />
+        <Preference app:key="storm_log" app:title="@string/storm_log_title" app:iconSpaceReserved="false" />
+        <Preference app:key="flash_bang" app:title="@string/experimental_flash_bang" app:iconSpaceReserved="false" />
+        <Preference app:key="ar_storm" app:title="@string/experimental_point_menu_ar" app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

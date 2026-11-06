@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mute_alerts">Peata hoiatused</string>
+    <string name="mute_day">1 päevaks</string>
+    <string name="mute_week">1 nädalaks</string>
+    <string name="mute_rain">Kuni vihm on läbi</string>
+    <string name="mute_unmute">Jätka hoiatusi</string>
+    <string name="mute_until">Peatatud kuni %1$s</string>
+    <string name="mute_no_rain">Prognoos ei näita siin vihma, seega pole midagi peatada.</string>
+    <string name="mute_no_forecast">Sinu asukoha prognoosi ei õnnestunud laadida. Proovi hiljem uuesti.</string>
+    <string name="past_alerts">Past Alerts</string>
+    <string name="past_alerts_empty">No Alerts Yet</string>
+    <string name="past_alerts_clear">Clear Past Alerts</string>
+    <string name="past_alerts_clear_confirm">Clear Past Alerts</string>
+    <string name="notifications_outside">meteocooli teavitused sinu asukohas ei tööta, sest see jääb väljapoole meie radariandmete kattealat. Teavitused jäävad sisse ja hakkavad tööle, kui jõuad kaetud alale.</string>
+    <string name="notifications_outside_title">Siin teavitusi ei ole</string>
+    <string name="rain_unavailable">Rain forecast unavailable</string>
+    <string name="rain_checking">Checking rain…</string>
+    <string name="rain_refresh">Refresh</string>
+    <string name="rain_starts">Starts at %1$s</string>
+    <string name="rain_until">Vihm kuni %1$s</string>
+    <string name="rain_continues">Continues through the forecast</string>
+    <string name="rain_dry_through">Vihma ei ole oodata kuni %1$s</string>
+    <string name="data_licences">Andmelitsentsid</string>
+    <string name="source_rmi">Radar Belgia (Jabbeke, Wideumont) · CC BY 4.0, muudetud</string>
+    <string name="source_vmm">Radar Belgia (Helchteren) · CC BY 4.0 / Modellicentie Gratis Hergebruik v1.0, muudetud</string>
+    <string name="source_shmu">Radar Slovakkia · CC BY 4.0, muudetud</string>
+    <string name="source_lhmt">Radar Leedu · CC BY 4.0 / CC BY-SA 4.0, muudetud</string>
+    <string name="source_kaur">Radar Eesti · CC BY 4.0, muudetud</string>
+    <string name="source_met_eireann">Radar Iirimaa · Copyright Met Éireann. Allikas: www.met.ie. Avaldatud litsentsi Creative Commons Autorile viitamine 4.0 Rahvusvaheline (CC BY 4.0) alusel. Andmeid on muudetud: meteocool on need kokku liitnud, ümber projitseerinud, maapinnakajadest ja mürast puhastanud ning värvinud.</string>
+    <string name="source_dhmz">Radar Horvaatia · Izvor: DHMZ. CC BY 4.0 / Otvorena dozvola, muudetud, viimati kaardil näidatud skaneerimise ajal</string>
+    <string name="source_dmi">Radar Taani · CC BY 4.0, muudetud</string>
+    <string name="source_knmi">Radar Madalmaad (Den Helder, Herwijnen) · CC BY 4.0, muudetud</string>
+    <string name="source_fmi">Radar Soome · CC BY 4.0, muudetud</string>
+    <string name="source_smhi">Radar Rootsi · CC BY 4.0, muudetud</string>
+    <string name="source_met_norway">Radar Norra · Põhineb MET Norway andmetel. NLOD 2.0 / CC BY 4.0, muudetud</string>
+    <string name="weather_tools">Ilmatööriistad</string>
+    <string name="rain_monitor">Vihma olek</string>
+    <string name="rain_track">Jälgi seda vihma</string>
+    <string name="rain_stop">Lõpeta jälgimine</string>
+    <string name="rain_tracking">Vihma jälgimine kuni kaks tundi.</string>
+    <string name="rain_monitor_help">Jälgimise ajal kontrollib iga minuti järel vihma sinu praeguses asukohas. Lõpeb pärast vihma või kahe tunni möödumisel. Võid igal ajal lõpetada.</string>
+    <string name="rain_continues_until">Vihma on oodata kuni %1$s</string>
+</resources>
